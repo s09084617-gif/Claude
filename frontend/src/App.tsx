@@ -13,6 +13,7 @@ import Nutrition from './pages/Nutrition'
 import Progress from './pages/Progress'
 import Analytics from './pages/Analytics'
 import Profile from './pages/Profile'
+import QRScanner from './pages/QRScanner'
 import NotFound from './pages/NotFound'
 
 function PrivateRoute({ children }: { children: React.ReactNode }) {
@@ -110,6 +111,16 @@ function AppRoutes() {
           <PrivateRoute>
             <Layout>
               <Profile />
+            </Layout>
+          </PrivateRoute>
+        }
+      />
+      <Route
+        path="/qr"
+        element={
+          <PrivateRoute>
+            <Layout>
+              <QRScanner />
             </Layout>
           </PrivateRoute>
         }
