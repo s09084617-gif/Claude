@@ -1,7 +1,7 @@
 import { useState, useEffect, FormEvent } from 'react'
 import { Dumbbell, Loader2, CheckCircle, ChevronDown, ChevronRight } from 'lucide-react'
 import { useToast } from '../contexts/ToastContext'
-import { api, Workout } from '../api/client'
+import { api, Workout, WorkoutDetails } from '../api/client'
 
 const GOAL_OPTIONS = [
   { value: 'fat_loss', label: 'Fat Loss' },
@@ -10,7 +10,86 @@ const GOAL_OPTIONS = [
   { value: 'general_fitness', label: 'General Fitness' },
 ]
 
-export default function Workouts() {
+interface Movement {
+  name?: string
+  sets?: number
+  reps?: string | number
+  duration?: string
+  notes?: string
+}
+
+interface DayGroup {
+  day?: string
+  movements?: Movement[]
+}
+
+function ExerciseList({ details }: { details: WorkoutDetails }) {
+  const workouts = details?.workouts ?? []
+  if (workouts.length === 0) return <p className="text-sm text-gray-400">No exercises recorded.</p>
+
+  const first = workouts[0] as DayGroup
+  const isGrouped = first && typeof first === 'object' && 'movements' in first
+
+  if (isGrouped) {
+    return (
+      <div className="space-y-4">
+        {(workouts as DayGroup[]).map((group, gi) => (
+          <div key={gi}>
+            {group.day && (
+              <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">
+                {group.day}
+              </p>
+            )}
+            <table className="w-full text-xs">
+              <thead>
+                <tr className="border-b border-gray-200">
+                  <th className="text-left py-1.5 pr-4 font-medium text-gray-500">Exercise</th>
+                  <th className="text-center py-1.5 px-2 font-medium text-gray-500">Sets</th>
+                  <th className="text-center py-1.5 px-2 font-medium text-gray-500">Reps</th>
+                  <th className="text-left py-1.5 pl-2 font-medium text-gray-500">Notes</th>
+                </tr>
+              </thead>
+              <tbody>
+                {(group.movements ?? []).map((m, mi) => (
+                  <tr key={mi} className="border-b border-gray-50">
+                    <td className="py-1.5 pr-4 font-medium text-gray-800">{m.name ?? '—'}</td>
+                    <td className="py-1.5 px-2 text-center text-gray-600">{m.sets ?? '—'}</td>
+                    <td className="py-1.5 px-2 text-center text-gray-600">{m.duration ?? m.reps ?? '—'}</td>
+                    <td className="py-1.5 pl-2 text-gray-400">{m.notes ?? ''}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        ))}
+      </div>
+    )
+  }
+
+  return (
+    <table className="w-full text-xs">
+      <thead>
+        <tr className="border-b border-gray-200">
+          <th className="text-left py-1.5 pr-4 font-medium text-gray-500">Exercise</th>
+          <th className="text-center py-1.5 px-2 font-medium text-gray-500">Sets</th>
+          <th className="text-center py-1.5 px-2 font-medium text-gray-500">Reps</th>
+          <th className="text-left py-1.5 pl-2 font-medium text-gray-500">Notes</th>
+        </tr>
+      </thead>
+      <tbody>
+        {(workouts as Movement[]).map((m, i) => (
+          <tr key={i} className="border-b border-gray-50">
+            <td className="py-1.5 pr-4 font-medium text-gray-800">{m.name ?? '—'}</td>
+            <td className="py-1.5 px-2 text-center text-gray-600">{m.sets ?? '—'}</td>
+            <td className="py-1.5 px-2 text-center text-gray-600">{m.duration ?? m.reps ?? '—'}</td>
+            <td className="py-1.5 pl-2 text-gray-400">{m.notes ?? ''}</td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  )
+}
+
   const { toast } = useToast()
 
   // Generate form state
@@ -174,10 +253,10 @@ export default function Workouts() {
               )}
               {generatedWorkout.details?.workouts && (
                 <div>
-                  <p className="font-medium mb-1">Exercises:</p>
-                  <pre className="whitespace-pre-wrap text-xs bg-white rounded p-3 border border-green-100 font-sans leading-relaxed">
-                    {JSON.stringify(generatedWorkout.details.workouts, null, 2)}
-                  </pre>
+                  <p className="font-medium mb-2">Exercises:</p>
+                  <div className="bg-white rounded-lg p-3 border border-green-100">
+                    <ExerciseList details={generatedWorkout.details} />
+                  </div>
                 </div>
               )}
             </div>
@@ -229,10 +308,8 @@ export default function Workouts() {
                     </span>
                   </button>
                   {isOpen && (
-                    <div className="px-10 pb-4">
-                      <pre className="whitespace-pre-wrap text-xs bg-gray-50 rounded-lg p-4 border border-gray-200 font-sans leading-relaxed text-gray-700 overflow-x-auto">
-                        {JSON.stringify(w.details?.workouts ?? [], null, 2)}
-                      </pre>
+                    <div className="px-10 pb-5">
+                      <ExerciseList details={w.details} />
                     </div>
                   )}
                 </div>

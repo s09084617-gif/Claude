@@ -343,86 +343,134 @@ export default function Progress() {
             <p className="text-sm">No entries yet. Log your first progress above!</p>
           </div>
         ) : (
-          <div className="overflow-x-auto">
-            <table className="w-full text-sm">
-              <thead>
-                <tr className="border-b border-gray-200">
-                  <th className="text-left py-3 px-3 text-xs font-semibold text-gray-500 uppercase tracking-wider">
-                    Date
-                  </th>
-                  <th className="text-left py-3 px-3 text-xs font-semibold text-gray-500 uppercase tracking-wider">
-                    Weight (kg)
-                  </th>
-                  <th className="text-left py-3 px-3 text-xs font-semibold text-gray-500 uppercase tracking-wider">
-                    Body Fat %
-                  </th>
-                  <th className="text-left py-3 px-3 text-xs font-semibold text-gray-500 uppercase tracking-wider">
-                    Muscle (kg)
-                  </th>
-                  <th className="text-left py-3 px-3 text-xs font-semibold text-gray-500 uppercase tracking-wider">
-                    Notes
-                  </th>
-                  <th className="py-3 px-3"></th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-gray-100">
-                {[...logs]
-                  .sort((a, b) => {
-                    const dateA = a.logged_at ?? a.created_at ?? ''
-                    const dateB = b.logged_at ?? b.created_at ?? ''
-                    return new Date(dateB).getTime() - new Date(dateA).getTime()
-                  })
-                  .map((log) => {
-                    const dateStr = log.logged_at ?? log.created_at ?? ''
-                    return (
-                      <tr key={log.id} className="hover:bg-gray-50 transition-colors">
-                        <td className="py-3 px-3 text-gray-600 text-xs">
+          <>
+            {/* Desktop table */}
+            <div className="hidden sm:block overflow-x-auto">
+              <table className="w-full text-sm">
+                <thead>
+                  <tr className="border-b border-gray-200">
+                    <th className="text-left py-3 px-3 text-xs font-semibold text-gray-500 uppercase tracking-wider">Date</th>
+                    <th className="text-left py-3 px-3 text-xs font-semibold text-gray-500 uppercase tracking-wider">Weight (kg)</th>
+                    <th className="text-left py-3 px-3 text-xs font-semibold text-gray-500 uppercase tracking-wider">Body Fat %</th>
+                    <th className="text-left py-3 px-3 text-xs font-semibold text-gray-500 uppercase tracking-wider">Muscle (kg)</th>
+                    <th className="text-left py-3 px-3 text-xs font-semibold text-gray-500 uppercase tracking-wider">Notes</th>
+                    <th className="py-3 px-3"></th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-gray-100">
+                  {[...logs]
+                    .sort((a, b) => {
+                      const dateA = a.logged_at ?? a.created_at ?? ''
+                      const dateB = b.logged_at ?? b.created_at ?? ''
+                      return new Date(dateB).getTime() - new Date(dateA).getTime()
+                    })
+                    .map((log) => {
+                      const dateStr = log.logged_at ?? log.created_at ?? ''
+                      return (
+                        <tr key={log.id} className="hover:bg-gray-50 transition-colors">
+                          <td className="py-3 px-3 text-gray-600 text-xs">
+                            {dateStr ? new Date(dateStr).toLocaleDateString() : '—'}
+                          </td>
+                          <td className="py-3 px-3 font-medium text-gray-900">
+                            {log.weight_kg !== undefined ? log.weight_kg : '—'}
+                          </td>
+                          <td className="py-3 px-3 text-gray-700">
+                            {log.pbf !== undefined ? `${log.pbf}%` : '—'}
+                          </td>
+                          <td className="py-3 px-3 text-gray-700">
+                            {log.smm_kg !== undefined ? log.smm_kg : '—'}
+                          </td>
+                          <td className="py-3 px-3 text-gray-500 text-xs max-w-[200px] truncate">
+                            {log.notes ?? '—'}
+                          </td>
+                          <td className="py-3 px-3 text-right">
+                            {deleteConfirmId === log.id ? (
+                              <div className="flex items-center gap-1.5 justify-end">
+                                <button onClick={() => handleDelete(log.id)} disabled={deleting}
+                                  className="px-2 py-1 rounded bg-red-600 text-white text-xs font-medium disabled:opacity-50">
+                                  {deleting ? '...' : 'Yes'}
+                                </button>
+                                <button onClick={() => setDeleteConfirmId(null)}
+                                  className="px-2 py-1 rounded border border-gray-300 text-gray-600 text-xs">
+                                  No
+                                </button>
+                              </div>
+                            ) : (
+                              <button onClick={() => setDeleteConfirmId(log.id)}
+                                className="p-1.5 rounded text-gray-400 hover:text-red-600 hover:bg-red-50 transition-colors">
+                                <Trash2 size={14} />
+                              </button>
+                            )}
+                          </td>
+                        </tr>
+                      )
+                    })}
+                </tbody>
+              </table>
+            </div>
+
+            {/* Mobile cards */}
+            <div className="sm:hidden space-y-3">
+              {[...logs]
+                .sort((a, b) => {
+                  const da = a.logged_at ?? a.created_at ?? ''
+                  const db_ = b.logged_at ?? b.created_at ?? ''
+                  return new Date(db_).getTime() - new Date(da).getTime()
+                })
+                .map((log) => {
+                  const dateStr = log.logged_at ?? log.created_at ?? ''
+                  return (
+                    <div key={log.id} className="p-4 rounded-lg bg-gray-50 border border-gray-100">
+                      <div className="flex items-center justify-between mb-2">
+                        <p className="text-xs font-semibold text-gray-500">
                           {dateStr ? new Date(dateStr).toLocaleDateString() : '—'}
-                        </td>
-                        <td className="py-3 px-3 font-medium text-gray-900">
-                          {log.weight_kg !== undefined ? `${log.weight_kg}` : '—'}
-                        </td>
-                        <td className="py-3 px-3 text-gray-700">
-                          {log.pbf !== undefined ? `${log.pbf}%` : '—'}
-                        </td>
-                        <td className="py-3 px-3 text-gray-700">
-                          {log.smm_kg !== undefined ? `${log.smm_kg}` : '—'}
-                        </td>
-                        <td className="py-3 px-3 text-gray-500 text-xs max-w-[200px] truncate">
-                          {log.notes ?? '—'}
-                        </td>
-                        <td className="py-3 px-3 text-right">
-                          {deleteConfirmId === log.id ? (
-                            <div className="flex items-center gap-1.5 justify-end">
-                              <button
-                                onClick={() => handleDelete(log.id)}
-                                disabled={deleting}
-                                className="px-2 py-1 rounded bg-red-600 text-white text-xs font-medium disabled:opacity-50"
-                              >
-                                {deleting ? '...' : 'Yes'}
-                              </button>
-                              <button
-                                onClick={() => setDeleteConfirmId(null)}
-                                className="px-2 py-1 rounded border border-gray-300 text-gray-600 text-xs"
-                              >
-                                No
-                              </button>
-                            </div>
-                          ) : (
-                            <button
-                              onClick={() => setDeleteConfirmId(log.id)}
-                              className="p-1.5 rounded text-gray-400 hover:text-red-600 hover:bg-red-50 transition-colors"
-                            >
-                              <Trash2 size={14} />
+                        </p>
+                        {deleteConfirmId === log.id ? (
+                          <div className="flex items-center gap-1.5">
+                            <button onClick={() => handleDelete(log.id)} disabled={deleting}
+                              className="px-2 py-1 rounded bg-red-600 text-white text-xs font-medium disabled:opacity-50">
+                              {deleting ? '...' : 'Delete'}
                             </button>
-                          )}
-                        </td>
-                      </tr>
-                    )
-                  })}
-              </tbody>
-            </table>
-          </div>
+                            <button onClick={() => setDeleteConfirmId(null)}
+                              className="px-2 py-1 rounded border border-gray-300 text-gray-600 text-xs">
+                              Cancel
+                            </button>
+                          </div>
+                        ) : (
+                          <button onClick={() => setDeleteConfirmId(log.id)}
+                            className="p-1 rounded text-gray-400 hover:text-red-600 transition-colors">
+                            <Trash2 size={14} />
+                          </button>
+                        )}
+                      </div>
+                      <div className="grid grid-cols-3 gap-2 text-center">
+                        {log.weight_kg !== undefined && (
+                          <div className="p-2 rounded bg-white border border-gray-100">
+                            <p className="text-xs text-gray-400">Weight</p>
+                            <p className="font-semibold text-gray-900 text-sm">{log.weight_kg} kg</p>
+                          </div>
+                        )}
+                        {log.pbf !== undefined && (
+                          <div className="p-2 rounded bg-white border border-gray-100">
+                            <p className="text-xs text-gray-400">Body Fat</p>
+                            <p className="font-semibold text-gray-900 text-sm">{log.pbf}%</p>
+                          </div>
+                        )}
+                        {log.smm_kg !== undefined && (
+                          <div className="p-2 rounded bg-white border border-gray-100">
+                            <p className="text-xs text-gray-400">Muscle</p>
+                            <p className="font-semibold text-gray-900 text-sm">{log.smm_kg} kg</p>
+                          </div>
+                        )}
+                      </div>
+                      {log.notes && (
+                        <p className="mt-2 text-xs text-gray-500 italic">{log.notes}</p>
+                      )}
+                    </div>
+                  )
+                })}
+            </div>
+          </>
         )}
       </div>
     </div>

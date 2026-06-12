@@ -87,44 +87,6 @@ def get_program(db: Session, classification: str, restriction: Optional[str]) ->
     return "4_day_split"
 
 
-def get_or_create_user(db: Session, user_id: Optional[int], username: Optional[str]) -> User:
-    if user_id is not None:
-        user = db.get(User, user_id)
-        if not user:
-            raise HTTPException(status_code=404, detail="User not found")
-        return user
-
-    if username:
-        username_key = username.strip()
-        user = db.query(User).filter(User.username == username_key).first()
-        if user:
-            return user
-
-        user = User(
-            username=username_key,
-            email=f"{username_key}@example.com",
-            hashed_password="default_password",
-            is_active=True,
-        )
-        db.add(user)
-        db.flush()
-        return user
-
-    user = db.query(User).filter(User.username == "anonymous").first()
-    if user:
-        return user
-
-    user = User(
-        username="anonymous",
-        email="anonymous@example.com",
-        hashed_password="default_password",
-        is_active=True,
-    )
-    db.add(user)
-    db.flush()
-    return user
-
-
 def create_assessment(db: Session, user: User, title: str, description: str) -> Assessment:
     assessment = Assessment(
         user_id=user.id,
