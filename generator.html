@@ -1,0 +1,777 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Workout Generator · I-BLITZ Fitness Club</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Rajdhani:wght@400;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --crimson:#8B0000;
+  --cb:#CC0000;
+  --gold:#C9A84C;
+  --bg:#0a0a0a;
+  --card:#111;
+  --card2:#161616;
+  --border:rgba(139,0,0,0.25);
+  --text:#e8e8e8;
+  --muted:#777;
+  --green:#22c55e;
+  --wa:#25D366;
+}
+body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;min-height:100vh;overflow-x:hidden}
+
+/* NAV */
+nav{position:sticky;top:0;z-index:200;background:rgba(10,10,10,0.97);border-bottom:1px solid rgba(139,0,0,0.4);backdrop-filter:blur(12px);padding:12px 24px;display:flex;align-items:center;gap:20px;flex-wrap:wrap}
+.nav-logo{font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:3px;color:var(--cb);text-decoration:none}
+nav a{font-family:'Rajdhani',sans-serif;font-size:15px;font-weight:600;color:#888;text-decoration:none;letter-spacing:.5px;transition:color .2s}
+nav a:hover{color:var(--gold)}
+nav a.active{color:var(--cb)}
+
+/* HERO */
+.hero{background:linear-gradient(135deg,#110000 0%,#1a0000 40%,#0a0a0a 100%);border-bottom:2px solid rgba(139,0,0,0.4);padding:52px 24px 44px;text-align:center;position:relative;overflow:hidden}
+.hero::before{content:'GENERATE';position:absolute;font-family:'Bebas Neue',sans-serif;font-size:clamp(80px,18vw,180px);color:rgba(139,0,0,0.06);top:50%;left:50%;transform:translate(-50%,-50%);white-space:nowrap;pointer-events:none;letter-spacing:8px}
+.hero-badge{display:inline-block;background:var(--crimson);color:var(--gold);font-family:'Rajdhani',sans-serif;font-size:12px;font-weight:700;letter-spacing:2px;text-transform:uppercase;padding:5px 14px;border-radius:3px;margin-bottom:14px}
+.hero h1{font-family:'Bebas Neue',sans-serif;font-size:clamp(40px,9vw,80px);letter-spacing:4px;color:#fff;line-height:1}
+.hero h1 span{color:var(--cb)}
+.hero p{font-family:'Rajdhani',sans-serif;font-size:18px;color:var(--muted);margin-top:10px;letter-spacing:1px}
+
+/* FORM */
+.container{max-width:900px;margin:0 auto;padding:36px 20px 60px}
+.form-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:30px;margin-bottom:28px}
+.form-card h2{font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:2px;color:#fff;margin-bottom:6px}
+.form-card p{font-size:13px;color:var(--muted);margin-bottom:22px}
+
+.options-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:10px}
+.opt-btn{background:var(--card2);border:2px solid #222;border-radius:8px;color:var(--text);font-family:'Rajdhani',sans-serif;font-size:15px;font-weight:600;padding:12px 10px;cursor:pointer;transition:all .18s;text-align:center;line-height:1.3;user-select:none}
+.opt-btn:hover{border-color:var(--crimson);color:#fff}
+.opt-btn.selected{background:rgba(139,0,0,0.2);border-color:var(--cb);color:#fff}
+.opt-btn .opt-icon{font-size:22px;display:block;margin-bottom:4px}
+
+.gen-btn{width:100%;background:linear-gradient(135deg,var(--crimson),var(--cb));color:#fff;font-family:'Bebas Neue',sans-serif;font-size:26px;letter-spacing:3px;padding:18px;border:none;border-radius:10px;cursor:pointer;transition:all .2s;margin-top:4px;position:relative;overflow:hidden}
+.gen-btn::after{content:'';position:absolute;inset:0;background:linear-gradient(135deg,transparent,rgba(255,255,255,0.08));opacity:0;transition:opacity .2s}
+.gen-btn:hover::after{opacity:1}
+.gen-btn:hover{transform:translateY(-2px);box-shadow:0 8px 32px rgba(204,0,0,0.4)}
+.gen-btn:active{transform:translateY(0)}
+.gen-btn:disabled{opacity:.4;cursor:not-allowed;transform:none}
+
+/* RESULT */
+#result{display:none}
+.result-header{background:linear-gradient(135deg,rgba(139,0,0,0.3),rgba(10,10,10,0));border:1px solid rgba(139,0,0,0.4);border-radius:12px;padding:24px 28px;margin-bottom:20px;display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:gap}
+.result-header h2{font-family:'Bebas Neue',sans-serif;font-size:clamp(22px,5vw,36px);letter-spacing:3px;color:#fff;line-height:1}
+.result-header h2 span{color:var(--cb)}
+.result-meta{display:flex;gap:14px;flex-wrap:wrap;margin-top:8px}
+.meta-chip{background:#1a1a1a;border:1px solid #2a2a2a;border-radius:4px;padding:4px 12px;font-size:12px;font-weight:600;letter-spacing:.5px;text-transform:uppercase;color:var(--muted)}
+.meta-chip.gold{color:var(--gold);border-color:rgba(201,168,76,0.3)}
+.result-actions{display:flex;gap:10px;flex-shrink:0;flex-wrap:wrap}
+.btn{display:inline-flex;align-items:center;gap:8px;padding:10px 18px;border-radius:7px;font-family:'Rajdhani',sans-serif;font-size:15px;font-weight:700;letter-spacing:.5px;cursor:pointer;border:none;text-decoration:none;transition:all .18s}
+.btn-wa{background:var(--wa);color:#fff}
+.btn-wa:hover{background:#1aab52}
+.btn-book{background:var(--crimson);color:#fff}
+.btn-book:hover{background:var(--cb)}
+.btn-ghost{background:#1a1a1a;border:1px solid #2a2a2a;color:var(--text)}
+.btn-ghost:hover{border-color:var(--gold);color:var(--gold)}
+
+/* EXERCISE TABLE */
+.ex-table{background:var(--card);border:1px solid var(--border);border-radius:10px;overflow:hidden;margin-bottom:20px}
+.ex-table-head{display:grid;grid-template-columns:36px 1fr 80px 80px 80px 80px;gap:0;background:#161616;padding:10px 18px;font-size:10px;text-transform:uppercase;letter-spacing:1.5px;color:var(--muted);font-weight:700;border-bottom:1px solid #1e1e1e}
+.ex-row{display:grid;grid-template-columns:36px 1fr 80px 80px 80px 80px;gap:0;padding:14px 18px;border-bottom:1px solid #181818;align-items:center;transition:background .15s}
+.ex-row:last-child{border-bottom:none}
+.ex-row:hover{background:rgba(139,0,0,0.04)}
+.ex-num{font-family:'Bebas Neue',sans-serif;font-size:20px;color:rgba(139,0,0,0.5);line-height:1}
+.ex-name{font-size:14px;font-weight:600;color:#fff;line-height:1.3}
+.ex-type{font-size:11px;color:var(--muted);margin-top:2px;font-weight:400}
+.ex-sets,.ex-reps,.ex-rest,.ex-tempo{font-size:13px;font-weight:600;color:var(--text);text-align:center}
+.ex-sets{color:var(--gold)}
+.ex-reps{color:#fff}
+.ex-rest{color:var(--muted)}
+
+/* TIP CARD */
+.tip-card{background:linear-gradient(135deg,rgba(201,168,76,0.07),rgba(10,10,10,0));border:1px solid rgba(201,168,76,0.25);border-radius:10px;padding:20px 24px;display:flex;gap:16px;align-items:flex-start;margin-bottom:20px}
+.tip-icon{font-size:28px;flex-shrink:0;margin-top:2px}
+.tip-card h4{font-family:'Bebas Neue',sans-serif;font-size:16px;letter-spacing:2px;color:var(--gold);margin-bottom:4px}
+.tip-card p{font-size:13px;color:var(--muted);line-height:1.6}
+
+/* LOADING */
+.loading{text-align:center;padding:48px;display:none}
+.loader{width:48px;height:48px;border:3px solid #222;border-top-color:var(--cb);border-radius:50%;animation:spin .7s linear infinite;margin:0 auto 16px}
+@keyframes spin{to{transform:rotate(360deg)}}
+.loading p{font-family:'Rajdhani',sans-serif;font-size:18px;color:var(--muted);letter-spacing:1px}
+
+/* FOOTER */
+footer{text-align:center;padding:28px;border-top:1px solid rgba(139,0,0,0.2);color:#444;font-size:12px;letter-spacing:1px;margin-top:20px}
+footer a{color:var(--gold);text-decoration:none}
+
+@media(max-width:640px){
+  .ex-table-head,.ex-row{grid-template-columns:28px 1fr 60px 60px 60px 60px;padding:10px 12px;gap:0}
+  .ex-name{font-size:13px}
+  .result-header{flex-direction:column;gap:14px}
+  .options-grid{grid-template-columns:repeat(auto-fill,minmax(100px,1fr))}
+}
+@media(max-width:440px){
+  .ex-table-head{display:none}
+  .ex-row{grid-template-columns:28px 1fr;padding:12px}
+  .ex-sets,.ex-reps,.ex-rest,.ex-tempo{display:none}
+  .ex-name::after{content:attr(data-detail);display:block;font-size:11px;color:var(--muted);font-weight:400;margin-top:3px}
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="nav-logo">I-BLITZ</a>
+  <a href="index.html">Home</a>
+  <a href="men.html">Men's</a>
+  <a href="women.html">Women's</a>
+  <a href="slots.html" style="color:var(--wa)">📅 Book Slot</a>
+  <a href="generator.html" class="active" style="color:var(--gold)">⚡ Generator</a>
+</nav>
+
+<div class="hero">
+  <div class="hero-badge">I-BLITZ Fitness Club · Bangalore</div>
+  <h1>WORKOUT <span>GENERATOR</span></h1>
+  <p>Custom plans by Coach Sahil · Pick your goal, get your workout</p>
+</div>
+
+<div class="container">
+
+  <!-- STEP 1: MUSCLE GROUP -->
+  <div class="form-card">
+    <h2>01 · TARGET MUSCLE</h2>
+    <p>Which muscle group are you training today?</p>
+    <div class="options-grid" id="muscleOpts">
+      <button class="opt-btn" data-val="chest"><span class="opt-icon">💪</span>Chest</button>
+      <button class="opt-btn" data-val="back"><span class="opt-icon">🔙</span>Back</button>
+      <button class="opt-btn" data-val="shoulders"><span class="opt-icon">🏋️</span>Shoulders</button>
+      <button class="opt-btn" data-val="biceps"><span class="opt-icon">💪</span>Biceps</button>
+      <button class="opt-btn" data-val="triceps"><span class="opt-icon">🦾</span>Triceps</button>
+      <button class="opt-btn" data-val="legs"><span class="opt-icon">🦵</span>Legs</button>
+      <button class="opt-btn" data-val="core"><span class="opt-icon">🔥</span>Core</button>
+      <button class="opt-btn" data-val="fullbody"><span class="opt-icon">⚡</span>Full Body</button>
+    </div>
+  </div>
+
+  <!-- STEP 2: LEVEL -->
+  <div class="form-card">
+    <h2>02 · EXPERIENCE LEVEL</h2>
+    <p>How long have you been training consistently?</p>
+    <div class="options-grid" id="levelOpts">
+      <button class="opt-btn" data-val="beginner"><span class="opt-icon">🌱</span>Beginner<br><small style="font-size:11px;color:#555">0–6 months</small></button>
+      <button class="opt-btn" data-val="intermediate"><span class="opt-icon">⚡</span>Intermediate<br><small style="font-size:11px;color:#555">6–24 months</small></button>
+      <button class="opt-btn" data-val="advanced"><span class="opt-icon">🔥</span>Advanced<br><small style="font-size:11px;color:#555">2+ years</small></button>
+    </div>
+  </div>
+
+  <!-- STEP 3: GOAL -->
+  <div class="form-card">
+    <h2>03 · TRAINING GOAL</h2>
+    <p>What do you want to achieve from this session?</p>
+    <div class="options-grid" id="goalOpts">
+      <button class="opt-btn" data-val="muscle"><span class="opt-icon">💪</span>Muscle Building</button>
+      <button class="opt-btn" data-val="fatloss"><span class="opt-icon">🔥</span>Fat Loss</button>
+      <button class="opt-btn" data-val="strength"><span class="opt-icon">🏋️</span>Strength</button>
+      <button class="opt-btn" data-val="endurance"><span class="opt-icon">🏃</span>Endurance</button>
+    </div>
+  </div>
+
+  <!-- STEP 4: EQUIPMENT -->
+  <div class="form-card">
+    <h2>04 · EQUIPMENT</h2>
+    <p>What do you have access to right now?</p>
+    <div class="options-grid" id="equipOpts">
+      <button class="opt-btn" data-val="gym"><span class="opt-icon">🏟️</span>Full Gym</button>
+      <button class="opt-btn" data-val="dumbbells"><span class="opt-icon">🥊</span>Dumbbells Only</button>
+      <button class="opt-btn" data-val="bodyweight"><span class="opt-icon">🤸</span>Bodyweight</button>
+    </div>
+  </div>
+
+  <button class="gen-btn" id="genBtn" onclick="generate()">⚡ GENERATE MY WORKOUT</button>
+
+  <!-- LOADING -->
+  <div class="loading" id="loading">
+    <div class="loader"></div>
+    <p>Building your custom workout...</p>
+  </div>
+
+  <!-- RESULT -->
+  <div id="result"></div>
+
+</div>
+
+<footer>
+  © 2025 I-BLITZ Fitness Club · Bangalore ·
+  <a href="index.html">Home</a> · <a href="slots.html">Book a Slot</a>
+</footer>
+
+<script>
+// ─── EXERCISE DATABASE ───────────────────────────────────────────
+const DB = {
+  chest: {
+    gym: {
+      compound: [
+        {name:'Barbell Bench Press',type:'Compound · Primary push',muscle:'Pectoralis Major'},
+        {name:'Incline Barbell Press',type:'Compound · Upper chest',muscle:'Upper Pec'},
+        {name:'Decline Barbell Press',type:'Compound · Lower chest',muscle:'Lower Pec'},
+        {name:'Cable Crossover',type:'Isolation · Pec fly',muscle:'Pectoralis'},
+      ],
+      isolation: [
+        {name:'Dumbbell Flyes',type:'Isolation · Stretch focus',muscle:'Pectoralis'},
+        {name:'Incline Dumbbell Flyes',type:'Isolation · Upper chest',muscle:'Upper Pec'},
+        {name:'Cable Fly — Low to High',type:'Isolation · Lower pec',muscle:'Lower Pec'},
+        {name:'Chest Dips',type:'Compound · Lower chest',muscle:'Chest/Triceps'},
+        {name:'Pec Deck Machine',type:'Isolation · Mind-muscle',muscle:'Pectoralis'},
+        {name:'Dumbbell Pullover',type:'Isolation · Chest stretch',muscle:'Pec/Serratus'},
+      ]
+    },
+    dumbbells: {
+      compound: [
+        {name:'Dumbbell Bench Press',type:'Compound · Flat press',muscle:'Pectoralis Major'},
+        {name:'Incline Dumbbell Press',type:'Compound · Upper chest',muscle:'Upper Pec'},
+        {name:'Decline Dumbbell Press',type:'Compound · Lower chest',muscle:'Lower Pec'},
+      ],
+      isolation: [
+        {name:'Dumbbell Flyes',type:'Isolation · Stretch focus',muscle:'Pectoralis'},
+        {name:'Incline Dumbbell Flyes',type:'Isolation · Upper chest',muscle:'Upper Pec'},
+        {name:'Dumbbell Pullover',type:'Isolation · Chest stretch',muscle:'Pec/Serratus'},
+        {name:'Around the World',type:'Isolation · Full pec',muscle:'Pectoralis'},
+      ]
+    },
+    bodyweight: {
+      compound: [
+        {name:'Push-Up',type:'Compound · Chest/Triceps',muscle:'Pectoralis'},
+        {name:'Wide-Grip Push-Up',type:'Compound · Chest focused',muscle:'Pec Major'},
+        {name:'Decline Push-Up',type:'Compound · Upper chest',muscle:'Upper Pec'},
+        {name:'Diamond Push-Up',type:'Compound · Tricep/Chest',muscle:'Triceps/Chest'},
+      ],
+      isolation: [
+        {name:'Archer Push-Up',type:'Isolation · Unilateral',muscle:'Pec Major'},
+        {name:'Hindu Push-Up',type:'Dynamic · Full pec',muscle:'Pec/Shoulder'},
+        {name:'Close-Grip Push-Up',type:'Isolation · Inner chest',muscle:'Inner Pec'},
+        {name:'Chest Squeeze Push-Up',type:'Isolation · Mind-muscle',muscle:'Pectoralis'},
+      ]
+    }
+  },
+
+  back: {
+    gym: {
+      compound: [
+        {name:'Barbell Deadlift',type:'Compound · King of back',muscle:'Entire Posterior Chain'},
+        {name:'Bent-Over Barbell Row',type:'Compound · Thickness',muscle:'Lats/Rhomboids'},
+        {name:'Pull-Up / Chin-Up',type:'Compound · Width builder',muscle:'Lats'},
+        {name:'T-Bar Row',type:'Compound · Mid-back',muscle:'Mid Back/Lats'},
+        {name:'Seated Cable Row',type:'Compound · Full back',muscle:'Mid Back'},
+      ],
+      isolation: [
+        {name:'Lat Pulldown',type:'Isolation · Lat width',muscle:'Latissimus Dorsi'},
+        {name:'Single-Arm Dumbbell Row',type:'Isolation · Unilateral',muscle:'Lats/Rhomboids'},
+        {name:'Straight-Arm Pulldown',type:'Isolation · Lat isolation',muscle:'Lats'},
+        {name:'Face Pull',type:'Isolation · Rear delt/traps',muscle:'Rear Delt/Traps'},
+        {name:'Rack Pull',type:'Compound · Traps/Erectors',muscle:'Traps/Lower Back'},
+      ]
+    },
+    dumbbells: {
+      compound: [
+        {name:'Dumbbell Bent-Over Row',type:'Compound · Back thickness',muscle:'Lats/Rhomboids'},
+        {name:'Single-Arm Dumbbell Row',type:'Isolation · Unilateral',muscle:'Lats/Rhomboids'},
+        {name:'Renegade Row',type:'Compound · Core/Back',muscle:'Back/Core'},
+        {name:'Dumbbell Deadlift',type:'Compound · Posterior chain',muscle:'Full Back'},
+      ],
+      isolation: [
+        {name:'Dumbbell Pullover',type:'Isolation · Lat stretch',muscle:'Lats/Serratus'},
+        {name:'Dumbbell Shrug',type:'Isolation · Traps',muscle:'Trapezius'},
+        {name:'Dumbbell Face Pull',type:'Isolation · Rear delt',muscle:'Rear Delt/Traps'},
+        {name:'Incline Dumbbell Row',type:'Isolation · Upper back',muscle:'Upper Lats'},
+      ]
+    },
+    bodyweight: {
+      compound: [
+        {name:'Pull-Up',type:'Compound · Width builder',muscle:'Lats'},
+        {name:'Chin-Up',type:'Compound · Bicep/Lat',muscle:'Lats/Biceps'},
+        {name:'Inverted Row (Table Row)',type:'Compound · Horizontal pull',muscle:'Mid Back'},
+        {name:'Australian Pull-Up',type:'Compound · Mid-back',muscle:'Rhomboids/Lats'},
+      ],
+      isolation: [
+        {name:'Superman Hold',type:'Isolation · Lower back',muscle:'Erector Spinae'},
+        {name:'Scapular Pull-Up',type:'Isolation · Lat activation',muscle:'Lats/Serratus'},
+        {name:'Band Pull-Apart',type:'Isolation · Upper back',muscle:'Rear Delt/Traps'},
+        {name:'Good Morning',type:'Isolation · Hamstrings/Back',muscle:'Posterior Chain'},
+      ]
+    }
+  },
+
+  shoulders: {
+    gym: {
+      compound: [
+        {name:'Barbell Overhead Press',type:'Compound · King of shoulders',muscle:'All 3 Deltoid Heads'},
+        {name:'Arnold Press',type:'Compound · Full delt',muscle:'All 3 Deltoid Heads'},
+        {name:'Dumbbell Shoulder Press',type:'Compound · Full delt press',muscle:'Anterior/Lateral Delt'},
+        {name:'Smith Machine Press',type:'Compound · Guided press',muscle:'Anterior Delt'},
+      ],
+      isolation: [
+        {name:'Lateral Raise',type:'Isolation · Shoulder width',muscle:'Lateral Deltoid'},
+        {name:'Front Raise',type:'Isolation · Anterior delt',muscle:'Anterior Deltoid'},
+        {name:'Rear Delt Fly',type:'Isolation · Rear delt',muscle:'Posterior Deltoid'},
+        {name:'Cable Lateral Raise',type:'Isolation · Constant tension',muscle:'Lateral Delt'},
+        {name:'Face Pull',type:'Isolation · Rear delt/traps',muscle:'Rear Delt/External Rotators'},
+        {name:'Upright Row',type:'Compound · Traps/Lateral delt',muscle:'Traps/Lateral Delt'},
+        {name:'Shrug',type:'Isolation · Trapezius',muscle:'Upper Trapezius'},
+      ]
+    },
+    dumbbells: {
+      compound: [
+        {name:'Dumbbell Shoulder Press',type:'Compound · Full delt',muscle:'All 3 Deltoid Heads'},
+        {name:'Arnold Press',type:'Compound · Full delt rotation',muscle:'All Heads'},
+        {name:'Dumbbell Upright Row',type:'Compound · Lateral/Trap',muscle:'Lateral Delt/Traps'},
+      ],
+      isolation: [
+        {name:'Lateral Raise',type:'Isolation · Width builder',muscle:'Lateral Deltoid'},
+        {name:'Front Raise',type:'Isolation · Front delt',muscle:'Anterior Deltoid'},
+        {name:'Bent-Over Rear Delt Fly',type:'Isolation · Rear delt',muscle:'Posterior Deltoid'},
+        {name:'Dumbbell Shrug',type:'Isolation · Upper traps',muscle:'Trapezius'},
+        {name:'Cuban Press',type:'Compound · Full shoulder',muscle:'All Heads + Rotator Cuff'},
+      ]
+    },
+    bodyweight: {
+      compound: [
+        {name:'Pike Push-Up',type:'Compound · Shoulder press pattern',muscle:'Anterior/Lateral Delt'},
+        {name:'Handstand Push-Up',type:'Compound · Advanced overhead',muscle:'All Deltoid Heads'},
+        {name:'Decline Pike Push-Up',type:'Compound · Overhead emphasis',muscle:'Anterior Delt'},
+        {name:'Wall Handstand Hold',type:'Isometric · Shoulder stability',muscle:'All Deltoid Heads'},
+      ],
+      isolation: [
+        {name:'Arm Circle (Weighted)',type:'Isolation · Lateral delt',muscle:'Lateral Deltoid'},
+        {name:'Band Pull-Apart',type:'Isolation · Rear delt',muscle:'Posterior Deltoid'},
+        {name:'L-Sit Shoulder Press',type:'Compound · Core/Shoulder',muscle:'All Heads/Core'},
+        {name:'Superman Arm Raise',type:'Isolation · Rear delt/traps',muscle:'Rear Delt/Traps'},
+      ]
+    }
+  },
+
+  biceps: {
+    gym: {
+      compound: [
+        {name:'Barbell Curl',type:'Compound · Mass builder',muscle:'Biceps Brachii'},
+        {name:'EZ-Bar Curl',type:'Compound · Wrist-friendly',muscle:'Biceps/Brachialis'},
+        {name:'Incline Dumbbell Curl',type:'Compound · Long head stretch',muscle:'Long Head Bicep'},
+      ],
+      isolation: [
+        {name:'Hammer Curl',type:'Isolation · Brachialis',muscle:'Brachialis/Bicep'},
+        {name:'Preacher Curl',type:'Isolation · Short head peak',muscle:'Short Head Bicep'},
+        {name:'Concentration Curl',type:'Isolation · Peak contraction',muscle:'Bicep Peak'},
+        {name:'Cable Curl',type:'Isolation · Constant tension',muscle:'Biceps Brachii'},
+        {name:'Reverse Curl',type:'Isolation · Brachioradialis',muscle:'Brachioradialis'},
+        {name:'Spider Curl',type:'Isolation · Short head',muscle:'Short Head Bicep'},
+      ]
+    },
+    dumbbells: {
+      compound: [
+        {name:'Dumbbell Curl',type:'Compound · Supination emphasis',muscle:'Biceps Brachii'},
+        {name:'Hammer Curl',type:'Compound · Brachialis',muscle:'Brachialis/Bicep'},
+        {name:'Cross-Body Hammer Curl',type:'Compound · Brachialis peak',muscle:'Brachialis'},
+      ],
+      isolation: [
+        {name:'Concentration Curl',type:'Isolation · Peak contraction',muscle:'Bicep Peak'},
+        {name:'Incline Curl',type:'Isolation · Long head',muscle:'Long Head Bicep'},
+        {name:'Zottman Curl',type:'Isolation · Full bicep',muscle:'Bicep/Brachioradialis'},
+        {name:'Reverse Curl',type:'Isolation · Forearm',muscle:'Brachioradialis'},
+        {name:'Waiter Curl',type:'Isolation · Short head',muscle:'Short Head Bicep'},
+      ]
+    },
+    bodyweight: {
+      compound: [
+        {name:'Chin-Up',type:'Compound · Best bodyweight bicep',muscle:'Biceps/Lats'},
+        {name:'Inverted Row (Underhand)',type:'Compound · Horizontal bicep pull',muscle:'Biceps/Back'},
+        {name:'Negative Chin-Up',type:'Eccentric · Strength builder',muscle:'Biceps Brachii'},
+      ],
+      isolation: [
+        {name:'Resistance Band Curl',type:'Isolation · Constant tension',muscle:'Biceps Brachii'},
+        {name:'Towel Curl',type:'Isolation · Grip/Bicep',muscle:'Biceps/Forearm'},
+        {name:'Isometric Bicep Hold',type:'Isometric · Mind-muscle',muscle:'Biceps Brachii'},
+        {name:'Archer Chin-Up',type:'Isolation · Unilateral',muscle:'Biceps/Lat'},
+      ]
+    }
+  },
+
+  triceps: {
+    gym: {
+      compound: [
+        {name:'Close-Grip Bench Press',type:'Compound · Mass builder',muscle:'All 3 Tricep Heads'},
+        {name:'Skull Crushers (EZ Bar)',type:'Compound · Long head mass',muscle:'Long Head Tricep'},
+        {name:'Dips (Tricep Focus)',type:'Compound · Lower/Lateral head',muscle:'Triceps'},
+      ],
+      isolation: [
+        {name:'Cable Pushdown',type:'Isolation · Lateral head',muscle:'Lateral Tricep Head'},
+        {name:'Overhead Cable Extension',type:'Isolation · Long head stretch',muscle:'Long Head Tricep'},
+        {name:'Single-Arm Pushdown',type:'Isolation · Unilateral',muscle:'Triceps'},
+        {name:'Dumbbell Kickback',type:'Isolation · Peak contraction',muscle:'Lateral/Long Head'},
+        {name:'Overhead Dumbbell Extension',type:'Isolation · Long head',muscle:'Long Head Tricep'},
+        {name:'Reverse Grip Pushdown',type:'Isolation · Medial head',muscle:'Medial Tricep Head'},
+      ]
+    },
+    dumbbells: {
+      compound: [
+        {name:'Dumbbell Skull Crusher',type:'Compound · Long head mass',muscle:'Triceps Brachii'},
+        {name:'Close-Grip Dumbbell Press',type:'Compound · All heads',muscle:'All Tricep Heads'},
+        {name:'Overhead Dumbbell Extension',type:'Compound · Long head',muscle:'Long Head'},
+      ],
+      isolation: [
+        {name:'Dumbbell Kickback',type:'Isolation · Peak contraction',muscle:'Lateral/Medial Head'},
+        {name:'Tate Press',type:'Isolation · Medial head',muscle:'Medial Tricep'},
+        {name:'Floor Press',type:'Compound · Tricep focus',muscle:'Triceps/Chest'},
+        {name:'JM Press',type:'Compound · Strength/Mass',muscle:'All Tricep Heads'},
+      ]
+    },
+    bodyweight: {
+      compound: [
+        {name:'Diamond Push-Up',type:'Compound · All heads',muscle:'Triceps/Chest'},
+        {name:'Tricep Dip (Bench)',type:'Compound · All heads',muscle:'Triceps'},
+        {name:'Pike Push-Up',type:'Compound · Overhead pattern',muscle:'Triceps/Shoulder'},
+        {name:'Close-Grip Push-Up',type:'Compound · Tricep emphasis',muscle:'Triceps'},
+      ],
+      isolation: [
+        {name:'Overhead Tricep Extension (Band)',type:'Isolation · Long head stretch',muscle:'Long Head Tricep'},
+        {name:'Tricep Push-Up Negatives',type:'Eccentric · Strength builder',muscle:'Triceps Brachii'},
+        {name:'Bench Dip',type:'Compound · Full tricep',muscle:'All Tricep Heads'},
+        {name:'Sphinx Push-Up',type:'Isolation · Medial head',muscle:'Medial/Long Head'},
+      ]
+    }
+  },
+
+  legs: {
+    gym: {
+      compound: [
+        {name:'Barbell Back Squat',type:'Compound · King of legs',muscle:'Quads/Glutes/Hamstrings'},
+        {name:'Romanian Deadlift',type:'Compound · Posterior chain',muscle:'Hamstrings/Glutes'},
+        {name:'Leg Press',type:'Compound · Quad dominant',muscle:'Quads/Glutes'},
+        {name:'Barbell Hip Thrust',type:'Compound · Glute king',muscle:'Glutes/Hamstrings'},
+        {name:'Bulgarian Split Squat',type:'Compound · Unilateral',muscle:'Quads/Glutes'},
+      ],
+      isolation: [
+        {name:'Leg Extension',type:'Isolation · Quad isolation',muscle:'Quadriceps'},
+        {name:'Leg Curl (Lying)',type:'Isolation · Hamstring curl',muscle:'Hamstrings'},
+        {name:'Seated Leg Curl',type:'Isolation · Hamstring stretch',muscle:'Hamstrings'},
+        {name:'Standing Calf Raise',type:'Isolation · Gastrocnemius',muscle:'Calves'},
+        {name:'Seated Calf Raise',type:'Isolation · Soleus',muscle:'Soleus'},
+        {name:'Sumo Squat',type:'Compound · Inner thigh/Glutes',muscle:'Adductors/Glutes'},
+        {name:'Cable Glute Kickback',type:'Isolation · Glute peak',muscle:'Gluteus Maximus'},
+      ]
+    },
+    dumbbells: {
+      compound: [
+        {name:'Dumbbell Goblet Squat',type:'Compound · Quad/Glute',muscle:'Quads/Glutes'},
+        {name:'Dumbbell Romanian Deadlift',type:'Compound · Posterior chain',muscle:'Hamstrings/Glutes'},
+        {name:'Dumbbell Lunge',type:'Compound · Unilateral',muscle:'Quads/Glutes'},
+        {name:'Dumbbell Step-Up',type:'Compound · Glute/Quad',muscle:'Glutes/Quads'},
+        {name:'Dumbbell Bulgarian Split Squat',type:'Compound · Unilateral',muscle:'Quads/Glutes'},
+      ],
+      isolation: [
+        {name:'Dumbbell Hip Thrust',type:'Isolation · Glute focus',muscle:'Glutes'},
+        {name:'Dumbbell Calf Raise',type:'Isolation · Calves',muscle:'Gastrocnemius'},
+        {name:'Dumbbell Sumo Squat',type:'Compound · Inner thigh',muscle:'Adductors/Glutes'},
+        {name:'Dumbbell Good Morning',type:'Isolation · Hamstrings',muscle:'Hamstrings/Lower Back'},
+      ]
+    },
+    bodyweight: {
+      compound: [
+        {name:'Bodyweight Squat',type:'Compound · Foundational',muscle:'Quads/Glutes'},
+        {name:'Jump Squat',type:'Compound · Explosive power',muscle:'Quads/Glutes/Calves'},
+        {name:'Reverse Lunge',type:'Compound · Unilateral balance',muscle:'Glutes/Quads'},
+        {name:'Glute Bridge',type:'Compound · Posterior chain',muscle:'Glutes/Hamstrings'},
+        {name:'Pistol Squat',type:'Compound · Advanced unilateral',muscle:'Full Leg'},
+      ],
+      isolation: [
+        {name:'Wall Sit',type:'Isometric · Quad endurance',muscle:'Quadriceps'},
+        {name:'Donkey Kick',type:'Isolation · Glute focus',muscle:'Gluteus Maximus'},
+        {name:'Fire Hydrant',type:'Isolation · Glute med',muscle:'Gluteus Medius'},
+        {name:'Calf Raise (Bodyweight)',type:'Isolation · Calves',muscle:'Gastrocnemius'},
+        {name:'Nordic Hamstring Curl',type:'Eccentric · Hamstrings',muscle:'Hamstrings'},
+        {name:'Glute Kickback',type:'Isolation · Glute peak',muscle:'Glutes'},
+      ]
+    }
+  },
+
+  core: {
+    gym: {
+      compound: [
+        {name:'Cable Crunch',type:'Compound · Rectus abdominis',muscle:'Abs'},
+        {name:'Hanging Leg Raise',type:'Compound · Lower abs',muscle:'Lower Abs/Hip Flexors'},
+        {name:'Ab Wheel Rollout',type:'Compound · Full core',muscle:'Entire Core'},
+        {name:'Pallof Press',type:'Anti-rotation · Core stability',muscle:'Transverse Abdominis'},
+      ],
+      isolation: [
+        {name:'Decline Sit-Up',type:'Isolation · Weighted crunch',muscle:'Rectus Abdominis'},
+        {name:'Cable Woodchop',type:'Isolation · Obliques',muscle:'Obliques'},
+        {name:'Plank',type:'Isometric · Core stability',muscle:'Entire Core'},
+        {name:'Russian Twist (Weighted)',type:'Isolation · Obliques',muscle:'Obliques'},
+        {name:'Leg Raise',type:'Isolation · Lower abs',muscle:'Lower Abs'},
+        {name:'Side Bend (Cable)',type:'Isolation · Lateral oblique',muscle:'Obliques'},
+      ]
+    },
+    dumbbells: {
+      compound: [
+        {name:'Dumbbell Woodchop',type:'Compound · Rotational power',muscle:'Obliques/Core'},
+        {name:'Dumbbell Side Bend',type:'Compound · Lateral core',muscle:'Obliques'},
+        {name:'Farmers Walk (Single Arm)',type:'Compound · Anti-lateral flex',muscle:'Core/Grip'},
+      ],
+      isolation: [
+        {name:'Dumbbell Russian Twist',type:'Isolation · Obliques',muscle:'Obliques'},
+        {name:'Weighted Plank',type:'Isometric · Core stability',muscle:'Entire Core'},
+        {name:'Dumbbell Crunch',type:'Isolation · Abs',muscle:'Rectus Abdominis'},
+        {name:'Windmill',type:'Isolation · Lateral oblique',muscle:'Obliques/Shoulder'},
+        {name:'Suitcase Carry',type:'Compound · Anti-lateral flex',muscle:'Core/Lats'},
+      ]
+    },
+    bodyweight: {
+      compound: [
+        {name:'Plank',type:'Isometric · Core stability',muscle:'Entire Core'},
+        {name:'Hollow Body Hold',type:'Isometric · Full core tension',muscle:'Entire Core'},
+        {name:'L-Sit Hold',type:'Isometric · Advanced core',muscle:'Abs/Hip Flexors'},
+        {name:'Ab Wheel Rollout',type:'Compound · Full core',muscle:'Entire Core'},
+      ],
+      isolation: [
+        {name:'Crunch',type:'Isolation · Upper abs',muscle:'Rectus Abdominis'},
+        {name:'Leg Raise',type:'Isolation · Lower abs',muscle:'Lower Abs'},
+        {name:'Bicycle Crunch',type:'Isolation · Full abs/Obliques',muscle:'Obliques/Abs'},
+        {name:'Mountain Climber',type:'Compound · Core/Cardio',muscle:'Core/Hip Flexors'},
+        {name:'Dead Bug',type:'Isolation · Deep core',muscle:'Transverse Abdominis'},
+        {name:'Side Plank',type:'Isometric · Lateral core',muscle:'Obliques'},
+        {name:'V-Up',type:'Isolation · Full abs',muscle:'Upper/Lower Abs'},
+        {name:'Russian Twist',type:'Isolation · Obliques',muscle:'Obliques'},
+      ]
+    }
+  },
+
+  fullbody: {
+    gym: {
+      compound: [
+        {name:'Barbell Deadlift',type:'Compound · Full posterior chain',muscle:'Full Body'},
+        {name:'Barbell Back Squat',type:'Compound · Leg/Core/Back',muscle:'Full Body'},
+        {name:'Barbell Overhead Press',type:'Compound · Push/Core',muscle:'Shoulders/Triceps/Core'},
+        {name:'Barbell Bent-Over Row',type:'Compound · Pull/Back',muscle:'Back/Biceps/Core'},
+        {name:'Dumbbell Thruster',type:'Compound · Explosive full body',muscle:'Full Body'},
+        {name:'Power Clean',type:'Compound · Olympic lift',muscle:'Full Body'},
+      ],
+      isolation: [
+        {name:'Pull-Up',type:'Compound · Upper body pull',muscle:'Lats/Biceps'},
+        {name:'Dumbbell Lunge to Curl',type:'Compound · Lower + Bicep',muscle:'Legs/Biceps'},
+        {name:'Kettlebell Swing',type:'Compound · Hip drive/Cardio',muscle:'Posterior Chain'},
+        {name:'Burpee',type:'Compound · Conditioning',muscle:'Full Body'},
+        {name:'Box Jump',type:'Compound · Explosive legs',muscle:'Quads/Glutes/Calves'},
+      ]
+    },
+    dumbbells: {
+      compound: [
+        {name:'Dumbbell Thruster',type:'Compound · Squat + Press',muscle:'Full Body'},
+        {name:'Dumbbell Deadlift',type:'Compound · Posterior chain',muscle:'Full Body'},
+        {name:'Dumbbell Romanian Deadlift',type:'Compound · Hamstring/Back',muscle:'Full Body'},
+        {name:'Renegade Row',type:'Compound · Push/Pull/Core',muscle:'Full Body'},
+        {name:'Dumbbell Clean and Press',type:'Compound · Olympic pattern',muscle:'Full Body'},
+      ],
+      isolation: [
+        {name:'Dumbbell Goblet Squat',type:'Compound · Legs/Core',muscle:'Quads/Glutes'},
+        {name:'Dumbbell Lunge to Curl',type:'Compound · Legs/Bicep',muscle:'Full Body'},
+        {name:'Dumbbell Swing',type:'Compound · Hip hinge/Cardio',muscle:'Posterior Chain'},
+        {name:'Burpee (Dumbbell)',type:'Compound · Conditioning',muscle:'Full Body'},
+        {name:'Man Maker',type:'Compound · Elite combo',muscle:'Full Body'},
+      ]
+    },
+    bodyweight: {
+      compound: [
+        {name:'Burpee',type:'Compound · Full body conditioning',muscle:'Full Body'},
+        {name:'Jump Squat',type:'Compound · Explosive legs',muscle:'Quads/Glutes'},
+        {name:'Push-Up',type:'Compound · Upper body push',muscle:'Chest/Triceps/Core'},
+        {name:'Pull-Up',type:'Compound · Upper body pull',muscle:'Lats/Biceps'},
+        {name:'Mountain Climber',type:'Compound · Core/Cardio',muscle:'Full Body'},
+      ],
+      isolation: [
+        {name:'Jump Lunge',type:'Compound · Explosive unilateral',muscle:'Quads/Glutes'},
+        {name:'Plank to Downward Dog',type:'Compound · Core/Mobility',muscle:'Core/Shoulders'},
+        {name:'Bear Crawl',type:'Compound · Core/Conditioning',muscle:'Core/Full Body'},
+        {name:'Tuck Jump',type:'Compound · Plyometric',muscle:'Full Body'},
+        {name:'Inchworm',type:'Compound · Core/Hamstrings',muscle:'Core/Full Body'},
+      ]
+    }
+  }
+};
+
+// ─── PRESCRIPTION BY GOAL × LEVEL ───────────────────────────────
+const PRESCRIPTION = {
+  muscle: {
+    beginner:     {sets:'3',reps:'10–12',rest:'60s',tempo:'2-0-2',tip:"Focus on feeling the muscle contract every rep. Control the weight — don't let the weight control you.",exCount:5},
+    intermediate: {sets:'4',reps:'8–12', rest:'75s',tempo:'3-1-2',tip:"Apply progressive overload — add 2.5kg or 1 clean rep each week. Track every session.",exCount:6},
+    advanced:     {sets:'4–5',reps:'6–12',rest:'90s',tempo:'4-1-2',tip:"Use drop sets, supersets, and rest-pause on final sets. You need intensity techniques to keep growing.",exCount:7}
+  },
+  fatloss: {
+    beginner:     {sets:'3',reps:'12–15',rest:'45s',tempo:'2-0-1',tip:"Keep rest short. Circuit-style training burns more calories. Stay in the 45s rest zone.",exCount:6},
+    intermediate: {sets:'3–4',reps:'12–20',rest:'30s',tempo:'2-0-1',tip:"Superset opposing muscle groups. Pair compound moves with isolation to spike your heart rate.",exCount:6},
+    advanced:     {sets:'4',reps:'15–20',rest:'20s',tempo:'1-0-1',tip:"HIIT-style finisher after your main work. Drop sets on every exercise. No rest — only progress.",exCount:7}
+  },
+  strength: {
+    beginner:     {sets:'3',reps:'5–6',  rest:'2min',tempo:'2-1-1',tip:"Strength is a skill — prioritize form above all. 5×5 protocol is gold for beginners.",exCount:4},
+    intermediate: {sets:'4–5',reps:'3–6', rest:'2–3min',tempo:'2-2-1',tip:"Use RPE 8–9. Leave 1–2 reps in the tank. Train strength days fresh — not fatigued.",exCount:5},
+    advanced:     {sets:'5',reps:'1–5',  rest:'3–5min',tempo:'1-2-X',tip:"Periodise your training — heavy, moderate, deload. CNS fatigue is real at this level.",exCount:5}
+  },
+  endurance: {
+    beginner:     {sets:'2–3',reps:'15–20',rest:'30s',tempo:'1-0-1',tip:"Build your work capacity first. Higher reps, shorter rest. Your cardiovascular base is everything.",exCount:6},
+    intermediate: {sets:'3',reps:'20–25',rest:'20s',tempo:'1-0-1',tip:"Circuit training with minimal rest. Push the volume — your body adapts to demand.",exCount:7},
+    advanced:     {sets:'4',reps:'25–30',rest:'15s',tempo:'1-0-1',tip:"Extended sets, 100-rep challenges, AMRAP rounds. Condition yourself to embrace discomfort.",exCount:8}
+  }
+};
+
+// ─── COACH TIPS BY MUSCLE ────────────────────────────────────────
+const COACH_TIPS = {
+  chest:"Arch your upper back, retract scapula, and drive through the heel of your palm — not your fingers. Most people lose half their chest gains to poor setup.",
+  back:"Pull with your elbows, not your hands. Initiate every pull by depressing your scapula first. This single cue doubles lat activation.",
+  shoulders:"Never press behind the neck. Train rear delts twice as much as front delts — they're almost always the weak link and cause shoulder injuries.",
+  biceps:"Supinate (rotate your wrist outward) at the top of every curl. That rotation is what gives you the peak. Most people skip it.",
+  triceps:"The long head (inner tricep) makes up 2/3 of your arm mass — prioritize overhead movements to fully stretch it.",
+  legs:"Depth matters more than weight on squats. Below parallel activates 40% more glute. Ego kills leg gains.",
+  core:"Your core is not just your abs — it's a 360° cylinder. Train anti-rotation and anti-extension, not just crunches.",
+  fullbody:"On full-body sessions, sequence compound lifts first when you're fresh. Save isolation work for the end."
+};
+
+// ─── STATE ───────────────────────────────────────────────────────
+const state = { muscle: null, level: null, goal: null, equip: null };
+
+// ─── OPTION SELECTION ────────────────────────────────────────────
+function setupOpts(containerId, key){
+  document.getElementById(containerId).querySelectorAll('.opt-btn').forEach(btn=>{
+    btn.onclick = ()=>{
+      document.getElementById(containerId).querySelectorAll('.opt-btn').forEach(b=>b.classList.remove('selected'));
+      btn.classList.add('selected');
+      state[key] = btn.dataset.val;
+    };
+  });
+}
+setupOpts('muscleOpts','muscle');
+setupOpts('levelOpts','level');
+setupOpts('goalOpts','goal');
+setupOpts('equipOpts','equip');
+
+// ─── GENERATE ────────────────────────────────────────────────────
+function shuffle(arr){ return [...arr].sort(()=>Math.random()-.5); }
+
+function generate(){
+  const {muscle, level, goal, equip} = state;
+  if(!muscle||!level||!goal||!equip){
+    const missing = [];
+    if(!muscle) missing.push('Target Muscle');
+    if(!level)  missing.push('Experience Level');
+    if(!goal)   missing.push('Training Goal');
+    if(!equip)  missing.push('Equipment');
+    alert('Please select:\n• ' + missing.join('\n• '));
+    return;
+  }
+
+  const genBtn = document.getElementById('genBtn');
+  const loading = document.getElementById('loading');
+  const result  = document.getElementById('result');
+
+  genBtn.disabled = true;
+  loading.style.display = 'block';
+  result.style.display  = 'none';
+
+  setTimeout(()=>{
+    const rx = PRESCRIPTION[goal][level];
+    const pool = DB[muscle]?.[equip] || {};
+    const compounds = shuffle(pool.compound || []);
+    const isolation = shuffle(pool.isolation || []);
+
+    const numCompound = Math.min(Math.ceil(rx.exCount * 0.4), compounds.length);
+    const numIsolation = Math.min(rx.exCount - numCompound, isolation.length);
+    const exercises = [...compounds.slice(0,numCompound), ...isolation.slice(0,numIsolation)];
+
+    const duration = exercises.length * (parseInt(rx.sets) * (60 + parseInt(rx.rest)) / 60);
+    const durationLabel = `~${Math.round(duration)} min`;
+
+    const muscleLabel = {chest:'Chest',back:'Back',shoulders:'Shoulders',biceps:'Biceps',triceps:'Triceps',legs:'Legs',core:'Core',fullbody:'Full Body'}[muscle];
+    const goalLabel   = {muscle:'Muscle Building',fatloss:'Fat Loss',strength:'Strength',endurance:'Endurance'}[goal];
+    const levelLabel  = {beginner:'Beginner',intermediate:'Intermediate',advanced:'Advanced'}[level];
+    const equipLabel  = {gym:'Full Gym',dumbbells:'Dumbbells',bodyweight:'Bodyweight'}[equip];
+
+    const waText = encodeURIComponent(
+`🏋️ *I-BLITZ Custom Workout*
+━━━━━━━━━━━━━━━━━━━
+📌 *Target:* ${muscleLabel}
+🎯 *Goal:* ${goalLabel}
+⚡ *Level:* ${levelLabel}
+🏟️ *Equipment:* ${equipLabel}
+━━━━━━━━━━━━━━━━━━━
+*Exercises (${exercises.length}):*
+${exercises.map((e,i)=>`${i+1}. ${e.name} — ${rx.sets} sets × ${rx.reps} reps`).join('\n')}
+━━━━━━━━━━━━━━━━━━━
+📍 I-BLITZ Fitness Club, Bangalore
+Coach, I want to train this with you! 💪`
+    );
+
+    const rowsHTML = exercises.map((ex,i)=>`
+      <div class="ex-row">
+        <div class="ex-num">${i+1}</div>
+        <div>
+          <div class="ex-name" data-detail="${rx.sets} sets · ${rx.reps} reps · ${rx.rest} rest">${ex.name}</div>
+          <div class="ex-type">${ex.type}</div>
+        </div>
+        <div class="ex-sets">${rx.sets}</div>
+        <div class="ex-reps">${rx.reps}</div>
+        <div class="ex-rest">${rx.rest}</div>
+        <div class="ex-tempo">${rx.tempo}</div>
+      </div>`).join('');
+
+    result.innerHTML = `
+      <div class="result-header">
+        <div>
+          <div class="hero-badge" style="margin-bottom:10px">Custom Workout · Coach Sahil</div>
+          <h2>${muscleLabel} <span>— ${goalLabel}</span></h2>
+          <div class="result-meta">
+            <span class="meta-chip gold">${levelLabel}</span>
+            <span class="meta-chip">${equipLabel}</span>
+            <span class="meta-chip">${exercises.length} Exercises</span>
+            <span class="meta-chip">${durationLabel}</span>
+          </div>
+        </div>
+        <div class="result-actions">
+          <a class="btn btn-wa" href="https://wa.me/917015552731?text=${waText}" target="_blank">💬 Share on WhatsApp</a>
+          <a class="btn btn-book" href="slots.html">📅 Book a Session</a>
+          <button class="btn btn-ghost" onclick="generate()">↻ Regenerate</button>
+        </div>
+      </div>
+
+      <div class="ex-table">
+        <div class="ex-table-head">
+          <div></div>
+          <div>Exercise</div>
+          <div style="text-align:center">Sets</div>
+          <div style="text-align:center">Reps</div>
+          <div style="text-align:center">Rest</div>
+          <div style="text-align:center">Tempo</div>
+        </div>
+        ${rowsHTML}
+      </div>
+
+      <div class="tip-card">
+        <div class="tip-icon">⚡</div>
+        <div>
+          <h4>Coach Sahil's Tip · ${muscleLabel}</h4>
+          <p>${COACH_TIPS[muscle]}</p>
+        </div>
+      </div>
+
+      <div class="tip-card" style="background:linear-gradient(135deg,rgba(34,197,94,0.06),rgba(10,10,10,0));border-color:rgba(34,197,94,0.2)">
+        <div class="tip-icon">📋</div>
+        <div>
+          <h4>Session Protocol</h4>
+          <p>${rx.tip}</p>
+        </div>
+      </div>
+    `;
+
+    loading.style.display = 'none';
+    result.style.display  = 'block';
+    genBtn.disabled = false;
+    result.scrollIntoView({behavior:'smooth',block:'start'});
+  }, 900);
+}
+</script>
+</body>
+</html>
