@@ -5,6 +5,7 @@ from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy import or_
 from sqlalchemy.orm import Session, joinedload
 
+from .auth import get_current_user
 from .database import get_db
 from .models import (
     Assessment,
@@ -305,15 +306,13 @@ async def generate_episode(request: GenerateEpisodeRequest, db: Session = Depend
     summary="List stored workouts",
 )
 async def list_workouts(
-    user_id: Optional[int] = None,
     episode_id: Optional[int] = None,
     limit: int = 50,
     db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
 ):
-    query = db.query(Workout)
+    query = db.query(Workout).filter(Workout.user_id == current_user.id)
 
-    if user_id is not None:
-        query = query.filter(Workout.user_id == user_id)
     if episode_id is not None:
         query = query.filter(Workout.episode_id == episode_id)
 
@@ -327,15 +326,17 @@ async def list_workouts(
     summary="List stored episodes with outcomes",
 )
 async def list_episodes(
-    user_id: Optional[int] = None,
     completed: Optional[bool] = None,
     limit: int = 50,
     db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
 ):
-    query = db.query(Episode).options(joinedload(Episode.outcomes))
-
-    if user_id is not None:
-        query = query.join(Assessment).filter(Assessment.user_id == user_id)
+    query = (
+        db.query(Episode)
+        .options(joinedload(Episode.outcomes))
+        .join(Assessment)
+        .filter(Assessment.user_id == current_user.id)
+    )
 
     if completed is True:
         query = query.filter(Episode.completed_at.is_not(None))

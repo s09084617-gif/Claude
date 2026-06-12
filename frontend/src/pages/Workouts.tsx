@@ -32,7 +32,7 @@ export default function Workouts() {
     const fetchWorkouts = async () => {
       setHistoryLoading(true)
       try {
-        const res = await api.getWorkouts(user?.id)
+        const res = await api.getWorkouts()
         setWorkouts(res.data)
       } catch {
         setHistoryError('Failed to load workout history.')
@@ -41,7 +41,7 @@ export default function Workouts() {
       }
     }
     fetchWorkouts()
-  }, [user?.id])
+  }, [])
 
   const handleGenerate = async (e: FormEvent) => {
     e.preventDefault()
@@ -59,7 +59,7 @@ export default function Workouts() {
       setGeneratedWorkout(res.data)
       toast(`Workout generated for program: ${res.data.program}`)
       // Refresh history
-      const histRes = await api.getWorkouts(user?.id)
+      const histRes = await api.getWorkouts()
       setWorkouts(histRes.data)
     } catch (err: unknown) {
       const axiosError = err as { response?: { data?: { detail?: string } } }

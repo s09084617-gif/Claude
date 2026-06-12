@@ -5,7 +5,7 @@ import { useToast } from '../contexts/ToastContext'
 import { api } from '../api/client'
 
 export default function Profile() {
-  const { user } = useAuth()
+  const { user, refreshUser } = useAuth()
   const { toast } = useToast()
 
   // Profile fields
@@ -25,6 +25,7 @@ export default function Profile() {
     setProfileSaving(true)
     try {
       await api.updateProfile({ username, email })
+      await refreshUser()
       toast('Profile updated successfully')
     } catch (err: unknown) {
       const axiosError = err as { response?: { data?: { detail?: string } } }

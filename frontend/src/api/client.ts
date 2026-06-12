@@ -183,16 +183,10 @@ export const api = {
   // Engine
   generateEpisode: (data: EpisodeRequest) =>
     axiosInstance.post<EpisodeResponse>('/engine/generate-episode', data),
-  getEpisodes: (userId?: number) =>
-    axiosInstance.get<Episode[]>('/engine/episodes', {
-      params: userId ? { user_id: userId } : {},
-    }),
+  getEpisodes: () => axiosInstance.get<Episode[]>('/engine/episodes'),
   generateWorkout: (data: WorkoutRequest) =>
     axiosInstance.post<Workout>('/engine/generate-workout', data),
-  getWorkouts: (userId?: number) =>
-    axiosInstance.get<Workout[]>('/engine/workouts', {
-      params: userId ? { user_id: userId } : {},
-    }),
+  getWorkouts: () => axiosInstance.get<Workout[]>('/engine/workouts'),
 
   // Nutrition
   createNutritionPlan: (data: NutritionPlanRequest) =>

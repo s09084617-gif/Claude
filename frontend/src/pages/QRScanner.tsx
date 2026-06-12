@@ -15,7 +15,6 @@ import {
 } from 'lucide-react'
 import { useToast } from '../contexts/ToastContext'
 import { api, Workout, NutritionPlan, Episode } from '../api/client'
-import { useAuth } from '../contexts/AuthContext'
 
 type Tab = 'scan' | 'generate'
 type GenerateType = 'workout' | 'episode' | 'nutrition' | 'custom'
@@ -23,7 +22,6 @@ type GenerateType = 'workout' | 'episode' | 'nutrition' | 'custom'
 // ── Generate tab ─────────────────────────────────────────────────────────────
 
 function GenerateTab() {
-  const { user } = useAuth()
   const { toast } = useToast()
 
   const [type, setType] = useState<GenerateType>('workout')
@@ -42,10 +40,10 @@ function GenerateTab() {
     const load = async () => {
       try {
         if (type === 'workout') {
-          const res = await api.getWorkouts(user?.id)
+          const res = await api.getWorkouts()
           setWorkouts(res.data)
         } else if (type === 'episode') {
-          const res = await api.getEpisodes(user?.id)
+          const res = await api.getEpisodes()
           setEpisodes(res.data)
         } else if (type === 'nutrition') {
           const res = await api.getNutritionPlans()
@@ -59,7 +57,7 @@ function GenerateTab() {
     }
     if (type !== 'custom') load()
     else setLoading(false)
-  }, [type, user?.id])
+  }, [type])
 
   // Build the QR payload string
   const qrValue = (() => {

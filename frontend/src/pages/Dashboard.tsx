@@ -44,8 +44,8 @@ export default function Dashboard() {
       setError('')
       try {
         const [episodesRes, workoutsRes, nutritionRes, progressRes] = await Promise.allSettled([
-          api.getEpisodes(user?.id),
-          api.getWorkouts(user?.id),
+          api.getEpisodes(),
+          api.getWorkouts(),
           api.getNutritionPlans(),
           api.getProgressLogs(),
         ])
@@ -73,7 +73,7 @@ export default function Dashboard() {
       }
     }
     fetchData()
-  }, [user?.id])
+  }, [])
 
   const statCards: StatCard[] = [
     {

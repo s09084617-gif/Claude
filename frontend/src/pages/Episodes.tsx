@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react'
 import { Play, Loader2 } from 'lucide-react'
-import { useAuth } from '../contexts/AuthContext'
 import { api, Episode, EpisodeOutcome } from '../api/client'
 
 function ProgramBadge({ text }: { text: string }) {
@@ -26,7 +25,6 @@ function getOutcomeClassification(outcomes: EpisodeOutcome[]): string | null {
 }
 
 export default function Episodes() {
-  const { user } = useAuth()
   const [episodes, setEpisodes] = useState<Episode[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
@@ -35,7 +33,7 @@ export default function Episodes() {
     const fetchEpisodes = async () => {
       setLoading(true)
       try {
-        const res = await api.getEpisodes(user?.id)
+        const res = await api.getEpisodes()
         setEpisodes(res.data)
       } catch {
         setError('Failed to load episodes.')
@@ -44,7 +42,7 @@ export default function Episodes() {
       }
     }
     fetchEpisodes()
-  }, [user?.id])
+  }, [])
 
   return (
     <div className="max-w-5xl mx-auto">
