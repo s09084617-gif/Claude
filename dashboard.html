@@ -4,6 +4,9 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>I-BLITZ Trainer Dashboard · Coach Sahil</title>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+<script src="firebase-config.js"></script>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@300;400;500;600;700&display=swap');
 
@@ -603,38 +606,75 @@ select.form-input option{background:#1e1e1e}
 
 <script>
 // ══════════════════════════════════════════
-//  DATA LAYER — localStorage persistence
+//  DATA LAYER — Firebase + localStorage
 // ══════════════════════════════════════════
 const DB = {
   get(k){ try{ return JSON.parse(localStorage.getItem('iblitz_'+k)||'null') }catch{ return null } },
   set(k,v){ localStorage.setItem('iblitz_'+k, JSON.stringify(v)) }
 };
 
-let slots   = DB.get('slots')   || [];
-let clients = DB.get('clients') || [];
+let slots   = [];
+let clients = [];
+let fbDB    = null;
 
-function saveSlots()  { DB.set('slots', slots); }
-function saveClients(){ DB.set('clients', clients); }
+function saveSlots(){
+  DB.set('slots', slots);
+  if(FB_READY && fbDB){
+    const obj={};
+    slots.forEach(s=>{ obj[s.id]=s; });
+    fbDB.ref('slots').set(obj);
+  }
+}
+function saveClients(){
+  DB.set('clients', clients);
+  if(FB_READY && fbDB){
+    const obj={};
+    clients.forEach(c=>{ obj[c.id]=c; });
+    fbDB.ref('clients').set(obj);
+  }
+}
 
-// Seed demo data if empty
-if(slots.length===0 && clients.length===0){
-  const today = new Date();
-  const fmt = d => d.toISOString().split('T')[0];
-  const d0 = fmt(today);
-  const d1 = fmt(new Date(today.getTime()+86400000));
-  const d2 = fmt(new Date(today.getTime()+2*86400000));
-  clients = [
-    {id:'c1',name:'Priya Sharma',phone:'9876543210',goal:'Fat Loss',membership:'active',joinDate:fmt(new Date(today.getTime()-30*86400000)),sessions:8},
-    {id:'c2',name:'Rahul Mehta',phone:'9845001234',goal:'Muscle Gain',membership:'active',joinDate:fmt(new Date(today.getTime()-60*86400000)),sessions:18},
-    {id:'c3',name:'Sneha Iyer',phone:'9123456789',goal:'Strength',membership:'trial',joinDate:d0,sessions:1},
-  ];
-  slots = [
-    {id:'s1',clientName:'Priya Sharma',phone:'9876543210',date:d0,time:'6:00 AM',status:'confirmed',notes:''},
-    {id:'s2',clientName:'Rahul Mehta',phone:'9845001234',date:d0,time:'7:00 AM',status:'confirmed',notes:'Leg day'},
-    {id:'s3',clientName:'Sneha Iyer',phone:'9123456789',date:d1,time:'6:00 AM',status:'pending',notes:'First session'},
-    {id:'s4',clientName:'Rahul Mehta',phone:'9845001234',date:d2,time:'8:00 AM',status:'confirmed',notes:''},
-  ];
-  saveSlots(); saveClients();
+function seedDemoData(){
+  if(slots.length===0 && clients.length===0){
+    const today = new Date();
+    const fmt = d => d.toISOString().split('T')[0];
+    const d0=fmt(today), d1=fmt(new Date(today.getTime()+86400000)), d2=fmt(new Date(today.getTime()+2*86400000));
+    clients=[
+      {id:'c1',name:'Priya Sharma',phone:'9876543210',goal:'Fat Loss',membership:'active',joinDate:fmt(new Date(today.getTime()-30*86400000)),sessions:8},
+      {id:'c2',name:'Rahul Mehta',phone:'9845001234',goal:'Muscle Gain',membership:'active',joinDate:fmt(new Date(today.getTime()-60*86400000)),sessions:18},
+      {id:'c3',name:'Sneha Iyer',phone:'9123456789',goal:'Strength',membership:'trial',joinDate:d0,sessions:1},
+    ];
+    slots=[
+      {id:'s1',clientName:'Priya Sharma',phone:'9876543210',date:d0,time:'6:00 AM',status:'confirmed',notes:''},
+      {id:'s2',clientName:'Rahul Mehta',phone:'9845001234',date:d0,time:'7:00 AM',status:'confirmed',notes:'Leg day'},
+      {id:'s3',clientName:'Sneha Iyer',phone:'9123456789',date:d1,time:'6:00 AM',status:'pending',notes:'First session'},
+      {id:'s4',clientName:'Rahul Mehta',phone:'9845001234',date:d2,time:'8:00 AM',status:'confirmed',notes:''},
+    ];
+    saveSlots(); saveClients();
+  }
+}
+
+function initFirebase(){
+  if(!FB_READY){
+    slots   = DB.get('slots')   || [];
+    clients = DB.get('clients') || [];
+    seedDemoData();
+    renderDashboard();
+    return;
+  }
+  firebase.initializeApp(FIREBASE_CONFIG);
+  fbDB = firebase.database();
+  showToast('🔥 Firebase connected — live sync active','success');
+
+  fbDB.ref('/').on('value', snapshot=>{
+    const data = snapshot.val() || {};
+    slots   = data.slots   ? Object.values(data.slots)   : [];
+    clients = data.clients ? Object.values(data.clients) : [];
+    renderDashboard();
+    renderAllSlots();
+    renderClients();
+    renderMonthly();
+  });
 }
 
 // ══════════════════════════════════════════
@@ -1205,7 +1245,7 @@ document.addEventListener('DOMContentLoaded',()=>{
   const now = new Date();
   document.getElementById('todayLabel').textContent = now.toLocaleDateString('en-IN',{weekday:'short',day:'numeric',month:'short',year:'numeric'});
   document.getElementById('f-date').min = todayStr();
-  renderDashboard();
+  initFirebase();
 });
 </script>
 </body>

@@ -507,9 +507,14 @@
   </p>
 </footer>
 
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+<script src="firebase-config.js"></script>
 <script>
   // ── CONFIG — update your WhatsApp number here ──
   const COACH_WHATSAPP = '917015552731';
+  let bookingFbDB = null;
+  if(FB_READY){ firebase.initializeApp(FIREBASE_CONFIG); bookingFbDB = firebase.database(); }
 
   let selectedTime = '';
 
@@ -631,6 +636,21 @@
 
   function sendToWhatsApp() {
     if (!validate()) return false;
+    const name  = document.getElementById('clientName').value.trim();
+    const phone = document.getElementById('clientPhone').value.trim();
+    const date  = document.getElementById('slotDate').value;
+
+    // Write booking to Firebase so dashboard updates instantly
+    if(FB_READY && bookingFbDB){
+      const id = Date.now().toString(36) + Math.random().toString(36).slice(2,5);
+      bookingFbDB.ref('slots/' + id).set({
+        id, clientName: name, phone, date,
+        time: selectedTime, status: 'pending',
+        notes: 'Via online booking form',
+        createdAt: Date.now()
+      });
+    }
+
     const msg = buildMessage();
     const url = `https://wa.me/${COACH_WHATSAPP}?text=${encodeURIComponent(msg)}`;
     window.open(url, '_blank');

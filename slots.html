@@ -103,6 +103,9 @@ footer a{color:var(--gold);text-decoration:none}
   .btn-book{margin-left:0;margin-top:10px}
 }
 </style>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+<script src="firebase-config.js"></script>
 </head>
 <body>
 
@@ -150,26 +153,24 @@ footer a{color:var(--gold);text-decoration:none}
 // Fixed time slots offered at I-BLITZ
 const MORNING_SLOTS = ['6:00 AM','7:00 AM','8:00 AM','9:00 AM','10:00 AM'];
 const EVENING_SLOTS = ['5:00 PM','6:00 PM','7:00 PM','8:00 PM','9:00 PM'];
-const ALL_SLOTS = [...MORNING_SLOTS, ...EVENING_SLOTS];
 
-// Load booked slots from localStorage (same data as dashboard)
-function getBookedSlots(){
-  try{ return JSON.parse(localStorage.getItem('iblitz_slots')) || []; }
-  catch(e){ return []; }
-}
+// Live slots cache — updated by Firebase listener or localStorage
+let liveSlots = [];
 
-function dateStr(d){
-  return d.toISOString().slice(0,10);
+function loadFromLocalStorage(){
+  try{ liveSlots = JSON.parse(localStorage.getItem('iblitz_slots')) || []; }
+  catch(e){ liveSlots = []; }
 }
 
 function isBooked(dateISO, timeStr){
-  const bookings = getBookedSlots();
-  return bookings.some(b =>
+  return liveSlots.some(b =>
     b.date === dateISO &&
     b.time === timeStr &&
     b.status !== 'cancelled'
   );
 }
+
+function dateStr(d){ return d.toISOString().slice(0,10); }
 
 // Build the 7-day tab strip
 let selectedDate = null;
@@ -252,12 +253,23 @@ function bookSlot(dateISO, timeStr){
 
 // Init
 buildDayTabs();
-renderSlots(selectedDate);
-
-// Auto-refresh every 60s in case coach updates availability from dashboard
-setInterval(()=>{
-  if(selectedDate) renderSlots(selectedDate);
-}, 60000);
+// Init — Firebase real-time or localStorage fallback
+if(FB_READY){
+  firebase.initializeApp(FIREBASE_CONFIG);
+  firebase.database().ref('slots').on('value', snapshot => {
+    liveSlots = [];
+    snapshot.forEach(child => liveSlots.push(child.val()));
+    buildDayTabs();
+    if(selectedDate) renderSlots(selectedDate);
+  });
+} else {
+  // Fallback: localStorage (same device only)
+  loadFromLocalStorage();
+  buildDayTabs();
+  renderSlots(selectedDate);
+  // Auto-refresh every 30s
+  setInterval(()=>{ loadFromLocalStorage(); if(selectedDate) renderSlots(selectedDate); }, 30000);
+}
 </script>
 </body>
 </html>
