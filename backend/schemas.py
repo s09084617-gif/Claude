@@ -9,8 +9,6 @@ class GenerateEpisodeRequest(BaseModel):
     smm: str
     goal: str
     restriction: Optional[str] = None
-    user_id: Optional[int] = None
-    username: Optional[str] = None
     assessment_title: Optional[str] = None
 
 
@@ -26,8 +24,6 @@ class GenerateWorkoutRequest(BaseModel):
     program: str
     goal: str
     restriction: Optional[str] = None
-    user_id: Optional[int] = None
-    username: Optional[str] = None
     episode_id: Optional[int] = None
 
 
@@ -111,7 +107,7 @@ class UserResponse(BaseModel):
 
 class UpdateProfileRequest(BaseModel):
     username: Optional[str] = None
-    email: Optional[str] = None
+    email: Optional[EmailStr] = None
 
 
 class ChangePasswordRequest(BaseModel):

@@ -1,5 +1,5 @@
 import { useState, useEffect, FormEvent } from 'react'
-import { TrendingUp, Plus, Trash2, Loader2, X } from 'lucide-react'
+import { TrendingUp, Plus, Trash2, Loader2, X, Download } from 'lucide-react'
 import {
   LineChart,
   Line,
@@ -117,6 +117,36 @@ export default function Progress() {
   const hasWeightData = chartData.some((d) => d.weight !== undefined)
   const hasPbfData = chartData.some((d) => d.pbf !== undefined)
   const hasSmmData = chartData.some((d) => d.smm !== undefined)
+
+  const handleExportCsv = () => {
+    const rows = [
+      ['Date', 'Weight (kg)', 'Body Fat %', 'Muscle Mass (kg)', 'Notes'],
+      ...[...logs]
+        .sort((a, b) => {
+          const da = a.logged_at ?? a.created_at ?? ''
+          const db_ = b.logged_at ?? b.created_at ?? ''
+          return new Date(da).getTime() - new Date(db_).getTime()
+        })
+        .map((l) => {
+          const date = l.logged_at ?? l.created_at ?? ''
+          return [
+            date ? new Date(date).toLocaleDateString() : '',
+            l.weight_kg ?? '',
+            l.pbf ?? '',
+            l.smm_kg ?? '',
+            (l.notes ?? '').replace(/,/g, ' '),
+          ]
+        }),
+    ]
+    const csv = rows.map((r) => r.join(',')).join('\n')
+    const blob = new Blob([csv], { type: 'text/csv' })
+    const url = URL.createObjectURL(blob)
+    const a = document.createElement('a')
+    a.href = url
+    a.download = `progress_${new Date().toISOString().slice(0, 10)}.csv`
+    a.click()
+    URL.revokeObjectURL(url)
+  }
 
   return (
     <div className="max-w-4xl mx-auto">
@@ -290,7 +320,18 @@ export default function Progress() {
 
       {/* History Table */}
       <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-8">
-        <h2 className="text-lg font-semibold text-gray-900 mb-5">Log History</h2>
+        <div className="flex items-center justify-between mb-5">
+          <h2 className="text-lg font-semibold text-gray-900">Log History</h2>
+          {logs.length > 0 && (
+            <button
+              onClick={handleExportCsv}
+              className="flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium text-gray-600 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
+            >
+              <Download size={14} />
+              Export CSV
+            </button>
+          )}
+        </div>
 
         {loading ? (
           <div className="flex justify-center py-12">

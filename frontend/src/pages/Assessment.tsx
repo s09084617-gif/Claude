@@ -1,6 +1,5 @@
 import { useState, FormEvent } from 'react'
 import { ClipboardList, CheckCircle, Loader2 } from 'lucide-react'
-import { useAuth } from '../contexts/AuthContext'
 import { useToast } from '../contexts/ToastContext'
 import { api, EpisodeResponse } from '../api/client'
 
@@ -18,7 +17,6 @@ const GOAL_OPTIONS = [
 ]
 
 export default function Assessment() {
-  const { user } = useAuth()
   const { toast } = useToast()
   const [pbf, setPbf] = useState('')
   const [smm, setSmm] = useState('normal')
@@ -39,8 +37,6 @@ export default function Assessment() {
         smm,
         goal,
         restriction: restriction.trim() || undefined,
-        user_id: user?.id,
-        username: user?.username,
       })
       setResult(res.data)
       toast(`Program recommended: ${res.data.program}`)

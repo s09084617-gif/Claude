@@ -49,8 +49,7 @@ export interface EpisodeRequest {
   smm: string
   goal: string
   restriction?: string
-  user_id?: number
-  username?: string
+  assessment_title?: string
 }
 
 export interface EpisodeResponse {
@@ -90,8 +89,6 @@ export interface WorkoutRequest {
   program: string
   goal: string
   restriction?: string
-  user_id?: number
-  username?: string
   episode_id?: number
 }
 

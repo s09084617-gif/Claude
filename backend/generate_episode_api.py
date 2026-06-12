@@ -242,20 +242,19 @@ def create_workout(db: Session, user: Optional[User], episode: Optional[Episode]
     response_model=WorkoutResponse,
     summary="Generate a workout plan",
 )
-async def generate_workout(request: GenerateWorkoutRequest, db: Session = Depends(get_db)):
-    user = None
+async def generate_workout(
+    request: GenerateWorkoutRequest,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
+):
     episode = None
-
-    if request.user_id is not None or request.username is not None:
-        user = get_or_create_user(db, request.user_id, request.username)
-
     if request.episode_id is not None:
         episode = db.get(Episode, request.episode_id)
         if not episode:
             raise HTTPException(status_code=404, detail="Episode not found")
 
     details = generate_workout_details(db, request.program, request.goal, request.restriction)
-    workout = create_workout(db, user, episode, request.program, details)
+    workout = create_workout(db, current_user, episode, request.program, details)
 
     db.commit()
     db.refresh(workout)
@@ -275,15 +274,18 @@ async def generate_workout(request: GenerateWorkoutRequest, db: Session = Depend
     response_model=GenerateEpisodeResponse,
     summary="Generate an episode recommendation",
 )
-async def generate_episode(request: GenerateEpisodeRequest, db: Session = Depends(get_db)):
+async def generate_episode(
+    request: GenerateEpisodeRequest,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
+):
     classification = get_classification(db, request.pbf, request.smm)
     recommendation = get_recommendation(db, classification, request.goal)
     program = get_program(db, classification, request.restriction)
 
-    user = get_or_create_user(db, request.user_id, request.username)
     assessment_title = request.assessment_title or f"{request.goal.capitalize()} Assessment"
-    assessment_description = f"Generated assessment for {user.username}"
-    assessment = create_assessment(db, user, assessment_title, assessment_description)
+    assessment_description = f"Generated assessment for {current_user.username}"
+    assessment = create_assessment(db, current_user, assessment_title, assessment_description)
     episode = create_episode(db, assessment, program)
     create_outcome(db, episode, classification, recommendation, program)
 

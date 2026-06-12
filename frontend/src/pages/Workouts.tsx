@@ -1,6 +1,5 @@
 import { useState, useEffect, FormEvent } from 'react'
-import { Dumbbell, Loader2, CheckCircle } from 'lucide-react'
-import { useAuth } from '../contexts/AuthContext'
+import { Dumbbell, Loader2, CheckCircle, ChevronDown, ChevronRight } from 'lucide-react'
 import { useToast } from '../contexts/ToastContext'
 import { api, Workout } from '../api/client'
 
@@ -12,7 +11,6 @@ const GOAL_OPTIONS = [
 ]
 
 export default function Workouts() {
-  const { user } = useAuth()
   const { toast } = useToast()
 
   // Generate form state
@@ -27,6 +25,7 @@ export default function Workouts() {
   const [workouts, setWorkouts] = useState<Workout[]>([])
   const [historyLoading, setHistoryLoading] = useState(true)
   const [historyError, setHistoryError] = useState('')
+  const [expandedId, setExpandedId] = useState<number | null>(null)
 
   useEffect(() => {
     const fetchWorkouts = async () => {
@@ -53,8 +52,6 @@ export default function Workouts() {
         program: program.trim(),
         goal,
         restriction: restriction.trim() || undefined,
-        user_id: user?.id,
-        username: user?.username,
       })
       setGeneratedWorkout(res.data)
       toast(`Workout generated for program: ${res.data.program}`)
@@ -206,47 +203,41 @@ export default function Workouts() {
             <p className="text-sm">No workouts generated yet.</p>
           </div>
         ) : (
-          <div className="overflow-x-auto">
-            <table className="w-full text-sm">
-              <thead>
-                <tr className="border-b border-gray-200">
-                  <th className="text-left py-3 px-3 text-xs font-semibold text-gray-500 uppercase tracking-wider">
-                    ID
-                  </th>
-                  <th className="text-left py-3 px-3 text-xs font-semibold text-gray-500 uppercase tracking-wider">
-                    Program
-                  </th>
-                  <th className="text-left py-3 px-3 text-xs font-semibold text-gray-500 uppercase tracking-wider">
-                    Goal
-                  </th>
-                  <th className="text-left py-3 px-3 text-xs font-semibold text-gray-500 uppercase tracking-wider">
-                    Date
-                  </th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-gray-100">
-                {workouts.map((w) => (
-                  <tr key={w.id} className="hover:bg-gray-50 transition-colors">
-                    <td className="py-3 px-3 text-gray-500">#{w.id}</td>
-                    <td className="py-3 px-3 font-medium text-gray-900">
-                      {w.program ?? '—'}
-                    </td>
-                    <td className="py-3 px-3">
-                      {w.details?.goal ? (
-                        <span className="inline-block px-2 py-0.5 rounded-full bg-green-100 text-green-700 text-xs font-medium">
-                          {w.details.goal}
-                        </span>
-                      ) : (
-                        '—'
-                      )}
-                    </td>
-                    <td className="py-3 px-3 text-gray-500">
+          <div className="divide-y divide-gray-100">
+            {workouts.map((w) => {
+              const isOpen = expandedId === w.id
+              return (
+                <div key={w.id}>
+                  <button
+                    onClick={() => setExpandedId(isOpen ? null : w.id)}
+                    className="w-full flex items-center gap-3 py-3 px-3 hover:bg-gray-50 transition-colors text-left"
+                  >
+                    {isOpen ? (
+                      <ChevronDown size={14} className="text-gray-400 shrink-0" />
+                    ) : (
+                      <ChevronRight size={14} className="text-gray-400 shrink-0" />
+                    )}
+                    <span className="text-xs text-gray-400 w-10 shrink-0">#{w.id}</span>
+                    <span className="font-medium text-gray-900 flex-1 text-sm">{w.program ?? '—'}</span>
+                    {w.details?.goal && (
+                      <span className="inline-block px-2 py-0.5 rounded-full bg-green-100 text-green-700 text-xs font-medium">
+                        {w.details.goal}
+                      </span>
+                    )}
+                    <span className="text-xs text-gray-400 ml-3 shrink-0">
                       {w.created_at ? new Date(w.created_at).toLocaleDateString() : '—'}
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+                    </span>
+                  </button>
+                  {isOpen && (
+                    <div className="px-10 pb-4">
+                      <pre className="whitespace-pre-wrap text-xs bg-gray-50 rounded-lg p-4 border border-gray-200 font-sans leading-relaxed text-gray-700 overflow-x-auto">
+                        {JSON.stringify(w.details?.workouts ?? [], null, 2)}
+                      </pre>
+                    </div>
+                  )}
+                </div>
+              )
+            })}
           </div>
         )}
       </div>
