@@ -152,3 +152,37 @@ CREATE INDEX IF NOT EXISTS idx_exercise_substitutions_restriction_id ON exercise
 CREATE INDEX IF NOT EXISTS idx_classification_rules_active ON classification_rules(active);
 CREATE INDEX IF NOT EXISTS idx_recommendation_rules_active ON recommendation_rules(active);
 CREATE INDEX IF NOT EXISTS idx_program_rules_active ON program_rules(active);
+
+-- Nutrition plans
+CREATE TABLE IF NOT EXISTS nutrition_plans (
+    id BIGSERIAL PRIMARY KEY,
+    user_id BIGINT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    title TEXT NOT NULL,
+    goal TEXT,
+    calories INTEGER,
+    protein_g NUMERIC,
+    carbs_g NUMERIC,
+    fat_g NUMERIC,
+    meals JSONB,
+    notes TEXT,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
+CREATE INDEX IF NOT EXISTS idx_nutrition_plans_user_id ON nutrition_plans(user_id);
+
+-- Progress logs
+CREATE TABLE IF NOT EXISTS progress_logs (
+    id BIGSERIAL PRIMARY KEY,
+    user_id BIGINT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    logged_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    weight_kg NUMERIC,
+    pbf NUMERIC,
+    smm_kg NUMERIC,
+    notes TEXT,
+    metrics JSONB,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
+CREATE INDEX IF NOT EXISTS idx_progress_logs_user_id ON progress_logs(user_id);
+CREATE INDEX IF NOT EXISTS idx_progress_logs_logged_at ON progress_logs(logged_at DESC);
