@@ -1,0 +1,1212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>I-BLITZ Trainer Dashboard · Coach Sahil</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@300;400;500;600;700&display=swap');
+
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+
+:root{
+  --crimson:#C0112B;
+  --crimson2:#8B0000;
+  --gold:#D4A017;
+  --black:#080808;
+  --dark:#111;
+  --card:#161616;
+  --card2:#1C1C1C;
+  --border:#252525;
+  --border2:#303030;
+  --text:#EFEFEF;
+  --muted:#666;
+  --muted2:#999;
+  --green:#22c55e;
+  --yellow:#f59e0b;
+  --blue:#3b82f6;
+  --wa:#25D366;
+}
+
+body{background:var(--black);color:var(--text);font-family:'Inter',sans-serif;min-height:100vh;overflow-x:hidden}
+
+/* ─── SIDEBAR ─── */
+.layout{display:flex;min-height:100vh}
+.sidebar{width:220px;background:var(--dark);border-right:1px solid var(--border);display:flex;flex-direction:column;position:fixed;top:0;left:0;height:100vh;z-index:100;transition:transform .3s}
+.sidebar-logo{padding:20px 16px 16px;border-bottom:1px solid var(--border)}
+.sidebar-logo .mark{background:var(--crimson);border-radius:4px;width:36px;height:36px;display:flex;align-items:center;justify-content:center;font-family:'Bebas Neue',sans-serif;font-size:16px;color:#fff;margin-bottom:8px}
+.sidebar-logo h1{font-family:'Bebas Neue',sans-serif;font-size:16px;letter-spacing:2px;color:#fff;line-height:1}
+.sidebar-logo p{font-size:10px;color:var(--gold);letter-spacing:1px;margin-top:2px}
+.nav{flex:1;padding:12px 0;overflow-y:auto}
+.nav-item{display:flex;align-items:center;gap:10px;padding:10px 16px;font-size:13px;font-weight:500;color:var(--muted2);cursor:pointer;transition:all .15s;border-left:2px solid transparent;user-select:none}
+.nav-item:hover{color:var(--text);background:rgba(255,255,255,.03)}
+.nav-item.active{color:#fff;border-left-color:var(--crimson);background:rgba(192,17,43,.08)}
+.nav-item .ni{font-size:16px;width:20px;text-align:center}
+.nav-section{font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);padding:14px 16px 4px;font-weight:600}
+.sidebar-footer{padding:14px 16px;border-top:1px solid var(--border);font-size:11px;color:var(--muted)}
+.sidebar-footer span{color:var(--gold)}
+
+/* ─── MAIN ─── */
+.main{margin-left:220px;flex:1;min-height:100vh;display:flex;flex-direction:column}
+.topbar{background:var(--dark);border-bottom:1px solid var(--border);padding:14px 24px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:50}
+.topbar-title{font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:2px;color:#fff}
+.topbar-right{display:flex;align-items:center;gap:10px}
+.topbar-date{font-size:12px;color:var(--muted2);background:var(--card2);padding:6px 12px;border-radius:4px;border:1px solid var(--border)}
+.burger{display:none;background:none;border:none;color:var(--text);font-size:20px;cursor:pointer;padding:4px}
+
+.content{padding:24px;flex:1}
+.page{display:none}
+.page.active{display:block}
+
+/* ─── STAT CARDS ─── */
+.stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:24px}
+.stat-card{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:18px;position:relative;overflow:hidden}
+.stat-card::after{content:'';position:absolute;top:0;left:0;right:0;height:2px}
+.stat-card.red::after{background:var(--crimson)}
+.stat-card.gold::after{background:var(--gold)}
+.stat-card.green::after{background:var(--green)}
+.stat-card.blue::after{background:var(--blue)}
+.stat-val{font-family:'Bebas Neue',sans-serif;font-size:38px;line-height:1;color:#fff;letter-spacing:1px}
+.stat-lbl{font-size:11px;text-transform:uppercase;letter-spacing:1px;color:var(--muted2);margin-top:4px;font-weight:600}
+.stat-sub{font-size:11px;color:var(--muted);margin-top:6px}
+.stat-icon{position:absolute;top:14px;right:16px;font-size:22px;opacity:.25}
+
+/* ─── SECTION HEADER ─── */
+.sec-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
+.sec-title{font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:1.5px;color:#fff}
+.sec-sub{font-size:12px;color:var(--muted2);margin-top:1px}
+.btn{display:inline-flex;align-items:center;gap:6px;padding:8px 14px;border-radius:5px;font-size:13px;font-weight:600;cursor:pointer;border:none;transition:all .15s;font-family:'Inter',sans-serif}
+.btn-primary{background:var(--crimson);color:#fff}
+.btn-primary:hover{background:#a50f25}
+.btn-ghost{background:var(--card2);color:var(--text);border:1px solid var(--border2)}
+.btn-ghost:hover{border-color:var(--crimson);color:#fff}
+.btn-green{background:var(--green);color:#fff}
+.btn-green:hover{background:#16a34a}
+.btn-sm{padding:5px 10px;font-size:12px}
+.btn-wa{background:var(--wa);color:#fff}
+.btn-wa:hover{background:#1aab52}
+
+/* ─── TABLE ─── */
+.table-wrap{background:var(--card);border:1px solid var(--border);border-radius:8px;overflow:hidden;margin-bottom:24px}
+table{width:100%;border-collapse:collapse}
+th{font-size:11px;text-transform:uppercase;letter-spacing:1px;color:var(--muted);padding:10px 16px;text-align:left;border-bottom:1px solid var(--border);font-weight:600;background:var(--card2)}
+td{padding:12px 16px;font-size:13px;border-bottom:1px solid var(--border);vertical-align:middle}
+tr:last-child td{border-bottom:none}
+tr:hover td{background:rgba(255,255,255,.02)}
+.badge{display:inline-block;padding:3px 9px;border-radius:3px;font-size:11px;font-weight:700;letter-spacing:.5px;text-transform:uppercase}
+.badge-green{background:rgba(34,197,94,.15);color:var(--green)}
+.badge-yellow{background:rgba(245,158,11,.15);color:var(--yellow)}
+.badge-red{background:rgba(192,17,43,.15);color:#ff6b6b}
+.badge-blue{background:rgba(59,130,246,.15);color:var(--blue)}
+.badge-gray{background:rgba(100,100,100,.15);color:var(--muted2)}
+.client-avatar{width:30px;height:30px;border-radius:50%;background:var(--crimson);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:#fff;flex-shrink:0}
+.client-info{display:flex;align-items:center;gap:10px}
+
+/* ─── MODAL ─── */
+.overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:200;align-items:center;justify-content:center;padding:20px}
+.overlay.open{display:flex}
+.modal{background:var(--card);border:1px solid var(--border2);border-radius:10px;width:100%;max-width:460px;max-height:90vh;overflow-y:auto}
+.modal-header{padding:18px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
+.modal-title{font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:1.5px;color:#fff}
+.modal-close{background:none;border:none;color:var(--muted2);font-size:20px;cursor:pointer;line-height:1;padding:2px}
+.modal-close:hover{color:#fff}
+.modal-body{padding:20px}
+.modal-footer{padding:14px 20px;border-top:1px solid var(--border);display:flex;gap:8px;justify-content:flex-end}
+
+/* ─── FORM ─── */
+.form-group{margin-bottom:14px}
+.form-label{display:block;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--muted2);margin-bottom:6px}
+.form-input{width:100%;background:#1e1e1e;border:1px solid var(--border2);border-radius:5px;color:var(--text);font-family:'Inter',sans-serif;font-size:14px;padding:10px 12px;outline:none;transition:border .15s;-webkit-appearance:none;appearance:none}
+.form-input:focus{border-color:var(--crimson)}
+.form-input::placeholder{color:#444}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+select.form-input option{background:#1e1e1e}
+
+/* ─── CALENDAR STRIP ─── */
+.cal-strip{display:flex;gap:8px;overflow-x:auto;padding-bottom:4px;margin-bottom:20px;scrollbar-width:none}
+.cal-strip::-webkit-scrollbar{display:none}
+.cal-day{flex-shrink:0;width:52px;text-align:center;padding:10px 6px;border-radius:6px;cursor:pointer;border:1px solid var(--border);background:var(--card);transition:all .15s}
+.cal-day:hover{border-color:var(--crimson)}
+.cal-day.today{border-color:var(--gold);background:rgba(212,160,23,.08)}
+.cal-day.selected{background:var(--crimson);border-color:var(--crimson)}
+.cal-day.has-slot::after{content:'';display:block;width:5px;height:5px;border-radius:50%;background:var(--green);margin:4px auto 0}
+.cal-day.selected.has-slot::after{background:#fff}
+.cal-day .day-name{font-size:10px;text-transform:uppercase;color:var(--muted2);letter-spacing:.5px}
+.cal-day.selected .day-name{color:rgba(255,255,255,.7)}
+.cal-day .day-num{font-family:'Bebas Neue',sans-serif;font-size:20px;line-height:1.1;color:#fff;margin-top:2px}
+.cal-day.today .day-num{color:var(--gold)}
+
+/* ─── CHART BARS ─── */
+.bar-chart{display:flex;align-items:flex-end;gap:6px;height:100px;margin:10px 0}
+.bar-wrap{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px}
+.bar{width:100%;background:var(--crimson);border-radius:3px 3px 0 0;transition:height .4s;min-height:2px;cursor:pointer;position:relative}
+.bar:hover{background:var(--gold)}
+.bar-tip{position:absolute;top:-24px;left:50%;transform:translateX(-50%);background:var(--gold);color:var(--black);font-size:10px;font-weight:700;padding:2px 5px;border-radius:2px;white-space:nowrap;opacity:0;transition:opacity .15s;pointer-events:none}
+.bar:hover .bar-tip{opacity:1}
+.bar-lbl{font-size:10px;color:var(--muted);text-align:center}
+
+/* ─── EMPTY STATE ─── */
+.empty{text-align:center;padding:40px 20px}
+.empty-icon{font-size:40px;margin-bottom:10px;opacity:.4}
+.empty p{color:var(--muted2);font-size:14px}
+
+/* ─── TOAST ─── */
+.toast{position:fixed;bottom:24px;right:24px;background:#1e1e1e;border:1px solid var(--border2);border-radius:6px;padding:12px 16px;font-size:13px;color:var(--text);z-index:999;transform:translateY(80px);opacity:0;transition:all .3s;max-width:300px}
+.toast.show{transform:translateY(0);opacity:1}
+.toast.success{border-left:3px solid var(--green)}
+.toast.error{border-left:3px solid var(--crimson)}
+
+/* ─── MONTH NAV ─── */
+.month-nav{display:flex;align-items:center;gap:12px;margin-bottom:16px}
+.month-nav button{background:var(--card2);border:1px solid var(--border);color:var(--text);width:30px;height:30px;border-radius:4px;cursor:pointer;font-size:14px;display:flex;align-items:center;justify-content:center}
+.month-nav button:hover{border-color:var(--crimson)}
+.month-nav span{font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:1.5px;color:#fff;min-width:140px;text-align:center}
+
+/* ─── REVENUE TOGGLE ─── */
+.rev-wrap{display:flex;align-items:center;gap:10px;margin-bottom:16px}
+.toggle{width:36px;height:20px;background:var(--border2);border-radius:10px;position:relative;cursor:pointer;transition:background .2s}
+.toggle.on{background:var(--green)}
+.toggle::after{content:'';width:14px;height:14px;background:#fff;border-radius:50%;position:absolute;top:3px;left:3px;transition:left .2s}
+.toggle.on::after{left:19px}
+.rev-label{font-size:13px;color:var(--muted2)}
+
+/* ─── PROGRESS BAR ─── */
+.prog-bar{height:6px;background:var(--border2);border-radius:3px;margin-top:8px;overflow:hidden}
+.prog-fill{height:100%;background:var(--crimson);border-radius:3px;transition:width .5s}
+.prog-fill.gold{background:var(--gold)}
+.prog-fill.green{background:var(--green)}
+
+/* ─── PIN LOCK ─── */
+#pinLock{position:fixed;inset:0;background:#080808;z-index:9999;display:flex;flex-direction:column;align-items:center;justify-content:center;transition:opacity .4s}
+#pinLock.unlocked{opacity:0;pointer-events:none}
+.pin-card{background:#111;border:1px solid #252525;border-radius:12px;padding:40px;text-align:center;max-width:340px;width:90%}
+.pin-logo{font-family:'Bebas Neue',sans-serif;font-size:34px;letter-spacing:4px;color:var(--crimson);margin-bottom:2px}
+.pin-title{font-size:11px;color:#666;letter-spacing:2px;text-transform:uppercase;margin-bottom:28px}
+.pin-dots{display:flex;gap:14px;justify-content:center;margin-bottom:24px}
+.pin-dot{width:14px;height:14px;border-radius:50%;border:2px solid #333;transition:all .15s}
+.pin-dot.filled{background:var(--crimson);border-color:var(--crimson)}
+.pin-pad{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;max-width:210px;margin:0 auto}
+.pin-btn{background:#161616;border:1px solid #252525;color:#fff;font-size:20px;font-weight:600;height:58px;border-radius:8px;cursor:pointer;transition:all .15s;font-family:'Inter',sans-serif}
+.pin-btn:hover{background:#1c1c1c;border-color:var(--crimson)}
+.pin-btn:active{transform:scale(.93)}
+.pin-err{color:#ff6b6b;font-size:12px;min-height:18px;margin-top:10px}
+.pin-hint{font-size:10px;color:#333;margin-top:14px}
+@keyframes pin-shake{0%,100%{transform:translateX(0)}20%,60%{transform:translateX(-10px)}40%,80%{transform:translateX(10px)}}
+.pin-shake{animation:pin-shake .4s}
+
+/* ─── MOBILE ─── */
+@media(max-width:768px){
+  .sidebar{transform:translateX(-100%)}
+  .sidebar.open{transform:translateX(0)}
+  .main{margin-left:0}
+  .burger{display:block}
+  .stats-grid{grid-template-columns:1fr 1fr}
+  .form-row{grid-template-columns:1fr}
+  .content{padding:16px}
+  .topbar{padding:12px 16px}
+}
+@media(max-width:480px){
+  .stats-grid{grid-template-columns:1fr 1fr}
+  .stat-val{font-size:28px}
+}
+</style>
+</head>
+<body>
+
+<!-- ─── PIN LOCK SCREEN ─── -->
+<div id="pinLock">
+  <div class="pin-card" id="pinCard">
+    <div class="pin-logo">I-BLITZ</div>
+    <div class="pin-title">Trainer Dashboard · Coach Access Only</div>
+    <div class="pin-dots">
+      <div class="pin-dot" id="d0"></div>
+      <div class="pin-dot" id="d1"></div>
+      <div class="pin-dot" id="d2"></div>
+      <div class="pin-dot" id="d3"></div>
+    </div>
+    <div class="pin-pad">
+      <button class="pin-btn" onclick="pinPress('1')">1</button>
+      <button class="pin-btn" onclick="pinPress('2')">2</button>
+      <button class="pin-btn" onclick="pinPress('3')">3</button>
+      <button class="pin-btn" onclick="pinPress('4')">4</button>
+      <button class="pin-btn" onclick="pinPress('5')">5</button>
+      <button class="pin-btn" onclick="pinPress('6')">6</button>
+      <button class="pin-btn" onclick="pinPress('7')">7</button>
+      <button class="pin-btn" onclick="pinPress('8')">8</button>
+      <button class="pin-btn" onclick="pinPress('9')">9</button>
+      <button class="pin-btn" onclick="pinPress('⌫')" style="font-size:16px">⌫</button>
+      <button class="pin-btn" onclick="pinPress('0')">0</button>
+      <button class="pin-btn" onclick="pinPress('✓')" style="background:var(--crimson);border-color:var(--crimson)">✓</button>
+    </div>
+    <div class="pin-err" id="pinErr"></div>
+    <div class="pin-hint">Enter your 4-digit PIN · Default: 1234</div>
+  </div>
+</div>
+
+<div class="layout">
+
+<!-- ─── SIDEBAR ─── -->
+<nav class="sidebar" id="sidebar">
+  <div class="sidebar-logo">
+    <div class="mark">IB</div>
+    <h1>I-BLITZ</h1>
+    <p>TRAINER DASHBOARD</p>
+  </div>
+  <div class="nav">
+    <div class="nav-section">Main</div>
+    <div class="nav-item active" onclick="goTo('dashboard',this)"><span class="ni">📊</span> Dashboard</div>
+    <div class="nav-item" onclick="goTo('slots',this)"><span class="ni">📅</span> Bookings</div>
+    <div class="nav-item" onclick="goTo('clients',this)"><span class="ni">👥</span> Clients</div>
+    <div class="nav-section">Reports</div>
+    <div class="nav-item" onclick="goTo('monthly',this)"><span class="ni">📈</span> Monthly Report</div>
+    <div class="nav-section">Tools</div>
+    <div class="nav-item" onclick="window.open('booking.html','_blank')"><span class="ni">🔗</span> Booking Page</div>
+  </div>
+  <div class="sidebar-footer">Coach <span>Sahil R</span> · I-BLITZ<br>Bangalore<br><a href="index.html" style="color:var(--gold);font-size:10px;text-decoration:none;margin-top:6px;display:inline-block;">← Public Site</a>&nbsp;&nbsp;<span onclick="changePin()" style="color:var(--muted);font-size:10px;cursor:pointer;text-decoration:underline;">Change PIN</span></div>
+</nav>
+
+<!-- ─── MAIN ─── -->
+<div class="main">
+  <div class="topbar">
+    <div style="display:flex;align-items:center;gap:12px">
+      <button class="burger" onclick="toggleSidebar()">☰</button>
+      <div class="topbar-title" id="pageTitle">Dashboard</div>
+    </div>
+    <div class="topbar-right">
+      <div class="topbar-date" id="todayLabel"></div>
+      <button class="btn btn-primary btn-sm" onclick="openAddSlot()">+ Add Booking</button>
+    </div>
+  </div>
+
+  <div class="content">
+
+    <!-- ══════ DASHBOARD PAGE ══════ -->
+    <div class="page active" id="page-dashboard">
+
+      <div class="stats-grid">
+        <div class="stat-card red">
+          <div class="stat-icon">📅</div>
+          <div class="stat-val" id="s-today">0</div>
+          <div class="stat-lbl">Today's Sessions</div>
+          <div class="stat-sub" id="s-today-sub">No sessions yet</div>
+        </div>
+        <div class="stat-card gold">
+          <div class="stat-icon">📆</div>
+          <div class="stat-val" id="s-month">0</div>
+          <div class="stat-lbl">Sessions This Month</div>
+          <div class="stat-sub" id="s-month-sub">—</div>
+        </div>
+        <div class="stat-card green">
+          <div class="stat-icon">👥</div>
+          <div class="stat-val" id="s-clients">0</div>
+          <div class="stat-lbl">Total Clients</div>
+          <div class="stat-sub" id="s-clients-sub">Active members</div>
+        </div>
+        <div class="stat-card blue">
+          <div class="stat-icon">⏳</div>
+          <div class="stat-val" id="s-pending">0</div>
+          <div class="stat-lbl">Pending Confirm</div>
+          <div class="stat-sub">Awaiting your reply</div>
+        </div>
+      </div>
+
+      <!-- Calendar strip -->
+      <div class="sec-header">
+        <div>
+          <div class="sec-title">This Week's Schedule</div>
+          <div class="sec-sub">Click a day to filter bookings</div>
+        </div>
+        <button class="btn btn-ghost btn-sm" onclick="clearDayFilter()">Show All</button>
+      </div>
+      <div class="cal-strip" id="calStrip"></div>
+
+      <!-- Today's slots -->
+      <div class="sec-header">
+        <div class="sec-title" id="slotTableTitle">All Upcoming Bookings</div>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Client</th>
+              <th>Date</th>
+              <th>Time</th>
+              <th>Status</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="dashSlotBody"></tbody>
+        </table>
+      </div>
+
+      <!-- Weekly bar chart -->
+      <div class="sec-header" style="margin-top:8px">
+        <div class="sec-title">Sessions This Week</div>
+      </div>
+      <div class="table-wrap" style="padding:16px 20px 8px">
+        <div class="bar-chart" id="weekChart"></div>
+      </div>
+
+    </div>
+
+    <!-- ══════ BOOKINGS PAGE ══════ -->
+    <div class="page" id="page-slots">
+      <div class="sec-header">
+        <div>
+          <div class="sec-title">All Bookings</div>
+          <div class="sec-sub">Manage all client slot requests</div>
+        </div>
+        <button class="btn btn-primary" onclick="openAddSlot()">+ New Booking</button>
+      </div>
+
+      <div style="display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap">
+        <button class="btn btn-ghost btn-sm" onclick="filterSlots('all')" id="f-all">All</button>
+        <button class="btn btn-ghost btn-sm" onclick="filterSlots('pending')" id="f-pending">Pending</button>
+        <button class="btn btn-ghost btn-sm" onclick="filterSlots('confirmed')" id="f-confirmed">Confirmed</button>
+        <button class="btn btn-ghost btn-sm" onclick="filterSlots('done')" id="f-done">Done</button>
+        <button class="btn btn-ghost btn-sm" onclick="filterSlots('cancelled')" id="f-cancelled">Cancelled</button>
+      </div>
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Client</th>
+              <th>Phone</th>
+              <th>Date</th>
+              <th>Time</th>
+              <th>Status</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="allSlotBody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ══════ CLIENTS PAGE ══════ -->
+    <div class="page" id="page-clients">
+      <div class="sec-header">
+        <div>
+          <div class="sec-title">Client Roster</div>
+          <div class="sec-sub">All registered clients and their session history</div>
+        </div>
+        <button class="btn btn-primary" onclick="openAddClient()">+ Add Client</button>
+      </div>
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Client</th>
+              <th>Phone</th>
+              <th>Goal</th>
+              <th>Sessions</th>
+              <th>This Month</th>
+              <th>Status</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="clientBody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ══════ MONTHLY REPORT PAGE ══════ -->
+    <div class="page" id="page-monthly">
+      <div class="sec-header">
+        <div class="month-nav">
+          <button onclick="changeMonth(-1)">‹</button>
+          <span id="monthLabel"></span>
+          <button onclick="changeMonth(1)">›</button>
+        </div>
+      </div>
+
+      <div class="stats-grid" style="grid-template-columns:repeat(3,1fr)">
+        <div class="stat-card red">
+          <div class="stat-icon">📅</div>
+          <div class="stat-val" id="r-sessions">0</div>
+          <div class="stat-lbl">Total Sessions</div>
+        </div>
+        <div class="stat-card gold">
+          <div class="stat-icon">✅</div>
+          <div class="stat-val" id="r-done">0</div>
+          <div class="stat-lbl">Completed</div>
+        </div>
+        <div class="stat-card green">
+          <div class="stat-icon">👥</div>
+          <div class="stat-val" id="r-unique">0</div>
+          <div class="stat-lbl">Unique Clients</div>
+        </div>
+      </div>
+
+      <!-- Revenue tracker -->
+      <div class="table-wrap" style="padding:16px 20px;margin-bottom:20px">
+        <div class="rev-wrap">
+          <div class="toggle" id="revToggle" onclick="toggleRevenue()"></div>
+          <span class="rev-label">Show Revenue Tracker</span>
+        </div>
+        <div id="revSection" style="display:none">
+          <div class="form-row" style="margin-bottom:12px">
+            <div class="form-group" style="margin:0">
+              <label class="form-label">Rate per Session (₹)</label>
+              <input class="form-input" type="number" id="rateInput" placeholder="e.g. 500" oninput="calcRevenue()">
+            </div>
+            <div class="form-group" style="margin:0">
+              <div class="form-label">Estimated Revenue</div>
+              <div style="font-family:'Bebas Neue',sans-serif;font-size:32px;color:var(--gold);padding-top:6px" id="revenueVal">₹ 0</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Sessions per week -->
+      <div class="sec-header">
+        <div class="sec-title">Sessions by Week</div>
+      </div>
+      <div class="table-wrap" style="padding:16px 20px 8px;margin-bottom:20px">
+        <div class="bar-chart" id="monthChart" style="height:120px"></div>
+      </div>
+
+      <!-- Busiest days -->
+      <div class="sec-header">
+        <div class="sec-title">Busiest Days</div>
+      </div>
+      <div class="table-wrap" style="padding:16px 20px;margin-bottom:20px">
+        <div id="busiestDays"></div>
+      </div>
+
+      <!-- Top clients this month -->
+      <div class="sec-header">
+        <div class="sec-title">Top Clients This Month</div>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th>Client</th><th>Sessions</th><th>Trend</th></tr>
+          </thead>
+          <tbody id="topClientsBody"></tbody>
+        </table>
+      </div>
+    </div>
+
+  </div><!-- /content -->
+</div><!-- /main -->
+</div><!-- /layout -->
+
+<!-- ─── ADD BOOKING MODAL ─── -->
+<div class="overlay" id="slotModal">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title" id="slotModalTitle">New Booking</div>
+      <button class="modal-close" onclick="closeModal('slotModal')">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-group">
+        <label class="form-label">Client Name</label>
+        <input class="form-input" id="f-clientName" placeholder="Full name" list="clientSuggestions" oninput="autoFillPhone()">
+        <datalist id="clientSuggestions"></datalist>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Phone Number</label>
+          <input class="form-input" id="f-phone" placeholder="10-digit number" type="tel" maxlength="10">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Date</label>
+          <input class="form-input" type="date" id="f-date">
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Time Slot</label>
+          <select class="form-input" id="f-time">
+            <option value="">Select time</option>
+            <option>6:00 AM</option><option>7:00 AM</option><option>8:00 AM</option>
+            <option>9:00 AM</option><option>10:00 AM</option><option>11:00 AM</option>
+            <option>5:00 PM</option><option>6:00 PM</option><option>7:00 PM</option>
+            <option>8:00 PM</option><option>9:00 PM</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Status</label>
+          <select class="form-input" id="f-status">
+            <option value="pending">Pending</option>
+            <option value="confirmed">Confirmed</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Notes (optional)</label>
+        <input class="form-input" id="f-notes" placeholder="e.g. First session, focus on chest">
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeModal('slotModal')">Cancel</button>
+      <button class="btn btn-primary" onclick="saveSlot()">Save Booking</button>
+    </div>
+  </div>
+</div>
+
+<!-- ─── ADD CLIENT MODAL ─── -->
+<div class="overlay" id="clientModal">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title" id="clientModalTitle">Add Client</div>
+      <button class="modal-close" onclick="closeModal('clientModal')">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-group">
+        <label class="form-label">Full Name</label>
+        <input class="form-input" id="c-name" placeholder="Client name">
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Phone</label>
+          <input class="form-input" id="c-phone" placeholder="10-digit" type="tel" maxlength="10">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Goal</label>
+          <select class="form-input" id="c-goal">
+            <option>Fat Loss</option>
+            <option>Muscle Gain</option>
+            <option>Strength</option>
+            <option>Endurance</option>
+            <option>Body Recomp</option>
+            <option>General Fitness</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Membership</label>
+          <select class="form-input" id="c-membership">
+            <option value="active">Active</option>
+            <option value="inactive">Inactive</option>
+            <option value="trial">Trial</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Join Date</label>
+          <input class="form-input" type="date" id="c-joindate">
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeModal('clientModal')">Cancel</button>
+      <button class="btn btn-primary" onclick="saveClient()">Save Client</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ══════════════════════════════════════════
+//  DATA LAYER — localStorage persistence
+// ══════════════════════════════════════════
+const DB = {
+  get(k){ try{ return JSON.parse(localStorage.getItem('iblitz_'+k)||'null') }catch{ return null } },
+  set(k,v){ localStorage.setItem('iblitz_'+k, JSON.stringify(v)) }
+};
+
+let slots   = DB.get('slots')   || [];
+let clients = DB.get('clients') || [];
+
+function saveSlots()  { DB.set('slots', slots); }
+function saveClients(){ DB.set('clients', clients); }
+
+// Seed demo data if empty
+if(slots.length===0 && clients.length===0){
+  const today = new Date();
+  const fmt = d => d.toISOString().split('T')[0];
+  const d0 = fmt(today);
+  const d1 = fmt(new Date(today.getTime()+86400000));
+  const d2 = fmt(new Date(today.getTime()+2*86400000));
+  clients = [
+    {id:'c1',name:'Priya Sharma',phone:'9876543210',goal:'Fat Loss',membership:'active',joinDate:fmt(new Date(today.getTime()-30*86400000)),sessions:8},
+    {id:'c2',name:'Rahul Mehta',phone:'9845001234',goal:'Muscle Gain',membership:'active',joinDate:fmt(new Date(today.getTime()-60*86400000)),sessions:18},
+    {id:'c3',name:'Sneha Iyer',phone:'9123456789',goal:'Strength',membership:'trial',joinDate:d0,sessions:1},
+  ];
+  slots = [
+    {id:'s1',clientName:'Priya Sharma',phone:'9876543210',date:d0,time:'6:00 AM',status:'confirmed',notes:''},
+    {id:'s2',clientName:'Rahul Mehta',phone:'9845001234',date:d0,time:'7:00 AM',status:'confirmed',notes:'Leg day'},
+    {id:'s3',clientName:'Sneha Iyer',phone:'9123456789',date:d1,time:'6:00 AM',status:'pending',notes:'First session'},
+    {id:'s4',clientName:'Rahul Mehta',phone:'9845001234',date:d2,time:'8:00 AM',status:'confirmed',notes:''},
+  ];
+  saveSlots(); saveClients();
+}
+
+// ══════════════════════════════════════════
+//  UTILS
+// ══════════════════════════════════════════
+const uid = () => Date.now().toString(36) + Math.random().toString(36).slice(2,5);
+
+function fmtDate(str){
+  if(!str) return '—';
+  const d = new Date(str+'T00:00:00');
+  return d.toLocaleDateString('en-IN',{weekday:'short',day:'numeric',month:'short'});
+}
+function todayStr(){ return new Date().toISOString().split('T')[0]; }
+function monthStr(y,m){ return `${y}-${String(m+1).padStart(2,'0')}`; }
+
+function initials(name){
+  return name.trim().split(' ').map(w=>w[0]).join('').toUpperCase().slice(0,2);
+}
+
+const STATUS_BADGE = {
+  pending:'<span class="badge badge-yellow">Pending</span>',
+  confirmed:'<span class="badge badge-green">Confirmed</span>',
+  done:'<span class="badge badge-blue">Done</span>',
+  cancelled:'<span class="badge badge-red">Cancelled</span>',
+};
+const MEM_BADGE = {
+  active:'<span class="badge badge-green">Active</span>',
+  inactive:'<span class="badge badge-gray">Inactive</span>',
+  trial:'<span class="badge badge-yellow">Trial</span>',
+};
+
+// ══════════════════════════════════════════
+//  NAVIGATION
+// ══════════════════════════════════════════
+const PAGE_TITLES = {dashboard:'Dashboard',slots:'Bookings',clients:'Clients',monthly:'Monthly Report'};
+let currentFilter = 'all';
+let selectedDay = null;
+
+function goTo(page, el){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
+  document.getElementById('page-'+page).classList.add('active');
+  if(el) el.classList.add('active');
+  document.getElementById('pageTitle').textContent = PAGE_TITLES[page]||page;
+  if(page==='dashboard') renderDashboard();
+  if(page==='slots') renderAllSlots();
+  if(page==='clients') renderClients();
+  if(page==='monthly') renderMonthly();
+  if(window.innerWidth<=768) toggleSidebar(false);
+}
+
+function toggleSidebar(force){
+  const sb = document.getElementById('sidebar');
+  if(force===false) sb.classList.remove('open');
+  else sb.classList.toggle('open');
+}
+
+// ══════════════════════════════════════════
+//  DASHBOARD
+// ══════════════════════════════════════════
+function renderDashboard(){
+  const today = todayStr();
+  const now = new Date();
+  const yr = now.getFullYear(), mo = now.getMonth();
+  const prefix = monthStr(yr, mo);
+
+  const todaySlots    = slots.filter(s=>s.date===today);
+  const monthSlots    = slots.filter(s=>s.date.startsWith(prefix));
+  const pendingSlots  = slots.filter(s=>s.status==='pending');
+
+  document.getElementById('s-today').textContent   = todaySlots.length;
+  document.getElementById('s-today-sub').textContent = todaySlots.length ? `Next: ${todaySlots[0].time}` : 'No sessions today';
+  document.getElementById('s-month').textContent   = monthSlots.length;
+  document.getElementById('s-month-sub').textContent = `${monthSlots.filter(s=>s.status==='done').length} completed`;
+  document.getElementById('s-clients').textContent = clients.length;
+  document.getElementById('s-clients-sub').textContent = `${clients.filter(c=>c.membership==='active').length} active`;
+  document.getElementById('s-pending').textContent = pendingSlots.length;
+
+  renderCalStrip();
+  renderDashSlots();
+  renderWeekChart();
+}
+
+function renderCalStrip(){
+  const strip = document.getElementById('calStrip');
+  strip.innerHTML = '';
+  const today = new Date();
+  const days = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+  for(let i=-1;i<13;i++){
+    const d = new Date(today);
+    d.setDate(today.getDate()+i);
+    const ds = d.toISOString().split('T')[0];
+    const hasSlot = slots.some(s=>s.date===ds);
+    const isToday = ds===todayStr();
+    const isSelected = ds===selectedDay;
+    const el = document.createElement('div');
+    el.className = 'cal-day' + (isToday?' today':'') + (isSelected?' selected':'') + (hasSlot?' has-slot':'');
+    el.innerHTML = `<div class="day-name">${days[d.getDay()]}</div><div class="day-num">${d.getDate()}</div>`;
+    el.onclick = ()=>{ selectedDay=ds; renderCalStrip(); renderDashSlots(); };
+    strip.appendChild(el);
+    if(isToday && !isSelected) el.scrollIntoView({block:'nearest',inline:'center'});
+  }
+}
+
+function clearDayFilter(){ selectedDay=null; renderCalStrip(); renderDashSlots(); }
+
+function renderDashSlots(){
+  const body = document.getElementById('dashSlotBody');
+  const title = document.getElementById('slotTableTitle');
+  let filtered = selectedDay
+    ? slots.filter(s=>s.date===selectedDay)
+    : slots.filter(s=>s.date>=todayStr()).slice(0,10);
+  filtered.sort((a,b)=>a.date.localeCompare(b.date));
+  title.textContent = selectedDay ? `Bookings on ${fmtDate(selectedDay)}` : 'Upcoming Bookings';
+  if(!filtered.length){
+    body.innerHTML = `<tr><td colspan="5"><div class="empty"><div class="empty-icon">📭</div><p>No bookings found</p></div></td></tr>`;
+    return;
+  }
+  body.innerHTML = filtered.map(s=>`
+    <tr>
+      <td><div class="client-info"><div class="client-avatar">${initials(s.clientName)}</div>${s.clientName}</div></td>
+      <td>${fmtDate(s.date)}</td>
+      <td>${s.time}</td>
+      <td>${STATUS_BADGE[s.status]||''}</td>
+      <td style="display:flex;gap:6px;flex-wrap:wrap">
+        ${s.status==='pending'?`<button class="btn btn-green btn-sm" onclick="changeStatus('${s.id}','confirmed')">✓ Confirm</button>`:''}
+        ${s.status==='confirmed'?`<button class="btn btn-ghost btn-sm" onclick="changeStatus('${s.id}','done')">✓ Done</button>`:''}
+        <button class="btn btn-wa btn-sm" onclick="waClient('${s.phone}','${s.clientName}','${s.date}','${s.time}','${s.status}')">💬</button>
+        <button class="btn btn-ghost btn-sm" onclick="deleteSlot('${s.id}')">🗑</button>
+      </td>
+    </tr>`).join('');
+}
+
+function renderWeekChart(){
+  const days = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
+  const today = new Date();
+  const dow = today.getDay(); // 0=Sun
+  const monday = new Date(today);
+  monday.setDate(today.getDate() - (dow===0?6:dow-1));
+
+  const counts = days.map((_,i)=>{
+    const d = new Date(monday);
+    d.setDate(monday.getDate()+i);
+    const ds = d.toISOString().split('T')[0];
+    return slots.filter(s=>s.date===ds).length;
+  });
+
+  const max = Math.max(...counts,1);
+  const chart = document.getElementById('weekChart');
+  chart.innerHTML = counts.map((c,i)=>`
+    <div class="bar-wrap">
+      <div class="bar" style="height:${Math.round((c/max)*90)+2}px">
+        <div class="bar-tip">${c}</div>
+      </div>
+      <div class="bar-lbl">${days[i]}</div>
+    </div>`).join('');
+}
+
+// ══════════════════════════════════════════
+//  SLOTS PAGE
+// ══════════════════════════════════════════
+function filterSlots(f){
+  currentFilter=f;
+  ['all','pending','confirmed','done','cancelled'].forEach(x=>{
+    document.getElementById('f-'+x).style.borderColor = x===f?'var(--crimson)':'';
+    document.getElementById('f-'+x).style.color = x===f?'var(--crimson)':'';
+  });
+  renderAllSlots();
+}
+
+function renderAllSlots(){
+  filterSlots(currentFilter);
+  const body = document.getElementById('allSlotBody');
+  let filtered = currentFilter==='all' ? [...slots] : slots.filter(s=>s.status===currentFilter);
+  filtered.sort((a,b)=>a.date.localeCompare(b.date));
+  if(!filtered.length){
+    body.innerHTML=`<tr><td colspan="6"><div class="empty"><div class="empty-icon">📭</div><p>No bookings in this category</p></div></td></tr>`;
+    return;
+  }
+  body.innerHTML = filtered.map(s=>`
+    <tr>
+      <td><div class="client-info"><div class="client-avatar">${initials(s.clientName)}</div>${s.clientName}</div></td>
+      <td>${s.phone}</td>
+      <td>${fmtDate(s.date)}</td>
+      <td>${s.time}</td>
+      <td>${STATUS_BADGE[s.status]||''}</td>
+      <td style="display:flex;gap:5px;flex-wrap:wrap">
+        ${s.status==='pending'?`<button class="btn btn-green btn-sm" onclick="changeStatus('${s.id}','confirmed')">Confirm</button>`:''}
+        ${s.status==='confirmed'?`<button class="btn btn-ghost btn-sm" onclick="changeStatus('${s.id}','done')">Done</button>`:''}
+        ${s.status!=='cancelled'&&s.status!=='done'?`<button class="btn btn-ghost btn-sm" onclick="changeStatus('${s.id}','cancelled')">Cancel</button>`:''}
+        <button class="btn btn-wa btn-sm" onclick="waClient('${s.phone}','${s.clientName}','${s.date}','${s.time}','${s.status}')">💬</button>
+        <button class="btn btn-ghost btn-sm" onclick="deleteSlot('${s.id}')">🗑</button>
+      </td>
+    </tr>`).join('');
+}
+
+// ══════════════════════════════════════════
+//  CLIENTS PAGE
+// ══════════════════════════════════════════
+function renderClients(){
+  const body = document.getElementById('clientBody');
+  const today = todayStr();
+  const prefix = monthStr(new Date().getFullYear(), new Date().getMonth());
+
+  if(!clients.length){
+    body.innerHTML=`<tr><td colspan="7"><div class="empty"><div class="empty-icon">👥</div><p>No clients yet. Add your first client!</p></div></td></tr>`;
+    return;
+  }
+
+  body.innerHTML = clients.map(c=>{
+    const totalSessions = slots.filter(s=>s.clientName===c.name&&s.status==='done').length;
+    const monthSessions = slots.filter(s=>s.clientName===c.name&&s.status==='done'&&s.date.startsWith(prefix)).length;
+    return `<tr>
+      <td><div class="client-info"><div class="client-avatar">${initials(c.name)}</div><div><div style="font-weight:600">${c.name}</div><div style="font-size:11px;color:var(--muted2)">Joined ${fmtDate(c.joinDate)}</div></div></div></td>
+      <td><a href="tel:${c.phone}" style="color:var(--text);text-decoration:none">${c.phone}</a></td>
+      <td><span style="font-size:12px;color:var(--muted2)">${c.goal}</span></td>
+      <td><span style="font-family:'Bebas Neue',sans-serif;font-size:18px;color:var(--gold)">${totalSessions}</span></td>
+      <td>${monthSessions}</td>
+      <td>${MEM_BADGE[c.membership]||''}</td>
+      <td style="display:flex;gap:5px">
+        <button class="btn btn-wa btn-sm" onclick="waClientDirect('${c.phone}')">💬</button>
+        <button class="btn btn-ghost btn-sm" onclick="editClient('${c.id}')">✏️</button>
+        <button class="btn btn-ghost btn-sm" onclick="deleteClient('${c.id}')">🗑</button>
+      </td>
+    </tr>`;
+  }).join('');
+}
+
+// ══════════════════════════════════════════
+//  MONTHLY REPORT
+// ══════════════════════════════════════════
+let reportYear = new Date().getFullYear();
+let reportMonth = new Date().getMonth();
+
+function changeMonth(d){
+  reportMonth+=d;
+  if(reportMonth<0){reportMonth=11;reportYear--;}
+  if(reportMonth>11){reportMonth=0;reportYear++;}
+  renderMonthly();
+}
+
+function renderMonthly(){
+  const prefix = monthStr(reportYear, reportMonth);
+  const mSlots = slots.filter(s=>s.date.startsWith(prefix));
+  const doneSlots = mSlots.filter(s=>s.status==='done');
+  const uniqueClients = [...new Set(mSlots.map(s=>s.clientName))];
+
+  const monthNames=['January','February','March','April','May','June','July','August','September','October','November','December'];
+  document.getElementById('monthLabel').textContent = `${monthNames[reportMonth]} ${reportYear}`;
+  document.getElementById('r-sessions').textContent = mSlots.length;
+  document.getElementById('r-done').textContent = doneSlots.length;
+  document.getElementById('r-unique').textContent = uniqueClients.length;
+
+  calcRevenue();
+
+  // Weeks chart
+  const weeksCount = [0,0,0,0,0];
+  mSlots.forEach(s=>{
+    const d = new Date(s.date+'T00:00:00');
+    const w = Math.min(Math.floor((d.getDate()-1)/7),4);
+    weeksCount[w]++;
+  });
+  const max = Math.max(...weeksCount,1);
+  document.getElementById('monthChart').innerHTML = weeksCount.map((c,i)=>`
+    <div class="bar-wrap">
+      <div class="bar" style="height:${Math.round((c/max)*110)+2}px">
+        <div class="bar-tip">${c}</div>
+      </div>
+      <div class="bar-lbl">Wk ${i+1}</div>
+    </div>`).join('');
+
+  // Busiest days
+  const dayCount={};
+  mSlots.forEach(s=>{
+    const day = new Date(s.date+'T00:00:00').toLocaleDateString('en-IN',{weekday:'long'});
+    dayCount[day]=(dayCount[day]||0)+1;
+  });
+  const sorted = Object.entries(dayCount).sort((a,b)=>b[1]-a[1]);
+  const maxDay = sorted[0]?.[1]||1;
+  document.getElementById('busiestDays').innerHTML = sorted.length
+    ? sorted.map(([day,count])=>`
+        <div style="margin-bottom:10px">
+          <div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:4px">
+            <span>${day}</span><span style="color:var(--gold);font-weight:700">${count}</span>
+          </div>
+          <div class="prog-bar"><div class="prog-fill gold" style="width:${Math.round((count/maxDay)*100)}%"></div></div>
+        </div>`).join('')
+    : '<p style="color:var(--muted2);font-size:13px;padding:10px 0">No data for this month</p>';
+
+  // Top clients
+  const clientCount={};
+  mSlots.forEach(s=>{ clientCount[s.clientName]=(clientCount[s.clientName]||0)+1; });
+  const topClients = Object.entries(clientCount).sort((a,b)=>b[1]-a[1]).slice(0,5);
+  const maxC = topClients[0]?.[1]||1;
+  document.getElementById('topClientsBody').innerHTML = topClients.length
+    ? topClients.map(([name,count])=>`
+        <tr>
+          <td><div class="client-info"><div class="client-avatar">${initials(name)}</div>${name}</div></td>
+          <td><span style="font-family:'Bebas Neue',sans-serif;font-size:18px;color:var(--gold)">${count}</span></td>
+          <td style="min-width:100px"><div class="prog-bar"><div class="prog-fill" style="width:${Math.round((count/maxC)*100)}%"></div></div></td>
+        </tr>`).join('')
+    : `<tr><td colspan="3"><div class="empty"><div class="empty-icon">📊</div><p>No data yet</p></div></td></tr>`;
+}
+
+let showRevenue = false;
+function toggleRevenue(){
+  showRevenue=!showRevenue;
+  document.getElementById('revToggle').classList.toggle('on',showRevenue);
+  document.getElementById('revSection').style.display=showRevenue?'block':'none';
+}
+function calcRevenue(){
+  const rate = parseFloat(document.getElementById('rateInput')?.value)||0;
+  const prefix = monthStr(reportYear, reportMonth);
+  const done = slots.filter(s=>s.date.startsWith(prefix)&&s.status==='done').length;
+  const el = document.getElementById('revenueVal');
+  if(el) el.textContent = `₹ ${(done*rate).toLocaleString('en-IN')}`;
+}
+
+// ══════════════════════════════════════════
+//  SLOT CRUD
+// ══════════════════════════════════════════
+let editSlotId = null;
+
+function openAddSlot(){
+  editSlotId=null;
+  document.getElementById('slotModalTitle').textContent='New Booking';
+  document.getElementById('f-clientName').value='';
+  document.getElementById('f-phone').value='';
+  document.getElementById('f-date').value=todayStr();
+  document.getElementById('f-time').value='';
+  document.getElementById('f-status').value='pending';
+  document.getElementById('f-notes').value='';
+  updateClientSuggestions();
+  document.getElementById('slotModal').classList.add('open');
+}
+
+function updateClientSuggestions(){
+  const dl = document.getElementById('clientSuggestions');
+  dl.innerHTML = clients.map(c=>`<option value="${c.name}">`).join('');
+}
+
+function autoFillPhone(){
+  const name = document.getElementById('f-clientName').value.trim();
+  const c = clients.find(x=>x.name.toLowerCase()===name.toLowerCase());
+  if(c) document.getElementById('f-phone').value=c.phone;
+}
+
+function saveSlot(){
+  const name = document.getElementById('f-clientName').value.trim();
+  const phone = document.getElementById('f-phone').value.trim();
+  const date = document.getElementById('f-date').value;
+  const time = document.getElementById('f-time').value;
+  const status = document.getElementById('f-status').value;
+  const notes = document.getElementById('f-notes').value.trim();
+
+  if(!name||!date||!time){ showToast('Fill all required fields','error'); return; }
+
+  if(editSlotId){
+    const i = slots.findIndex(s=>s.id===editSlotId);
+    if(i>=0) slots[i]={...slots[i],clientName:name,phone,date,time,status,notes};
+  } else {
+    slots.push({id:uid(),clientName:name,phone,date,time,status,notes});
+    // Auto-add client if new
+    if(!clients.find(c=>c.name.toLowerCase()===name.toLowerCase())){
+      clients.push({id:uid(),name,phone,goal:'General Fitness',membership:'active',joinDate:date,sessions:0});
+      saveClients();
+    }
+  }
+  saveSlots();
+  closeModal('slotModal');
+  showToast(editSlotId?'Booking updated':'Booking added ✓','success');
+  renderDashboard();
+}
+
+function changeStatus(id, status){
+  const s = slots.find(x=>x.id===id);
+  if(s){
+    s.status=status;
+    if(status==='done'){
+      // increment client sessions
+      const c = clients.find(x=>x.name.toLowerCase()===s.clientName.toLowerCase());
+      if(c) c.sessions=(c.sessions||0)+1;
+      saveClients();
+    }
+    saveSlots();
+    renderDashboard();
+    renderAllSlots();
+    showToast(`Marked as ${status}`,'success');
+  }
+}
+
+function deleteSlot(id){
+  if(!confirm('Delete this booking?')) return;
+  slots=slots.filter(s=>s.id!==id);
+  saveSlots();
+  renderDashboard();
+  renderAllSlots();
+  showToast('Booking deleted','success');
+}
+
+// ══════════════════════════════════════════
+//  CLIENT CRUD
+// ══════════════════════════════════════════
+let editClientId = null;
+
+function openAddClient(){
+  editClientId=null;
+  document.getElementById('clientModalTitle').textContent='Add Client';
+  document.getElementById('c-name').value='';
+  document.getElementById('c-phone').value='';
+  document.getElementById('c-goal').value='Fat Loss';
+  document.getElementById('c-membership').value='active';
+  document.getElementById('c-joindate').value=todayStr();
+  document.getElementById('clientModal').classList.add('open');
+}
+
+function editClient(id){
+  const c=clients.find(x=>x.id===id);
+  if(!c) return;
+  editClientId=id;
+  document.getElementById('clientModalTitle').textContent='Edit Client';
+  document.getElementById('c-name').value=c.name;
+  document.getElementById('c-phone').value=c.phone;
+  document.getElementById('c-goal').value=c.goal;
+  document.getElementById('c-membership').value=c.membership;
+  document.getElementById('c-joindate').value=c.joinDate||todayStr();
+  document.getElementById('clientModal').classList.add('open');
+}
+
+function saveClient(){
+  const name=document.getElementById('c-name').value.trim();
+  const phone=document.getElementById('c-phone').value.trim();
+  const goal=document.getElementById('c-goal').value;
+  const membership=document.getElementById('c-membership').value;
+  const joinDate=document.getElementById('c-joindate').value;
+  if(!name){ showToast('Enter client name','error'); return; }
+  if(editClientId){
+    const i=clients.findIndex(c=>c.id===editClientId);
+    if(i>=0) clients[i]={...clients[i],name,phone,goal,membership,joinDate};
+  } else {
+    clients.push({id:uid(),name,phone,goal,membership,joinDate,sessions:0});
+  }
+  saveClients();
+  closeModal('clientModal');
+  showToast(editClientId?'Client updated':'Client added ✓','success');
+  renderClients();
+}
+
+function deleteClient(id){
+  if(!confirm('Delete this client?')) return;
+  clients=clients.filter(c=>c.id!==id);
+  saveClients();
+  renderClients();
+  showToast('Client removed','success');
+}
+
+// ══════════════════════════════════════════
+//  WHATSAPP
+// ══════════════════════════════════════════
+function waClient(phone,name,date,time,status){
+  let msg='';
+  if(status==='pending'){
+    msg=`✅ *Booking Confirmed!*\n\nHey ${name} 👋\n\nYour training slot at *I-BLITZ Fitness Club* is confirmed:\n\n📅 Date: ${fmtDate(date)}\n⏰ Time: ${time}\n📍 Location: I-BLITZ Fitness Club, Bangalore\n\nPlease arrive 5 mins early. See you on the floor! 💪\n\n— Coach Sahil`;
+  } else {
+    msg=`Hey ${name} 👋\n\nThis is Coach Sahil from I-BLITZ Fitness Club.\n\nJust a reminder for your session on *${fmtDate(date)}* at *${time}*.\n\nSee you soon! 💪`;
+  }
+  window.open(`https://wa.me/91${phone}?text=${encodeURIComponent(msg)}`,'_blank');
+}
+
+function waClientDirect(phone){
+  window.open(`https://wa.me/91${phone}`,'_blank');
+}
+
+// ══════════════════════════════════════════
+//  MODALS & TOAST
+// ══════════════════════════════════════════
+function closeModal(id){ document.getElementById(id).classList.remove('open'); }
+
+document.querySelectorAll('.overlay').forEach(o=>{
+  o.addEventListener('click', e=>{ if(e.target===o) o.classList.remove('open'); });
+});
+
+let toastTimer;
+function showToast(msg, type='success'){
+  const t=document.getElementById('toast');
+  t.textContent=msg;
+  t.className=`toast ${type} show`;
+  clearTimeout(toastTimer);
+  toastTimer=setTimeout(()=>t.classList.remove('show'),2800);
+}
+
+// ══════════════════════════════════════════
+//  PIN AUTHENTICATION
+// ══════════════════════════════════════════
+const PIN_KEY = 'iblitz_pin';
+const DEFAULT_PIN = '1234';
+let pinBuf = '';
+
+function getStoredPin(){ return localStorage.getItem(PIN_KEY) || DEFAULT_PIN; }
+
+function pinUnlock(){
+  const lock = document.getElementById('pinLock');
+  lock.classList.add('unlocked');
+  setTimeout(()=>lock.style.display='none', 420);
+}
+
+function checkAuth(){
+  if(sessionStorage.getItem('iblitz_authed')==='1'){ pinUnlock(); return; }
+}
+
+function pinPress(val){
+  const err = document.getElementById('pinErr');
+  if(val==='⌫'){
+    pinBuf = pinBuf.slice(0,-1);
+  } else if(val==='✓'){
+    if(pinBuf.length<4){ err.textContent='Enter 4 digits'; return; }
+    if(pinBuf===getStoredPin()){
+      sessionStorage.setItem('iblitz_authed','1');
+      err.textContent='';
+      pinUnlock();
+    } else {
+      err.textContent='Wrong PIN — try again';
+      document.getElementById('pinCard').classList.add('pin-shake');
+      setTimeout(()=>document.getElementById('pinCard').classList.remove('pin-shake'),420);
+      pinBuf='';
+    }
+    updatePinDots();
+    return;
+  } else {
+    if(pinBuf.length>=4) return;
+    pinBuf += val;
+    err.textContent='';
+    if(pinBuf.length===4) setTimeout(()=>pinPress('✓'),150);
+  }
+  updatePinDots();
+}
+
+function updatePinDots(){
+  for(let i=0;i<4;i++){
+    document.getElementById('d'+i).classList.toggle('filled', i<pinBuf.length);
+  }
+}
+
+function changePin(){
+  const current = prompt('Enter current PIN:');
+  if(current===null) return;
+  if(current!==getStoredPin()){ alert('Wrong PIN'); return; }
+  const np = prompt('Enter new 4-digit PIN:');
+  if(!np||!/^\d{4}$/.test(np)){ alert('PIN must be exactly 4 digits'); return; }
+  const np2 = prompt('Confirm new PIN:');
+  if(np!==np2){ alert('PINs do not match'); return; }
+  localStorage.setItem(PIN_KEY, np);
+  showToast('PIN updated ✓','success');
+}
+
+document.addEventListener('keydown', e=>{
+  if(document.getElementById('pinLock').style.display==='none') return;
+  if(e.key>='0'&&e.key<='9') pinPress(e.key);
+  else if(e.key==='Backspace') pinPress('⌫');
+  else if(e.key==='Enter') pinPress('✓');
+});
+
+// ══════════════════════════════════════════
+//  INIT
+// ══════════════════════════════════════════
+document.addEventListener('DOMContentLoaded',()=>{
+  checkAuth();
+  const now = new Date();
+  document.getElementById('todayLabel').textContent = now.toLocaleDateString('en-IN',{weekday:'short',day:'numeric',month:'short',year:'numeric'});
+  document.getElementById('f-date').min = todayStr();
+  renderDashboard();
+});
+</script>
+</body>
+</html>

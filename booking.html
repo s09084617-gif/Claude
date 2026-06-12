@@ -362,6 +362,7 @@
   <a href="index.html" style="font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:4px;background:linear-gradient(to right,#C0112B,#D4A017);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;text-decoration:none;">Sahil Fitness</a>
   <div style="display:flex;gap:20px;">
     <a href="index.html" style="font-family:'Inter',sans-serif;font-size:11px;letter-spacing:2px;color:#888;text-decoration:none;text-transform:uppercase;">Home</a>
+    <a href="slots.html" style="font-family:'Inter',sans-serif;font-size:11px;letter-spacing:2px;color:#25D366;text-decoration:none;text-transform:uppercase;">View Slots</a>
     <a href="men.html" style="font-family:'Inter',sans-serif;font-size:11px;letter-spacing:2px;color:#C0112B;text-decoration:none;text-transform:uppercase;">Men's</a>
     <a href="women.html" style="font-family:'Inter',sans-serif;font-size:11px;letter-spacing:2px;color:#d4a0d4;text-decoration:none;text-transform:uppercase;">Women's</a>
   </div>
@@ -511,10 +512,22 @@
     const today = new Date().toISOString().split('T')[0];
     dateInput.min = today;
 
+    // Pre-fill from URL params (e.g. when coming from slots.html)
+    const params = new URLSearchParams(window.location.search);
+    if(params.get('date')) dateInput.value = params.get('date');
+    if(params.get('time')){
+      const t = params.get('time');
+      selectedTime = t;
+      document.querySelectorAll('.time-btn').forEach(b=>{
+        if(b.textContent.trim()===t) b.classList.add('selected');
+      });
+    }
+
     // Live preview on input change
     ['clientName','clientPhone','slotDate'].forEach(id => {
       document.getElementById(id).addEventListener('input', updatePreview);
     });
+    updatePreview();
   });
 
   function selectTime(el, time) {
