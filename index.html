@@ -777,6 +777,219 @@
   .modal-body { padding: 20px; }
   @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
+  /* ──── CONTACT & SOCIAL ──── */
+  .contact-section {
+    background: var(--card);
+    border-top: 1px solid var(--border);
+    padding: 72px 24px;
+  }
+  .contact-inner {
+    max-width: 900px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 60px;
+    align-items: start;
+  }
+  .contact-eyebrow {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: var(--crimson);
+    margin-bottom: 8px;
+  }
+  .contact-heading {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 42px;
+    letter-spacing: 1px;
+    color: #fff;
+    line-height: 0.95;
+    margin-bottom: 16px;
+  }
+  .contact-heading span { color: var(--gold); }
+  .contact-desc {
+    font-size: 13px;
+    color: var(--muted);
+    line-height: 1.8;
+    margin-bottom: 32px;
+  }
+  .contact-links {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+  .contact-link {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    background: var(--card2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 16px 20px;
+    text-decoration: none;
+    color: inherit;
+    transition: border-color 0.2s, transform 0.2s;
+  }
+  .contact-link:hover {
+    border-color: var(--gold);
+    transform: translateX(4px);
+  }
+  .contact-link-icon {
+    font-size: 22px;
+    width: 44px;
+    height: 44px;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+  .contact-link-text { flex: 1; }
+  .contact-link-label {
+    font-size: 10px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 2px;
+  }
+  .contact-link-value {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--gold);
+  }
+  .contact-link-arrow {
+    color: var(--crimson);
+    font-size: 16px;
+    opacity: 0;
+    transition: opacity 0.2s, transform 0.2s;
+  }
+  .contact-link:hover .contact-link-arrow {
+    opacity: 1;
+    transform: translateX(4px);
+  }
+
+  /* Social side */
+  .social-col { }
+  .social-heading {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 28px;
+    letter-spacing: 1px;
+    color: #fff;
+    margin-bottom: 6px;
+  }
+  .social-sub {
+    font-size: 12px;
+    color: var(--muted);
+    margin-bottom: 24px;
+    line-height: 1.6;
+  }
+  .social-cards {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+  .social-card {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    border-radius: 10px;
+    padding: 18px 20px;
+    text-decoration: none;
+    color: inherit;
+    transition: transform 0.2s, opacity 0.2s;
+    position: relative;
+    overflow: hidden;
+  }
+  .social-card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    transition: opacity 0.2s;
+  }
+  .social-card:hover { transform: translateY(-2px); }
+  .social-card:hover::before { opacity: 1; }
+  .social-card.instagram {
+    background: linear-gradient(135deg, rgba(225,48,108,0.12), rgba(193,53,132,0.08));
+    border: 1px solid rgba(225,48,108,0.3);
+  }
+  .social-card.instagram:hover { border-color: rgba(225,48,108,0.7); }
+  .social-card.whatsapp {
+    background: linear-gradient(135deg, rgba(37,211,102,0.12), rgba(37,211,102,0.04));
+    border: 1px solid rgba(37,211,102,0.3);
+  }
+  .social-card.whatsapp:hover { border-color: rgba(37,211,102,0.7); }
+  .social-icon-wrap {
+    width: 50px;
+    height: 50px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    font-size: 26px;
+  }
+  .social-card.instagram .social-icon-wrap {
+    background: linear-gradient(135deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888);
+  }
+  .social-card.whatsapp .social-icon-wrap {
+    background: #25D366;
+  }
+  .social-text { flex: 1; }
+  .social-platform {
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 2px;
+  }
+  .social-handle {
+    font-size: 16px;
+    font-weight: 700;
+    color: #fff;
+  }
+  .social-followers {
+    font-size: 11px;
+    color: var(--muted);
+    margin-top: 2px;
+  }
+  .social-cta-btn {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    padding: 8px 14px;
+    border-radius: 6px;
+    border: none;
+    cursor: pointer;
+    text-transform: uppercase;
+    flex-shrink: 0;
+  }
+  .social-card.instagram .social-cta-btn {
+    background: rgba(225,48,108,0.2);
+    color: #f09433;
+    border: 1px solid rgba(225,48,108,0.4);
+  }
+  .social-card.whatsapp .social-cta-btn {
+    background: rgba(37,211,102,0.15);
+    color: #25D366;
+    border: 1px solid rgba(37,211,102,0.4);
+  }
+
+  .contact-divider {
+    width: 40px;
+    height: 2px;
+    background: linear-gradient(90deg, var(--crimson), var(--gold));
+    margin: 20px 0;
+    border-radius: 2px;
+  }
+
+  @media (max-width: 768px) {
+    .contact-inner { grid-template-columns: 1fr; gap: 40px; }
+  }
+
   /* ──── FOOTER ──── */
   .coach-footer {
     background: var(--card);
@@ -871,6 +1084,7 @@
     <li><a href="#workouts">Workouts</a></li>
     <li><a href="#priority">Priority</a></li>
     <li><a href="#nutrition">Nutrition</a></li>
+    <li><a href="#contact">Contact</a></li>
   </ul>
 </nav>
 
@@ -895,7 +1109,10 @@
         <div class="stat"><div class="stat-num">5×</div><div class="stat-label">Per Week</div></div>
         <div class="stat"><div class="stat-num">∞</div><div class="stat-label">Progress</div></div>
       </div>
-      <a href="#workouts" class="hero-cta">Start Training →</a>
+      <div style="display:flex;gap:12px;flex-wrap:wrap;margin-top:32px;">
+        <a href="#workouts" class="hero-cta">Start Training →</a>
+        <a href="https://wa.me/917015552731?text=Hi%20Coach%20Sahil%2C%20I%27m%20interested%20in%20training!" target="_blank" rel="noopener" class="hero-cta" style="background:rgba(37,211,102,0.15);color:#25D366;border:1px solid rgba(37,211,102,0.5);">💬 WhatsApp Me</a>
+      </div>
     </div>
     <div class="hero-photo-wrap">
       <div class="hero-photo-glow"></div>
@@ -1210,7 +1427,76 @@
   </table>
 </div>
 
-<hr class="section-divider">
+<!-- CONTACT & SOCIAL -->
+<div class="contact-section" id="contact">
+  <div class="contact-inner">
+
+    <!-- Left: Contact Details -->
+    <div class="contact-col">
+      <div class="contact-eyebrow">Get In Touch</div>
+      <div class="contact-heading">TRAIN WITH<br><span>COACH SAHIL</span></div>
+      <div class="contact-divider"></div>
+      <p class="contact-desc">
+        Ready to transform? Reach out directly for custom workout plans, 1-on-1 personal training, or nutrition guidance at I-Blitz Fitness Club, Bangalore.
+      </p>
+      <div class="contact-links">
+        <a href="tel:+917015552731" class="contact-link">
+          <div class="contact-link-icon">📞</div>
+          <div class="contact-link-text">
+            <div class="contact-link-label">Phone / WhatsApp</div>
+            <div class="contact-link-value">+91 70155 52731</div>
+          </div>
+          <span class="contact-link-arrow">→</span>
+        </a>
+        <a href="mailto:s09084617@gmail.com" class="contact-link">
+          <div class="contact-link-icon">✉️</div>
+          <div class="contact-link-text">
+            <div class="contact-link-label">Email</div>
+            <div class="contact-link-value">s09084617@gmail.com</div>
+          </div>
+          <span class="contact-link-arrow">→</span>
+        </a>
+        <div class="contact-link" style="cursor:default;">
+          <div class="contact-link-icon">📍</div>
+          <div class="contact-link-text">
+            <div class="contact-link-label">Location</div>
+            <div class="contact-link-value">I-Blitz Fitness Club · Bangalore</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right: Social Media -->
+    <div class="social-col">
+      <div class="social-heading">Follow the Journey</div>
+      <p class="social-sub">Behind-the-scenes training, client transformations, and daily fitness content from Coach Sahil.</p>
+      <div class="social-cards">
+
+        <a href="https://instagram.com/sahil_r_fitness" target="_blank" rel="noopener" class="social-card instagram">
+          <div class="social-icon-wrap">📸</div>
+          <div class="social-text">
+            <div class="social-platform">Instagram</div>
+            <div class="social-handle">@sahil_r_fitness</div>
+            <div class="social-followers">Workouts · Transformations · Tips</div>
+          </div>
+          <span class="social-cta-btn">Follow</span>
+        </a>
+
+        <a href="https://wa.me/917015552731?text=Hi%20Coach%20Sahil%2C%20I%27m%20interested%20in%20personal%20training!" target="_blank" rel="noopener" class="social-card whatsapp">
+          <div class="social-icon-wrap">💬</div>
+          <div class="social-text">
+            <div class="social-platform">WhatsApp</div>
+            <div class="social-handle">+91 70155 52731</div>
+            <div class="social-followers">Message directly for enquiries</div>
+          </div>
+          <span class="social-cta-btn">Message</span>
+        </a>
+
+      </div>
+    </div>
+
+  </div>
+</div>
 
 <!-- FOOTER -->
 <div class="coach-footer">
@@ -1227,6 +1513,9 @@
       <a href="#priority" class="footer-link">Priority</a>
       <a href="#nutrition" class="footer-link">Nutrition</a>
       <a href="#about" class="footer-link">About</a>
+      <a href="#contact" class="footer-link">Contact</a>
+      <a href="https://instagram.com/sahil_r_fitness" target="_blank" rel="noopener" class="footer-link">Instagram</a>
+      <a href="https://wa.me/917015552731" target="_blank" rel="noopener" class="footer-link">WhatsApp</a>
     </div>
     <p style="margin-top: 24px; font-size: 11px; color: #333;">shankyfitness.blogspot.com</p>
   </div>
