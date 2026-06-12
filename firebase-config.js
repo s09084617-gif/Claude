@@ -1,5 +1,5 @@
 // ═══════════════════════════════════════════════════════════
-//  I-BLITZ FIREBASE CONFIG — iblitz-fitness (fitness-b506f)
+//  SAHIL FITNESS FIREBASE CONFIG — iblitz-fitness (fitness-b506f)
 // ═══════════════════════════════════════════════════════════
 
 const FIREBASE_CONFIG = {

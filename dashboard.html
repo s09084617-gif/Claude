@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>I-BLITZ Trainer Dashboard · Coach Sahil</title>
+<title>SAHIL FITNESS Trainer Dashboard · Coach Sahil</title>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
 <script src="firebase-config.js"></script>
@@ -219,7 +219,7 @@ select.form-input option{background:#1e1e1e}
 <!-- ─── PIN LOCK SCREEN ─── -->
 <div id="pinLock">
   <div class="pin-card" id="pinCard">
-    <div class="pin-logo">I-BLITZ</div>
+    <div class="pin-logo">SAHIL FITNESS</div>
     <div class="pin-title">Trainer Dashboard · Coach Access Only</div>
     <div class="pin-dots">
       <div class="pin-dot" id="d0"></div>
@@ -251,8 +251,8 @@ select.form-input option{background:#1e1e1e}
 <!-- ─── SIDEBAR ─── -->
 <nav class="sidebar" id="sidebar">
   <div class="sidebar-logo">
-    <div class="mark">IB</div>
-    <h1>I-BLITZ</h1>
+    <div class="mark">SF</div>
+    <h1>SAHIL FITNESS</h1>
     <p>TRAINER DASHBOARD</p>
   </div>
   <div class="nav">
@@ -265,7 +265,7 @@ select.form-input option{background:#1e1e1e}
     <div class="nav-section">Tools</div>
     <div class="nav-item" onclick="window.open('booking.html','_blank')"><span class="ni">🔗</span> Booking Page</div>
   </div>
-  <div class="sidebar-footer">Coach <span>Sahil R</span> · I-BLITZ<br>Bangalore<br><a href="index.html" style="color:var(--gold);font-size:10px;text-decoration:none;margin-top:6px;display:inline-block;">← Public Site</a>&nbsp;&nbsp;<span onclick="changePin()" style="color:var(--muted);font-size:10px;cursor:pointer;text-decoration:underline;">Change PIN</span></div>
+  <div class="sidebar-footer">Coach <span>Sahil R</span> · SAHIL FITNESS<br>Bangalore<br><a href="index.html" style="color:var(--gold);font-size:10px;text-decoration:none;margin-top:6px;display:inline-block;">← Public Site</a>&nbsp;&nbsp;<span onclick="changePin()" style="color:var(--muted);font-size:10px;cursor:pointer;text-decoration:underline;">Change PIN</span></div>
 </nav>
 
 <!-- ─── MAIN ─── -->
@@ -1137,9 +1137,9 @@ function deleteClient(id){
 function waClient(phone,name,date,time,status){
   let msg='';
   if(status==='pending'){
-    msg=`✅ *Booking Confirmed!*\n\nHey ${name} 👋\n\nYour training slot at *I-BLITZ Fitness Club* is confirmed:\n\n📅 Date: ${fmtDate(date)}\n⏰ Time: ${time}\n📍 Location: I-BLITZ Fitness Club, Bangalore\n\nPlease arrive 5 mins early. See you on the floor! 💪\n\n— Coach Sahil`;
+    msg=`✅ *Booking Confirmed!*\n\nHey ${name} 👋\n\nYour training slot at *Sahil Fitness Club* is confirmed:\n\n📅 Date: ${fmtDate(date)}\n⏰ Time: ${time}\n📍 Location: Sahil Fitness Club, Bangalore\n\nPlease arrive 5 mins early. See you on the floor! 💪\n\n— Coach Sahil`;
   } else {
-    msg=`Hey ${name} 👋\n\nThis is Coach Sahil from I-BLITZ Fitness Club.\n\nJust a reminder for your session on *${fmtDate(date)}* at *${time}*.\n\nSee you soon! 💪`;
+    msg=`Hey ${name} 👋\n\nThis is Coach Sahil from Sahil Fitness Club.\n\nJust a reminder for your session on *${fmtDate(date)}* at *${time}*.\n\nSee you soon! 💪`;
   }
   window.open(`https://wa.me/91${phone}?text=${encodeURIComponent(msg)}`,'_blank');
 }

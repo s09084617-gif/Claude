@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Available Training Slots · I-BLITZ Fitness Club</title>
+<title>Available Training Slots · Sahil Fitness Club</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Rajdhani:wght@400;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
@@ -110,7 +110,7 @@ footer a{color:var(--gold);text-decoration:none}
 <body>
 
 <nav>
-  <span class="logo">I-BLITZ</span>
+  <span class="logo">SAHIL FITNESS</span>
   <a href="index.html">Home</a>
   <a href="booking.html" class="active">📅 Book Slot</a>
   <a href="men.html">Men's</a>
@@ -119,7 +119,7 @@ footer a{color:var(--gold);text-decoration:none}
 
 <div class="hero-strip">
   <h1>AVAILABLE <span>TRAINING</span> SLOTS</h1>
-  <p>I-BLITZ Fitness Club · Bangalore · Coach Sahil Bansal</p>
+  <p>Sahil Fitness Club · Bangalore · Coach Sahil Bansal</p>
   <div class="notice">⚡ Green = Open · Grey = Booked · Pick a slot and request via WhatsApp</div>
 </div>
 
@@ -140,17 +140,17 @@ footer a{color:var(--gold);text-decoration:none}
     <h3>READY TO TRAIN?</h3>
     <p>Select an available slot above or reach out to Coach Sahil directly on WhatsApp</p>
     <a class="btn-book" href="booking.html">📅 Book via Form</a>
-    <a class="btn-wa" href="https://wa.me/917015552731?text=Hi%20Coach%20Sahil%2C%20I%20want%20to%20book%20a%20training%20slot%20at%20I-BLITZ!" target="_blank">💬 WhatsApp Coach</a>
+    <a class="btn-wa" href="https://wa.me/917015552731?text=Hi%20Coach%20Sahil%2C%20I%20want%20to%20book%20a%20training%20slot%20at%20Sahil%20Fitness%20Club!" target="_blank">💬 WhatsApp Coach</a>
   </div>
 </div>
 
 <footer>
-  © 2025 I-BLITZ Fitness Club · Bangalore ·
+  © 2025 Sahil Fitness Club · Bangalore ·
   <a href="index.html">Home</a> · <a href="booking.html">Book a Slot</a>
 </footer>
 
 <script>
-// Fixed time slots offered at I-BLITZ
+// Fixed time slots offered at Sahil Fitness Club
 const MORNING_SLOTS = ['6:00 AM','7:00 AM','8:00 AM','9:00 AM','10:00 AM'];
 const EVENING_SLOTS = ['5:00 PM','6:00 PM','7:00 PM','8:00 PM','9:00 PM'];
 
@@ -238,7 +238,7 @@ function slotCard(dateISO, timeStr){
   } else {
     const d = new Date(dateISO+'T00:00:00');
     const dateLabel = d.toLocaleDateString('en-IN',{weekday:'long',day:'numeric',month:'short'});
-    const waMsg = encodeURIComponent(`🏋️ *SLOT BOOKING REQUEST*\n━━━━━━━━━━━━━━━━━━━\n📅 *Date:* ${dateLabel}\n⏰ *Time:* ${timeStr}\n━━━━━━━━━━━━━━━━━━━\n📍 I-BLITZ Fitness Club, Bangalore\nPlease confirm my slot, Coach Sahil! 💪`);
+    const waMsg = encodeURIComponent(`🏋️ *SLOT BOOKING REQUEST*\n━━━━━━━━━━━━━━━━━━━\n📅 *Date:* ${dateLabel}\n⏰ *Time:* ${timeStr}\n━━━━━━━━━━━━━━━━━━━\n📍 Sahil Fitness Club, Bangalore\nPlease confirm my slot, Coach Sahil! 💪`);
     return `<div class="slot-card available" onclick="bookSlot('${dateISO}','${timeStr}')">
       <div class="slot-time">${timeStr}</div>
       <div class="slot-status">Available</div>
