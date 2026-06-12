@@ -11,6 +11,7 @@ import {
   Legend,
 } from 'recharts'
 import { api, ProgressLog, ProgressLogRequest } from '../api/client'
+import { useToast } from '../contexts/ToastContext'
 
 interface ChartDataPoint {
   date: string
@@ -20,6 +21,7 @@ interface ChartDataPoint {
 }
 
 export default function Progress() {
+  const { toast } = useToast()
   const [logs, setLogs] = useState<ProgressLog[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
@@ -63,15 +65,17 @@ export default function Progress() {
       if (notes.trim()) data.notes = notes.trim()
 
       await api.createProgressLog(data)
-      // Reset form
       setWeightKg('')
       setPbf('')
       setSmmKg('')
       setNotes('')
       await fetchLogs()
+      toast('Progress logged')
     } catch (err: unknown) {
       const axiosError = err as { response?: { data?: { detail?: string } } }
-      setFormError(axiosError.response?.data?.detail ?? 'Failed to log progress.')
+      const msg = axiosError.response?.data?.detail ?? 'Failed to log progress.'
+      setFormError(msg)
+      toast(msg, 'error')
     } finally {
       setSubmitting(false)
     }
@@ -83,8 +87,11 @@ export default function Progress() {
       await api.deleteProgressLog(id)
       setLogs((prev) => prev.filter((l) => l.id !== id))
       setDeleteConfirmId(null)
+      toast('Entry deleted', 'info')
     } catch {
-      setError('Failed to delete log.')
+      const msg = 'Failed to delete log.'
+      setError(msg)
+      toast(msg, 'error')
     } finally {
       setDeleting(false)
     }

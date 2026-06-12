@@ -1,6 +1,7 @@
 import { useState, useEffect, FormEvent } from 'react'
 import { Dumbbell, Loader2, CheckCircle } from 'lucide-react'
 import { useAuth } from '../contexts/AuthContext'
+import { useToast } from '../contexts/ToastContext'
 import { api, Workout } from '../api/client'
 
 const GOAL_OPTIONS = [
@@ -12,6 +13,7 @@ const GOAL_OPTIONS = [
 
 export default function Workouts() {
   const { user } = useAuth()
+  const { toast } = useToast()
 
   // Generate form state
   const [program, setProgram] = useState('')
@@ -55,12 +57,15 @@ export default function Workouts() {
         username: user?.username,
       })
       setGeneratedWorkout(res.data)
+      toast(`Workout generated for program: ${res.data.program}`)
       // Refresh history
       const histRes = await api.getWorkouts(user?.id)
       setWorkouts(histRes.data)
     } catch (err: unknown) {
       const axiosError = err as { response?: { data?: { detail?: string } } }
-      setGenError(axiosError.response?.data?.detail ?? 'Failed to generate workout.')
+      const msg = axiosError.response?.data?.detail ?? 'Failed to generate workout.'
+      setGenError(msg)
+      toast(msg, 'error')
     } finally {
       setGenerating(false)
     }

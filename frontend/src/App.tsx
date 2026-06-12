@@ -13,6 +13,7 @@ import Nutrition from './pages/Nutrition'
 import Progress from './pages/Progress'
 import Analytics from './pages/Analytics'
 import Profile from './pages/Profile'
+import NotFound from './pages/NotFound'
 
 function PrivateRoute({ children }: { children: React.ReactNode }) {
   const { isAuthenticated, loading } = useAuth()
@@ -113,7 +114,7 @@ function AppRoutes() {
           </PrivateRoute>
         }
       />
-      <Route path="*" element={<Navigate to="/" replace />} />
+      <Route path="*" element={<NotFound />} />
     </Routes>
   )
 }

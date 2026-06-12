@@ -1,6 +1,7 @@
 import { useState, FormEvent } from 'react'
 import { ClipboardList, CheckCircle, Loader2 } from 'lucide-react'
 import { useAuth } from '../contexts/AuthContext'
+import { useToast } from '../contexts/ToastContext'
 import { api, EpisodeResponse } from '../api/client'
 
 const SMM_OPTIONS = [
@@ -18,6 +19,7 @@ const GOAL_OPTIONS = [
 
 export default function Assessment() {
   const { user } = useAuth()
+  const { toast } = useToast()
   const [pbf, setPbf] = useState('')
   const [smm, setSmm] = useState('normal')
   const [goal, setGoal] = useState('general_fitness')
@@ -41,9 +43,12 @@ export default function Assessment() {
         username: user?.username,
       })
       setResult(res.data)
+      toast(`Program recommended: ${res.data.program}`)
     } catch (err: unknown) {
       const axiosError = err as { response?: { data?: { detail?: string } } }
-      setError(axiosError.response?.data?.detail ?? 'Failed to generate assessment. Please try again.')
+      const msg = axiosError.response?.data?.detail ?? 'Failed to generate assessment.'
+      setError(msg)
+      toast(msg, 'error')
     } finally {
       setLoading(false)
     }

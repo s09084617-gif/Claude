@@ -1,6 +1,7 @@
 import { useState, useEffect, FormEvent } from 'react'
 import { Utensils, Plus, Pencil, Trash2, X, Check, Loader2 } from 'lucide-react'
 import { api, NutritionPlan, NutritionPlanRequest } from '../api/client'
+import { useToast } from '../contexts/ToastContext'
 
 const GOAL_OPTIONS = [
   { value: '', label: 'Select a goal (optional)' },
@@ -173,6 +174,7 @@ function PlanForm({ initial, onSave, onCancel, saving, submitLabel }: PlanFormPr
 }
 
 export default function Nutrition() {
+  const { toast } = useToast()
   const [plans, setPlans] = useState<NutritionPlan[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
@@ -203,9 +205,12 @@ export default function Nutrition() {
       await api.createNutritionPlan(data)
       await fetchPlans()
       setShowAddForm(false)
+      toast('Nutrition plan created')
     } catch (err: unknown) {
       const axiosError = err as { response?: { data?: { detail?: string } } }
-      setError(axiosError.response?.data?.detail ?? 'Failed to create plan.')
+      const msg = axiosError.response?.data?.detail ?? 'Failed to create plan.'
+      setError(msg)
+      toast(msg, 'error')
     } finally {
       setSaving(false)
     }
@@ -217,9 +222,12 @@ export default function Nutrition() {
       await api.updateNutritionPlan(id, data)
       await fetchPlans()
       setEditingId(null)
+      toast('Plan updated')
     } catch (err: unknown) {
       const axiosError = err as { response?: { data?: { detail?: string } } }
-      setError(axiosError.response?.data?.detail ?? 'Failed to update plan.')
+      const msg = axiosError.response?.data?.detail ?? 'Failed to update plan.'
+      setError(msg)
+      toast(msg, 'error')
     } finally {
       setSaving(false)
     }
@@ -231,8 +239,11 @@ export default function Nutrition() {
       await api.deleteNutritionPlan(id)
       setPlans((prev) => prev.filter((p) => p.id !== id))
       setDeleteConfirmId(null)
+      toast('Plan deleted', 'info')
     } catch {
-      setError('Failed to delete plan.')
+      const msg = 'Failed to delete plan.'
+      setError(msg)
+      toast(msg, 'error')
     } finally {
       setDeleting(false)
     }
