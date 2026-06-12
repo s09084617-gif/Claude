@@ -1,26 +1,886 @@
 openapi: 3.1.0
 info:
-  title: IBLITZ API
+  title: iBlitz API
   version: 1.0.0
+  description: >
+    Backend API for the iBlitz fitness platform. Provides JWT authentication,
+    episode/workout generation, nutrition plans, progress logs, and analytics.
+
+servers:
+  - url: http://localhost:8000
+    description: Local development server
+
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  schemas:
+    # ── Auth ────────────────────────────────────────────────────────────────────
+    RegisterRequest:
+      type: object
+      required: [username, email, password]
+      properties:
+        username:
+          type: string
+          example: johndoe
+        email:
+          type: string
+          format: email
+          example: john@example.com
+        password:
+          type: string
+          format: password
+          example: supersecret
+
+    TokenResponse:
+      type: object
+      properties:
+        access_token:
+          type: string
+        token_type:
+          type: string
+          example: bearer
+        user_id:
+          type: integer
+        username:
+          type: string
+
+    UserResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+        username:
+          type: string
+        email:
+          type: string
+          nullable: true
+        is_active:
+          type: boolean
+        created_at:
+          type: string
+          format: date-time
+
+    # ── Engine ──────────────────────────────────────────────────────────────────
+    GenerateEpisodeRequest:
+      type: object
+      required: [pbf, smm, goal]
+      properties:
+        pbf:
+          type: number
+          example: 25.3
+        smm:
+          type: string
+          example: low
+        goal:
+          type: string
+          example: fat_loss
+        restriction:
+          type: string
+          nullable: true
+          example: KNEE_PAIN
+        user_id:
+          type: integer
+          nullable: true
+        username:
+          type: string
+          nullable: true
+        assessment_title:
+          type: string
+          nullable: true
+
+    GenerateEpisodeResponse:
+      type: object
+      properties:
+        classification:
+          type: string
+          example: obese_low_muscle
+        recommendation:
+          type: string
+          example: fat_loss
+        program:
+          type: string
+          example: 3_day_full_body
+        episode_id:
+          type: integer
+          nullable: true
+        assessment_id:
+          type: integer
+          nullable: true
+
+    GenerateWorkoutRequest:
+      type: object
+      required: [program, goal]
+      properties:
+        program:
+          type: string
+          example: 4_day_split
+        goal:
+          type: string
+          example: muscle_gain
+        restriction:
+          type: string
+          nullable: true
+        user_id:
+          type: integer
+          nullable: true
+        username:
+          type: string
+          nullable: true
+        episode_id:
+          type: integer
+          nullable: true
+
+    WorkoutResponse:
+      type: object
+      properties:
+        workout_id:
+          type: integer
+        user_id:
+          type: integer
+          nullable: true
+        episode_id:
+          type: integer
+          nullable: true
+        program:
+          type: string
+        details:
+          type: object
+          additionalProperties: true
+
+    OutcomeResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+        episode_id:
+          type: integer
+        name:
+          type: string
+        result:
+          type: object
+          additionalProperties: true
+        score:
+          type: number
+          nullable: true
+
+    EpisodeResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+        assessment_id:
+          type: integer
+        name:
+          type: string
+        sequence:
+          type: integer
+        started_at:
+          type: string
+          format: date-time
+          nullable: true
+        completed_at:
+          type: string
+          format: date-time
+          nullable: true
+        outcomes:
+          type: array
+          items:
+            $ref: '#/components/schemas/OutcomeResponse'
+
+    # ── Nutrition Plans ─────────────────────────────────────────────────────────
+    NutritionPlanCreate:
+      type: object
+      required: [title]
+      properties:
+        title:
+          type: string
+          example: High-Protein Cut
+        goal:
+          type: string
+          nullable: true
+          example: fat_loss
+        calories:
+          type: integer
+          nullable: true
+          example: 1800
+        protein_g:
+          type: number
+          nullable: true
+          example: 180
+        carbs_g:
+          type: number
+          nullable: true
+          example: 150
+        fat_g:
+          type: number
+          nullable: true
+          example: 60
+        meals:
+          type: array
+          nullable: true
+          items:
+            type: object
+            additionalProperties: true
+        notes:
+          type: string
+          nullable: true
+
+    NutritionPlanUpdate:
+      type: object
+      properties:
+        title:
+          type: string
+        goal:
+          type: string
+          nullable: true
+        calories:
+          type: integer
+          nullable: true
+        protein_g:
+          type: number
+          nullable: true
+        carbs_g:
+          type: number
+          nullable: true
+        fat_g:
+          type: number
+          nullable: true
+        meals:
+          type: array
+          nullable: true
+          items:
+            type: object
+            additionalProperties: true
+        notes:
+          type: string
+          nullable: true
+
+    NutritionPlanResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+        user_id:
+          type: integer
+        title:
+          type: string
+        goal:
+          type: string
+          nullable: true
+        calories:
+          type: integer
+          nullable: true
+        protein_g:
+          type: number
+          nullable: true
+        carbs_g:
+          type: number
+          nullable: true
+        fat_g:
+          type: number
+          nullable: true
+        meals:
+          type: array
+          nullable: true
+          items:
+            type: object
+            additionalProperties: true
+        notes:
+          type: string
+          nullable: true
+        created_at:
+          type: string
+          format: date-time
+
+    # ── Progress Logs ───────────────────────────────────────────────────────────
+    ProgressLogCreate:
+      type: object
+      properties:
+        weight_kg:
+          type: number
+          nullable: true
+          example: 82.5
+        pbf:
+          type: number
+          nullable: true
+          example: 24.1
+        smm_kg:
+          type: number
+          nullable: true
+          example: 35.2
+        notes:
+          type: string
+          nullable: true
+        metrics:
+          type: object
+          nullable: true
+          additionalProperties: true
+        logged_at:
+          type: string
+          format: date-time
+          nullable: true
+
+    ProgressLogResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+        user_id:
+          type: integer
+        logged_at:
+          type: string
+          format: date-time
+        weight_kg:
+          type: number
+          nullable: true
+        pbf:
+          type: number
+          nullable: true
+        smm_kg:
+          type: number
+          nullable: true
+        notes:
+          type: string
+          nullable: true
+        metrics:
+          type: object
+          nullable: true
+          additionalProperties: true
+        created_at:
+          type: string
+          format: date-time
+
+    # ── Analytics ───────────────────────────────────────────────────────────────
+    EffectivenessResponse:
+      type: object
+      properties:
+        total_episodes:
+          type: integer
+        avg_score:
+          type: number
+          nullable: true
+        classification_counts:
+          type: object
+          additionalProperties:
+            type: integer
+        recommendation_counts:
+          type: object
+          additionalProperties:
+            type: integer
+        program_counts:
+          type: object
+          additionalProperties:
+            type: integer
+
+    # ── Errors ──────────────────────────────────────────────────────────────────
+    HTTPError:
+      type: object
+      properties:
+        detail:
+          type: string
+
 paths:
-  /assessments:
-    post:
-      summary: Create assessment
-  /recommendations:
-    post:
-      summary: Generate recommendation
-  /programs/{id}:
+  # ── Root / Health ────────────────────────────────────────────────────────────
+  /:
     get:
-      summary: Get program
-  /nutrition-plans/{id}:
+      tags: [general]
+      summary: Root — sanity check
+      operationId: readRoot
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  docs:
+                    type: string
+
+  /health:
     get:
-      summary: Get nutrition plan
-  /progress-logs:
+      tags: [general]
+      summary: Health check
+      operationId: healthCheck
+      responses:
+        '200':
+          description: Service is healthy
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: ok
+
+  # ── Auth ─────────────────────────────────────────────────────────────────────
+  /auth/register:
     post:
-      summary: Create progress log
-  /outcomes:
+      tags: [auth]
+      summary: Register a new user
+      operationId: authRegister
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RegisterRequest'
+      responses:
+        '201':
+          description: User created — returns JWT token
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TokenResponse'
+        '400':
+          description: Username or email already taken
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPError'
+
+  /auth/login:
     post:
-      summary: Create outcome
+      tags: [auth]
+      summary: Login and obtain a JWT token
+      operationId: authLogin
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              required: [username, password]
+              properties:
+                username:
+                  type: string
+                password:
+                  type: string
+                  format: password
+      responses:
+        '200':
+          description: Successful login
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TokenResponse'
+        '401':
+          description: Incorrect username or password
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPError'
+
+  /auth/me:
+    get:
+      tags: [auth]
+      summary: Get current authenticated user
+      operationId: authMe
+      security:
+        - BearerAuth: []
+      responses:
+        '200':
+          description: Current user profile
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserResponse'
+        '401':
+          description: Not authenticated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPError'
+
+  # ── Engine ───────────────────────────────────────────────────────────────────
+  /engine/generate-episode:
+    post:
+      tags: [engine]
+      summary: Generate an episode recommendation
+      operationId: generateEpisode
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GenerateEpisodeRequest'
+      responses:
+        '200':
+          description: Episode generated with classification, recommendation, and program
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GenerateEpisodeResponse'
+        '404':
+          description: User not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPError'
+
+  /engine/generate-workout:
+    post:
+      tags: [engine]
+      summary: Generate a workout plan
+      operationId: generateWorkout
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GenerateWorkoutRequest'
+      responses:
+        '200':
+          description: Workout plan generated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WorkoutResponse'
+        '404':
+          description: User or episode not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPError'
+
+  /engine/episodes:
+    get:
+      tags: [engine]
+      summary: List stored episodes with outcomes
+      operationId: listEpisodes
+      parameters:
+        - name: user_id
+          in: query
+          schema:
+            type: integer
+          required: false
+        - name: completed
+          in: query
+          schema:
+            type: boolean
+          required: false
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            default: 50
+          required: false
+      responses:
+        '200':
+          description: List of episodes
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/EpisodeResponse'
+
+  /engine/workouts:
+    get:
+      tags: [engine]
+      summary: List stored workouts
+      operationId: listWorkouts
+      parameters:
+        - name: user_id
+          in: query
+          schema:
+            type: integer
+          required: false
+        - name: episode_id
+          in: query
+          schema:
+            type: integer
+          required: false
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            default: 50
+          required: false
+      responses:
+        '200':
+          description: List of workouts
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/WorkoutResponse'
+
+  # ── Nutrition Plans ──────────────────────────────────────────────────────────
+  /nutrition/plans:
+    post:
+      tags: [nutrition]
+      summary: Create a nutrition plan
+      operationId: createNutritionPlan
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NutritionPlanCreate'
+      responses:
+        '201':
+          description: Nutrition plan created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NutritionPlanResponse'
+        '401':
+          description: Not authenticated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPError'
+
+    get:
+      tags: [nutrition]
+      summary: List all nutrition plans for the current user
+      operationId: listNutritionPlans
+      security:
+        - BearerAuth: []
+      responses:
+        '200':
+          description: List of nutrition plans
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/NutritionPlanResponse'
+        '401':
+          description: Not authenticated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPError'
+
+  /nutrition/plans/{plan_id}:
+    get:
+      tags: [nutrition]
+      summary: Get a single nutrition plan
+      operationId: getNutritionPlan
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: plan_id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Nutrition plan details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NutritionPlanResponse'
+        '401':
+          description: Not authenticated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPError'
+        '404':
+          description: Nutrition plan not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPError'
+
+    put:
+      tags: [nutrition]
+      summary: Update a nutrition plan
+      operationId: updateNutritionPlan
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: plan_id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NutritionPlanUpdate'
+      responses:
+        '200':
+          description: Updated nutrition plan
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NutritionPlanResponse'
+        '401':
+          description: Not authenticated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPError'
+        '404':
+          description: Nutrition plan not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPError'
+
+    delete:
+      tags: [nutrition]
+      summary: Delete a nutrition plan
+      operationId: deleteNutritionPlan
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: plan_id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: Nutrition plan deleted
+        '401':
+          description: Not authenticated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPError'
+        '404':
+          description: Nutrition plan not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPError'
+
+  # ── Progress Logs ────────────────────────────────────────────────────────────
+  /progress/logs:
+    post:
+      tags: [progress]
+      summary: Create a progress log entry
+      operationId: createProgressLog
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProgressLogCreate'
+      responses:
+        '201':
+          description: Progress log created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProgressLogResponse'
+        '401':
+          description: Not authenticated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPError'
+
+    get:
+      tags: [progress]
+      summary: List progress logs for the current user
+      operationId: listProgressLogs
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            default: 50
+          required: false
+      responses:
+        '200':
+          description: List of progress logs ordered by logged_at descending
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ProgressLogResponse'
+        '401':
+          description: Not authenticated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPError'
+
+  /progress/logs/{log_id}:
+    delete:
+      tags: [progress]
+      summary: Delete a progress log entry
+      operationId: deleteProgressLog
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: log_id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: Progress log deleted
+        '401':
+          description: Not authenticated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPError'
+        '404':
+          description: Progress log not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPError'
+
+  # ── Analytics ────────────────────────────────────────────────────────────────
   /analytics/effectiveness:
     get:
-      summary: Recommendation effectiveness analytics
+      tags: [analytics]
+      summary: Recommendation effectiveness analytics for the current user
+      operationId: recommendationEffectiveness
+      security:
+        - BearerAuth: []
+      responses:
+        '200':
+          description: Aggregated analytics across all episodes and outcomes for the user
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EffectivenessResponse'
+        '401':
+          description: Not authenticated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPError'
+
+tags:
+  - name: general
+    description: Root and health-check endpoints
+  - name: auth
+    description: JWT registration, login, and current-user endpoints
+  - name: engine
+    description: Episode/workout generation engine
+  - name: nutrition
+    description: Nutrition plan CRUD (requires auth)
+  - name: progress
+    description: Progress log CRUD (requires auth)
+  - name: analytics
+    description: Recommendation effectiveness analytics (requires auth)
