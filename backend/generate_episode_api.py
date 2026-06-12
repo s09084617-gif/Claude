@@ -260,11 +260,12 @@ async def generate_workout(request: GenerateWorkoutRequest, db: Session = Depend
     db.refresh(workout)
 
     return WorkoutResponse(
-        workout_id=workout.id,
+        id=workout.id,
         user_id=workout.user_id,
         episode_id=workout.episode_id,
         program=workout.program,
         details=workout.details,
+        created_at=workout.created_at,
     )
 
 

@@ -10,6 +10,7 @@ import {
   BarChart2,
   LogOut,
   Zap,
+  UserCircle,
 } from 'lucide-react'
 import { useAuth } from '../contexts/AuthContext'
 
@@ -27,6 +28,7 @@ const navItems: NavItem[] = [
   { label: 'Nutrition', path: '/nutrition', icon: <Utensils size={18} /> },
   { label: 'Progress', path: '/progress', icon: <TrendingUp size={18} /> },
   { label: 'Analytics', path: '/analytics', icon: <BarChart2 size={18} /> },
+  { label: 'Profile', path: '/profile', icon: <UserCircle size={18} /> },
 ]
 
 export default function Layout({ children }: { children: React.ReactNode }) {

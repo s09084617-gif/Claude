@@ -1,7 +1,7 @@
 from datetime import datetime
 from typing import List, Optional
 
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict
 
 
 class GenerateEpisodeRequest(BaseModel):
@@ -32,13 +32,14 @@ class GenerateWorkoutRequest(BaseModel):
 
 
 class WorkoutResponse(BaseModel):
-    workout_id: int = Field(alias="id")
+    id: int
     user_id: Optional[int] = None
     episode_id: Optional[int] = None
     program: str
     details: dict
+    created_at: Optional[datetime] = None
 
-    model_config = ConfigDict(from_attributes=True, populate_by_name=True)
+    model_config = ConfigDict(from_attributes=True)
 
 
 class OutcomeResponse(BaseModel):
@@ -89,6 +90,16 @@ class UserResponse(BaseModel):
 
     class Config:
         from_attributes = True
+
+
+class UpdateProfileRequest(BaseModel):
+    username: Optional[str] = None
+    email: Optional[str] = None
+
+
+class ChangePasswordRequest(BaseModel):
+    current_password: str
+    new_password: str
 
 
 # ── Nutrition Plans ───────────────────────────────────────────────────────────

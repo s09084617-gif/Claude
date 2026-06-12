@@ -61,16 +61,29 @@ export interface EpisodeResponse {
   assessment_id: number
 }
 
+export interface OutcomeResult {
+  classification?: string
+  recommendation?: string
+  program?: string
+  [key: string]: unknown
+}
+
+export interface EpisodeOutcome {
+  id: number
+  episode_id: number
+  name: string
+  result: OutcomeResult
+  score: number | null
+}
+
 export interface Episode {
   id: number
-  episode_name?: string
-  sequence?: number
-  program?: string
-  outcomes?: string
-  started_at?: string
-  completed_at?: string
-  user_id?: number
-  username?: string
+  assessment_id: number
+  name: string
+  sequence: number
+  started_at: string | null
+  completed_at: string | null
+  outcomes: EpisodeOutcome[]
 }
 
 export interface WorkoutRequest {
@@ -82,13 +95,20 @@ export interface WorkoutRequest {
   episode_id?: number
 }
 
+export interface WorkoutDetails {
+  program: string
+  goal: string
+  restriction: string | null
+  workouts: unknown[]
+}
+
 export interface Workout {
   id: number
-  program?: string
-  goal?: string
-  details?: string
-  created_at?: string
-  user_id?: number
+  user_id: number | null
+  episode_id: number | null
+  program: string
+  details: WorkoutDetails
+  created_at: string | null
 }
 
 export interface NutritionPlan {
@@ -155,6 +175,10 @@ export const api = {
     })
   },
   me: () => axiosInstance.get<User>('/auth/me'),
+  updateProfile: (data: { username?: string; email?: string }) =>
+    axiosInstance.patch<User>('/auth/profile', data),
+  changePassword: (data: { current_password: string; new_password: string }) =>
+    axiosInstance.post('/auth/change-password', data),
 
   // Engine
   generateEpisode: (data: EpisodeRequest) =>

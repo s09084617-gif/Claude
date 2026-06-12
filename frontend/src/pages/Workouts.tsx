@@ -162,21 +162,19 @@ export default function Workouts() {
               <h3 className="font-semibold text-gray-900">Workout Generated!</h3>
             </div>
             <div className="space-y-2 text-sm text-gray-700">
-              {generatedWorkout.program && (
+              <p>
+                <span className="font-medium">Program:</span> {generatedWorkout.program}
+              </p>
+              {generatedWorkout.details?.goal && (
                 <p>
-                  <span className="font-medium">Program:</span> {generatedWorkout.program}
+                  <span className="font-medium">Goal:</span> {generatedWorkout.details.goal}
                 </p>
               )}
-              {generatedWorkout.goal && (
-                <p>
-                  <span className="font-medium">Goal:</span> {generatedWorkout.goal}
-                </p>
-              )}
-              {generatedWorkout.details && (
+              {generatedWorkout.details?.workouts && (
                 <div>
-                  <p className="font-medium mb-1">Details:</p>
+                  <p className="font-medium mb-1">Exercises:</p>
                   <pre className="whitespace-pre-wrap text-xs bg-white rounded p-3 border border-green-100 font-sans leading-relaxed">
-                    {generatedWorkout.details}
+                    {JSON.stringify(generatedWorkout.details.workouts, null, 2)}
                   </pre>
                 </div>
               )}
@@ -229,9 +227,9 @@ export default function Workouts() {
                       {w.program ?? '—'}
                     </td>
                     <td className="py-3 px-3">
-                      {w.goal ? (
+                      {w.details?.goal ? (
                         <span className="inline-block px-2 py-0.5 rounded-full bg-green-100 text-green-700 text-xs font-medium">
-                          {w.goal}
+                          {w.details.goal}
                         </span>
                       ) : (
                         '—'
