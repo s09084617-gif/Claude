@@ -1,6 +1,7 @@
 import { useState, useEffect, FormEvent } from 'react'
 import { Utensils, Plus, Pencil, Trash2, X, Check, Loader2 } from 'lucide-react'
 import { api, NutritionPlan, NutritionPlanRequest } from '../api/client'
+import { useToast } from '../contexts/ToastContext'
 
 const GOAL_OPTIONS = [
   { value: '', label: 'Select a goal (optional)' },
@@ -10,16 +11,41 @@ const GOAL_OPTIONS = [
   { value: 'general_fitness', label: 'General Fitness' },
 ]
 
-const emptyForm = (): NutritionPlanRequest => ({
-  title: '',
-  goal: '',
-  calories: undefined,
-  protein_g: undefined,
-  carbs_g: undefined,
-  fat_g: undefined,
-  meals: '',
-  notes: '',
-})
+/** Convert a string[] from the API to a comma-separated display string */
+function mealsToText(meals: string[] | null | undefined): string {
+  if (!meals || meals.length === 0) return ''
+  return meals.join(', ')
+}
+
+/** Parse a comma-separated input string into a string[] for the API */
+function textToMeals(text: string): string[] | null {
+  const parts = text.split(',').map((s) => s.trim()).filter(Boolean)
+  return parts.length > 0 ? parts : null
+}
+
+interface FormState {
+  title: string
+  goal: string
+  calories: string
+  protein_g: string
+  carbs_g: string
+  fat_g: string
+  mealsText: string
+  notes: string
+}
+
+function planToForm(initial?: Partial<NutritionPlanRequest>): FormState {
+  return {
+    title: initial?.title ?? '',
+    goal: initial?.goal ?? '',
+    calories: initial?.calories != null ? String(initial.calories) : '',
+    protein_g: initial?.protein_g != null ? String(initial.protein_g) : '',
+    carbs_g: initial?.carbs_g != null ? String(initial.carbs_g) : '',
+    fat_g: initial?.fat_g != null ? String(initial.fat_g) : '',
+    mealsText: mealsToText(initial?.meals),
+    notes: initial?.notes ?? '',
+  }
+}
 
 interface PlanFormProps {
   initial?: Partial<NutritionPlanRequest>
@@ -30,18 +56,22 @@ interface PlanFormProps {
 }
 
 function PlanForm({ initial, onSave, onCancel, saving, submitLabel }: PlanFormProps) {
-  const [form, setForm] = useState<NutritionPlanRequest>({ ...emptyForm(), ...initial })
+  const [form, setForm] = useState<FormState>(planToForm(initial))
 
-  const set = (field: keyof NutritionPlanRequest, value: string | number | undefined) =>
+  const set = (field: keyof FormState, value: string) =>
     setForm((prev) => ({ ...prev, [field]: value }))
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault()
     await onSave({
-      ...form,
-      goal: form.goal || undefined,
-      meals: form.meals || undefined,
-      notes: form.notes || undefined,
+      title: form.title,
+      goal: form.goal || null,
+      calories: form.calories ? parseInt(form.calories) : null,
+      protein_g: form.protein_g ? parseFloat(form.protein_g) : null,
+      carbs_g: form.carbs_g ? parseFloat(form.carbs_g) : null,
+      fat_g: form.fat_g ? parseFloat(form.fat_g) : null,
+      meals: textToMeals(form.mealsText),
+      notes: form.notes || null,
     })
   }
 
@@ -79,8 +109,8 @@ function PlanForm({ initial, onSave, onCancel, saving, submitLabel }: PlanFormPr
           <label className="block text-sm font-medium text-gray-700 mb-1">Calories (kcal)</label>
           <input
             type="number"
-            value={form.calories ?? ''}
-            onChange={(e) => set('calories', e.target.value ? parseInt(e.target.value) : undefined)}
+            value={form.calories}
+            onChange={(e) => set('calories', e.target.value)}
             min={0}
             placeholder="e.g. 2000"
             className="w-full px-3 py-2.5 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent"
@@ -90,10 +120,8 @@ function PlanForm({ initial, onSave, onCancel, saving, submitLabel }: PlanFormPr
           <label className="block text-sm font-medium text-gray-700 mb-1">Protein (g)</label>
           <input
             type="number"
-            value={form.protein_g ?? ''}
-            onChange={(e) =>
-              set('protein_g', e.target.value ? parseFloat(e.target.value) : undefined)
-            }
+            value={form.protein_g}
+            onChange={(e) => set('protein_g', e.target.value)}
             min={0}
             step={0.1}
             placeholder="e.g. 150"
@@ -104,10 +132,8 @@ function PlanForm({ initial, onSave, onCancel, saving, submitLabel }: PlanFormPr
           <label className="block text-sm font-medium text-gray-700 mb-1">Carbs (g)</label>
           <input
             type="number"
-            value={form.carbs_g ?? ''}
-            onChange={(e) =>
-              set('carbs_g', e.target.value ? parseFloat(e.target.value) : undefined)
-            }
+            value={form.carbs_g}
+            onChange={(e) => set('carbs_g', e.target.value)}
             min={0}
             step={0.1}
             placeholder="e.g. 250"
@@ -118,10 +144,8 @@ function PlanForm({ initial, onSave, onCancel, saving, submitLabel }: PlanFormPr
           <label className="block text-sm font-medium text-gray-700 mb-1">Fat (g)</label>
           <input
             type="number"
-            value={form.fat_g ?? ''}
-            onChange={(e) =>
-              set('fat_g', e.target.value ? parseFloat(e.target.value) : undefined)
-            }
+            value={form.fat_g}
+            onChange={(e) => set('fat_g', e.target.value)}
             min={0}
             step={0.1}
             placeholder="e.g. 70"
@@ -132,16 +156,16 @@ function PlanForm({ initial, onSave, onCancel, saving, submitLabel }: PlanFormPr
           <label className="block text-sm font-medium text-gray-700 mb-1">Meals</label>
           <input
             type="text"
-            value={form.meals ?? ''}
-            onChange={(e) => set('meals', e.target.value)}
-            placeholder="e.g. Breakfast, Lunch, Dinner, Snack"
+            value={form.mealsText}
+            onChange={(e) => set('mealsText', e.target.value)}
+            placeholder="e.g. Breakfast, Lunch, Dinner, Snack (comma-separated)"
             className="w-full px-3 py-2.5 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent"
           />
         </div>
         <div className="sm:col-span-2">
           <label className="block text-sm font-medium text-gray-700 mb-1">Notes</label>
           <textarea
-            value={form.notes ?? ''}
+            value={form.notes}
             onChange={(e) => set('notes', e.target.value)}
             rows={3}
             placeholder="Additional notes..."
@@ -173,6 +197,7 @@ function PlanForm({ initial, onSave, onCancel, saving, submitLabel }: PlanFormPr
 }
 
 export default function Nutrition() {
+  const { toast } = useToast()
   const [plans, setPlans] = useState<NutritionPlan[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
@@ -203,9 +228,12 @@ export default function Nutrition() {
       await api.createNutritionPlan(data)
       await fetchPlans()
       setShowAddForm(false)
+      toast('Nutrition plan created')
     } catch (err: unknown) {
       const axiosError = err as { response?: { data?: { detail?: string } } }
-      setError(axiosError.response?.data?.detail ?? 'Failed to create plan.')
+      const msg = axiosError.response?.data?.detail ?? 'Failed to create plan.'
+      setError(msg)
+      toast(msg, 'error')
     } finally {
       setSaving(false)
     }
@@ -217,9 +245,12 @@ export default function Nutrition() {
       await api.updateNutritionPlan(id, data)
       await fetchPlans()
       setEditingId(null)
+      toast('Plan updated')
     } catch (err: unknown) {
       const axiosError = err as { response?: { data?: { detail?: string } } }
-      setError(axiosError.response?.data?.detail ?? 'Failed to update plan.')
+      const msg = axiosError.response?.data?.detail ?? 'Failed to update plan.'
+      setError(msg)
+      toast(msg, 'error')
     } finally {
       setSaving(false)
     }
@@ -231,8 +262,11 @@ export default function Nutrition() {
       await api.deleteNutritionPlan(id)
       setPlans((prev) => prev.filter((p) => p.id !== id))
       setDeleteConfirmId(null)
+      toast('Plan deleted', 'info')
     } catch {
-      setError('Failed to delete plan.')
+      const msg = 'Failed to delete plan.'
+      setError(msg)
+      toast(msg, 'error')
     } finally {
       setDeleting(false)
     }
@@ -401,9 +435,10 @@ export default function Nutrition() {
                     )}
                   </div>
 
-                  {plan.meals && (
+                  {plan.meals && plan.meals.length > 0 && (
                     <p className="mt-3 text-sm text-gray-600">
-                      <span className="font-medium">Meals:</span> {plan.meals}
+                      <span className="font-medium">Meals:</span>{' '}
+                      {plan.meals.join(' · ')}
                     </p>
                   )}
                   {plan.notes && (

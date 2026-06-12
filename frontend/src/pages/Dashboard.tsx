@@ -44,8 +44,8 @@ export default function Dashboard() {
       setError('')
       try {
         const [episodesRes, workoutsRes, nutritionRes, progressRes] = await Promise.allSettled([
-          api.getEpisodes(user?.id),
-          api.getWorkouts(user?.id),
+          api.getEpisodes(),
+          api.getWorkouts(),
           api.getNutritionPlans(),
           api.getProgressLogs(),
         ])
@@ -73,7 +73,7 @@ export default function Dashboard() {
       }
     }
     fetchData()
-  }, [user?.id])
+  }, [])
 
   const statCards: StatCard[] = [
     {
@@ -195,33 +195,37 @@ export default function Dashboard() {
           </div>
         ) : (
           <div className="space-y-3">
-            {recentEpisodes.map((ep) => (
-              <div
-                key={ep.id}
-                className="flex items-center justify-between p-4 rounded-lg bg-gray-50 border border-gray-100"
-              >
-                <div>
-                  <p className="text-sm font-medium text-gray-800">
-                    {ep.episode_name ?? `Episode #${ep.id}`}
-                  </p>
-                  {ep.program && (
-                    <p className="text-xs text-gray-500 mt-0.5">Program: {ep.program}</p>
-                  )}
-                </div>
-                <div className="text-right">
-                  {ep.started_at && (
-                    <p className="text-xs text-gray-400">
-                      {new Date(ep.started_at).toLocaleDateString()}
+            {recentEpisodes.map((ep) => {
+              const classification = ep.outcomes?.[0]?.result?.classification
+              const program = ep.outcomes?.[0]?.result?.program
+              return (
+                <div
+                  key={ep.id}
+                  className="flex items-center justify-between p-4 rounded-lg bg-gray-50 border border-gray-100"
+                >
+                  <div>
+                    <p className="text-sm font-medium text-gray-800">
+                      {ep.name ?? `Episode #${ep.id}`}
                     </p>
-                  )}
-                  {ep.outcomes && (
-                    <span className="inline-block mt-1 px-2 py-0.5 rounded-full bg-blue-100 text-blue-700 text-xs">
-                      {ep.outcomes}
-                    </span>
-                  )}
+                    {program && (
+                      <p className="text-xs text-gray-500 mt-0.5">Program: {String(program)}</p>
+                    )}
+                  </div>
+                  <div className="text-right">
+                    {ep.started_at && (
+                      <p className="text-xs text-gray-400">
+                        {new Date(ep.started_at).toLocaleDateString()}
+                      </p>
+                    )}
+                    {classification && (
+                      <span className="inline-block mt-1 px-2 py-0.5 rounded-full bg-blue-100 text-blue-700 text-xs">
+                        {String(classification)}
+                      </span>
+                    )}
+                  </div>
                 </div>
-              </div>
-            ))}
+              )
+            })}
           </div>
         )}
       </div>

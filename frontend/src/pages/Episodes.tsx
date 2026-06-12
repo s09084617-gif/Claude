@@ -1,18 +1,30 @@
 import { useState, useEffect } from 'react'
 import { Play, Loader2 } from 'lucide-react'
-import { useAuth } from '../contexts/AuthContext'
-import { api, Episode } from '../api/client'
+import { api, Episode, EpisodeOutcome } from '../api/client'
 
-function StatusBadge({ text }: { text: string }) {
+function ProgramBadge({ text }: { text: string }) {
   return (
-    <span className="inline-block px-2.5 py-0.5 rounded-full bg-blue-100 text-blue-700 text-xs font-medium">
+    <span className="inline-block px-2.5 py-0.5 rounded-full bg-purple-100 text-purple-700 text-xs font-medium">
       {text}
     </span>
   )
 }
 
+function getOutcomeProgram(outcomes: EpisodeOutcome[]): string | null {
+  for (const o of outcomes) {
+    if (o.result?.program) return String(o.result.program)
+  }
+  return null
+}
+
+function getOutcomeClassification(outcomes: EpisodeOutcome[]): string | null {
+  for (const o of outcomes) {
+    if (o.result?.classification) return String(o.result.classification)
+  }
+  return null
+}
+
 export default function Episodes() {
-  const { user } = useAuth()
   const [episodes, setEpisodes] = useState<Episode[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
@@ -21,7 +33,7 @@ export default function Episodes() {
     const fetchEpisodes = async () => {
       setLoading(true)
       try {
-        const res = await api.getEpisodes(user?.id)
+        const res = await api.getEpisodes()
         setEpisodes(res.data)
       } catch {
         setError('Failed to load episodes.')
@@ -30,7 +42,7 @@ export default function Episodes() {
       }
     }
     fetchEpisodes()
-  }, [user?.id])
+  }, [])
 
   return (
     <div className="max-w-5xl mx-auto">
@@ -84,41 +96,41 @@ export default function Episodes() {
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-100">
-                  {episodes.map((ep) => (
-                    <tr key={ep.id} className="hover:bg-gray-50 transition-colors">
-                      <td className="py-3.5 px-3">
-                        <div>
-                          <p className="font-medium text-gray-900">
-                            {ep.episode_name ?? `Episode #${ep.id}`}
-                          </p>
-                          <p className="text-xs text-gray-400">ID: {ep.id}</p>
-                        </div>
-                      </td>
-                      <td className="py-3.5 px-3 text-gray-600">
-                        {ep.sequence ?? '—'}
-                      </td>
-                      <td className="py-3.5 px-3">
-                        {ep.program ? (
-                          <span className="inline-block px-2.5 py-0.5 rounded-full bg-purple-100 text-purple-700 text-xs font-medium">
-                            {ep.program}
-                          </span>
-                        ) : (
-                          <span className="text-gray-400">—</span>
-                        )}
-                      </td>
-                      <td className="py-3.5 px-3">
-                        {ep.outcomes ? <StatusBadge text={ep.outcomes} /> : <span className="text-gray-400">—</span>}
-                      </td>
-                      <td className="py-3.5 px-3 text-gray-500 text-xs">
-                        {ep.started_at ? new Date(ep.started_at).toLocaleDateString() : '—'}
-                      </td>
-                      <td className="py-3.5 px-3 text-gray-500 text-xs">
-                        {ep.completed_at ? new Date(ep.completed_at).toLocaleDateString() : (
-                          <span className="text-amber-500">In progress</span>
-                        )}
-                      </td>
-                    </tr>
-                  ))}
+                  {episodes.map((ep) => {
+                    const program = getOutcomeProgram(ep.outcomes)
+                    const classification = getOutcomeClassification(ep.outcomes)
+                    return (
+                      <tr key={ep.id} className="hover:bg-gray-50 transition-colors">
+                        <td className="py-3.5 px-3">
+                          <div>
+                            <p className="font-medium text-gray-900">{ep.name}</p>
+                            <p className="text-xs text-gray-400">ID: {ep.id}</p>
+                          </div>
+                        </td>
+                        <td className="py-3.5 px-3 text-gray-600">{ep.sequence}</td>
+                        <td className="py-3.5 px-3">
+                          {program ? <ProgramBadge text={program} /> : <span className="text-gray-400">—</span>}
+                        </td>
+                        <td className="py-3.5 px-3">
+                          {classification ? (
+                            <span className="inline-block px-2.5 py-0.5 rounded-full bg-blue-100 text-blue-700 text-xs font-medium">
+                              {classification}
+                            </span>
+                          ) : (
+                            <span className="text-gray-400">{ep.outcomes.length} outcome{ep.outcomes.length !== 1 ? 's' : ''}</span>
+                          )}
+                        </td>
+                        <td className="py-3.5 px-3 text-gray-500 text-xs">
+                          {ep.started_at ? new Date(ep.started_at).toLocaleDateString() : '—'}
+                        </td>
+                        <td className="py-3.5 px-3 text-gray-500 text-xs">
+                          {ep.completed_at ? new Date(ep.completed_at).toLocaleDateString() : (
+                            <span className="text-amber-500">In progress</span>
+                          )}
+                        </td>
+                      </tr>
+                    )
+                  })}
                 </tbody>
               </table>
             </div>
@@ -131,14 +143,16 @@ export default function Episodes() {
                   className="p-4 rounded-lg bg-gray-50 border border-gray-100"
                 >
                   <div className="flex items-start justify-between mb-2">
-                    <p className="font-medium text-gray-900">
-                      {ep.episode_name ?? `Episode #${ep.id}`}
-                    </p>
-                    {ep.outcomes && <StatusBadge text={ep.outcomes} />}
+                    <p className="font-medium text-gray-900">{ep.name}</p>
+                    {getOutcomeProgram(ep.outcomes) && (
+                      <ProgramBadge text={getOutcomeProgram(ep.outcomes)!} />
+                    )}
                   </div>
                   <div className="space-y-1 text-xs text-gray-500">
-                    {ep.program && <p>Program: {ep.program}</p>}
-                    {ep.sequence !== undefined && <p>Sequence: {ep.sequence}</p>}
+                    {getOutcomeClassification(ep.outcomes) && (
+                      <p>Classification: {getOutcomeClassification(ep.outcomes)}</p>
+                    )}
+                    <p>Sequence: {ep.sequence}</p>
                     {ep.started_at && (
                       <p>Started: {new Date(ep.started_at).toLocaleDateString()}</p>
                     )}

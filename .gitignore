@@ -3,7 +3,16 @@ __pycache__/
 *.pyo
 .env
 venv/
+.venv/
 .envrc
 .DS_Store
 *.sqlite3
 *.db
+
+# Frontend
+frontend/node_modules/
+frontend/dist/
+frontend/.env.local
+
+# Docker
+pgdata/

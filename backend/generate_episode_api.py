@@ -5,6 +5,7 @@ from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy import or_
 from sqlalchemy.orm import Session, joinedload
 
+from .auth import get_current_user
 from .database import get_db
 from .models import (
     Assessment,
@@ -84,44 +85,6 @@ def get_program(db: Session, classification: str, restriction: Optional[str]) ->
     if "low_muscle" in classification:
         return "3_day_full_body"
     return "4_day_split"
-
-
-def get_or_create_user(db: Session, user_id: Optional[int], username: Optional[str]) -> User:
-    if user_id is not None:
-        user = db.get(User, user_id)
-        if not user:
-            raise HTTPException(status_code=404, detail="User not found")
-        return user
-
-    if username:
-        username_key = username.strip()
-        user = db.query(User).filter(User.username == username_key).first()
-        if user:
-            return user
-
-        user = User(
-            username=username_key,
-            email=f"{username_key}@example.com",
-            hashed_password="default_password",
-            is_active=True,
-        )
-        db.add(user)
-        db.flush()
-        return user
-
-    user = db.query(User).filter(User.username == "anonymous").first()
-    if user:
-        return user
-
-    user = User(
-        username="anonymous",
-        email="anonymous@example.com",
-        hashed_password="default_password",
-        is_active=True,
-    )
-    db.add(user)
-    db.flush()
-    return user
 
 
 def create_assessment(db: Session, user: User, title: str, description: str) -> Assessment:
@@ -241,30 +204,30 @@ def create_workout(db: Session, user: Optional[User], episode: Optional[Episode]
     response_model=WorkoutResponse,
     summary="Generate a workout plan",
 )
-async def generate_workout(request: GenerateWorkoutRequest, db: Session = Depends(get_db)):
-    user = None
+async def generate_workout(
+    request: GenerateWorkoutRequest,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
+):
     episode = None
-
-    if request.user_id is not None or request.username is not None:
-        user = get_or_create_user(db, request.user_id, request.username)
-
     if request.episode_id is not None:
         episode = db.get(Episode, request.episode_id)
         if not episode:
             raise HTTPException(status_code=404, detail="Episode not found")
 
     details = generate_workout_details(db, request.program, request.goal, request.restriction)
-    workout = create_workout(db, user, episode, request.program, details)
+    workout = create_workout(db, current_user, episode, request.program, details)
 
     db.commit()
     db.refresh(workout)
 
     return WorkoutResponse(
-        workout_id=workout.id,
+        id=workout.id,
         user_id=workout.user_id,
         episode_id=workout.episode_id,
         program=workout.program,
         details=workout.details,
+        created_at=workout.created_at,
     )
 
 
@@ -273,15 +236,18 @@ async def generate_workout(request: GenerateWorkoutRequest, db: Session = Depend
     response_model=GenerateEpisodeResponse,
     summary="Generate an episode recommendation",
 )
-async def generate_episode(request: GenerateEpisodeRequest, db: Session = Depends(get_db)):
+async def generate_episode(
+    request: GenerateEpisodeRequest,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
+):
     classification = get_classification(db, request.pbf, request.smm)
     recommendation = get_recommendation(db, classification, request.goal)
     program = get_program(db, classification, request.restriction)
 
-    user = get_or_create_user(db, request.user_id, request.username)
     assessment_title = request.assessment_title or f"{request.goal.capitalize()} Assessment"
-    assessment_description = f"Generated assessment for {user.username}"
-    assessment = create_assessment(db, user, assessment_title, assessment_description)
+    assessment_description = f"Generated assessment for {current_user.username}"
+    assessment = create_assessment(db, current_user, assessment_title, assessment_description)
     episode = create_episode(db, assessment, program)
     create_outcome(db, episode, classification, recommendation, program)
 
@@ -304,15 +270,13 @@ async def generate_episode(request: GenerateEpisodeRequest, db: Session = Depend
     summary="List stored workouts",
 )
 async def list_workouts(
-    user_id: Optional[int] = None,
     episode_id: Optional[int] = None,
     limit: int = 50,
     db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
 ):
-    query = db.query(Workout)
+    query = db.query(Workout).filter(Workout.user_id == current_user.id)
 
-    if user_id is not None:
-        query = query.filter(Workout.user_id == user_id)
     if episode_id is not None:
         query = query.filter(Workout.episode_id == episode_id)
 
@@ -326,15 +290,17 @@ async def list_workouts(
     summary="List stored episodes with outcomes",
 )
 async def list_episodes(
-    user_id: Optional[int] = None,
     completed: Optional[bool] = None,
     limit: int = 50,
     db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
 ):
-    query = db.query(Episode).options(joinedload(Episode.outcomes))
-
-    if user_id is not None:
-        query = query.join(Assessment).filter(Assessment.user_id == user_id)
+    query = (
+        db.query(Episode)
+        .options(joinedload(Episode.outcomes))
+        .join(Assessment)
+        .filter(Assessment.user_id == current_user.id)
+    )
 
     if completed is True:
         query = query.filter(Episode.completed_at.is_not(None))

@@ -6,6 +6,7 @@ interface AuthContextValue {
   token: string | null
   login: (username: string, password: string) => Promise<void>
   logout: () => void
+  refreshUser: () => Promise<void>
   isAuthenticated: boolean
   loading: boolean
 }
@@ -54,6 +55,15 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     setUser(null)
   }
 
+  const refreshUser = async () => {
+    try {
+      const res = await api.me()
+      setUser(res.data)
+    } catch {
+      // ignore — keep stale state rather than logging out
+    }
+  }
+
   return (
     <AuthContext.Provider
       value={{
@@ -61,6 +71,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         token,
         login,
         logout,
+        refreshUser,
         isAuthenticated: !!token && !!user,
         loading,
       }}

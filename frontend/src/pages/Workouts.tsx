@@ -1,7 +1,7 @@
 import { useState, useEffect, FormEvent } from 'react'
-import { Dumbbell, Loader2, CheckCircle } from 'lucide-react'
-import { useAuth } from '../contexts/AuthContext'
-import { api, Workout } from '../api/client'
+import { Dumbbell, Loader2, CheckCircle, ChevronDown, ChevronRight } from 'lucide-react'
+import { useToast } from '../contexts/ToastContext'
+import { api, Workout, WorkoutDetails } from '../api/client'
 
 const GOAL_OPTIONS = [
   { value: 'fat_loss', label: 'Fat Loss' },
@@ -10,8 +10,87 @@ const GOAL_OPTIONS = [
   { value: 'general_fitness', label: 'General Fitness' },
 ]
 
-export default function Workouts() {
-  const { user } = useAuth()
+interface Movement {
+  name?: string
+  sets?: number
+  reps?: string | number
+  duration?: string
+  notes?: string
+}
+
+interface DayGroup {
+  day?: string
+  movements?: Movement[]
+}
+
+function ExerciseList({ details }: { details: WorkoutDetails }) {
+  const workouts = details?.workouts ?? []
+  if (workouts.length === 0) return <p className="text-sm text-gray-400">No exercises recorded.</p>
+
+  const first = workouts[0] as DayGroup
+  const isGrouped = first && typeof first === 'object' && 'movements' in first
+
+  if (isGrouped) {
+    return (
+      <div className="space-y-4">
+        {(workouts as DayGroup[]).map((group, gi) => (
+          <div key={gi}>
+            {group.day && (
+              <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">
+                {group.day}
+              </p>
+            )}
+            <table className="w-full text-xs">
+              <thead>
+                <tr className="border-b border-gray-200">
+                  <th className="text-left py-1.5 pr-4 font-medium text-gray-500">Exercise</th>
+                  <th className="text-center py-1.5 px-2 font-medium text-gray-500">Sets</th>
+                  <th className="text-center py-1.5 px-2 font-medium text-gray-500">Reps</th>
+                  <th className="text-left py-1.5 pl-2 font-medium text-gray-500">Notes</th>
+                </tr>
+              </thead>
+              <tbody>
+                {(group.movements ?? []).map((m, mi) => (
+                  <tr key={mi} className="border-b border-gray-50">
+                    <td className="py-1.5 pr-4 font-medium text-gray-800">{m.name ?? '—'}</td>
+                    <td className="py-1.5 px-2 text-center text-gray-600">{m.sets ?? '—'}</td>
+                    <td className="py-1.5 px-2 text-center text-gray-600">{m.duration ?? m.reps ?? '—'}</td>
+                    <td className="py-1.5 pl-2 text-gray-400">{m.notes ?? ''}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        ))}
+      </div>
+    )
+  }
+
+  return (
+    <table className="w-full text-xs">
+      <thead>
+        <tr className="border-b border-gray-200">
+          <th className="text-left py-1.5 pr-4 font-medium text-gray-500">Exercise</th>
+          <th className="text-center py-1.5 px-2 font-medium text-gray-500">Sets</th>
+          <th className="text-center py-1.5 px-2 font-medium text-gray-500">Reps</th>
+          <th className="text-left py-1.5 pl-2 font-medium text-gray-500">Notes</th>
+        </tr>
+      </thead>
+      <tbody>
+        {(workouts as Movement[]).map((m, i) => (
+          <tr key={i} className="border-b border-gray-50">
+            <td className="py-1.5 pr-4 font-medium text-gray-800">{m.name ?? '—'}</td>
+            <td className="py-1.5 px-2 text-center text-gray-600">{m.sets ?? '—'}</td>
+            <td className="py-1.5 px-2 text-center text-gray-600">{m.duration ?? m.reps ?? '—'}</td>
+            <td className="py-1.5 pl-2 text-gray-400">{m.notes ?? ''}</td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  )
+}
+
+  const { toast } = useToast()
 
   // Generate form state
   const [program, setProgram] = useState('')
@@ -25,12 +104,13 @@ export default function Workouts() {
   const [workouts, setWorkouts] = useState<Workout[]>([])
   const [historyLoading, setHistoryLoading] = useState(true)
   const [historyError, setHistoryError] = useState('')
+  const [expandedId, setExpandedId] = useState<number | null>(null)
 
   useEffect(() => {
     const fetchWorkouts = async () => {
       setHistoryLoading(true)
       try {
-        const res = await api.getWorkouts(user?.id)
+        const res = await api.getWorkouts()
         setWorkouts(res.data)
       } catch {
         setHistoryError('Failed to load workout history.')
@@ -39,7 +119,7 @@ export default function Workouts() {
       }
     }
     fetchWorkouts()
-  }, [user?.id])
+  }, [])
 
   const handleGenerate = async (e: FormEvent) => {
     e.preventDefault()
@@ -51,16 +131,17 @@ export default function Workouts() {
         program: program.trim(),
         goal,
         restriction: restriction.trim() || undefined,
-        user_id: user?.id,
-        username: user?.username,
       })
       setGeneratedWorkout(res.data)
+      toast(`Workout generated for program: ${res.data.program}`)
       // Refresh history
-      const histRes = await api.getWorkouts(user?.id)
+      const histRes = await api.getWorkouts()
       setWorkouts(histRes.data)
     } catch (err: unknown) {
       const axiosError = err as { response?: { data?: { detail?: string } } }
-      setGenError(axiosError.response?.data?.detail ?? 'Failed to generate workout.')
+      const msg = axiosError.response?.data?.detail ?? 'Failed to generate workout.'
+      setGenError(msg)
+      toast(msg, 'error')
     } finally {
       setGenerating(false)
     }
@@ -162,22 +243,20 @@ export default function Workouts() {
               <h3 className="font-semibold text-gray-900">Workout Generated!</h3>
             </div>
             <div className="space-y-2 text-sm text-gray-700">
-              {generatedWorkout.program && (
+              <p>
+                <span className="font-medium">Program:</span> {generatedWorkout.program}
+              </p>
+              {generatedWorkout.details?.goal && (
                 <p>
-                  <span className="font-medium">Program:</span> {generatedWorkout.program}
+                  <span className="font-medium">Goal:</span> {generatedWorkout.details.goal}
                 </p>
               )}
-              {generatedWorkout.goal && (
-                <p>
-                  <span className="font-medium">Goal:</span> {generatedWorkout.goal}
-                </p>
-              )}
-              {generatedWorkout.details && (
+              {generatedWorkout.details?.workouts && (
                 <div>
-                  <p className="font-medium mb-1">Details:</p>
-                  <pre className="whitespace-pre-wrap text-xs bg-white rounded p-3 border border-green-100 font-sans leading-relaxed">
-                    {generatedWorkout.details}
-                  </pre>
+                  <p className="font-medium mb-2">Exercises:</p>
+                  <div className="bg-white rounded-lg p-3 border border-green-100">
+                    <ExerciseList details={generatedWorkout.details} />
+                  </div>
                 </div>
               )}
             </div>
@@ -203,47 +282,39 @@ export default function Workouts() {
             <p className="text-sm">No workouts generated yet.</p>
           </div>
         ) : (
-          <div className="overflow-x-auto">
-            <table className="w-full text-sm">
-              <thead>
-                <tr className="border-b border-gray-200">
-                  <th className="text-left py-3 px-3 text-xs font-semibold text-gray-500 uppercase tracking-wider">
-                    ID
-                  </th>
-                  <th className="text-left py-3 px-3 text-xs font-semibold text-gray-500 uppercase tracking-wider">
-                    Program
-                  </th>
-                  <th className="text-left py-3 px-3 text-xs font-semibold text-gray-500 uppercase tracking-wider">
-                    Goal
-                  </th>
-                  <th className="text-left py-3 px-3 text-xs font-semibold text-gray-500 uppercase tracking-wider">
-                    Date
-                  </th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-gray-100">
-                {workouts.map((w) => (
-                  <tr key={w.id} className="hover:bg-gray-50 transition-colors">
-                    <td className="py-3 px-3 text-gray-500">#{w.id}</td>
-                    <td className="py-3 px-3 font-medium text-gray-900">
-                      {w.program ?? '—'}
-                    </td>
-                    <td className="py-3 px-3">
-                      {w.goal ? (
-                        <span className="inline-block px-2 py-0.5 rounded-full bg-green-100 text-green-700 text-xs font-medium">
-                          {w.goal}
-                        </span>
-                      ) : (
-                        '—'
-                      )}
-                    </td>
-                    <td className="py-3 px-3 text-gray-500">
+          <div className="divide-y divide-gray-100">
+            {workouts.map((w) => {
+              const isOpen = expandedId === w.id
+              return (
+                <div key={w.id}>
+                  <button
+                    onClick={() => setExpandedId(isOpen ? null : w.id)}
+                    className="w-full flex items-center gap-3 py-3 px-3 hover:bg-gray-50 transition-colors text-left"
+                  >
+                    {isOpen ? (
+                      <ChevronDown size={14} className="text-gray-400 shrink-0" />
+                    ) : (
+                      <ChevronRight size={14} className="text-gray-400 shrink-0" />
+                    )}
+                    <span className="text-xs text-gray-400 w-10 shrink-0">#{w.id}</span>
+                    <span className="font-medium text-gray-900 flex-1 text-sm">{w.program ?? '—'}</span>
+                    {w.details?.goal && (
+                      <span className="inline-block px-2 py-0.5 rounded-full bg-green-100 text-green-700 text-xs font-medium">
+                        {w.details.goal}
+                      </span>
+                    )}
+                    <span className="text-xs text-gray-400 ml-3 shrink-0">
                       {w.created_at ? new Date(w.created_at).toLocaleDateString() : '—'}
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+                    </span>
+                  </button>
+                  {isOpen && (
+                    <div className="px-10 pb-5">
+                      <ExerciseList details={w.details} />
+                    </div>
+                  )}
+                </div>
+              )
+            })}
           </div>
         )}
       </div>

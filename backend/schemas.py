@@ -1,7 +1,7 @@
 from datetime import datetime
-from typing import List, Optional
+from typing import Optional
 
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict, field_validator, EmailStr
 
 
 class GenerateEpisodeRequest(BaseModel):
@@ -9,8 +9,6 @@ class GenerateEpisodeRequest(BaseModel):
     smm: str
     goal: str
     restriction: Optional[str] = None
-    user_id: Optional[int] = None
-    username: Optional[str] = None
     assessment_title: Optional[str] = None
 
 
@@ -26,19 +24,18 @@ class GenerateWorkoutRequest(BaseModel):
     program: str
     goal: str
     restriction: Optional[str] = None
-    user_id: Optional[int] = None
-    username: Optional[str] = None
     episode_id: Optional[int] = None
 
 
 class WorkoutResponse(BaseModel):
-    workout_id: int = Field(alias="id")
+    id: int
     user_id: Optional[int] = None
     episode_id: Optional[int] = None
     program: str
     details: dict
+    created_at: Optional[datetime] = None
 
-    model_config = ConfigDict(from_attributes=True, populate_by_name=True)
+    model_config = ConfigDict(from_attributes=True)
 
 
 class OutcomeResponse(BaseModel):
@@ -69,8 +66,25 @@ class EpisodeResponse(BaseModel):
 
 class RegisterRequest(BaseModel):
     username: str
-    email: str
+    email: EmailStr
     password: str
+
+    @field_validator("username")
+    @classmethod
+    def username_valid(cls, v: str) -> str:
+        v = v.strip()
+        if len(v) < 3:
+            raise ValueError("Username must be at least 3 characters")
+        if len(v) > 50:
+            raise ValueError("Username must be 50 characters or fewer")
+        return v
+
+    @field_validator("password")
+    @classmethod
+    def password_valid(cls, v: str) -> str:
+        if len(v) < 8:
+            raise ValueError("Password must be at least 8 characters")
+        return v
 
 
 class TokenResponse(BaseModel):
@@ -89,6 +103,16 @@ class UserResponse(BaseModel):
 
     class Config:
         from_attributes = True
+
+
+class UpdateProfileRequest(BaseModel):
+    username: Optional[str] = None
+    email: Optional[EmailStr] = None
+
+
+class ChangePasswordRequest(BaseModel):
+    current_password: str
+    new_password: str
 
 
 # ── Nutrition Plans ───────────────────────────────────────────────────────────

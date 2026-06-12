@@ -1,71 +1,171 @@
-# iblitz-platform1
+# iBlitz Platform
 
-A backend for the iblitz recommendation and workout system.
+A full-stack fitness assessment and workout recommendation platform.
 
-## Backend structure
+- **Backend** — FastAPI + PostgreSQL + SQLAlchemy
+- **Frontend** — React 18 + TypeScript + Vite + Tailwind CSS
 
-- `backend/main.py` — FastAPI application entrypoint
-- `backend/generate_episode_api.py` — recommendation, episode, workout, and listing endpoints
-- `backend/database.py` — SQLAlchemy database engine and session management
-- `backend/models.py` — ORM schema for users, assessments, episodes, outcomes, workouts
-- `backend/schemas.py` — Pydantic request/response schemas
-- `backend/schema_v3.sql` — PostgreSQL schema bootstrap SQL
-- `backend/setup_ec2_postgres.sh` — Docker-based PostgreSQL setup script
-- `backend/seed_reference_data.sh` — seed program, exercise, restriction, and rule reference data
-- `backend/reset_and_seed_canonical_assessments.sh` — reset and reseed canonical test data
-- `backend/seed_canonical_assessments.sh` — create 10 test users, episodes, outcomes
-- `backend/run_dev.sh` — local FastAPI startup helper
+---
 
-## Requirements
-
-Install Python dependencies:
+## Quick Start (Docker — recommended)
 
 ```bash
+# Clone and start everything (PostgreSQL + backend + frontend)
+docker compose up --build
+```
+
+| Service  | URL                              |
+|----------|----------------------------------|
+| Frontend | http://localhost:5173            |
+| API docs | http://localhost:8000/docs       |
+| Admin    | http://localhost:8000/admin      |
+
+---
+
+## Local Development (without Docker)
+
+### 1. PostgreSQL
+
+Start a local Postgres instance (Docker):
+
+```bash
+docker run -d \
+  --name iblitz-db \
+  -e POSTGRES_USER=iblitz \
+  -e POSTGRES_PASSWORD=iblitz123 \
+  -e POSTGRES_DB=iblitz \
+  -p 5432:5432 \
+  postgres:15-alpine
+```
+
+### 2. Backend
+
+```bash
+# Install Python dependencies
 pip install -r requirements.txt
+
+# Copy and edit env file
+cp .env.example .env
+
+# Start API (auto-reloads on file changes)
+bash backend/run_dev.sh
+# → http://localhost:8000/docs
 ```
 
-## Running locally
-
-1. Start the PostgreSQL container:
+### 3. Frontend
 
 ```bash
-cd backend
-sudo chmod +x setup_ec2_postgres.sh
-sudo ./setup_ec2_postgres.sh
+cd frontend
+npm install
+npm run dev
+# → http://localhost:5173
 ```
 
-2. Start the backend:
+### 4. Seed reference data (optional)
 
 ```bash
-cd backend
-chmod +x run_dev.sh
-./run_dev.sh
+bash backend/seed_reference_data.sh
+bash backend/seed_canonical_assessments.sh
 ```
 
-3. Open the API docs:
+Or use `make`:
 
-```
-http://127.0.0.1:8000/docs
-```
-
-4. Open the admin dashboard:
-
-```
-http://127.0.0.1:8000/admin
+```bash
+make install   # install all deps
+make backend   # run backend
+make frontend  # run frontend
+make seed      # seed reference data
 ```
 
-## API Endpoints
+---
 
-- `GET /` — root
-- `GET /health` — health check
-- `GET /docs` — OpenAPI docs
-- `POST /engine/generate-episode` — generate a recommendation episode and persist assessment/episode/outcome
-- `GET /engine/episodes` — list stored episodes with outcomes
-- `POST /engine/generate-workout` — generate and persist a workout plan
-- `GET /engine/workouts` — list stored workouts
-- `GET /admin` — admin dashboard and counts
+## API Reference
 
-## Notes
+### Auth
+| Method | Path | Description |
+|--------|------|-------------|
+| POST | `/auth/register` | Register — `{username, email, password}` → JWT |
+| POST | `/auth/login` | Login (form data) → JWT |
+| GET  | `/auth/me` | Current user (Bearer) |
 
-- The database URL defaults to `postgresql://iblitz:iblitz123@172.17.0.2:5432/iblitz`.
-- If host port forwarding is unavailable in this environment, use the Docker container directly and connect from the app inside the same host.
+### Assessment Engine
+| Method | Path | Description |
+|--------|------|-------------|
+| POST | `/engine/generate-episode` | Body comp assessment → classification + program |
+| GET  | `/engine/episodes` | List episodes with outcomes |
+| POST | `/engine/generate-workout` | Generate workout plan |
+| GET  | `/engine/workouts` | List workouts |
+
+### Nutrition Plans
+| Method | Path | Description |
+|--------|------|-------------|
+| POST | `/nutrition/plans` | Create nutrition plan (Bearer) |
+| GET  | `/nutrition/plans` | List your plans (Bearer) |
+| GET  | `/nutrition/plans/{id}` | Get single plan (Bearer) |
+| PUT  | `/nutrition/plans/{id}` | Update plan (Bearer) |
+| DELETE | `/nutrition/plans/{id}` | Delete plan (Bearer) |
+
+### Progress Logs
+| Method | Path | Description |
+|--------|------|-------------|
+| POST | `/progress/logs` | Log weight/BF%/muscle (Bearer) |
+| GET  | `/progress/logs` | List your logs (Bearer) |
+| DELETE | `/progress/logs/{id}` | Delete log (Bearer) |
+
+### Analytics
+| Method | Path | Description |
+|--------|------|-------------|
+| GET | `/analytics/effectiveness` | Episode/outcome analytics (Bearer) |
+
+Full OpenAPI spec: `IBLITZ_OpenAPI_3_1_Skeleton.yaml`
+
+---
+
+## Project Structure
+
+```
+iblitz-platform/
+├── backend/
+│   ├── main.py                  # FastAPI app + CORS + routers
+│   ├── auth.py                  # JWT utilities
+│   ├── auth_router.py           # /auth endpoints
+│   ├── generate_episode_api.py  # /engine endpoints
+│   ├── nutrition_api.py         # /nutrition endpoints
+│   ├── progress_api.py          # /progress endpoints
+│   ├── analytics_api.py         # /analytics endpoint
+│   ├── models.py                # SQLAlchemy ORM models
+│   ├── schemas.py               # Pydantic schemas
+│   ├── database.py              # DB engine + session
+│   └── schema_v3.sql            # PostgreSQL DDL
+├── frontend/
+│   └── src/
+│       ├── api/client.ts        # Typed axios API client
+│       ├── contexts/AuthContext.tsx
+│       ├── components/Layout.tsx
+│       └── pages/
+│           ├── Login.tsx / Register.tsx
+│           ├── Dashboard.tsx
+│           ├── Assessment.tsx
+│           ├── Workouts.tsx
+│           ├── Episodes.tsx
+│           ├── Nutrition.tsx
+│           ├── Progress.tsx
+│           └── Analytics.tsx
+├── docker-compose.yml
+├── Dockerfile.backend
+├── Makefile
+├── requirements.txt
+└── .env.example
+```
+
+---
+
+## Environment Variables
+
+| Variable | Default | Description |
+|----------|---------|-------------|
+| `DATABASE_URL` | `postgresql://iblitz:iblitz123@localhost:5432/iblitz` | Postgres connection string |
+| `SECRET_KEY` | `iblitz-dev-secret-key-change-in-production` | JWT signing key |
+| `ACCESS_TOKEN_EXPIRE_MINUTES` | `10080` (7 days) | JWT expiry |
+
+Copy `.env.example` to `.env` and set `SECRET_KEY` to a random value before deploying.
