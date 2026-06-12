@@ -1,0 +1,1800 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sahil Fitness | Women's Advanced Training Programs</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@300;400;600;700;800&display=swap');
+
+  :root {
+    --crimson: #C8102E;
+    --gold: #C9A84C;
+    --black: #0A0A0A;
+    --dark: #111111;
+    --card: #141414;
+    --card2: #181818;
+    --border: #222;
+    --text: #E8E8E8;
+    --muted: #777;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--black);
+    color: var(--text);
+    font-family: 'Inter', sans-serif;
+    line-height: 1.6;
+    min-height: 100vh;
+  }
+
+  /* ──── NAVIGATION ──── */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 1000;
+    background: rgba(10,10,10,0.95);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--border);
+    padding: 14px 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .nav-logo {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 18px;
+    letter-spacing: 3px;
+    color: var(--gold);
+    text-decoration: none;
+    font-weight: 700;
+  }
+  .nav-links {
+    display: flex;
+    gap: 24px;
+    list-style: none;
+  }
+  .nav-links a {
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--muted);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+  .nav-links a:hover { color: var(--gold); }
+
+  @media (max-width: 768px) {
+    .nav-links { gap: 12px; }
+    .nav-links a { font-size: 10px; }
+  }
+
+  /* ──── HERO ──── */
+  .hero {
+    position: relative;
+    overflow: hidden;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    margin-top: 60px;
+    background: var(--black);
+  }
+  .hero-bg {
+    position: absolute;
+    inset: 0;
+    background-image: url('images/sahil-poster.png');
+    background-size: cover;
+    background-position: center top;
+    opacity: 0.08;
+    pointer-events: none;
+  }
+  .hero-glow {
+    position: absolute;
+    top: -100px; left: 50%; transform: translateX(-50%);
+    width: 900px; height: 900px;
+    background: radial-gradient(circle, rgba(200,16,46,0.18) 0%, transparent 65%);
+    pointer-events: none;
+  }
+  .hero-inner {
+    position: relative;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 80px 40px;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 60px;
+    align-items: center;
+    width: 100%;
+  }
+  .hero-text { flex: 1; }
+  .hero-eyebrow {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 5px;
+    text-transform: uppercase;
+    color: var(--crimson);
+    margin-bottom: 12px;
+  }
+  .hero h1 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(52px, 10vw, 110px);
+    letter-spacing: 3px;
+    line-height: 0.9;
+    color: #fff;
+  }
+  .hero h1 .accent { color: var(--gold); }
+  .hero h1 .sub-line {
+    font-size: clamp(18px, 4vw, 36px);
+    letter-spacing: 8px;
+    color: var(--muted);
+    display: block;
+    margin-top: 10px;
+  }
+  .hero-desc {
+    max-width: 520px;
+    margin: 24px 0 0;
+    font-size: 14px;
+    color: #888;
+    line-height: 1.8;
+  }
+  .hero-desc strong { color: var(--gold); }
+  .hero-cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 32px;
+    background: var(--crimson);
+    color: #fff;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    padding: 14px 28px;
+    border-radius: 4px;
+    text-decoration: none;
+    transition: background 0.2s, transform 0.2s;
+  }
+  .hero-cta:hover { background: #a50d25; transform: translateY(-2px); }
+
+  .hero-photo-wrap {
+    position: relative;
+    flex-shrink: 0;
+  }
+  .hero-photo {
+    width: 340px;
+    height: 500px;
+    object-fit: cover;
+    object-position: top center;
+    border-radius: 12px;
+    border: 1px solid var(--border);
+    display: block;
+    position: relative;
+    z-index: 1;
+  }
+  .hero-photo-glow {
+    position: absolute;
+    inset: -20px;
+    background: radial-gradient(circle at center, rgba(200,16,46,0.25) 0%, transparent 70%);
+    border-radius: 20px;
+    z-index: 0;
+  }
+  .hero-photo-badge {
+    position: absolute;
+    bottom: -16px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--card);
+    border: 1px solid var(--gold);
+    border-radius: 6px;
+    padding: 10px 20px;
+    text-align: center;
+    white-space: nowrap;
+    z-index: 2;
+  }
+  .hero-photo-badge .badge-name {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 18px;
+    letter-spacing: 2px;
+    color: var(--gold);
+  }
+  .hero-photo-badge .badge-role {
+    font-size: 10px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  .stats-row {
+    display: flex;
+    justify-content: flex-start;
+    gap: 0;
+    margin: 36px 0 0;
+    max-width: 500px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  .stat {
+    flex: 1;
+    padding: 16px 10px;
+    text-align: center;
+    border-right: 1px solid var(--border);
+    background: var(--card);
+  }
+  .stat:last-child { border-right: none; }
+  .stat-num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 30px;
+    color: var(--crimson);
+    line-height: 1;
+  }
+  .stat-label {
+    font-size: 10px;
+    color: var(--muted);
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    margin-top: 4px;
+  }
+
+  @media (max-width: 900px) {
+    .hero-inner { grid-template-columns: 1fr; text-align: center; gap: 40px; }
+    .hero-photo { width: 260px; height: 380px; margin: 0 auto; }
+    .stats-row { margin: 24px auto 0; }
+    .hero-desc { margin: 24px auto 0; }
+  }
+
+  /* ──── QUOTE BANNER ──── */
+  .quote-banner {
+    background: linear-gradient(135deg, rgba(200,16,46,0.12), rgba(201,168,76,0.08));
+    border-top: 1px solid rgba(200,16,46,0.3);
+    border-bottom: 1px solid rgba(200,16,46,0.3);
+    padding: 28px 40px;
+    text-align: center;
+  }
+  .quote-text {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(22px, 4vw, 38px);
+    letter-spacing: 2px;
+    color: #fff;
+  }
+  .quote-text span { color: var(--gold); }
+  .quote-attr {
+    font-size: 11px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--crimson);
+    margin-top: 8px;
+    font-weight: 700;
+  }
+
+  /* ──── ABOUT COACH ──── */
+  .coach-section {
+    position: relative;
+    overflow: hidden;
+  }
+  .coach-bg {
+    position: absolute;
+    inset: 0;
+    background-image: url('images/iblitz-sahil.png');
+    background-size: cover;
+    background-position: center;
+    opacity: 0.15;
+    pointer-events: none;
+  }
+  .coach-inner {
+    position: relative;
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 80px 40px;
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 60px;
+    align-items: center;
+  }
+  .coach-photo-col { text-align: center; }
+  .coach-main-photo {
+    width: 280px;
+    height: 360px;
+    object-fit: cover;
+    object-position: top center;
+    border-radius: 12px;
+    border: 2px solid var(--gold);
+    display: block;
+    position: relative;
+  }
+  .coach-label-strip {
+    background: var(--crimson);
+    color: #fff;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 13px;
+    letter-spacing: 3px;
+    padding: 8px 16px;
+    margin-top: -4px;
+    border-radius: 0 0 8px 8px;
+  }
+  .coach-text { }
+  .coach-eyebrow {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: var(--crimson);
+    margin-bottom: 8px;
+  }
+  .coach-name-heading {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(42px, 6vw, 72px);
+    letter-spacing: 2px;
+    color: #fff;
+    line-height: 0.9;
+    margin-bottom: 16px;
+  }
+  .coach-name-heading span { color: var(--gold); }
+  .coach-bio {
+    font-size: 14px;
+    color: #999;
+    line-height: 1.9;
+    max-width: 520px;
+    margin-bottom: 28px;
+  }
+  .coach-bio strong { color: var(--gold); }
+  .coach-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  .coach-tag {
+    background: rgba(255,255,255,0.05);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 6px 14px;
+    font-size: 11px;
+    color: #bbb;
+    font-weight: 600;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+  .coach-tag.highlight {
+    border-color: var(--gold);
+    color: var(--gold);
+    background: rgba(201,168,76,0.08);
+  }
+
+  @media (max-width: 768px) {
+    .coach-inner { grid-template-columns: 1fr; text-align: center; gap: 30px; }
+    .coach-main-photo { margin: 0 auto; width: 220px; height: 280px; }
+    .coach-tags { justify-content: center; }
+  }
+
+  /* ──── SECTION ──── */
+  .section {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 48px 20px;
+  }
+  .section-eyebrow {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: var(--crimson);
+    margin-bottom: 8px;
+  }
+  .section-heading {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 40px;
+    letter-spacing: 1px;
+    color: #fff;
+    margin-bottom: 6px;
+  }
+  .section-sub {
+    font-size: 13px;
+    color: var(--muted);
+    margin-bottom: 28px;
+  }
+
+  /* ──── WEEKLY PLAN ──── */
+  .week-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 6px;
+    margin-bottom: 8px;
+  }
+  .day-card {
+    background: var(--card2);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 10px 6px;
+    text-align: center;
+    transition: border-color 0.2s;
+    cursor: pointer;
+  }
+  .day-card.active { border-color: var(--crimson); }
+  .day-card.rest { opacity: 0.5; }
+  .day-name {
+    font-size: 9px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 6px;
+  }
+  .day-muscle {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 13px;
+    letter-spacing: 1px;
+    color: var(--gold);
+    line-height: 1.2;
+  }
+  .day-card.rest .day-muscle { color: var(--muted); }
+  .day-emoji { font-size: 18px; margin-bottom: 4px; display: block; }
+
+  /* ──── WORKOUT CHART ──── */
+  .chart-wrap {
+    margin: 24px 0 36px;
+    border-radius: 12px;
+    overflow: hidden;
+    border: 1px solid var(--border);
+  }
+  .chart-wrap img {
+    width: 100%;
+    display: block;
+  }
+  .chart-caption {
+    background: var(--card);
+    border-top: 1px solid var(--border);
+    padding: 12px 20px;
+    font-size: 12px;
+    color: var(--muted);
+    text-align: center;
+    letter-spacing: 1px;
+  }
+  .chart-caption strong { color: var(--gold); }
+
+  /* ──── WORKOUT CARDS ──── */
+  .workout-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 16px;
+    margin-top: 4px;
+  }
+  .workout-card {
+    background: var(--card2);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+    text-decoration: none;
+    color: inherit;
+    display: block;
+    transition: transform 0.2s, border-color 0.2s;
+    position: relative;
+    cursor: pointer;
+  }
+  .workout-card:hover {
+    transform: translateY(-3px);
+    border-color: var(--crimson);
+  }
+  .card-accent {
+    height: 4px;
+    background: linear-gradient(90deg, var(--crimson), var(--gold));
+  }
+  .card-body { padding: 20px; }
+  .card-emoji { font-size: 32px; margin-bottom: 12px; display: block; }
+  .card-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 26px;
+    letter-spacing: 1px;
+    color: #fff;
+    line-height: 1.1;
+    margin-bottom: 6px;
+  }
+  .card-subtitle {
+    font-size: 11px;
+    color: var(--gold);
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    font-weight: 600;
+    margin-bottom: 12px;
+  }
+  .card-desc {
+    font-size: 12px;
+    color: var(--muted);
+    line-height: 1.6;
+    margin-bottom: 16px;
+  }
+  .card-meta { display: flex; gap: 8px; flex-wrap: wrap; }
+  .card-tag {
+    background: rgba(255,255,255,0.05);
+    border: 1px solid var(--border);
+    border-radius: 3px;
+    padding: 3px 8px;
+    font-size: 10px;
+    color: #bbb;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+  }
+  .card-arrow {
+    position: absolute;
+    top: 20px; right: 20px;
+    color: var(--crimson);
+    font-size: 18px;
+    opacity: 0;
+    transition: opacity 0.2s, transform 0.2s;
+  }
+  .workout-card:hover .card-arrow { opacity: 1; transform: translateX(3px); }
+
+  /* ──── PRIORITY GRID ──── */
+  .priority-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 12px;
+    margin-top: 4px;
+  }
+  .priority-card {
+    background: var(--card2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 16px;
+  }
+  .priority-rank {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 42px;
+    color: var(--crimson);
+    opacity: 0.4;
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+  .priority-name { font-weight: 700; font-size: 14px; color: var(--gold); margin-bottom: 4px; }
+  .priority-desc { font-size: 12px; color: var(--muted); line-height: 1.6; }
+
+  /* ──── DIVIDER ──── */
+  .section-divider {
+    border: none;
+    border-top: 1px solid var(--border);
+    max-width: 960px;
+    margin: 0 auto;
+  }
+
+  /* ──── INTRO NOTE ──── */
+  .intro-note {
+    background: linear-gradient(135deg, rgba(200,16,46,0.08), rgba(201,168,76,0.06));
+    border-left: 3px solid var(--gold);
+    padding: 16px 20px;
+    border-radius: 0 6px 6px 0;
+    font-size: 13.5px;
+    color: #bbb;
+    line-height: 1.7;
+    margin-bottom: 32px;
+  }
+  .intro-note strong { color: var(--gold); }
+
+  /* ──── PHASE HEADER ──── */
+  .phase-header {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 18px;
+    padding-bottom: 14px;
+    border-bottom: 1px solid var(--border);
+  }
+  .phase-num {
+    background: var(--crimson);
+    color: #fff;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 20px;
+    width: 42px; height: 42px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+  .phase-info h3 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 21px;
+    letter-spacing: 1px;
+    color: #fff;
+  }
+  .phase-info p { font-size: 12px; color: var(--muted); letter-spacing: 1px; }
+
+  /* ──── EXERCISE CARD ──── */
+  .exercise-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 18px 20px;
+    margin-bottom: 12px;
+    transition: border-color 0.2s;
+  }
+  .exercise-card:hover { border-color: var(--crimson); }
+  .ex-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 10px;
+    margin-bottom: 10px;
+  }
+  .ex-name { font-weight: 700; font-size: 15px; color: #fff; }
+  .ex-muscle {
+    font-size: 10px;
+    color: var(--gold);
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    font-weight: 600;
+    flex-shrink: 0;
+  }
+  .ex-params { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 10px; }
+  .param-chip {
+    background: rgba(255,255,255,0.05);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 4px 10px;
+    font-size: 11px;
+    color: #ccc;
+    font-weight: 600;
+  }
+  .param-chip span { color: var(--crimson); }
+  .ex-tip { font-size: 12px; color: var(--muted); line-height: 1.6; }
+  .ex-tip strong { color: var(--gold); }
+  .set-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(200,16,46,0.15);
+    border: 1px solid rgba(200,16,46,0.4);
+    color: var(--crimson);
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    padding: 4px 10px;
+    border-radius: 4px;
+    margin-bottom: 10px;
+  }
+  .finisher-block {
+    background: linear-gradient(135deg, rgba(200,16,46,0.12), rgba(200,16,46,0.04));
+    border: 1px solid rgba(200,16,46,0.3);
+    border-radius: 10px;
+    padding: 20px;
+    margin-bottom: 12px;
+  }
+  .intensity-bar {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 24px 0 18px;
+  }
+  .intensity-bar::before,
+  .intensity-bar::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+  .intensity-label {
+    font-size: 10px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--muted);
+    white-space: nowrap;
+  }
+  .divider { border: none; border-top: 1px solid var(--border); margin: 8px 0 28px; }
+
+  /* ──── TIPS GRID ──── */
+  .tips-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 12px;
+    margin-top: 8px;
+  }
+  .tip-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 16px;
+  }
+  .tip-icon { font-size: 22px; margin-bottom: 8px; }
+  .tip-card h4 { font-size: 13px; color: var(--gold); font-weight: 700; margin-bottom: 4px; }
+  .tip-card p { font-size: 12px; color: var(--muted); line-height: 1.6; }
+
+  /* ──── NUTRITION TABLE ──── */
+  .nutrition-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 8px;
+  }
+  .nutrition-table th {
+    text-align: left;
+    font-size: 10px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--crimson);
+    padding: 10px 14px;
+    border-bottom: 1px solid var(--border);
+    font-weight: 700;
+  }
+  .nutrition-table td {
+    padding: 12px 14px;
+    font-size: 13px;
+    color: #ccc;
+    border-bottom: 1px solid var(--border);
+    vertical-align: top;
+  }
+  .nutrition-table td:first-child {
+    color: var(--gold);
+    font-weight: 600;
+    white-space: nowrap;
+  }
+  .nutrition-table tr:last-child td { border-bottom: none; }
+
+  /* ──── MODAL ──── */
+  .modal {
+    display: none;
+    position: fixed;
+    z-index: 2000;
+    left: 0; top: 0;
+    width: 100%; height: 100%;
+    overflow: auto;
+    background-color: rgba(0,0,0,0.95);
+    animation: fadeIn 0.3s;
+  }
+  .modal-content {
+    background-color: var(--card2);
+    margin: 40px auto;
+    padding: 0;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    max-width: 900px;
+    max-height: 90vh;
+    overflow-y: auto;
+  }
+  .modal-header {
+    position: sticky;
+    top: 0;
+    background: var(--card2);
+    border-bottom: 1px solid var(--border);
+    padding: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    z-index: 10;
+  }
+  .modal-header h2 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 32px;
+    letter-spacing: 1px;
+    color: #fff;
+  }
+  .close-btn {
+    color: var(--gold);
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+    background: none;
+    border: none;
+  }
+  .close-btn:hover { color: var(--crimson); }
+  .modal-body { padding: 20px; }
+  @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+  /* ──── FOOTER ──── */
+  .coach-footer {
+    background: var(--card);
+    border-top: 1px solid var(--border);
+    padding: 48px 24px;
+    text-align: center;
+    margin-top: 40px;
+    position: relative;
+    overflow: hidden;
+  }
+  .coach-footer-bg {
+    position: absolute;
+    inset: 0;
+    background-image: url('images/iblitz-sahil.png');
+    background-size: cover;
+    background-position: center top;
+    opacity: 0.06;
+    pointer-events: none;
+  }
+  .footer-inner { position: relative; }
+  .footer-avatar {
+    width: 110px;
+    height: 110px;
+    border-radius: 50%;
+    object-fit: cover;
+    object-position: top center;
+    border: 3px solid var(--gold);
+    margin: 0 auto 16px;
+    display: block;
+    box-shadow: 0 0 30px rgba(201,168,76,0.25);
+  }
+  .club-name {
+    font-size: 11px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--crimson);
+    font-weight: 700;
+  }
+  .coach-name {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 36px;
+    color: var(--gold);
+    letter-spacing: 3px;
+    margin: 4px 0;
+  }
+  .coach-footer p {
+    font-size: 12px;
+    color: var(--muted);
+    margin-top: 6px;
+  }
+  .footer-divider {
+    width: 60px;
+    height: 2px;
+    background: linear-gradient(90deg, var(--crimson), var(--gold));
+    margin: 16px auto;
+    border-radius: 2px;
+  }
+  .footer-links {
+    display: flex;
+    justify-content: center;
+    gap: 24px;
+    margin-top: 20px;
+    flex-wrap: wrap;
+  }
+  .footer-link {
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--muted);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+  .footer-link:hover { color: var(--gold); }
+
+  @media (max-width: 600px) {
+    .week-grid { grid-template-columns: repeat(4, 1fr); }
+    .stats-row { flex-wrap: wrap; }
+    .stat { flex: 1 0 33%; border-bottom: 1px solid var(--border); }
+    .modal-content { margin: 20px; max-width: calc(100% - 40px); }
+    .hero-inner { padding: 60px 20px; }
+    .coach-inner { padding: 60px 20px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAVIGATION -->
+<nav>
+  <div class="nav-logo">SAHIL FITNESS</div>
+  <ul class="nav-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#workouts">Workouts</a></li>
+    <li><a href="#priority">Priority</a></li>
+    <li><a href="#nutrition">Nutrition</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-glow"></div>
+  <div class="hero-inner">
+    <div class="hero-text">
+      <div class="hero-eyebrow">Coach Sahil · Bangalore</div>
+      <h1>
+        WOMEN'S<br>
+        <span class="accent">ADVANCED</span>
+        <span class="sub-line">TRAINING VAULT</span>
+      </h1>
+      <p class="hero-desc">
+        Every muscle. Every session. Designed specifically for <strong>women who train seriously</strong> — not generic workouts with pink dumbbells. Science-backed, coach-programmed, Sahil Fitness approved.
+      </p>
+      <div class="stats-row">
+        <div class="stat"><div class="stat-num">7</div><div class="stat-label">Workouts</div></div>
+        <div class="stat"><div class="stat-num">6</div><div class="stat-label">Muscle Groups</div></div>
+        <div class="stat"><div class="stat-num">5×</div><div class="stat-label">Per Week</div></div>
+        <div class="stat"><div class="stat-num">∞</div><div class="stat-label">Progress</div></div>
+      </div>
+      <a href="#workouts" class="hero-cta">Start Training →</a>
+    </div>
+    <div class="hero-photo-wrap">
+      <div class="hero-photo-glow"></div>
+      <img src="images/sahil-physique.png" alt="Coach Sahil" class="hero-photo">
+      <div class="hero-photo-badge">
+        <div class="badge-name">Coach Sahil</div>
+        <div class="badge-role">Strength & Physique Specialist</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- QUOTE BANNER -->
+<div class="quote-banner">
+  <div class="quote-text">"The Only Bad Workout Is The One That <span>Didn't Happen</span>"</div>
+  <div class="quote-attr">— Coach Sahil Bansal · I-Blitz Fitness Club</div>
+</div>
+
+<!-- ABOUT THE COACH -->
+<div class="coach-section" id="about">
+  <div class="coach-bg"></div>
+  <div class="coach-inner">
+    <div class="coach-photo-col">
+      <img src="images/coach-profile.png" alt="Coach Sahil Bansal" class="coach-main-photo">
+      <div class="coach-label-strip">COACH SAHIL BANSAL</div>
+    </div>
+    <div class="coach-text">
+      <div class="coach-eyebrow">About the Coach</div>
+      <div class="coach-name-heading">SAHIL<br><span>BANSAL</span></div>
+      <p class="coach-bio">
+        Bangalore's leading <strong>Strength & Physique Specialist</strong>, coaching women to transform their bodies through progressive overload, science-backed programming, and relentless discipline.<br><br>
+        At <strong>I-Blitz Fitness Club</strong>, Sahil has helped hundreds of women move beyond generic "toning" workouts to build real muscle, real strength, and real confidence — through advanced training protocols that respect women's physiology.
+      </p>
+      <div class="coach-tags">
+        <span class="coach-tag highlight">I-Blitz Fitness Club</span>
+        <span class="coach-tag highlight">Bangalore</span>
+        <span class="coach-tag">Custom Workout Plans</span>
+        <span class="coach-tag">Nutrition Guidance</span>
+        <span class="coach-tag">1-1 Personal Training</span>
+        <span class="coach-tag">Progress Tracking</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<hr class="section-divider">
+
+<!-- WEEKLY PLAN -->
+<div class="section">
+  <div class="section-eyebrow">Recommended Split</div>
+  <div class="section-heading">5-Day Training Week</div>
+  <div class="section-sub">Optimised for women's recovery, hormonal patterns, and maximum physique development.</div>
+  <div class="week-grid">
+    <div class="day-card active">
+      <span class="day-emoji">🍑</span>
+      <div class="day-name">Mon</div>
+      <div class="day-muscle">Glutes &<br>Hams</div>
+    </div>
+    <div class="day-card active">
+      <span class="day-emoji">💪</span>
+      <div class="day-name">Tue</div>
+      <div class="day-muscle">Back &<br>Lats</div>
+    </div>
+    <div class="day-card rest">
+      <span class="day-emoji">😴</span>
+      <div class="day-name">Wed</div>
+      <div class="day-muscle">Rest or<br>Walk</div>
+    </div>
+    <div class="day-card active">
+      <span class="day-emoji">🦵</span>
+      <div class="day-name">Thu</div>
+      <div class="day-muscle">Legs<br>Quads</div>
+    </div>
+    <div class="day-card active">
+      <span class="day-emoji">💫</span>
+      <div class="day-name">Fri</div>
+      <div class="day-muscle">Shoulders<br>+ Arms</div>
+    </div>
+    <div class="day-card active">
+      <span class="day-emoji">👊</span>
+      <div class="day-name">Sat</div>
+      <div class="day-muscle">Chest +<br>Core</div>
+    </div>
+    <div class="day-card rest">
+      <span class="day-emoji">🧘</span>
+      <div class="day-name">Sun</div>
+      <div class="day-muscle">Full<br>Rest</div>
+    </div>
+  </div>
+</div>
+
+<hr class="section-divider">
+
+<!-- WORKOUTS -->
+<div class="section" id="workouts">
+  <div class="section-eyebrow">Your Training Vault</div>
+  <div class="section-heading">Choose Your Session</div>
+  <div class="section-sub">Click any card to expand the full workout with phases, coaching cues, and finishers.</div>
+
+  <!-- Workout Reference Chart -->
+  <div class="chart-wrap">
+    <img src="images/workout-chart.png" alt="Workout Muscle Group Reference Chart">
+    <div class="chart-caption"><strong>Muscle Group Reference</strong> — All 7 sessions mapped to their primary muscle targets</div>
+  </div>
+
+  <div class="workout-grid">
+    <!-- LEGS QUADS -->
+    <div class="workout-card" onclick="openWorkout('legs')">
+      <div class="card-accent"></div>
+      <div class="card-body">
+        <span class="card-arrow">→</span>
+        <span class="card-emoji">🦵</span>
+        <div class="card-title">Legs —<br>Quads Focus</div>
+        <div class="card-subtitle">Squat · Press · Finisher</div>
+        <div class="card-desc">Heavy back squat, RDL, leg press supersets, and a brutal 100-rep drop set finisher. The complete quad and hamstring builder.</div>
+        <div class="card-meta">
+          <span class="card-tag">70–80 Min</span>
+          <span class="card-tag">4 Phases</span>
+          <span class="card-tag">Strength + Hypertrophy</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- GLUTES HAMSTRINGS -->
+    <div class="workout-card" onclick="openWorkout('glutes')">
+      <div class="card-accent"></div>
+      <div class="card-body">
+        <span class="card-arrow">→</span>
+        <span class="card-emoji">🍑</span>
+        <div class="card-title">Glutes &<br>Hamstrings</div>
+        <div class="card-subtitle">Hip Thrust · RDL · Nordic</div>
+        <div class="card-desc">The posterior chain session. Heavy barbell hip thrusts, sumo RDL, Nordic curls, and a full glute giant set finisher.</div>
+        <div class="card-meta">
+          <span class="card-tag">65–75 Min</span>
+          <span class="card-tag">4 Phases</span>
+          <span class="card-tag">Glute Growth Priority</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- BACK LATS -->
+    <div class="workout-card" onclick="openWorkout('back')">
+      <div class="card-accent"></div>
+      <div class="card-body">
+        <span class="card-arrow">→</span>
+        <span class="card-emoji">💪</span>
+        <div class="card-title">Back &<br>Lats</div>
+        <div class="card-subtitle">Pull-Up · Row · Pulldown</div>
+        <div class="card-desc">Weighted pull-ups, heavy barbell rows, straight-arm pulldowns, face pulls. Builds the V-taper that makes your waist look smaller.</div>
+        <div class="card-meta">
+          <span class="card-tag">65–70 Min</span>
+          <span class="card-tag">4 Phases</span>
+          <span class="card-tag">Posture + Width</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- SHOULDERS -->
+    <div class="workout-card" onclick="openWorkout('shoulders')">
+      <div class="card-accent"></div>
+      <div class="card-body">
+        <span class="card-arrow">→</span>
+        <span class="card-emoji">💫</span>
+        <div class="card-title">Shoulder<br>Sculpt</div>
+        <div class="card-subtitle">Press · Lateral · Rear Delt</div>
+        <div class="card-desc">Arnold press, heavy DB overhead, 2x lateral delt volume, face pulls, and a mechanical drop set finisher that destroys the caps.</div>
+        <div class="card-meta">
+          <span class="card-tag">55–65 Min</span>
+          <span class="card-tag">4 Phases</span>
+          <span class="card-tag">All 3 Heads</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ARMS -->
+    <div class="workout-card" onclick="openWorkout('arms')">
+      <div class="card-accent"></div>
+      <div class="card-body">
+        <span class="card-arrow">→</span>
+        <span class="card-emoji">💪</span>
+        <div class="card-title">Arms:<br>Bi + Tri</div>
+        <div class="card-subtitle">Curl · Press · Isolation</div>
+        <div class="card-desc">Tricep-first approach. Close-grip bench, overhead ext, skull crushers, barbell curls, incline curls, and the 21s protocol finisher.</div>
+        <div class="card-meta">
+          <span class="card-tag">55–65 Min</span>
+          <span class="card-tag">4 Phases</span>
+          <span class="card-tag">Definition Focus</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- CHEST -->
+    <div class="workout-card" onclick="openWorkout('chest')">
+      <div class="card-accent"></div>
+      <div class="card-body">
+        <span class="card-arrow">→</span>
+        <span class="card-emoji">👊</span>
+        <div class="card-title">Chest &<br>Upper Body</div>
+        <div class="card-subtitle">Press · Fly · Cable</div>
+        <div class="card-desc">Incline DB press, flat barbell bench, cable flyes at all angles, dips, and a 3-angle push-up burnout. Builds the upper body shape most women miss.</div>
+        <div class="card-meta">
+          <span class="card-tag">55–65 Min</span>
+          <span class="card-tag">4 Phases</span>
+          <span class="card-tag">3-Angle Press</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- CORE ABS -->
+    <div class="workout-card" onclick="openWorkout('core')">
+      <div class="card-accent"></div>
+      <div class="card-body">
+        <span class="card-arrow">→</span>
+        <span class="card-emoji">🔥</span>
+        <div class="card-title">Core &<br>Abs</div>
+        <div class="card-subtitle">Deep · Surface · Obliques</div>
+        <div class="card-desc">Dead bugs, weighted cable crunches, hanging knee raises, Pallof press, woodchops, and a 4-minute circuit. All 4 core zones covered.</div>
+        <div class="card-meta">
+          <span class="card-tag">40–50 Min</span>
+          <span class="card-tag">4 Phases</span>
+          <span class="card-tag">Add-On Any Day</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<hr class="section-divider">
+
+<!-- PRIORITY -->
+<div class="section" id="priority">
+  <div class="section-eyebrow">Coach Sahil's Take</div>
+  <div class="section-heading">Priority Ranking for Women</div>
+  <div class="section-sub">Based on impact on physique, health, and long-term results — not trends.</div>
+  <div class="priority-grid">
+    <div class="priority-card">
+      <div class="priority-rank">1</div>
+      <div class="priority-name">🍑 Glutes + Hamstrings</div>
+      <div class="priority-desc">The biggest physique impact per session. Train twice weekly. Heavy hip thrusts and RDLs are non-negotiable.</div>
+    </div>
+    <div class="priority-card">
+      <div class="priority-rank">2</div>
+      <div class="priority-name">💪 Back + Lats</div>
+      <div class="priority-desc">Most women skip this. A wide back creates the waist illusion and fixes posture that makes everything else look better.</div>
+    </div>
+    <div class="priority-card">
+      <div class="priority-rank">3</div>
+      <div class="priority-name">🦵 Legs — Quad Focus</div>
+      <div class="priority-desc">Squats are the queen of all exercises. Leg press and lunges drive the most metabolic adaptation and calorie burn.</div>
+    </div>
+    <div class="priority-card">
+      <div class="priority-rank">4</div>
+      <div class="priority-name">💫 Shoulders</div>
+      <div class="priority-desc">Developed shoulders + wide back = the physique most women want. Lateral and rear delts are the priority — not front.</div>
+    </div>
+    <div class="priority-card">
+      <div class="priority-rank">5</div>
+      <div class="priority-name">🔥 Core</div>
+      <div class="priority-desc">Builds structural strength and definition. But remember: abs are revealed through nutrition, not just training volume.</div>
+    </div>
+    <div class="priority-card">
+      <div class="priority-rank">6</div>
+      <div class="priority-name">💪 Arms + Chest</div>
+      <div class="priority-desc">Important for completeness and upper body definition. Lower priority only because compound movements already address them partially.</div>
+    </div>
+  </div>
+</div>
+
+<hr class="section-divider">
+
+<!-- NUTRITION -->
+<div class="section" id="nutrition">
+  <div class="section-eyebrow">Fuel the Work</div>
+  <div class="section-heading">Women's Training Nutrition Basics</div>
+  <div class="section-sub">Simple non-negotiables Coach Sahil applies with all clients.</div>
+  <table class="nutrition-table">
+    <thead>
+      <tr>
+        <th>Timing</th>
+        <th>What to Do</th>
+        <th>Why It Matters</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Pre-Workout<br>60–90 min before</td>
+        <td>Carbs + moderate protein. Rice, banana, oats + paneer/egg whites. Avoid heavy fats.</td>
+        <td>Fuels training intensity and prevents muscle breakdown during the session.</td>
+      </tr>
+      <tr>
+        <td>Post-Workout<br>Within 45 min</td>
+        <td>30–40g protein + fast carbs. Whey + banana, or rice + chicken. Don't skip this.</td>
+        <td>Initiates muscle protein synthesis. The most critical nutrition window of the day.</td>
+      </tr>
+      <tr>
+        <td>Daily Protein</td>
+        <td>1.6–2.0g per kg of bodyweight. Spread across 3–5 meals. Prioritise whole food sources.</td>
+        <td>You cannot build or maintain muscle without adequate protein. Period.</td>
+      </tr>
+      <tr>
+        <td>Hydration</td>
+        <td>Minimum 3 litres water daily. Add electrolytes on heavy training days (especially legs).</td>
+        <td>Dehydration reduces strength by 10–20%. Most women train significantly dehydrated.</td>
+      </tr>
+      <tr>
+        <td>Menstrual Phase</td>
+        <td>Increase iron-rich foods in the week after your period. Reduce training intensity during menstruation if needed.</td>
+        <td>Hormonal changes affect recovery, strength, and energy levels. Training around your cycle improves results.</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<hr class="section-divider">
+
+<!-- FOOTER -->
+<div class="coach-footer">
+  <div class="coach-footer-bg"></div>
+  <div class="footer-inner">
+    <img src="images/coach-profile.png" alt="Coach Sahil Bansal" class="footer-avatar">
+    <div class="club-name">I-Blitz Fitness Club · Bangalore</div>
+    <div class="coach-name">Coach Sahil Bansal</div>
+    <div class="footer-divider"></div>
+    <p>Strength & Physique Specialist · Advanced Programming · Women's Coaching</p>
+    <p style="margin-top: 8px; font-size: 12px; color: #555;">Train. Transform. Triumph.</p>
+    <div class="footer-links">
+      <a href="#workouts" class="footer-link">Workouts</a>
+      <a href="#priority" class="footer-link">Priority</a>
+      <a href="#nutrition" class="footer-link">Nutrition</a>
+      <a href="#about" class="footer-link">About</a>
+    </div>
+    <p style="margin-top: 24px; font-size: 11px; color: #333;">shankyfitness.blogspot.com</p>
+  </div>
+</div>
+
+<!-- MODALS -->
+<div id="legsModal" class="modal">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h2>🦵 LEGS — QUADS FOCUS</h2>
+      <button class="close-btn" onclick="closeWorkout('legs')">&times;</button>
+    </div>
+    <div class="modal-body" id="legsContent"></div>
+  </div>
+</div>
+
+<div id="glutesModal" class="modal">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h2>🍑 GLUTES & HAMSTRINGS</h2>
+      <button class="close-btn" onclick="closeWorkout('glutes')">&times;</button>
+    </div>
+    <div class="modal-body" id="glutesContent"></div>
+  </div>
+</div>
+
+<div id="backModal" class="modal">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h2>💪 BACK & LATS</h2>
+      <button class="close-btn" onclick="closeWorkout('back')">&times;</button>
+    </div>
+    <div class="modal-body" id="backContent"></div>
+  </div>
+</div>
+
+<div id="shouldersModal" class="modal">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h2>💫 SHOULDER SCULPT</h2>
+      <button class="close-btn" onclick="closeWorkout('shoulders')">&times;</button>
+    </div>
+    <div class="modal-body" id="shouldersContent"></div>
+  </div>
+</div>
+
+<div id="armsModal" class="modal">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h2>💪 ARMS: BICEPS & TRICEPS</h2>
+      <button class="close-btn" onclick="closeWorkout('arms')">&times;</button>
+    </div>
+    <div class="modal-body" id="armsContent"></div>
+  </div>
+</div>
+
+<div id="chestModal" class="modal">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h2>👊 CHEST & UPPER BODY</h2>
+      <button class="close-btn" onclick="closeWorkout('chest')">&times;</button>
+    </div>
+    <div class="modal-body" id="chestContent"></div>
+  </div>
+</div>
+
+<div id="coreModal" class="modal">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h2>🔥 CORE & ABS</h2>
+      <button class="close-btn" onclick="closeWorkout('core')">&times;</button>
+    </div>
+    <div class="modal-body" id="coreContent"></div>
+  </div>
+</div>
+
+<script>
+  const workouts = {
+    legs: `
+      <div class="intro-note">
+        <strong>Advanced Leg Day</strong> — This program is designed for women who already train consistently and want to <strong>build glutes, quad sweep, and hamstring thickness</strong> — not just "tone." It follows a <strong>neural activation → strength block → hypertrophy superset → metabolic finisher</strong> structure. Push each set close to failure. Rest as prescribed. Your legs will know they worked. 🔥
+      </div>
+
+      <div class="phase-header">
+        <div class="phase-num">1</div>
+        <div class="phase-info"><h3>Neural Activation + Glute Prime</h3><p>REST: 45 SEC · FOCUS: MIND-MUSCLE CONNECTION</p></div>
+      </div>
+
+      <div class="exercise-card">
+        <div class="ex-header"><div class="ex-name">Banded Clamshell</div><div class="ex-muscle">Glute Med</div></div>
+        <div class="ex-params"><div class="param-chip"><span>3</span> sets</div><div class="param-chip"><span>15</span> reps/side</div><div class="param-chip"><span>45 sec</span> rest</div></div>
+        <div class="ex-tip"><strong>Cue:</strong> Drive your top knee toward the ceiling, not your foot. Keep hips stacked. Squeeze at the top for 1 sec.</div>
+      </div>
+
+      <div class="exercise-card">
+        <div class="ex-header"><div class="ex-name">Glute Bridge with Band (Pause Reps)</div><div class="ex-muscle">Glutes · Hamstrings</div></div>
+        <div class="ex-params"><div class="param-chip"><span>3</span> sets</div><div class="param-chip"><span>12</span> reps</div><div class="param-chip"><span>2-sec pause</span> at top</div></div>
+        <div class="ex-tip"><strong>Cue:</strong> Drive hips up explosively, pause hard at the top. Tuck your chin slightly and press knees out against the band.</div>
+      </div>
+
+      <div class="divider"></div>
+
+      <div class="phase-header">
+        <div class="phase-num">2</div>
+        <div class="phase-info"><h3>Strength Block — Heavy Compound</h3><p>REST: 2.5–3 MIN · FOCUS: PROGRESSIVE OVERLOAD</p></div>
+      </div>
+
+      <div class="exercise-card">
+        <div class="ex-header"><div class="ex-name">Barbell Back Squat</div><div class="ex-muscle">Quads · Glutes · Core</div></div>
+        <div class="ex-params"><div class="param-chip"><span>4</span> sets</div><div class="param-chip"><span>5–6</span> reps</div><div class="param-chip"><span>80–85%</span> 1RM</div><div class="param-chip"><span>3 min</span> rest</div></div>
+        <div class="ex-tip"><strong>Cue:</strong> Break at hip and knee simultaneously. Reach depth (crease below parallel). Drive knees out. Chest stays tall. This is your key strength driver — don't rush the rest.</div>
+      </div>
+
+      <div class="exercise-card">
+        <div class="ex-header"><div class="ex-name">Romanian Deadlift (RDL)</div><div class="ex-muscle">Hamstrings · Glutes · Erectors</div></div>
+        <div class="ex-params"><div class="param-chip"><span>4</span> sets</div><div class="param-chip"><span>6</span> reps</div><div class="param-chip">Heavy controlled</div><div class="param-chip"><span>2.5 min</span> rest</div></div>
+        <div class="ex-tip"><strong>Cue:</strong> Hinge — don't squat. Push hips back as bar slides down legs. Deep hamstring stretch at bottom. Don't round lower back. Feel the hamstring load, not the lower back.</div>
+      </div>
+
+      <div class="divider"></div>
+
+      <div class="phase-header">
+        <div class="phase-num">3</div>
+        <div class="phase-info"><h3>Hypertrophy Superset Block</h3><p>REST: 60–90 SEC BETWEEN SUPERSETS · FOCUS: VOLUME + PUMP</p></div>
+      </div>
+
+      <div class="set-tag">⚡ SUPERSET A</div>
+      <div class="exercise-card">
+        <div class="ex-header"><div class="ex-name">A1 — Leg Press (Feet High & Wide)</div><div class="ex-muscle">Glutes · Hamstrings</div></div>
+        <div class="ex-params"><div class="param-chip"><span>4</span> sets</div><div class="param-chip"><span>12</span> reps</div><div class="param-chip">Slow <span>3-sec</span> eccentric</div></div>
+        <div class="ex-tip"><strong>Cue:</strong> Place feet high on platform, hip-width apart. Lower slowly, let your glutes stretch. Don't lock out at the top. Immediately go to A2.</div>
+      </div>
+
+      <div class="exercise-card">
+        <div class="ex-header"><div class="ex-name">A2 — Walking Barbell Lunge</div><div class="ex-muscle">Glutes · Quads · Balance</div></div>
+        <div class="ex-params"><div class="param-chip"><span>4</span> sets</div><div class="param-chip"><span>10</span> steps/leg</div><div class="param-chip">Moderate weight</div></div>
+        <div class="ex-tip"><strong>Cue:</strong> Long stride to bias glutes. Back knee lightly grazes floor. Stay upright — don't lean forward. Rest 75 sec after A2, then repeat A1.</div>
+      </div>
+
+      <div class="intensity-bar"><span class="intensity-label">next superset</span></div>
+
+      <div class="set-tag">⚡ SUPERSET B</div>
+      <div class="exercise-card">
+        <div class="ex-header"><div class="ex-name">B1 — Hip Thrust (Barbell or Machine)</div><div class="ex-muscle">Glutes Max · Hip Ext.</div></div>
+        <div class="ex-params"><div class="param-chip"><span>4</span> sets</div><div class="param-chip"><span>10</span> reps</div><div class="param-chip">Heavy + <span>1-sec</span> squeeze</div></div>
+        <div class="ex-tip"><strong>Cue:</strong> Shoulder blades on bench edge. Chin tucked. Drive hips up until torso is parallel to floor. Squeeze glutes HARD at the top. This is the money move for glute growth.</div>
+      </div>
+
+      <div class="exercise-card">
+        <div class="ex-header"><div class="ex-name">B2 — Lying Leg Curl</div><div class="ex-muscle">Hamstrings</div></div>
+        <div class="ex-params"><div class="param-chip"><span>4</span> sets</div><div class="param-chip"><span>12</span> reps</div><div class="param-chip">Slow negative</div></div>
+        <div class="ex-tip"><strong>Cue:</strong> Curl explosively, lower in 3 seconds. Plantarflex feet (toes pointed away) to maximally recruit hamstrings. Don't let hips rise off pad.</div>
+      </div>
+
+      <div class="divider"></div>
+
+      <div class="phase-header">
+        <div class="phase-num">4</div>
+        <div class="phase-info"><h3>Metabolic Finisher</h3><p>NO REST UNTIL COMPLETE · FOCUS: BURN + ENDURANCE</p></div>
+      </div>
+
+      <div class="finisher-block">
+        <div class="set-tag" style="border-color:rgba(200,16,46,0.6); background:rgba(200,16,46,0.2);">🔥 100 REP SQUAT DROP SET</div>
+        <div class="ex-name">Smith Machine or Goblet Squat</div>
+        <p style="font-size:13px; color:#ccc; margin-top:10px; line-height:1.8;">
+          Start with a moderate weight. Perform <strong style="color:var(--gold)">20 reps</strong> → strip weight → <strong style="color:var(--gold)">20 reps</strong> → strip → <strong style="color:var(--gold)">20 reps</strong> → strip → <strong style="color:var(--gold)">20 reps</strong> → bodyweight → <strong style="color:var(--gold)">20 reps</strong>.<br><br>
+          <span style="color:var(--crimson); font-weight:700;">100 reps total.</span> No extended rest between drops — only as long as it takes to strip plates. This floods the legs with blood and maximises metabolic stress for hypertrophy.
+        </p>
+      </div>
+
+      <div class="divider"></div>
+      <div class="tips-grid">
+        <div class="tip-card"><div class="tip-icon">🍗</div><h4>Post-Workout Nutrition</h4><p>Have 30–40g protein + fast carbs (banana + rice cakes) within 45 min. Legs are a large muscle group — they need it.</p></div>
+        <div class="tip-card"><div class="tip-icon">😴</div><h4>Leg Day Recovery</h4><p>Avoid training legs again within 48 hours. Sleep 7–9 hrs. DOMS is expected — it means you grew.</p></div>
+        <div class="tip-card"><div class="tip-icon">📈</div><h4>Progressive Overload</h4><p>Add 2.5 kg to squats and RDL every 2 weeks. Track your weights — guessing doesn't build legs.</p></div>
+        <div class="tip-card"><div class="tip-icon">🩺</div><h4>Knee & Hip Health</h4><p>If knees cave on squats, widen stance or reduce load and recheck mobility. Never train through sharp joint pain.</p></div>
+      </div>
+    `,
+    glutes: `
+      <div class="intro-note">
+        The glutes are the largest and most powerful muscle in the female body — yet most women underload them. This session prioritises <strong>hip extension mechanics, glute stretch under load, and hamstring isolation</strong>. If you leave without a glute pump that makes sitting down feel different, you didn't push hard enough.
+      </div>
+
+      <div class="phase-header">
+        <div class="phase-num">1</div>
+        <div class="phase-info"><h3>Glute Activation — Band Work</h3><p>REST: 30–45 SEC · NO HEAVY LOAD YET</p></div>
+      </div>
+      <div class="exercise-card">
+        <div class="ex-header"><div class="ex-name">Banded Monster Walk (Forward + Lateral)</div><div class="ex-muscle">Glute Med · Glute Min</div></div>
+        <div class="ex-params"><div class="param-chip"><span>3</span> rounds</div><div class="param-chip"><span>10</span> steps each way</div></div>
+        <div class="ex-tip"><strong>Cue:</strong> Band above knees. Stay in a quarter squat the entire time. Fight the band pulling your knees together. This fires the often-neglected glute medius that gives your hips that rounded shape.</div>
+      </div>
+      <div class="exercise-card">
+        <div class="ex-header"><div class="ex-name">Frog Pump</div><div class="ex-muscle">Glute Max · Hip Ext.</div></div>
+        <div class="ex-params"><div class="param-chip"><span>3</span> sets</div><div class="param-chip"><span>25</span> reps</div><div class="param-chip">Bodyweight</div></div>
+        <div class="ex-tip"><strong>Cue:</strong> Lie on back, soles of feet together, knees out (like a frog). Drive hips up repeatedly. Short range, fast reps. This positions the glutes for maximum activation before loading.</div>
+      </div>
+
+      <div class="divider"></div>
+
+      <div class="phase-header">
+        <div class="phase-num">2</div>
+        <div class="phase-info"><h3>Strength Block — Loaded Hip Hinge</h3><p>REST: 2.5–3 MIN · HEAVY AND CONTROLLED</p></div>
+      </div>
+      <div class="exercise-card">
+        <div class="ex-header"><div class="ex-name">Barbell Hip Thrust</div><div class="ex-muscle">Glute Max · Primary Mover</div></div>
+        <div class="ex-params"><div class="param-chip"><span>5</span> sets</div><div class="param-chip"><span>5, 5, 8, 8, 12</span> reps</div><div class="param-chip">Pyramid up, then down</div></div>
+        <div class="ex-tip"><strong>Cue:</strong> Shoulder blades on bench edge. Barbell padded across hips. Chin tucked. Drive hips up until torso parallel to floor. Squeeze glutes max at top — knees stay at 90°. This is the single best glute builder for women. Go HEAVY.</div>
+      </div>
+      <div class="exercise-card">
+        <div class="ex-header"><div class="ex-name">Sumo Romanian Deadlift</div><div class="ex-muscle">Glutes · Hamstrings · Adductors</div></div>
+        <div class="ex-params"><div class="param-chip"><span>4</span> sets</div><div class="param-chip"><span>6–8</span> reps</div><div class="param-chip">Heavy</div><div class="param-chip"><span>3 min</span> rest</div></div>
+        <div class="ex-tip"><strong>Cue:</strong> Wide stance, toes pointed out 45°. This variation brings more inner glute and adductor into the hip hinge compared to conventional RDL. Feel the inner thigh and glute complex stretch at the bottom.</div>
+      </div>
+
+      <div class="divider"></div>
+
+      <div class="phase-header">
+        <div class="phase-num">3</div>
+        <div class="phase-info"><h3>Hypertrophy Superset Block</h3><p>REST: 60–90 SEC BETWEEN SUPERSETS</p></div>
+      </div>
+
+      <div class="set-tag">⚡ SUPERSET A</div>
+      <div class="exercise-card">
+        <div class="ex-header"><div class="ex-name">A1 — Single-Leg Hip Thrust</div><div class="ex-muscle">Glute Max · Unilateral</div></div>
+        <div class="ex-params"><div class="param-chip"><span>3</span> sets</div><div class="param-chip"><span>12</span> reps/side</div><div class="param-chip">Bodyweight or plate on hip</div></div>
+        <div class="ex-tip"><strong>Cue:</strong> Non-working leg extended or at 90°. Drive through the planted heel. Unilateral work fixes left-right glute imbalances — very common in women.</div>
+      </div>
+      <div class="exercise-card">
+        <div class="ex-header"><div class="ex-name">A2 — Cable Pull-Through</div><div class="ex-muscle">Glutes · Hamstrings · Lower Back</div></div>
+        <div class="ex-params"><div class="param-chip"><span>3</span> sets</div><div class="param-chip"><span>15</span> reps</div></div>
+        <div class="ex-tip"><strong>Cue:</strong> Face away from cable, rope between legs, hinge forward until torso near parallel, drive hips forward aggressively. Feels like an RDL but with constant cable tension throughout the movement.</div>
+      </div>
+
+      <div class="intensity-bar"><span class="intensity-label">next superset</span></div>
+
+      <div class="set-tag">⚡ SUPERSET B</div>
+      <div class="exercise-card">
+        <div class="ex-header"><div class="ex-name">B1 — Nordic Hamstring Curl (or Lying Leg Curl)</div><div class="ex-muscle">Hamstrings — Eccentric Strength</div></div>
+        <div class="ex-params"><div class="param-chip"><span>3</span> sets</div><div class="param-chip"><span>8–10</span> reps</div><div class="param-chip">Slow <span>4-sec</span> eccentric</div></div>
+        <div class="ex-tip"><strong>Cue:</strong> Nordic: Knees anchored, lower your body toward the floor as slowly as possible. This is the most powerful hamstring builder known. Start assisted if needed — it builds incredible hamstring density over time.</div>
+      </div>
+      <div class="exercise-card">
+        <div class="ex-header"><div class="ex-name">B2 — Dumbbell Stiff-Leg Deadlift</div><div class="ex-muscle">Hamstrings · Glutes</div></div>
+        <div class="ex-params"><div class="param-chip"><span>3</span> sets</div><div class="param-chip"><span>12</span> reps</div></div>
+        <div class="ex-tip"><strong>Cue:</strong> Less knee bend than RDL — more hamstring isolation. Feel the stretch deep in the back of your legs. Keep dumbbells close to legs the entire way down.</div>
+      </div>
+
+      <div class="divider"></div>
+
+      <div class="phase-header">
+        <div class="phase-num">4</div>
+        <div class="phase-info"><h3>Glute Finisher — Pump Maximiser</h3><p>NO REST UNTIL COMPLETE</p></div>
+      </div>
+      <div class="finisher-block">
+        <div class="set-tag" style="border-color:rgba(200,16,46,0.6);background:rgba(200,16,46,0.2);">🔥 GLUTE GIANT SET</div>
+        <div class="ex-name">4 Exercises · No Rest Between</div>
+        <p style="font-size:13px;color:#ccc;margin-top:10px;line-height:1.9;">
+          <strong style="color:var(--gold)">① Donkey Kick</strong> — 15 reps/side<br>
+          <strong style="color:var(--gold)">② Fire Hydrant</strong> — 15 reps/side<br>
+          <strong style="color:var(--gold)">③ Glute Bridge Pulse</strong> — 30 reps<br>
+          <strong style="color:var(--gold)">④ Banded Squat Walk</strong> — 12 steps each way<br><br>
+          <span style="color:var(--crimson);font-weight:700;">Complete 3 rounds. Rest 60 sec between rounds only.</span> This floods the glutes with blood for maximum pump and growth stimulus.
+        </p>
+      </div>
+
+      <div class="divider"></div>
+      <div class="tips-grid">
+        <div class="tip-card"><div class="tip-icon">📐</div><h4>Foot Position Matters</h4><p>Higher, wider foot placement on any pressing or thrusting movement = more glute recruitment. Experiment each session.</p></div>
+        <div class="tip-card"><div class="tip-icon">🔁</div><h4>Train Glutes 2x/Week</h4><p>Glutes recover faster than quads. You can and should train them twice weekly for maximum hypertrophy results.</p></div>
+        <div class="tip-card"><div class="tip-icon">🍽️</div><h4>Eat to Grow</h4><p>You cannot build a bigger glute in a calorie deficit. A slight surplus of 150–250 kcal/day supports muscle growth without fat gain.</p></div>
+        <div class="tip-card"><div class="tip-icon">📏</div><h4>Track Hip Measurements</h4><p>Measure hip circumference monthly — not just bodyweight. Glute growth is the goal, not weight loss.</p></div>
+      </div>
+    `,
+    back: `
+      <div class="intro-note">
+        <strong>Most women skip back training. That's a mistake.</strong> <strong>A wide, developed back creates the illusion of a smaller waist</strong> — the V-taper effect. It also fixes the rounded shoulders and forward head posture that desk jobs cause. This session builds lats, mid-back thickness, and rear deltoids with a mix of heavy compound pulls and targeted isolation work.
+      </div>
+
+      <div class="phase-header">
+        <div class="phase-num">1</div>
+        <div class="phase-info"><h3>Scapular Activation + Warm-Up</h3><p>REST: 30 SEC · WAKE UP THE BACK</p></div>
+      </div>
+      <div class="exercise-card">
+        <div class="ex-header"><div class="ex-name">Band Pull-Apart</div><div class="ex-muscle">Rear Delt · Rhomboids</div></div>
+        <div class="ex-params"><div class="param-chip"><span>3</span> sets</div><div class="param-chip"><span>20</span> reps</div></div>
+        <div class="ex-tip"><strong>Cue:</strong> Arms straight in front, pull band apart until fully stretched behind you. Squeeze shoulder blades together hard. This directly counteracts desk posture and primes the rear delt for the session.</div>
+      </div>
+      <div class="exercise-card">
+        <div class="ex-header"><div class="ex-name">Dead Hang + Scapular Pull</div><div class="ex-muscle">Lats · Shoulder Girdle</div></div>
+        <div class="ex-params"><div class="param-chip"><span>3</span> sets</div><div class="param-chip"><span>10</span> scapular pulls</div><div class="param-chip"><span>20 sec</span> dead hang</div></div>
+        <div class="ex-tip"><strong>Cue:</strong> Hang from bar. Without bending elbows, depress shoulder blades (pull them DOWN). This is the initiation move for every pull — most women skip it and never feel their lats properly.</div>
+      </div>
+
+      <div class="divider"></div>
+
+      <div class="phase-header">
+        <div class="phase-num">2</div>
+        <div class="phase-info"><h3>Strength Block — Heavy Pulls</h3><p>REST: 2.5–3 MIN · MAX WEIGHT YOU CAN CONTROL</p></div>
+      </div>
+      <div class="exercise-card">
+        <div class="ex-header"><div class="ex-name">Weighted Pull-Up or Lat Pulldown</div><div class="ex-muscle">Lats · Biceps · Mid-Back</div></div>
+        <div class="ex-params"><div class="param-chip"><span>5</span> sets</div><div class="param-chip"><span>4, 4, 6, 6, 8</span> reps</div><div class="param-chip">Pyramid</div></div>
+        <div class="ex-tip"><strong>Cue:</strong> Wide overhand grip. Initiate by depressing scapulae first. Pull elbows to ribs, not just hands to chin. Chest comes slightly forward at top. Full dead hang at bottom — don't cut the range short.</div>
+      </div>
+      <div class="exercise-card">
+        <div class="ex-header"><div class="ex-name">Barbell Bent-Over Row</div><div class="ex-muscle">Mid-Back · Lats · Rear Delt</div></div>
+        <div class="ex-params"><div class="param-chip"><span>4</span> sets</div><div class="param-chip"><span>6</span> reps</div><div class="param-chip">Heavy + controlled</div></div>
+        <div class="ex-tip"><strong>Cue:</strong> Hinge to 45°, bar hanging, overhand grip. Pull bar to lower chest/upper belly. Squeeze shoulder blades at the top. DO NOT round your lower back. Lower in 3 seconds.</div>
+      </div>
+
+      <div class="divider"></div>
+
+      <div class="phase-header">
+        <div class="phase-num">3</div>
+        <div class="phase-info"><h3>Hypertrophy Superset Block</h3><p>REST: 60–90 SEC BETWEEN SUPERSETS</p></div>
+      </div>
+
+      <div class="set-tag">⚡ SUPERSET A</div>
+      <div class="exercise-card">
+        <div class="ex-header"><div class="ex-name">A1 — Single-Arm Dumbbell Row</div><div class="ex-muscle">Lats · Rhomboids · Unilateral</div></div>
+        <div class="ex-params"><div class="param-chip"><span>4</span> sets</div><div class="param-chip"><span>10</span> reps/side</div><div class="param-chip">Heavy DB</div></div>
+        <div class="ex-tip"><strong>Cue:</strong> Brace knee on bench. Pull DB to hip, not shoulder. Elbow travels close to the body. Let the lat stretch fully at the bottom.</div>
+      </div>
+      <div class="exercise-card">
+        <div class="ex-header"><div class="ex-name">A2 — Straight-Arm Lat Pulldown (Cable)</div><div class="ex-muscle">Lats — Long Head Isolation</div></div>
+        <div class="ex-params"><div class="param-chip"><span>4</span> sets</div><div class="param-chip"><span>15</span> reps</div></div>
+        <div class="ex-tip"><strong>Cue:</strong> Arms straight throughout. Hinge slightly forward. Pull the bar from overhead down to thighs using only lats — no biceps. Go immediately after A1.</div>
+      </div>
+
+      <div class="divider"></div>
+      <div class="tips-grid">
+        <div class="tip-card"><div class="tip-icon">🤏</div><h4>Loosen Your Grip</h4><p>Use lifting straps for heavy rows and pulldowns. Your grip will fatigue before your back — straps let you actually train the back harder.</p></div>
+        <div class="tip-card"><div class="tip-icon">🪞</div><h4>Check Posture Daily</h4><p>Back training only works if you reinforce it with good posture. Stand tall, pull shoulders back. Over time this reshapes your entire silhouette.</p></div>
+        <div class="tip-card"><div class="tip-icon">🎯</div><h4>Think "Elbows, Not Hands"</h4><p>On every row and pulldown, focus on where your elbows are moving — not your hands. This cue instantly improves lat activation by 40%.</p></div>
+        <div class="tip-card"><div class="tip-icon">📅</div><h4>Train Back 2x/Week</h4><p>Back is large and recovers well. Pair with biceps one day and with legs/posterior chain another day for maximum weekly volume.</p></div>
+      </div>
+    `,
+    shoulders: `
+      <div class="intro-note">
+        <strong>Developed shoulders are the single best thing a woman can build</strong> for her physique. Wider shoulders make the waist look smaller, improve posture, and give that strong, athletic look. Most women overtrain front delts (from pressing) and neglect lateral and rear heads. This session corrects that imbalance with <strong>2x the volume on lateral and rear delts</strong> vs front.
+      </div>
+
+      <div class="phase-header">
+        <div class="phase-num">1</div>
+        <div class="phase-info"><h3>Rotator Cuff Warm-Up</h3><p>ALWAYS DO THIS · PREVENT INJURY</p></div>
+      </div>
+      <div class="exercise-card">
+        <div class="ex-header"><div class="ex-name">Band External Rotation</div><div class="ex-muscle">Rotator Cuff</div></div>
+        <div class="ex-params"><div class="param-chip"><span>3</span> sets</div><div class="param-chip"><span>15</span> reps/side</div><div class="param-chip">Light band</div></div>
+        <div class="ex-tip"><strong>Cue:</strong> Elbow at 90°, anchored to side. Rotate forearm outward. This is non-negotiable — the rotator cuff protects the shoulder joint in all pressing movements.</div>
+      </div>
+
+      <div class="divider"></div>
+
+      <div class="phase-header">
+        <div class="phase-num">2</div>
+        <div class="phase-info"><h3>Overhead Press — Strength</h3><p>REST: 2–2.5 MIN · BUILD GENUINE PRESSING STRENGTH</p></div>
+      </div>
+      <div class="exercise-card">
+        <div class="ex-header"><div class="ex-name">Seated Dumbbell Shoulder Press</div><div class="ex-muscle">All 3 Delt Heads · Triceps</div></div>
+        <div class="ex-params"><div class="param-chip"><span>5</span> sets</div><div class="param-chip"><span>5, 5, 8, 8, 10</span> reps</div><div class="param-chip">Pyramid</div></div>
+        <div class="ex-tip"><strong>Cue:</strong> Dumbbells start at ear height. Press to full lockout overhead. Tuck ribs — don't arch your lower back. The seated position removes momentum.</div>
+      </div>
+
+      <div class="divider"></div>
+
+      <div class="phase-header">
+        <div class="phase-num">3</div>
+        <div class="phase-info"><h3>Lateral + Rear Delt Hypertrophy</h3><p>REST: 60 SEC · HIGH VOLUME — THIS IS WHERE THE CAPS COME FROM</p></div>
+      </div>
+
+      <div class="set-tag">⚡ SUPERSET A — LATERAL HEAD</div>
+      <div class="exercise-card">
+        <div class="ex-header"><div class="ex-name">A1 — Lateral Raise (Dumbbell)</div><div class="ex-muscle">Lateral Delt</div></div>
+        <div class="ex-params"><div class="param-chip"><span>4</span> sets</div><div class="param-chip"><span>15</span> reps</div><div class="param-chip">Slight lean forward</div></div>
+        <div class="ex-tip"><strong>Cue:</strong> Lean slightly forward (~15°) to move tension onto the lateral head. Lead with the elbow, not wrist. Pinky slightly higher than thumb at top. Control the descent.</div>
+      </div>
+
+      <div class="divider"></div>
+      <div class="tips-grid">
+        <div class="tip-card"><div class="tip-icon">⚖️</div><h4>2:1 Side-to-Front Ratio</h4><p>For every 1 set of front raises, do 2 sets of lateral raises. Most women are already front-delt dominant from everyday pushing movements.</p></div>
+        <div class="tip-card"><div class="tip-icon">🪶</div><h4>Lateral Raises: Go Lighter</h4><p>Going too heavy causes traps to take over. Control matters more than load here. A 5 kg DB done perfectly beats a 10 kg done poorly.</p></div>
+        <div class="tip-card"><div class="tip-icon">🔄</div><h4>Train Shoulders 2x/Week</h4><p>Delts are small muscles that recover fast. They thrive on frequency. Pair one heavy session with one high-rep pump session weekly.</p></div>
+        <div class="tip-card"><div class="tip-icon">🧘</div><h4>Posture Between Sessions</h4><p>Shoulders don't grow if you hunch at a desk all day. Daily chin tucks and wall angels reinforce your training adaptations.</p></div>
+      </div>
+    `,
+    arms: `
+      <div class="intro-note">
+        The "toned arms" every woman wants? That's actually <strong>muscle definition under low body fat</strong> — and you build it by progressively overloading your biceps and triceps. <strong>Triceps make up 2/3 of your arm size</strong> and are the key to eliminating arm jiggle. This session prioritises tricep volume with targeted bicep work for complete arm development.
+      </div>
+
+      <div class="phase-header">
+        <div class="phase-num">1</div>
+        <div class="phase-info"><h3>Tricep Priority Block</h3><p>REST: 90 SEC · TRICEPS FIRST WHEN FRESHEST</p></div>
+      </div>
+      <div class="exercise-card">
+        <div class="ex-header"><div class="ex-name">Close-Grip Bench Press</div><div class="ex-muscle">Triceps · Chest Inner</div></div>
+        <div class="ex-params"><div class="param-chip"><span>4</span> sets</div><div class="param-chip"><span>6–8</span> reps</div><div class="param-chip">Heavy compound</div></div>
+        <div class="ex-tip"><strong>Cue:</strong> Hands shoulder-width apart on bar. Elbows tucked to sides — don't let them flare. The strongest tricep builder because it allows maximum loading.</div>
+      </div>
+      <div class="exercise-card">
+        <div class="ex-header"><div class="ex-name">Overhead Tricep Extension (Cable or DB)</div><div class="ex-muscle">Tricep Long Head</div></div>
+        <div class="ex-params"><div class="param-chip"><span>4</span> sets</div><div class="param-chip"><span>10–12</span> reps</div><div class="param-chip">Slow eccentric</div></div>
+        <div class="ex-tip"><strong>Cue:</strong> Arms overhead stretches the long head of tricep (the biggest head). This is the exercise that eliminates the "bat wing" under the arm.</div>
+      </div>
+
+      <div class="divider"></div>
+
+      <div class="phase-header">
+        <div class="phase-num">2</div>
+        <div class="phase-info"><h3>Bicep Building Block</h3><p>REST: 90 SEC · PEAK + WIDTH FOCUSED</p></div>
+      </div>
+      <div class="exercise-card">
+        <div class="ex-header"><div class="ex-name">Barbell Curl (Supinated, Strict)</div><div class="ex-muscle">Bicep Short + Long Head</div></div>
+        <div class="ex-params"><div class="param-chip"><span>4</span> sets</div><div class="param-chip"><span>8</span> reps</div><div class="param-chip">No momentum</div></div>
+        <div class="ex-tip"><strong>Cue:</strong> No swinging. Elbows stay pinned at sides. Fully supinate (rotate palms up hard) at the top. Lower in 3 seconds — the eccentric builds more muscle than the curl itself.</div>
+      </div>
+
+      <div class="divider"></div>
+      <div class="tips-grid">
+        <div class="tip-card"><div class="tip-icon">🏋️</div><h4>Go Heavier Than You Think</h4><p>Women consistently underload their arm work. If you can do 15 reps easily, go up in weight. Muscle grows from challenge, not comfort.</p></div>
+        <div class="tip-card"><div class="tip-icon">🦾</div><h4>Triceps = 2/3 of Your Arm</h4><p>If you want defined arms, train triceps twice as hard as biceps. That's where the actual size and definition comes from — not curls.</p></div>
+        <div class="tip-card"><div class="tip-icon">🤸</div><h4>Full Range of Motion</h4><p>Never cut the range short. The full stretch at the bottom of a curl and full extension at the top of a pushdown are where growth happens.</p></div>
+        <div class="tip-card"><div class="tip-icon">💧</div><h4>Pump = Muscle Signal</h4><p>That tight, full feeling during arm training is the muscle filling with blood. It's a real training stimulus — don't stop too early.</p></div>
+      </div>
+    `,
+    chest: `
+      <div class="intro-note">
+        Chest training for women is not about getting bulky. It's about <strong>developing the pectoral muscles that support the breast tissue, improving upper body posture, and building the structural strength</strong> that makes every other push movement stronger. A strong chest combined with good back training gives you an upright, confident posture that transforms how your body looks in everything you wear.
+      </div>
+
+      <div class="phase-header">
+        <div class="phase-num">1</div>
+        <div class="phase-info"><h3>Chest Activation</h3><p>REST: 30 SEC · FEEL THE PECS BEFORE LOADING</p></div>
+      </div>
+      <div class="exercise-card">
+        <div class="ex-header"><div class="ex-name">Cable Crossover Squeeze (Light)</div><div class="ex-muscle">Chest — Full Activation</div></div>
+        <div class="ex-params"><div class="param-chip"><span>3</span> sets</div><div class="param-chip"><span>15</span> reps</div><div class="param-chip">Very light</div></div>
+        <div class="ex-tip"><strong>Cue:</strong> Slow and controlled. Focus entirely on squeezing the pecs together at the centre. Most women can't feel their chest during pressing — this activation drill fixes that.</div>
+      </div>
+
+      <div class="divider"></div>
+
+      <div class="phase-header">
+        <div class="phase-num">2</div>
+        <div class="phase-info"><h3>Strength Block — Press Heavy</h3><p>REST: 2–2.5 MIN · BUILD GENUINE PRESSING STRENGTH</p></div>
+      </div>
+      <div class="exercise-card">
+        <div class="ex-header"><div class="ex-name">Incline Dumbbell Press</div><div class="ex-muscle">Upper Chest · Front Delt</div></div>
+        <div class="ex-params"><div class="param-chip"><span>5</span> sets</div><div class="param-chip"><span>5, 5, 8, 8, 10</span> reps</div><div class="param-chip">Pyramid up</div></div>
+        <div class="ex-tip"><strong>Cue:</strong> Bench at 30–45°. DBs at chest level, elbows at 45° to body (not flared out). Press up and slightly in. Incline prioritises upper chest which is commonly underdeveloped in women.</div>
+      </div>
+      <div class="exercise-card">
+        <div class="ex-header"><div class="ex-name">Flat Barbell Bench Press</div><div class="ex-muscle">Chest Overall · Triceps</div></div>
+        <div class="ex-params"><div class="param-chip"><span>4</span> sets</div><div class="param-chip"><span>6–8</span> reps</div><div class="param-chip">Heavy</div></div>
+        <div class="ex-tip"><strong>Cue:</strong> Grip slightly wider than shoulder width. Retract scapulae into the bench (shoulder blades pulled together and down). Lower bar to lower chest. Press explosively.</div>
+      </div>
+
+      <div class="divider"></div>
+      <div class="tips-grid">
+        <div class="tip-card"><div class="tip-icon">🎯</div><h4>Feel the Chest, Not Arms</h4><p>If you feel chest exercises primarily in your shoulders or triceps, the mind-muscle connection is off. Slow down and focus on squeezing the pecs on every rep.</p></div>
+        <div class="tip-card"><div class="tip-icon">📐</div><h4>Angle Variety is Key</h4><p>Upper, middle, and lower chest require different angles. Use incline for upper, flat for overall, decline/dips for lower. Train all three angles each session.</p></div>
+        <div class="tip-card"><div class="tip-icon">⚖️</div><h4>Chest Won't Make You Bulky</h4><p>Women have significantly lower testosterone than men. Chest training builds shape and lifts — not mass. You would have to train for years to develop significant chest size.</p></div>
+        <div class="tip-card"><div class="tip-icon">🔗</div><h4>Chest Day = Posture Day</h4><p>Always pair chest training with rowing/back work. Chest-only training without back work shortens the pecs and worsens posture over time.</p></div>
+      </div>
+    `,
+    core: `
+      <div class="intro-note">
+        You cannot spot-reduce belly fat with crunches. <strong>Core training builds the muscle underneath</strong> — nutrition and overall fat loss reveals it. That said, a strong, developed core improves every other lift, protects your spine, improves posture, and creates that tight midsection look. This session targets all 4 zones: upper abs, lower abs, obliques, and deep core stability.
+      </div>
+
+      <div class="phase-header">
+        <div class="phase-num">1</div>
+        <div class="phase-info"><h3>Deep Core Activation</h3><p>BEFORE ANY CRUNCHING — BUILD FOUNDATION FIRST</p></div>
+      </div>
+      <div class="exercise-card">
+        <div class="ex-header"><div class="ex-name">Dead Bug</div><div class="ex-muscle">Transverse Abdominis · Deep Core</div></div>
+        <div class="ex-params"><div class="param-chip"><span>3</span> sets</div><div class="param-chip"><span>10</span> reps/side</div><div class="param-chip">Slow and controlled</div></div>
+        <div class="ex-tip"><strong>Cue:</strong> Lower back pressed flat to floor throughout. Extend opposite arm and leg simultaneously, hover above floor, return. If your lower back arches, reduce range.</div>
+      </div>
+
+      <div class="divider"></div>
+
+      <div class="phase-header">
+        <div class="phase-num">2</div>
+        <div class="phase-info"><h3>Upper + Lower Abs Block</h3><p>REST: 60 SEC · TARGET BOTH ZONES</p></div>
+      </div>
+      <div class="set-tag">⚡ SUPERSET A — UPPER ABS</div>
+      <div class="exercise-card">
+        <div class="ex-header"><div class="ex-name">A1 — Cable Crunch (Kneeling)</div><div class="ex-muscle">Upper Rectus Abdominis</div></div>
+        <div class="ex-params"><div class="param-chip"><span>4</span> sets</div><div class="param-chip"><span>15</span> reps</div><div class="param-chip">Weighted — go heavy</div></div>
+        <div class="ex-tip"><strong>Cue:</strong> Round your spine — crunch your ribs toward your pelvis. Heavy cable resistance is what builds actual ab thickness. Most women use too light a weight here.</div>
+      </div>
+
+      <div class="intensity-bar"><span class="intensity-label">next block</span></div>
+
+      <div class="set-tag">⚡ SUPERSET B — LOWER ABS</div>
+      <div class="exercise-card">
+        <div class="ex-header"><div class="ex-name">B1 — Hanging Knee Raise</div><div class="ex-muscle">Lower Abs · Hip Flexors</div></div>
+        <div class="ex-params"><div class="param-chip"><span>4</span> sets</div><div class="param-chip"><span>15</span> reps</div><div class="param-chip">Controlled, no swing</div></div>
+        <div class="ex-tip"><strong>Cue:</strong> Hang from pull-up bar. Tuck knees to chest using your abs — not momentum. Pause at top, lower slowly. Best lower ab exercise in existence.</div>
+      </div>
+
+      <div class="divider"></div>
+
+      <div class="phase-header">
+        <div class="phase-num">3</div>
+        <div class="phase-info"><h3>Obliques + Rotational Block</h3><p>REST: 60 SEC · BUILD WAIST DEFINITION</p></div>
+      </div>
+      <div class="exercise-card">
+        <div class="ex-header"><div class="ex-name">Pallof Press</div><div class="ex-muscle">Obliques · Anti-Rotation Core</div></div>
+        <div class="ex-params"><div class="param-chip"><span>3</span> sets</div><div class="param-chip"><span>12</span> reps/side</div></div>
+        <div class="ex-tip"><strong>Cue:</strong> Cable at chest height. Stand perpendicular to cable. Press cable straight out and hold — resist the rotational pull. The obliques work hardest when resisting movement, not during movement.</div>
+      </div>
+
+      <div class="divider"></div>
+
+      <div class="phase-header">
+        <div class="phase-num">4</div>
+        <div class="phase-info"><h3>Core Circuit Finisher</h3><p>NO REST WITHIN CIRCUIT · 3 ROUNDS</p></div>
+      </div>
+      <div class="finisher-block">
+        <div class="set-tag" style="border-color:rgba(200,16,46,0.6);background:rgba(200,16,46,0.2);">🔥 4-MINUTE CORE CIRCUIT</div>
+        <div class="ex-name">Complete 3 Rounds</div>
+        <p style="font-size:13px;color:#ccc;margin-top:10px;line-height:1.9;">
+          <strong style="color:var(--gold)">① Plank</strong> — 45 sec<br>
+          <strong style="color:var(--gold)">② Mountain Climbers</strong> — 30 sec<br>
+          <strong style="color:var(--gold)">③ Bicycle Crunch</strong> — 20 reps/side<br>
+          <strong style="color:var(--gold)">④ V-Up</strong> — 15 reps<br><br>
+          <span style="color:var(--crimson);font-weight:700;">45 sec rest between rounds.</span> This hits all core zones simultaneously and finishes with elevated heart rate.
+        </p>
+      </div>
+
+      <div class="divider"></div>
+      <div class="tips-grid">
+        <div class="tip-card"><div class="tip-icon">🍽️</div><h4>Nutrition Reveals Abs</h4><p>Training builds the muscle. Maintaining a calorie deficit peels back the fat. Both are required. No amount of core training compensates for excess body fat.</p></div>
+        <div class="tip-card"><div class="tip-icon">⚠️</div><h4>Avoid During Period</h4><p>Heavy core training during menstruation can increase cramping. Reduce intensity on those days — opt for yoga, light cardio, or simply rest. Listen to your body.</p></div>
+        <div class="tip-card"><div class="tip-icon">🏋️</div><h4>Squats Train Core Too</h4><p>A heavy back squat trains your core more than most direct ab exercises. Don't skip leg and back training and expect your core to develop from ab work alone.</p></div>
+        <div class="tip-card"><div class="tip-icon">📏</div><h4>Progress with Resistance</h4><p>Add weight to cable crunches and weighted sit-ups over time. Core muscles grow with progressive overload just like any other muscle group.</p></div>
+      </div>
+    `
+  };
+
+  function openWorkout(type) {
+    const modal = document.getElementById(type + 'Modal');
+    const content = document.getElementById(type + 'Content');
+    content.innerHTML = workouts[type];
+    modal.style.display = 'block';
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeWorkout(type) {
+    const modal = document.getElementById(type + 'Modal');
+    modal.style.display = 'none';
+    document.body.style.overflow = 'auto';
+  }
+
+  window.onclick = function(event) {
+    const modals = document.querySelectorAll('.modal');
+    modals.forEach(modal => {
+      if (event.target === modal) {
+        modal.style.display = 'none';
+        document.body.style.overflow = 'auto';
+      }
+    });
+  }
+</script>
+
+</body>
+</html>
