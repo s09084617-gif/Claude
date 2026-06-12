@@ -114,26 +114,26 @@ export interface Workout {
 export interface NutritionPlan {
   id: number
   title: string
-  goal?: string
-  calories?: number
-  protein_g?: number
-  carbs_g?: number
-  fat_g?: number
-  meals?: string
-  notes?: string
-  created_at?: string
-  updated_at?: string
+  goal?: string | null
+  calories?: number | null
+  protein_g?: number | null
+  carbs_g?: number | null
+  fat_g?: number | null
+  meals?: string[] | null
+  notes?: string | null
+  created_at?: string | null
+  updated_at?: string | null
 }
 
 export interface NutritionPlanRequest {
   title: string
-  goal?: string
-  calories?: number
-  protein_g?: number
-  carbs_g?: number
-  fat_g?: number
-  meals?: string
-  notes?: string
+  goal?: string | null
+  calories?: number | null
+  protein_g?: number | null
+  carbs_g?: number | null
+  fat_g?: number | null
+  meals?: string[] | null
+  notes?: string | null
 }
 
 export interface ProgressLog {
