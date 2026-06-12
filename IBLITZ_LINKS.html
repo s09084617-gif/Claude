@@ -3,70 +3,124 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>SAHIL FITNESS Website Links · Coach Sahil</title>
+<title>All Links · I-BLITZ Fitness Club · Coach Sahil Bansal</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Rajdhani:wght@400;500;600;700&family=Oswald:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
+:root{
+  --crimson:#8B0000;
+  --cb:#CC0000;
+  --gold:#C9A84C;
+  --gold-light:#F0C96A;
+  --dark:#0A0A0A;
+  --dark-2:#111111;
+  --dark-3:#1A1A1A;
+  --white:#F5F0E8;
+  --gray:#888;
+  --wa:#25D366;
+}
 *{box-sizing:border-box;margin:0;padding:0}
-body{background:#0a0a0a;color:#e8e8e8;font-family:'Segoe UI',Arial,sans-serif;min-height:100vh;padding:32px 20px}
-.wrap{max-width:680px;margin:0 auto}
-.top{text-align:center;margin-bottom:36px;padding-bottom:24px;border-bottom:1px solid rgba(139,0,0,0.4)}
-.logo{font-size:36px;font-weight:900;letter-spacing:6px;color:#CC0000;margin-bottom:4px}
-.sub{font-size:12px;color:#555;letter-spacing:2px;text-transform:uppercase}
-.coach{font-size:13px;color:#C9A84C;margin-top:6px;letter-spacing:1px}
+html{scroll-behavior:smooth}
+body{background:var(--dark);color:var(--white);font-family:'Rajdhani',sans-serif;overflow-x:hidden;min-height:100vh}
+body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellipse at 50% 0%,rgba(139,0,0,0.18) 0%,transparent 55%),radial-gradient(ellipse at 85% 80%,rgba(201,168,76,0.06) 0%,transparent 40%);pointer-events:none;z-index:0}
 
-.section{margin-bottom:28px}
-.section-title{font-size:10px;letter-spacing:2.5px;text-transform:uppercase;color:#555;font-weight:700;margin-bottom:10px;padding-left:4px}
+/* NAV */
+nav{position:sticky;top:0;z-index:300;background:rgba(10,10,10,0.97);border-bottom:1px solid rgba(139,0,0,0.4);backdrop-filter:blur(14px);padding:0 32px;display:flex;align-items:center;justify-content:space-between;height:60px}
+.nav-logo{font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:6px;background:linear-gradient(to right,var(--cb),var(--gold));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;text-decoration:none}
+.nav-links{display:flex;gap:30px;list-style:none}
+.nav-links a{font-family:'Oswald',sans-serif;font-size:12px;letter-spacing:3px;color:var(--gray);text-decoration:none;text-transform:uppercase;transition:color .3s}
+.nav-links a:hover{color:var(--gold)}
+.nav-links a.men{color:var(--cb)}
+.nav-links a.women{color:#d4a0d4}
+.nav-links a.active{color:var(--gold)}
+@media(max-width:640px){.nav-links{gap:16px}.nav-links a{font-size:10px;letter-spacing:2px}nav{padding:0 16px}}
+@media(max-width:440px){.nav-links li:nth-child(3),.nav-links li:nth-child(4){display:none}}
 
-.link-row{background:#111;border:1px solid #1e1e1e;border-radius:8px;padding:14px 18px;margin-bottom:8px;display:flex;align-items:center;justify-content:space-between;gap:12px;transition:border-color .2s}
-.link-row:hover{border-color:rgba(139,0,0,0.5)}
+/* PAGE HEADER */
+.page-header{position:relative;z-index:1;text-align:center;padding:60px 24px 40px}
+.page-eyebrow{font-family:'Oswald',sans-serif;font-size:11px;letter-spacing:5px;color:var(--cb);text-transform:uppercase;margin-bottom:12px}
+.page-title{font-family:'Bebas Neue',sans-serif;font-size:clamp(48px,10vw,88px);letter-spacing:6px;background:linear-gradient(180deg,var(--white) 0%,var(--gold-light) 55%,var(--gold) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;line-height:1}
+.page-sub{font-family:'Oswald',sans-serif;font-size:13px;letter-spacing:3px;color:var(--gray);text-transform:uppercase;margin-top:10px}
+
+/* DIVIDER */
+.divider{height:1px;background:linear-gradient(to right,transparent,rgba(139,0,0,0.5),transparent);margin:0 auto 48px;max-width:600px}
+
+/* WRAP */
+.wrap{position:relative;z-index:1;max-width:700px;margin:0 auto;padding:0 20px 80px}
+
+/* SECTION */
+.section{margin-bottom:36px}
+.section-label{font-family:'Oswald',sans-serif;font-size:10px;letter-spacing:4px;text-transform:uppercase;color:rgba(201,168,76,0.6);font-weight:600;margin-bottom:12px;padding-left:2px;border-left:2px solid var(--cb);padding-left:10px}
+
+/* LINK ROW */
+.link-row{background:var(--dark-2);border:1px solid rgba(30,30,30,1);border-radius:8px;padding:14px 18px;margin-bottom:8px;display:flex;align-items:center;justify-content:space-between;gap:14px;transition:border-color .25s,background .25s}
+.link-row:hover{border-color:rgba(204,0,0,0.45);background:#141414}
 .link-info{flex:1;min-width:0}
-.link-label{font-size:14px;font-weight:600;color:#fff;margin-bottom:3px}
-.link-url{font-size:12px;color:#555;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-family:monospace}
-.link-row a.open-btn{background:#CC0000;color:#fff;text-decoration:none;font-size:12px;font-weight:700;letter-spacing:.5px;padding:7px 14px;border-radius:5px;white-space:nowrap;flex-shrink:0;transition:background .2s}
-.link-row a.open-btn:hover{background:#a50000}
-.link-row a.open-btn.gold{background:#C9A84C;color:#000}
-.link-row a.open-btn.gold:hover{background:#b8943e}
-.link-row a.open-btn.green{background:#25D366;color:#fff}
-.link-row a.open-btn.green:hover{background:#1aab52}
-.link-row a.open-btn.dark{background:#1e1e1e;color:#888;border:1px solid #333}
-.link-row a.open-btn.dark:hover{border-color:#CC0000;color:#fff}
+.link-label{font-family:'Rajdhani',sans-serif;font-size:15px;font-weight:700;color:var(--white);margin-bottom:3px;letter-spacing:.5px}
+.link-url{font-size:11px;color:#444;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-family:monospace;letter-spacing:.3px}
 
-.badge{display:inline-block;font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;padding:2px 8px;border-radius:3px;margin-left:8px;vertical-align:middle}
-.badge-private{background:rgba(201,168,76,0.15);color:#C9A84C;border:1px solid rgba(201,168,76,0.3)}
-.badge-public{background:rgba(34,197,94,0.12);color:#22c55e;border:1px solid rgba(34,197,94,0.25)}
+/* BUTTONS */
+.open-btn{font-family:'Oswald',sans-serif;font-size:11px;letter-spacing:2px;text-transform:uppercase;text-decoration:none;padding:8px 16px;border-radius:4px;white-space:nowrap;flex-shrink:0;font-weight:600;transition:all .2s}
+.open-btn.red{background:var(--cb);color:#fff}
+.open-btn.red:hover{background:#a50000;box-shadow:0 0 14px rgba(204,0,0,0.4)}
+.open-btn.gold{background:var(--gold);color:#000}
+.open-btn.gold:hover{background:var(--gold-light)}
+.open-btn.green{background:var(--wa);color:#fff}
+.open-btn.green:hover{background:#1aab52}
+.open-btn.dark{background:var(--dark-3);color:#666;border:1px solid #2a2a2a}
+.open-btn.dark:hover{border-color:var(--cb);color:var(--white)}
 
-.pin-note{background:rgba(201,168,76,0.07);border:1px solid rgba(201,168,76,0.25);border-radius:8px;padding:14px 18px;margin-top:6px;font-size:12px;color:#C9A84C;line-height:1.6}
-.pin-note strong{color:#fff}
+/* BADGES */
+.badge{display:inline-block;font-size:9px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;padding:2px 8px;border-radius:3px;margin-left:8px;vertical-align:middle;font-family:'Oswald',sans-serif}
+.badge-private{background:rgba(201,168,76,0.12);color:var(--gold);border:1px solid rgba(201,168,76,0.3)}
+.badge-public{background:rgba(37,211,102,0.1);color:#22c55e;border:1px solid rgba(37,211,102,0.25)}
 
-.footer-note{text-align:center;font-size:11px;color:#333;margin-top:36px;letter-spacing:.5px}
+/* PIN NOTE */
+.pin-note{background:rgba(201,168,76,0.05);border:1px solid rgba(201,168,76,0.2);border-radius:8px;padding:14px 18px;margin-top:6px;font-size:13px;color:var(--gold);line-height:1.7;font-family:'Rajdhani',sans-serif}
+.pin-note strong{color:var(--white);font-weight:700}
+
+/* SHARE NOTE */
+.share-note{background:rgba(37,211,102,0.04);border:1px solid rgba(37,211,102,0.2);border-radius:8px;padding:14px 18px;margin-top:6px;font-size:13px;color:#22c55e;line-height:1.7;font-family:'Rajdhani',sans-serif}
+
+/* FOOTER */
+footer{position:relative;z-index:1;border-top:1px solid rgba(139,0,0,0.25);padding:32px 20px;text-align:center}
+.footer-brand{font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:6px;color:var(--cb);margin-bottom:6px}
+.footer-sub{font-family:'Oswald',sans-serif;font-size:10px;letter-spacing:3px;color:#333;text-transform:uppercase}
 </style>
 </head>
 <body>
+
+<!-- NAV -->
+<nav>
+  <a href="index.html" class="nav-logo">I-BLITZ</a>
+  <ul class="nav-links">
+    <li><a href="men.html" class="men">Men's ⚡</a></li>
+    <li><a href="women.html" class="women">Women's</a></li>
+    <li><a href="generator.html" style="color:var(--gold);">⚡ Generator</a></li>
+    <li><a href="slots.html" style="color:var(--wa);">📅 Book Slot</a></li>
+    <li><a href="IBLITZ_LINKS.html" class="active">All Links</a></li>
+  </ul>
+</nav>
+
+<!-- HEADER -->
+<div class="page-header">
+  <div class="page-eyebrow">I-BLITZ Fitness Club · Bangalore</div>
+  <div class="page-title">ALL LINKS</div>
+  <div class="page-sub">Coach Sahil Bansal · Every Page In One Place</div>
+</div>
+<div class="divider"></div>
+
 <div class="wrap">
 
-  <div class="top">
-    <div class="logo">SAHIL FITNESS</div>
-    <div class="sub">Fitness Club · Bangalore</div>
-    <div class="coach">Coach Sahil Bansal · All Website Links</div>
-  </div>
-
-  <!-- MAIN -->
+  <!-- MAIN PAGES -->
   <div class="section">
-    <div class="section-title">Main Pages</div>
-
-    <div class="link-row">
-      <div class="link-info">
-        <div class="link-label">🚀 Launch / Promo Page <span class="badge badge-public">Share for Ads</span></div>
-        <div class="link-url">https://s09084617-gif.github.io/Claude/launch.html</div>
-      </div>
-      <a class="open-btn" style="background:linear-gradient(135deg,#8B0000,#CC0000)" href="https://s09084617-gif.github.io/Claude/launch.html" target="_blank">Open</a>
-    </div>
+    <div class="section-label">Main Pages</div>
 
     <div class="link-row">
       <div class="link-info">
         <div class="link-label">🏠 Home / Landing Page</div>
         <div class="link-url">https://s09084617-gif.github.io/Claude/</div>
       </div>
-      <a class="open-btn" href="https://s09084617-gif.github.io/Claude/" target="_blank">Open</a>
+      <a class="open-btn red" href="index.html" target="_blank">Open</a>
     </div>
 
     <div class="link-row">
@@ -74,7 +128,7 @@ body{background:#0a0a0a;color:#e8e8e8;font-family:'Segoe UI',Arial,sans-serif;mi
         <div class="link-label">⚡ Workout Generator</div>
         <div class="link-url">https://s09084617-gif.github.io/Claude/generator.html</div>
       </div>
-      <a class="open-btn gold" href="https://s09084617-gif.github.io/Claude/generator.html" target="_blank">Open</a>
+      <a class="open-btn gold" href="generator.html" target="_blank">Open</a>
     </div>
 
     <div class="link-row">
@@ -82,7 +136,7 @@ body{background:#0a0a0a;color:#e8e8e8;font-family:'Segoe UI',Arial,sans-serif;mi
         <div class="link-label">📅 Available Slots <span class="badge badge-public">Public</span></div>
         <div class="link-url">https://s09084617-gif.github.io/Claude/slots.html</div>
       </div>
-      <a class="open-btn green" href="https://s09084617-gif.github.io/Claude/slots.html" target="_blank">Open</a>
+      <a class="open-btn green" href="slots.html" target="_blank">Open</a>
     </div>
 
     <div class="link-row">
@@ -90,7 +144,7 @@ body{background:#0a0a0a;color:#e8e8e8;font-family:'Segoe UI',Arial,sans-serif;mi
         <div class="link-label">📋 Booking Form <span class="badge badge-public">Public</span></div>
         <div class="link-url">https://s09084617-gif.github.io/Claude/booking.html</div>
       </div>
-      <a class="open-btn green" href="https://s09084617-gif.github.io/Claude/booking.html" target="_blank">Open</a>
+      <a class="open-btn green" href="booking.html" target="_blank">Open</a>
     </div>
 
     <div class="link-row">
@@ -98,24 +152,24 @@ body{background:#0a0a0a;color:#e8e8e8;font-family:'Segoe UI',Arial,sans-serif;mi
         <div class="link-label">📊 Trainer Dashboard <span class="badge badge-private">PIN Protected</span></div>
         <div class="link-url">https://s09084617-gif.github.io/Claude/dashboard.html</div>
       </div>
-      <a class="open-btn dark" href="https://s09084617-gif.github.io/Claude/dashboard.html" target="_blank">Open</a>
+      <a class="open-btn dark" href="dashboard.html" target="_blank">Open</a>
     </div>
 
     <div class="pin-note">
-      🔐 Dashboard default PIN: <strong>1234</strong> &nbsp;·&nbsp; Change it from inside the dashboard (sidebar → Change PIN) &nbsp;·&nbsp; Keep this link private — share only with yourself
+      🔐 Dashboard default PIN: <strong>1234</strong> &nbsp;·&nbsp; Change it from inside the dashboard (sidebar → Change PIN) &nbsp;·&nbsp; Keep this link private
     </div>
   </div>
 
-  <!-- PROGRAMS -->
+  <!-- TRAINING PROGRAMS -->
   <div class="section">
-    <div class="section-title">Training Programs</div>
+    <div class="section-label">Training Programs</div>
 
     <div class="link-row">
       <div class="link-info">
         <div class="link-label">💪 Men's Training Hub</div>
         <div class="link-url">https://s09084617-gif.github.io/Claude/men.html</div>
       </div>
-      <a class="open-btn" href="https://s09084617-gif.github.io/Claude/men.html" target="_blank">Open</a>
+      <a class="open-btn red" href="men.html" target="_blank">Open</a>
     </div>
 
     <div class="link-row">
@@ -123,20 +177,20 @@ body{background:#0a0a0a;color:#e8e8e8;font-family:'Segoe UI',Arial,sans-serif;mi
         <div class="link-label">👩 Women's Training Vault</div>
         <div class="link-url">https://s09084617-gif.github.io/Claude/women.html</div>
       </div>
-      <a class="open-btn" href="https://s09084617-gif.github.io/Claude/women.html" target="_blank">Open</a>
+      <a class="open-btn red" href="women.html" target="_blank">Open</a>
     </div>
   </div>
 
   <!-- MEN'S WORKOUTS -->
   <div class="section">
-    <div class="section-title">Men's Workout Pages</div>
+    <div class="section-label">Men's Workout Pages</div>
 
     <div class="link-row">
       <div class="link-info">
         <div class="link-label">🔙 Back Domination</div>
         <div class="link-url">https://s09084617-gif.github.io/Claude/men-back.html</div>
       </div>
-      <a class="open-btn" href="https://s09084617-gif.github.io/Claude/men-back.html" target="_blank">Open</a>
+      <a class="open-btn red" href="men-back.html" target="_blank">Open</a>
     </div>
 
     <div class="link-row">
@@ -144,7 +198,7 @@ body{background:#0a0a0a;color:#e8e8e8;font-family:'Segoe UI',Arial,sans-serif;mi
         <div class="link-label">💪 Chest Annihilation</div>
         <div class="link-url">https://s09084617-gif.github.io/Claude/men-chest.html</div>
       </div>
-      <a class="open-btn" href="https://s09084617-gif.github.io/Claude/men-chest.html" target="_blank">Open</a>
+      <a class="open-btn red" href="men-chest.html" target="_blank">Open</a>
     </div>
 
     <div class="link-row">
@@ -152,7 +206,7 @@ body{background:#0a0a0a;color:#e8e8e8;font-family:'Segoe UI',Arial,sans-serif;mi
         <div class="link-label">🏋️ Shoulder Destruction</div>
         <div class="link-url">https://s09084617-gif.github.io/Claude/men-shoulders.html</div>
       </div>
-      <a class="open-btn" href="https://s09084617-gif.github.io/Claude/men-shoulders.html" target="_blank">Open</a>
+      <a class="open-btn red" href="men-shoulders.html" target="_blank">Open</a>
     </div>
 
     <div class="link-row">
@@ -160,7 +214,7 @@ body{background:#0a0a0a;color:#e8e8e8;font-family:'Segoe UI',Arial,sans-serif;mi
         <div class="link-label">💥 Arm Annihilation</div>
         <div class="link-url">https://s09084617-gif.github.io/Claude/men-arms.html</div>
       </div>
-      <a class="open-btn" href="https://s09084617-gif.github.io/Claude/men-arms.html" target="_blank">Open</a>
+      <a class="open-btn red" href="men-arms.html" target="_blank">Open</a>
     </div>
 
     <div class="link-row">
@@ -168,33 +222,41 @@ body{background:#0a0a0a;color:#e8e8e8;font-family:'Segoe UI',Arial,sans-serif;mi
         <div class="link-label">🦵 Legs &amp; HIIT System</div>
         <div class="link-url">https://s09084617-gif.github.io/Claude/men-legs.html</div>
       </div>
-      <a class="open-btn" href="https://s09084617-gif.github.io/Claude/men-legs.html" target="_blank">Open</a>
+      <a class="open-btn red" href="men-legs.html" target="_blank">Open</a>
     </div>
   </div>
 
   <!-- OTHER -->
   <div class="section">
-    <div class="section-title">Other</div>
+    <div class="section-label">Other</div>
 
     <div class="link-row">
       <div class="link-info">
         <div class="link-label">📱 QR Code Page</div>
         <div class="link-url">https://s09084617-gif.github.io/Claude/qr.html</div>
       </div>
-      <a class="open-btn" href="https://s09084617-gif.github.io/Claude/qr.html" target="_blank">Open</a>
+      <a class="open-btn dark" href="qr.html" target="_blank">Open</a>
+    </div>
+
+    <div class="link-row">
+      <div class="link-info">
+        <div class="link-label">🚀 Launch / Welcome Page</div>
+        <div class="link-url">https://s09084617-gif.github.io/Claude/launch.html</div>
+      </div>
+      <a class="open-btn dark" href="launch.html" target="_blank">Open</a>
     </div>
   </div>
 
   <!-- SHARE WITH CLIENTS -->
   <div class="section">
-    <div class="section-title">Share These With Clients</div>
+    <div class="section-label">Share These With Clients</div>
 
     <div class="link-row">
       <div class="link-info">
         <div class="link-label">Website (share freely)</div>
         <div class="link-url">https://s09084617-gif.github.io/Claude/</div>
       </div>
-      <a class="open-btn green" href="https://s09084617-gif.github.io/Claude/" target="_blank">Open</a>
+      <a class="open-btn green" href="index.html" target="_blank">Open</a>
     </div>
 
     <div class="link-row">
@@ -202,7 +264,7 @@ body{background:#0a0a0a;color:#e8e8e8;font-family:'Segoe UI',Arial,sans-serif;mi
         <div class="link-label">Book a Slot (share with clients)</div>
         <div class="link-url">https://s09084617-gif.github.io/Claude/slots.html</div>
       </div>
-      <a class="open-btn green" href="https://s09084617-gif.github.io/Claude/slots.html" target="_blank">Open</a>
+      <a class="open-btn green" href="slots.html" target="_blank">Open</a>
     </div>
 
     <div class="link-row">
@@ -210,12 +272,20 @@ body{background:#0a0a0a;color:#e8e8e8;font-family:'Segoe UI',Arial,sans-serif;mi
         <div class="link-label">Workout Generator (share freely)</div>
         <div class="link-url">https://s09084617-gif.github.io/Claude/generator.html</div>
       </div>
-      <a class="open-btn gold" href="https://s09084617-gif.github.io/Claude/generator.html" target="_blank">Open</a>
+      <a class="open-btn gold" href="generator.html" target="_blank">Open</a>
+    </div>
+
+    <div class="share-note">
+      ✅ Green = safe to share with anyone &nbsp;·&nbsp; Gold = share for engagement &nbsp;·&nbsp; Gray = keep private (trainer only)
     </div>
   </div>
 
-  <div class="footer-note">Sahil Fitness Club · Coach Sahil Bansal · Bangalore · 2025</div>
-
 </div>
+
+<footer>
+  <div class="footer-brand">I-BLITZ</div>
+  <div class="footer-sub">Fitness Club · Coach Sahil Bansal · Bangalore · 2025</div>
+</footer>
+
 </body>
 </html>
