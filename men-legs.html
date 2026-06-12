@@ -1,0 +1,1762 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sahil Bansal — Advanced Legs & HIIT System</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Rajdhani:wght@400;500;600;700&family=Oswald:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --crimson: #8B0000;
+    --crimson-bright: #CC0000;
+    --gold: #C9A84C;
+    --gold-light: #F0C96A;
+    --dark: #0A0A0A;
+    --dark-3: #1A1A1A;
+    --white: #F5F0E8;
+    --gray: #888;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--dark);
+    color: var(--white);
+    font-family: 'Rajdhani', sans-serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background:
+      radial-gradient(ellipse at 50% 0%, rgba(139,0,0,0.18) 0%, transparent 60%),
+      radial-gradient(ellipse at 20% 50%, rgba(139,0,0,0.08) 0%, transparent 50%),
+      radial-gradient(ellipse at 80% 80%, rgba(201,168,76,0.05) 0%, transparent 40%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* ===== HERO ===== */
+  .hero {
+    position: relative;
+    width: 100%;
+    min-height: 500px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-end;
+    overflow: hidden;
+  }
+
+  .hero-bg {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to bottom, rgba(10,10,10,0.15) 0%, rgba(10,10,10,0.5) 58%, var(--dark) 100%);
+    z-index: 1;
+  }
+
+  .hero-image-wrap {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    z-index: 0;
+  }
+
+  .hero-image-wrap img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center top;
+    filter: saturate(0.85) contrast(1.1);
+  }
+
+  .spotlight {
+    position: absolute;
+    top: 0; left: 50%;
+    transform: translateX(-50%);
+    width: 400px; height: 100%;
+    background: conic-gradient(from 175deg at 50% 0%, transparent 0deg, rgba(200,150,80,0.07) 5deg, transparent 10deg);
+    z-index: 2;
+    pointer-events: none;
+  }
+
+  .hero-content {
+    position: relative;
+    z-index: 3;
+    text-align: center;
+    padding: 0 20px 44px;
+    animation: fadeUp 1s ease both;
+  }
+
+  .coach-badge {
+    display: inline-block;
+    background: linear-gradient(135deg, var(--crimson), #5A0000);
+    border: 1px solid var(--crimson-bright);
+    color: var(--white);
+    font-family: 'Oswald', sans-serif;
+    font-size: 11px;
+    letter-spacing: 4px;
+    padding: 5px 18px;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+    clip-path: polygon(8px 0%, 100% 0%, calc(100% - 8px) 100%, 0% 100%);
+  }
+
+  .hero-name {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(52px, 10vw, 96px);
+    letter-spacing: 6px;
+    line-height: 0.95;
+    background: linear-gradient(180deg, var(--white) 0%, var(--gold-light) 60%, var(--gold) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    filter: drop-shadow(0 0 30px rgba(201,168,76,0.3));
+  }
+
+  .hero-title {
+    font-family: 'Oswald', sans-serif;
+    font-weight: 300;
+    font-size: 16px;
+    letter-spacing: 8px;
+    color: var(--crimson-bright);
+    text-transform: uppercase;
+    margin-top: 6px;
+  }
+
+  /* ===== MASTER HEADER ===== */
+  .master-header {
+    position: relative;
+    z-index: 1;
+    text-align: center;
+    padding: 48px 20px 24px;
+  }
+
+  .master-label {
+    font-family: 'Oswald', sans-serif;
+    font-size: 11px;
+    letter-spacing: 6px;
+    color: var(--crimson-bright);
+    text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+
+  .master-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(32px, 6vw, 58px);
+    letter-spacing: 4px;
+    color: var(--white);
+    line-height: 1;
+  }
+
+  .master-title span { color: var(--crimson-bright); }
+
+  .master-sub {
+    font-family: 'Oswald', sans-serif;
+    font-size: 12px;
+    letter-spacing: 4px;
+    color: var(--gray);
+    text-transform: uppercase;
+    margin-top: 8px;
+  }
+
+  .divider {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin: 18px auto;
+    max-width: 440px;
+    justify-content: center;
+  }
+
+  .divider-line {
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(to right, transparent, var(--crimson-bright), transparent);
+  }
+
+  .divider-icon { color: var(--gold); font-size: 18px; }
+
+  /* ===== OVERALL STATS ===== */
+  .overall-stats {
+    display: flex;
+    justify-content: center;
+    max-width: 860px;
+    margin: 0 auto 36px;
+    border: 1px solid rgba(139,0,0,0.4);
+    overflow: hidden;
+    position: relative;
+    z-index: 1;
+  }
+
+  .stat-item {
+    flex: 1;
+    text-align: center;
+    padding: 18px 8px;
+    border-right: 1px solid rgba(139,0,0,0.4);
+    background: rgba(139,0,0,0.05);
+    transition: background 0.3s;
+  }
+
+  .stat-item:last-child { border-right: none; }
+  .stat-item:hover { background: rgba(139,0,0,0.15); }
+
+  .stat-num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 26px;
+    color: var(--crimson-bright);
+    display: block;
+    line-height: 1;
+  }
+
+  .stat-label {
+    font-size: 9px;
+    letter-spacing: 2px;
+    color: var(--gray);
+    text-transform: uppercase;
+    display: block;
+    margin-top: 3px;
+  }
+
+  /* ===== TAB NAVIGATION ===== */
+  .tab-nav {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    display: flex;
+    justify-content: center;
+    background: rgba(10,10,10,0.97);
+    border-bottom: 1px solid rgba(139,0,0,0.4);
+    backdrop-filter: blur(12px);
+    padding: 0 6px;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+
+  .tab-nav::-webkit-scrollbar { display: none; }
+
+  .tab-btn {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 17px;
+    letter-spacing: 3px;
+    color: var(--gray);
+    background: none;
+    border: none;
+    padding: 16px 22px;
+    cursor: pointer;
+    position: relative;
+    transition: color 0.3s;
+    text-transform: uppercase;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  .tab-btn::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 3px;
+    background: linear-gradient(to right, var(--crimson), var(--crimson-bright));
+    transform: scaleX(0);
+    transition: transform 0.3s;
+  }
+
+  .tab-btn:hover { color: var(--white); }
+  .tab-btn.active { color: var(--white); }
+  .tab-btn.active::after { transform: scaleX(1); }
+
+  .tab-btn .tab-icon {
+    display: block;
+    font-size: 9px;
+    letter-spacing: 2px;
+    color: var(--crimson-bright);
+    margin-top: 2px;
+    font-family: 'Oswald', sans-serif;
+  }
+
+  /* HIIT tab accent */
+  .tab-btn.hiit-tab { color: var(--gold); }
+  .tab-btn.hiit-tab::after { background: linear-gradient(to right, var(--gold), var(--gold-light)); }
+  .tab-btn.hiit-tab.active { color: var(--gold-light); }
+  .tab-btn.hiit-tab .tab-icon { color: var(--gold); }
+
+  /* ===== TAB PANELS ===== */
+  .tab-panel { display: none; }
+  .tab-panel.active { display: block; animation: fadeUp 0.5s ease both; }
+
+  /* ===== WARNING STRIP ===== */
+  .warning-strip {
+    background: linear-gradient(90deg, rgba(139,0,0,0.3), rgba(139,0,0,0.1), rgba(139,0,0,0.3));
+    border-top: 1px solid rgba(139,0,0,0.4);
+    border-bottom: 1px solid rgba(139,0,0,0.4);
+    padding: 10px 20px;
+    text-align: center;
+    font-family: 'Oswald', sans-serif;
+    font-size: 11px;
+    letter-spacing: 4px;
+    color: var(--crimson-bright);
+    text-transform: uppercase;
+    margin-bottom: 40px;
+    position: relative;
+    z-index: 1;
+  }
+
+  .warning-strip.gold-strip {
+    background: linear-gradient(90deg, rgba(201,168,76,0.2), rgba(201,168,76,0.05), rgba(201,168,76,0.2));
+    border-color: rgba(201,168,76,0.4);
+    color: var(--gold-light);
+  }
+
+  /* ===== SECTION HEADER ===== */
+  .section-program-header {
+    text-align: center;
+    padding: 44px 20px 28px;
+    position: relative;
+    z-index: 1;
+  }
+
+  .section-program-label {
+    font-family: 'Oswald', sans-serif;
+    font-size: 11px;
+    letter-spacing: 6px;
+    color: var(--crimson-bright);
+    text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+
+  .section-program-label.gold { color: var(--gold); }
+
+  .section-program-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(32px, 6vw, 58px);
+    letter-spacing: 4px;
+    color: var(--white);
+    line-height: 1;
+  }
+
+  .section-program-title span { color: var(--crimson-bright); }
+  .section-program-title span.gold { color: var(--gold-light); }
+
+  /* ===== STATS BAR ===== */
+  .stats-bar {
+    display: flex;
+    justify-content: center;
+    max-width: 700px;
+    margin: 0 auto 40px;
+    border: 1px solid rgba(139,0,0,0.4);
+    overflow: hidden;
+    position: relative;
+    z-index: 1;
+  }
+
+  .stats-bar.gold-border { border-color: rgba(201,168,76,0.4); }
+  .stats-bar.gold-border .stat-item { border-right-color: rgba(201,168,76,0.3); background: rgba(201,168,76,0.04); }
+  .stats-bar.gold-border .stat-item:hover { background: rgba(201,168,76,0.1); }
+  .stats-bar.gold-border .stat-num { color: var(--gold-light); }
+
+  /* ===== CONTAINER ===== */
+  .container {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 20px 60px;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* ===== SECTION TITLE ===== */
+  .section-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 26px;
+    letter-spacing: 5px;
+    color: var(--white);
+    margin-bottom: 18px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .section-title::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(to right, rgba(139,0,0,0.6), transparent);
+  }
+
+  .section-title.gold-line::after { background: linear-gradient(to right, rgba(201,168,76,0.5), transparent); }
+
+  .section-title .accent { color: var(--crimson-bright); }
+  .section-title .accent-gold { color: var(--gold-light); }
+
+  /* ===== PHASE ===== */
+  .phase {
+    margin-bottom: 36px;
+    border: 1px solid rgba(139,0,0,0.25);
+    background: linear-gradient(135deg, rgba(26,26,26,0.8), rgba(17,17,17,0.9));
+    overflow: hidden;
+    animation: fadeUp 0.7s ease both;
+  }
+
+  .phase.gold-phase { border-color: rgba(201,168,76,0.2); }
+
+  .phase-header {
+    background: linear-gradient(90deg, rgba(139,0,0,0.5), rgba(139,0,0,0.1), transparent);
+    padding: 16px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid rgba(139,0,0,0.3);
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  .phase-header.gold-header {
+    background: linear-gradient(90deg, rgba(201,168,76,0.25), rgba(201,168,76,0.05), transparent);
+    border-bottom-color: rgba(201,168,76,0.2);
+  }
+
+  .phase-num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 44px;
+    color: rgba(139,0,0,0.3);
+    line-height: 1;
+    margin-right: 14px;
+  }
+
+  .phase-num.gold-num { color: rgba(201,168,76,0.25); }
+
+  .phase-info { flex: 1; min-width: 160px; }
+
+  .phase-name {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 20px;
+    letter-spacing: 3px;
+    color: var(--white);
+  }
+
+  .phase-desc {
+    font-size: 11px;
+    letter-spacing: 2px;
+    color: var(--crimson-bright);
+    text-transform: uppercase;
+  }
+
+  .phase-desc.gold-desc { color: var(--gold); }
+
+  .phase-badge {
+    font-family: 'Oswald', sans-serif;
+    font-size: 11px;
+    letter-spacing: 2px;
+    color: var(--gold);
+    border: 1px solid var(--gold);
+    padding: 4px 12px;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+
+  /* ===== TABLE ===== */
+  .exercise-table { width: 100%; border-collapse: collapse; }
+  .exercise-table thead tr { background: rgba(0,0,0,0.4); }
+
+  .exercise-table th {
+    font-family: 'Oswald', sans-serif;
+    font-size: 10px;
+    letter-spacing: 3px;
+    color: var(--gray);
+    text-transform: uppercase;
+    padding: 12px 20px;
+    text-align: left;
+    border-bottom: 1px solid rgba(139,0,0,0.2);
+  }
+
+  .exercise-row {
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+    transition: background 0.2s;
+  }
+
+  .exercise-row:hover { background: rgba(139,0,0,0.08); }
+  .exercise-row.gold-row:hover { background: rgba(201,168,76,0.06); }
+  .exercise-row:last-child { border-bottom: none; }
+  .exercise-table td { padding: 14px 20px; vertical-align: top; }
+
+  .ex-num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 20px;
+    color: rgba(139,0,0,0.5);
+    width: 36px;
+    text-align: center;
+  }
+
+  .ex-num.gold-num { color: rgba(201,168,76,0.4); }
+
+  .ex-name {
+    font-family: 'Oswald', sans-serif;
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--white);
+    letter-spacing: 1px;
+  }
+
+  .ex-target {
+    font-size: 11px;
+    color: var(--crimson-bright);
+    letter-spacing: 1px;
+    margin-top: 2px;
+  }
+
+  .ex-target.gold-target { color: var(--gold); }
+
+  .ex-detail {
+    font-size: 12px;
+    color: var(--gray);
+    margin-top: 4px;
+    line-height: 1.5;
+  }
+
+  .badge-col { white-space: nowrap; }
+
+  .set-badge {
+    display: inline-block;
+    background: rgba(139,0,0,0.2);
+    border: 1px solid rgba(139,0,0,0.5);
+    color: var(--crimson-bright);
+    font-family: 'Oswald', sans-serif;
+    font-size: 12px;
+    padding: 3px 10px;
+    letter-spacing: 1px;
+    margin-right: 4px;
+    margin-bottom: 4px;
+  }
+
+  .set-badge.gold-badge {
+    background: rgba(201,168,76,0.1);
+    border-color: rgba(201,168,76,0.5);
+    color: var(--gold-light);
+  }
+
+  .rep-badge {
+    display: inline-block;
+    background: rgba(201,168,76,0.1);
+    border: 1px solid rgba(201,168,76,0.4);
+    color: var(--gold-light);
+    font-family: 'Oswald', sans-serif;
+    font-size: 12px;
+    padding: 3px 10px;
+    letter-spacing: 1px;
+    margin-bottom: 4px;
+  }
+
+  .rest-badge {
+    display: block;
+    font-size: 11px;
+    color: var(--gray);
+    letter-spacing: 1px;
+    margin-top: 4px;
+  }
+
+  /* ===== HIIT TIMER CARDS ===== */
+  .hiit-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 14px;
+    margin-bottom: 36px;
+  }
+
+  .hiit-card {
+    border: 1px solid rgba(201,168,76,0.25);
+    background: linear-gradient(135deg, rgba(26,26,26,0.9), rgba(17,17,17,0.95));
+    padding: 22px 20px;
+    position: relative;
+    overflow: hidden;
+    transition: border-color 0.3s, transform 0.3s;
+    animation: fadeUp 0.7s ease both;
+  }
+
+  .hiit-card:hover { border-color: rgba(201,168,76,0.5); transform: translateY(-2px); }
+
+  .hiit-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 3px; height: 100%;
+    background: linear-gradient(to bottom, var(--gold), transparent);
+  }
+
+  .hiit-card-num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 48px;
+    color: rgba(201,168,76,0.15);
+    line-height: 1;
+    position: absolute;
+    top: 10px; right: 16px;
+  }
+
+  .hiit-card-name {
+    font-family: 'Oswald', sans-serif;
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--white);
+    letter-spacing: 1px;
+    margin-bottom: 6px;
+  }
+
+  .hiit-timing {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 8px;
+    flex-wrap: wrap;
+  }
+
+  .hiit-work {
+    background: rgba(201,168,76,0.15);
+    border: 1px solid rgba(201,168,76,0.4);
+    color: var(--gold-light);
+    font-family: 'Oswald', sans-serif;
+    font-size: 11px;
+    padding: 3px 10px;
+    letter-spacing: 1px;
+  }
+
+  .hiit-rest {
+    background: rgba(139,0,0,0.15);
+    border: 1px solid rgba(139,0,0,0.4);
+    color: var(--crimson-bright);
+    font-family: 'Oswald', sans-serif;
+    font-size: 11px;
+    padding: 3px 10px;
+    letter-spacing: 1px;
+  }
+
+  .hiit-target {
+    font-size: 11px;
+    color: var(--crimson-bright);
+    letter-spacing: 1px;
+    margin-bottom: 6px;
+  }
+
+  .hiit-detail { font-size: 12px; color: var(--gray); line-height: 1.5; }
+
+  /* ===== HIIT PROTOCOL BLOCK ===== */
+  .protocol-block {
+    border: 1px solid rgba(201,168,76,0.3);
+    background: linear-gradient(135deg, rgba(201,168,76,0.06), rgba(17,17,17,0.9));
+    padding: 26px 28px;
+    margin-bottom: 36px;
+    animation: fadeUp 0.7s ease both;
+  }
+
+  .protocol-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 20px;
+    letter-spacing: 4px;
+    color: var(--gold-light);
+    margin-bottom: 14px;
+  }
+
+  .protocol-row {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 10px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+    flex-wrap: wrap;
+  }
+
+  .protocol-row:last-child { border-bottom: none; }
+
+  .protocol-label {
+    font-family: 'Oswald', sans-serif;
+    font-size: 12px;
+    letter-spacing: 2px;
+    color: var(--gray);
+    text-transform: uppercase;
+    min-width: 120px;
+  }
+
+  .protocol-value {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 22px;
+    color: var(--gold-light);
+    letter-spacing: 2px;
+  }
+
+  .protocol-desc { font-size: 12px; color: #777; line-height: 1.5; }
+
+  /* ===== TIPS ===== */
+  .tips-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 14px;
+    margin-bottom: 36px;
+  }
+
+  .tip-card {
+    border: 1px solid rgba(139,0,0,0.25);
+    padding: 22px;
+    background: rgba(26,26,26,0.7);
+    position: relative;
+    overflow: hidden;
+    transition: border-color 0.3s, transform 0.3s;
+  }
+
+  .tip-card:hover { border-color: rgba(139,0,0,0.6); transform: translateY(-2px); }
+
+  .tip-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 3px; height: 100%;
+    background: linear-gradient(to bottom, var(--crimson-bright), transparent);
+  }
+
+  .tip-card.gold-tip { border-color: rgba(201,168,76,0.2); }
+  .tip-card.gold-tip::before { background: linear-gradient(to bottom, var(--gold), transparent); }
+  .tip-card.gold-tip:hover { border-color: rgba(201,168,76,0.5); }
+
+  .tip-icon { font-size: 26px; margin-bottom: 8px; display: block; }
+
+  .tip-title {
+    font-family: 'Oswald', sans-serif;
+    font-size: 13px;
+    letter-spacing: 2px;
+    color: var(--gold);
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+
+  .tip-text { font-size: 12px; color: #999; line-height: 1.7; }
+
+  /* ===== NUTRITION ===== */
+  .nutrition-bar {
+    border: 1px solid rgba(139,0,0,0.3);
+    background: rgba(26,26,26,0.7);
+    padding: 28px;
+    margin-bottom: 36px;
+  }
+
+  .nutrition-bar.gold-nutrition { border-color: rgba(201,168,76,0.3); }
+
+  .nutrition-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 18px;
+    margin-top: 18px;
+  }
+
+  .nutrient { text-align: center; }
+
+  .nutrient-bar-wrap {
+    height: 4px;
+    background: rgba(255,255,255,0.1);
+    margin: 8px 0;
+    overflow: hidden;
+  }
+
+  .nutrient-bar-fill {
+    height: 100%;
+    background: linear-gradient(to right, var(--crimson), var(--crimson-bright));
+    animation: barGrow 1.5s 0.5s ease both;
+    transform-origin: left;
+  }
+
+  .nutrient-bar-fill.gold-fill { background: linear-gradient(to right, var(--gold), var(--gold-light)); }
+
+  @keyframes barGrow {
+    from { transform: scaleX(0); }
+    to { transform: scaleX(1); }
+  }
+
+  .nutrient-value {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 30px;
+    color: var(--white);
+    display: block;
+  }
+
+  .nutrient-unit { font-size: 13px; color: var(--crimson-bright); }
+  .nutrient-unit.gold { color: var(--gold); }
+
+  .nutrient-name {
+    font-size: 10px;
+    letter-spacing: 2px;
+    color: var(--gray);
+    text-transform: uppercase;
+    display: block;
+    margin-top: 4px;
+  }
+
+  /* ===== FOOTER ===== */
+  .footer {
+    border-top: 1px solid rgba(139,0,0,0.3);
+    padding: 30px 20px;
+    text-align: center;
+    position: relative;
+    z-index: 1;
+    background: rgba(0,0,0,0.3);
+  }
+
+  .footer-name {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 22px;
+    letter-spacing: 5px;
+    background: linear-gradient(to right, var(--crimson-bright), var(--gold));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .footer-sub {
+    font-size: 11px;
+    letter-spacing: 3px;
+    color: var(--gray);
+    text-transform: uppercase;
+    margin-top: 4px;
+  }
+
+  /* ===== ANIMATIONS ===== */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ===== RESPONSIVE ===== */
+  @media (max-width: 640px) {
+    .tab-btn { padding: 13px 12px; font-size: 13px; letter-spacing: 2px; }
+    .tab-btn .tab-icon { display: none; }
+    .exercise-table th:nth-child(3),
+    .exercise-table td:nth-child(3) { display: none; }
+    .overall-stats { flex-wrap: wrap; }
+    .stat-item { min-width: 33.3%; border-bottom: 1px solid rgba(139,0,0,0.2); }
+    .phase-header { flex-wrap: wrap; }
+  }
+</style>
+</head>
+<body>
+<nav style="position:sticky;top:0;z-index:200;background:rgba(10,10,10,0.97);border-bottom:1px solid rgba(139,0,0,0.4);backdrop-filter:blur(12px);padding:12px 24px;display:flex;align-items:center;gap:20px;">
+  <a href="men.html" style="font-family:'Oswald',sans-serif;font-size:13px;letter-spacing:3px;color:#C9A84C;text-decoration:none;text-transform:uppercase;">← Men's Training</a>
+  <span style="color:rgba(139,0,0,0.4);">|</span>
+  <a href="index.html" style="font-family:'Oswald',sans-serif;font-size:13px;letter-spacing:3px;color:#888;text-decoration:none;text-transform:uppercase;">Home</a>
+</nav>
+
+<!-- ===== HERO ===== -->
+<section class="hero">
+  <div class="hero-image-wrap">
+    <img src="images/sahil-physique.png" alt="Coach Sahil Bansal" />
+  </div>
+  <div class="hero-bg"></div>
+  <div class="spotlight"></div>
+  <div class="hero-content">
+    <div class="coach-badge">⚡ Elite Performance Coach</div>
+    <h1 class="hero-name">Sahil Bansal</h1>
+    <p class="hero-title">Coach &nbsp;|&nbsp; Strength &amp; Physique Specialist</p>
+  </div>
+</section>
+
+<!-- ===== MASTER HEADER ===== -->
+<div class="master-header">
+  <p class="master-label">Complete Elite Training System — Lower Body & Conditioning</p>
+  <h2 class="master-title">Advanced <span>Legs</span> & HIIT</h2>
+  <p class="master-sub">Quad · Hamstring · Glute · Calf · Explosive Conditioning — 4 Protocols</p>
+  <div class="divider">
+    <div class="divider-line"></div>
+    <span class="divider-icon">⚡</span>
+    <div class="divider-line"></div>
+  </div>
+</div>
+
+<!-- ===== OVERALL STATS ===== -->
+<div class="overall-stats">
+  <div class="stat-item"><span class="stat-num">4</span><span class="stat-label">Protocols</span></div>
+  <div class="stat-item"><span class="stat-num">16</span><span class="stat-label">Phases</span></div>
+  <div class="stat-item"><span class="stat-num">45+</span><span class="stat-label">Exercises</span></div>
+  <div class="stat-item"><span class="stat-num">5+</span><span class="stat-label">Hrs Training</span></div>
+  <div class="stat-item"><span class="stat-num">Elite</span><span class="stat-label">Level</span></div>
+  <div class="stat-item"><span class="stat-num">Zero</span><span class="stat-label">Excuses</span></div>
+</div>
+
+<!-- ===== TAB NAVIGATION ===== -->
+<nav class="tab-nav">
+  <button class="tab-btn active" onclick="switchTab('legs1', this)">
+    🦵 Legs Day 1
+    <span class="tab-icon">Quad Dominant</span>
+  </button>
+  <button class="tab-btn" onclick="switchTab('legs2', this)">
+    🔥 Legs Day 2
+    <span class="tab-icon">Posterior Chain</span>
+  </button>
+  <button class="tab-btn" onclick="switchTab('legs3', this)">
+    💣 Legs Day 3
+    <span class="tab-icon">Full Destruction</span>
+  </button>
+  <button class="tab-btn hiit-tab" onclick="switchTab('hiit', this)">
+    ⚡ HIIT
+    <span class="tab-icon">Conditioning</span>
+  </button>
+</nav>
+
+
+<!-- ================================================================ -->
+<!-- LEGS DAY 1 — QUAD DOMINANT                                        -->
+<!-- ================================================================ -->
+<div id="tab-legs1" class="tab-panel active">
+
+  <div class="section-program-header">
+    <p class="section-program-label">Elite Training Protocol — Legs Day 01</p>
+    <h2 class="section-program-title">Advanced <span>Quad</span> Domination</h2>
+  </div>
+
+  <div class="stats-bar">
+    <div class="stat-item"><span class="stat-num">4</span><span class="stat-label">Phases</span></div>
+    <div class="stat-item"><span class="stat-num">13</span><span class="stat-label">Exercises</span></div>
+    <div class="stat-item"><span class="stat-num">85</span><span class="stat-label">Min Duration</span></div>
+    <div class="stat-item"><span class="stat-num">Quad+</span><span class="stat-label">Primary Focus</span></div>
+  </div>
+
+  <div class="warning-strip">⚡ &nbsp; Advanced Level — Quads · VMO · Rectus Femoris · Glutes — Squat-Centric Protocol &nbsp; ⚡</div>
+
+  <div class="container">
+
+    <div class="section-title">Phase <span class="accent">01</span> — Activation & Warm-Up</div>
+    <div class="phase">
+      <div class="phase-header">
+        <span class="phase-num">01</span>
+        <div class="phase-info">
+          <div class="phase-name">Knee & Hip Joint Priming</div>
+          <div class="phase-desc">Activate glutes & VMO — mobilise hips — prime CNS for heavy squats</div>
+        </div>
+        <span class="phase-badge">12–15 mins</span>
+      </div>
+      <table class="exercise-table">
+        <thead><tr><th>#</th><th>Exercise</th><th>Target</th><th>Sets / Reps / Rest</th></tr></thead>
+        <tbody>
+          <tr class="exercise-row">
+            <td class="ex-num">1</td>
+            <td><div class="ex-name">Glute Bridge (Bodyweight)</div><div class="ex-detail">Drive hips to ceiling — squeeze glutes hard at top. 2-sec hold each rep. Wakes up the glutes before heavy squatting</div></td>
+            <td><div class="ex-target">Glutes / Hip Activation</div></td>
+            <td class="badge-col"><span class="set-badge">3 Sets</span><span class="rep-badge">20 Reps</span><span class="rest-badge">⏱ 30s rest</span></td>
+          </tr>
+          <tr class="exercise-row">
+            <td class="ex-num">2</td>
+            <td><div class="ex-name">Banded Clamshells + Lateral Walks</div><div class="ex-detail">Band above knees — clamshells 15 reps each side, then 10 steps lateral each way. Primes hip abductors for squat stability</div></td>
+            <td><div class="ex-target">Hip Abductors / Glute Med</div></td>
+            <td class="badge-col"><span class="set-badge">2 Sets</span><span class="rep-badge">15 + 10 each</span><span class="rest-badge">⏱ 30s rest</span></td>
+          </tr>
+          <tr class="exercise-row">
+            <td class="ex-num">3</td>
+            <td><div class="ex-name">Goblet Squat (Light) + Hip Circles</div><div class="ex-detail">Light dumbbell — deep squat, pause at bottom 3s. Then 10 hip circles each leg. Full hip and ankle mobility warm-up</div></td>
+            <td><div class="ex-target">Full Leg / Hip Mobility</div></td>
+            <td class="badge-col"><span class="set-badge">3 Sets</span><span class="rep-badge">12 + 10 circles</span><span class="rest-badge">⏱ 45s rest</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="section-title">Phase <span class="accent">02</span> — Heavy Compound Squatting</div>
+    <div class="phase">
+      <div class="phase-header">
+        <span class="phase-num">02</span>
+        <div class="phase-info">
+          <div class="phase-name">Maximum Quad Loading</div>
+          <div class="phase-desc">King of quad exercises — progressive overload — build raw leg mass</div>
+        </div>
+        <span class="phase-badge">Heavy Load</span>
+      </div>
+      <table class="exercise-table">
+        <thead><tr><th>#</th><th>Exercise</th><th>Target</th><th>Sets / Reps / Rest</th></tr></thead>
+        <tbody>
+          <tr class="exercise-row">
+            <td class="ex-num">1</td>
+            <td><div class="ex-name">Barbell Back Squat</div><div class="ex-detail">Bar on traps. Feet shoulder-width. Break parallel — knees track over toes. Explosive up, 3-sec negative. 80–90% 1RM. The king movement</div></td>
+            <td><div class="ex-target">Quads / Glutes / Full Leg Mass</div></td>
+            <td class="badge-col"><span class="set-badge">5 Sets</span><span class="rep-badge">5 → 3 Reps</span><span class="rest-badge">⏱ 4–5 min rest</span></td>
+          </tr>
+          <tr class="exercise-row">
+            <td class="ex-num">2</td>
+            <td><div class="ex-name">High-Bar Pause Squat</div><div class="ex-detail">2-second pause at the bottom — eliminates bounce, maximises quad tension. Use 70% of squat max. Builds bottom-of-squat strength</div></td>
+            <td><div class="ex-target">Quads — Bottom Strength / VMO</div></td>
+            <td class="badge-col"><span class="set-badge">4 Sets</span><span class="rep-badge">5 Reps</span><span class="rest-badge">⏱ 3 min rest</span></td>
+          </tr>
+          <tr class="exercise-row">
+            <td class="ex-num">3</td>
+            <td><div class="ex-name">Hack Squat (Machine)</div><div class="ex-detail">Feet low and close on platform — this increases quad dominance. Deep ROM, controlled negative. Load heavily after squats</div></td>
+            <td><div class="ex-target">Quads — Sweep & Detail</div></td>
+            <td class="badge-col"><span class="set-badge">4 Sets</span><span class="rep-badge">8–10 Reps</span><span class="rest-badge">⏱ 2.5 min rest</span></td>
+          </tr>
+          <tr class="exercise-row">
+            <td class="ex-num">4</td>
+            <td><div class="ex-name">Bulgarian Split Squat</div><div class="ex-detail">Rear foot elevated. Front foot far forward. Deep lunge — knee grazes floor. 2-sec pause at bottom. Unilateral mass builder — fixes imbalances</div></td>
+            <td><div class="ex-target">Quads / Glutes — Unilateral</div></td>
+            <td class="badge-col"><span class="set-badge">3 Sets</span><span class="rep-badge">10 Reps each</span><span class="rest-badge">⏱ 2 min rest</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="section-title">Phase <span class="accent">03</span> — Isolation & VMO Work</div>
+    <div class="phase">
+      <div class="phase-header">
+        <span class="phase-num">03</span>
+        <div class="phase-info">
+          <div class="phase-name">Quad Sculpting Protocol</div>
+          <div class="phase-desc">Isolate the VMO and sweep — shape, separation & definition</div>
+        </div>
+        <span class="phase-badge">Hypertrophy</span>
+      </div>
+      <table class="exercise-table">
+        <thead><tr><th>#</th><th>Exercise</th><th>Target</th><th>Sets / Reps / Rest</th></tr></thead>
+        <tbody>
+          <tr class="exercise-row">
+            <td class="ex-num">1</td>
+            <td><div class="ex-name">Leg Extension (Toes Pointed In)</div><div class="ex-detail">Rotate feet slightly inward — shifts load to outer VMO. 2-sec squeeze at full extension. Controlled negative. The VMO carver</div></td>
+            <td><div class="ex-target">VMO / Outer Quad — Isolation</div></td>
+            <td class="badge-col"><span class="set-badge">4 Sets</span><span class="rep-badge">12–15 Reps</span><span class="rest-badge">⏱ 75s rest</span></td>
+          </tr>
+          <tr class="exercise-row">
+            <td class="ex-num">2</td>
+            <td><div class="ex-name">Walking Lunges (Dumbbell)</div><div class="ex-detail">Long stride — front knee at 90°. Keep torso upright. 20 steps total. Builds the sweep and quad-glute tie-in. No rest between legs</div></td>
+            <td><div class="ex-target">Quads / Glutes / Coordination</div></td>
+            <td class="badge-col"><span class="set-badge">3 Sets</span><span class="rep-badge">20 Steps</span><span class="rest-badge">⏱ 90s rest</span></td>
+          </tr>
+          <tr class="exercise-row">
+            <td class="ex-num">3</td>
+            <td><div class="ex-name">Leg Press (Feet Close, Low)</div><div class="ex-detail">Close foot placement, low on the platform. Deep press — full ROM. Isolation of the quads away from glutes. Do NOT lock out the knees</div></td>
+            <td><div class="ex-target">Quads — Full Length Loading</div></td>
+            <td class="badge-col"><span class="set-badge">3 Sets</span><span class="rep-badge">15 Reps</span><span class="rest-badge">⏱ 90s rest</span></td>
+          </tr>
+          <tr class="exercise-row">
+            <td class="ex-num">4</td>
+            <td><div class="ex-name">Sissy Squat</div><div class="ex-detail">Hold support, lean back as knees drive forward over toes. Maximum quad stretch at bottom. Advanced movement — use bodyweight or light load only</div></td>
+            <td><div class="ex-target">Rectus Femoris — Deep Stretch</div></td>
+            <td class="badge-col"><span class="set-badge">3 Sets</span><span class="rep-badge">10–12 Reps</span><span class="rest-badge">⏱ 75s rest</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="section-title">Phase <span class="accent">04</span> — Finisher & Calf Work</div>
+    <div class="phase">
+      <div class="phase-header">
+        <span class="phase-num">04</span>
+        <div class="phase-info">
+          <div class="phase-name">Metabolic Finisher + Calf Protocol</div>
+          <div class="phase-desc">Drop sets + calf burnout — complete lower leg destruction</div>
+        </div>
+        <span class="phase-badge">🔥 Burnout</span>
+      </div>
+      <table class="exercise-table">
+        <thead><tr><th>#</th><th>Exercise</th><th>Target</th><th>Sets / Reps / Rest</th></tr></thead>
+        <tbody>
+          <tr class="exercise-row">
+            <td class="ex-num">1</td>
+            <td><div class="ex-name">Leg Extension — Triple Drop Set</div><div class="ex-detail">Start heavy → drop 30% → drop 30%. No rest between drops. Squeeze hard at top every rep. 3 full rounds. Quads on fire</div></td>
+            <td><div class="ex-target">Quads — Full Failure</div></td>
+            <td class="badge-col"><span class="set-badge">3 Drops</span><span class="rep-badge">10/12/15</span><span class="rest-badge">⏱ 2 min between rounds</span></td>
+          </tr>
+          <tr class="exercise-row">
+            <td class="ex-num">2</td>
+            <td><div class="ex-name">Standing Calf Raise (Smith Machine)</div><div class="ex-detail">Full stretch at bottom — pause 2 secs. Full contraction at top — pause 2 secs. Slow and controlled. 4 sets. Calves only grow with full ROM</div></td>
+            <td><div class="ex-target">Gastrocnemius — Mass</div></td>
+            <td class="badge-col"><span class="set-badge">4 Sets</span><span class="rep-badge">15–20 Reps</span><span class="rest-badge">⏱ 60s rest</span></td>
+          </tr>
+          <tr class="exercise-row">
+            <td class="ex-num">3</td>
+            <td><div class="ex-name">Seated Calf Raise</div><div class="ex-detail">Knee at 90° — targets the soleus underneath. Full stretch and contraction each rep. Don't skip the seated — it builds the width of the calf</div></td>
+            <td><div class="ex-target">Soleus — Thickness</div></td>
+            <td class="badge-col"><span class="set-badge">3 Sets</span><span class="rep-badge">20 Reps</span><span class="rest-badge">⏱ 60s rest</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="section-title">Coach <span class="accent">Sahil's</span> Quad Day Tips</div>
+    <div class="tips-grid">
+      <div class="tip-card"><span class="tip-icon">👑</span><div class="tip-title">Squat Depth is Non-Negotiable</div><p class="tip-text">Break parallel on every rep. Quarter squats build quarter results. Full depth activates the entire quad and glute complex. There are no shortcuts.</p></div>
+      <div class="tip-card"><span class="tip-icon">🦵</span><div class="tip-title">Knees Track Over Toes</div><p class="tip-text">During any squat or lunge, your knee must follow your toe direction. Caving inward is a red flag. Banded squats teach this pattern fast.</p></div>
+      <div class="tip-card"><span class="tip-icon">📐</span><div class="tip-title">Foot Placement Changes Everything</div><p class="tip-text">Feet close = more quads. Feet wide = more glutes and inner thighs. Toes turned in on leg extensions = VMO. Use position to target precisely.</p></div>
+      <div class="tip-card"><span class="tip-icon">⚡</span><div class="tip-title">The VMO Secret</div><p class="tip-text">The VMO (inner quad teardrop) is the most visible part of a developed leg. Sissy squats, close-stance presses, and toes-in extensions target it directly.</p></div>
+      <div class="tip-card"><span class="tip-icon">🩺</span><div class="tip-title">Protect Your Knees</div><p class="tip-text">Warm up completely before squatting heavy. Never let the knees cave. Strengthen VMO and hip abductors. Longevity is everything in leg training.</p></div>
+      <div class="tip-card"><span class="tip-icon">🐄</span><div class="tip-title">Calves Demand Full ROM</div><p class="tip-text">Calves are stubborn. Only full-range reps — all the way down, all the way up — with a deliberate pause and slow tempo will force them to grow.</p></div>
+    </div>
+
+    <div class="section-title">Peri-Workout <span class="accent">Nutrition</span></div>
+    <div class="nutrition-bar">
+      <p style="font-size:13px; color:#888; letter-spacing:1px; margin-bottom:16px;">Coach Sahil's recommended macros for quad day (based on 80kg athlete) — highest calorie demand of any training day</p>
+      <div class="nutrition-grid">
+        <div class="nutrient"><span class="nutrient-value">3200<span class="nutrient-unit"> kcal</span></span><div class="nutrient-bar-wrap"><div class="nutrient-bar-fill" style="width:100%"></div></div><span class="nutrient-name">Total Calories</span></div>
+        <div class="nutrient"><span class="nutrient-value">215<span class="nutrient-unit"> g</span></span><div class="nutrient-bar-wrap"><div class="nutrient-bar-fill" style="width:88%"></div></div><span class="nutrient-name">Protein</span></div>
+        <div class="nutrient"><span class="nutrient-value">400<span class="nutrient-unit"> g</span></span><div class="nutrient-bar-wrap"><div class="nutrient-bar-fill" style="width:80%"></div></div><span class="nutrient-name">Carbohydrates</span></div>
+        <div class="nutrient"><span class="nutrient-value">70<span class="nutrient-unit"> g</span></span><div class="nutrient-bar-wrap"><div class="nutrient-bar-fill" style="width:40%"></div></div><span class="nutrient-name">Healthy Fats</span></div>
+        <div class="nutrient"><span class="nutrient-value">4.5<span class="nutrient-unit"> L</span></span><div class="nutrient-bar-wrap"><div class="nutrient-bar-fill" style="width:95%"></div></div><span class="nutrient-name">Water</span></div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+
+<!-- ================================================================ -->
+<!-- LEGS DAY 2 — POSTERIOR CHAIN                                      -->
+<!-- ================================================================ -->
+<div id="tab-legs2" class="tab-panel">
+
+  <div class="section-program-header">
+    <p class="section-program-label">Elite Training Protocol — Legs Day 02</p>
+    <h2 class="section-program-title">Posterior <span>Chain</span> Annihilation</h2>
+  </div>
+
+  <div class="stats-bar">
+    <div class="stat-item"><span class="stat-num">4</span><span class="stat-label">Phases</span></div>
+    <div class="stat-item"><span class="stat-num">13</span><span class="stat-label">Exercises</span></div>
+    <div class="stat-item"><span class="stat-num">85</span><span class="stat-label">Min Duration</span></div>
+    <div class="stat-item"><span class="stat-num">Ham+Glute</span><span class="stat-label">Primary Focus</span></div>
+  </div>
+
+  <div class="warning-strip">⚡ &nbsp; Advanced Level — Hamstrings · Glutes · RDL Focus · Hip Hinge Mechanics — Build the Posterior &nbsp; ⚡</div>
+
+  <div class="container">
+
+    <div class="section-title">Phase <span class="accent">01</span> — Activation & Warm-Up</div>
+    <div class="phase">
+      <div class="phase-header">
+        <span class="phase-num">01</span>
+        <div class="phase-info">
+          <div class="phase-name">Hamstring & Glute Activation</div>
+          <div class="phase-desc">Fire the posterior chain — prime hip hinge pattern — protect the lower back</div>
+        </div>
+        <span class="phase-badge">10–12 mins</span>
+      </div>
+      <table class="exercise-table">
+        <thead><tr><th>#</th><th>Exercise</th><th>Target</th><th>Sets / Reps / Rest</th></tr></thead>
+        <tbody>
+          <tr class="exercise-row">
+            <td class="ex-num">1</td>
+            <td><div class="ex-name">Single-Leg Glute Bridge</div><div class="ex-detail">One leg extended, drive through heel. 2-sec hold at top. Activates glute unilaterally — identifies and corrects side-to-side imbalances</div></td>
+            <td><div class="ex-target">Glutes — Unilateral Activation</div></td>
+            <td class="badge-col"><span class="set-badge">3 Sets</span><span class="rep-badge">15 Reps each</span><span class="rest-badge">⏱ 30s rest</span></td>
+          </tr>
+          <tr class="exercise-row">
+            <td class="ex-num">2</td>
+            <td><div class="ex-name">Nordic Curl Negatives</div><div class="ex-detail">Kneel, anchor feet. Lower torso to floor as slowly as possible (3–5 secs). Use hands to push back up. Builds eccentric hamstring strength — injury prevention</div></td>
+            <td><div class="ex-target">Hamstrings — Eccentric Activation</div></td>
+            <td class="badge-col"><span class="set-badge">3 Sets</span><span class="rep-badge">5 Reps</span><span class="rest-badge">⏱ 45s rest</span></td>
+          </tr>
+          <tr class="exercise-row">
+            <td class="ex-num">3</td>
+            <td><div class="ex-name">Hip Hinge Drill (PVC or Dowel)</div><div class="ex-detail">Rod on spine — head, upper back, and glutes must touch rod throughout. Groove perfect RDL mechanics before loading. 15 slow reps</div></td>
+            <td><div class="ex-target">Hip Hinge Pattern / Lower Back</div></td>
+            <td class="badge-col"><span class="set-badge">2 Sets</span><span class="rep-badge">15 Reps</span><span class="rest-badge">⏱ No rest</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="section-title">Phase <span class="accent">02</span> — Heavy Hip Hinge & Pressing</div>
+    <div class="phase">
+      <div class="phase-header">
+        <span class="phase-num">02</span>
+        <div class="phase-info">
+          <div class="phase-name">Posterior Chain Power Loading</div>
+          <div class="phase-desc">Maximum hamstring and glute loading — build the foundation of athletic power</div>
+        </div>
+        <span class="phase-badge">Heavy Load</span>
+      </div>
+      <table class="exercise-table">
+        <thead><tr><th>#</th><th>Exercise</th><th>Target</th><th>Sets / Reps / Rest</th></tr></thead>
+        <tbody>
+          <tr class="exercise-row">
+            <td class="ex-num">1</td>
+            <td><div class="ex-name">Romanian Deadlift (Barbell)</div><div class="ex-detail">Soft knee bend — hinge from hips until bar passes knees. Full hamstring stretch. Drive hips forward to stand. The king of hamstring mass. Heavy and controlled</div></td>
+            <td><div class="ex-target">Hamstrings / Glutes / Lower Back</div></td>
+            <td class="badge-col"><span class="set-badge">5 Sets</span><span class="rep-badge">6–8 Reps</span><span class="rest-badge">⏱ 3–4 min rest</span></td>
+          </tr>
+          <tr class="exercise-row">
+            <td class="ex-num">2</td>
+            <td><div class="ex-name">Barbell Hip Thrust</div><div class="ex-detail">Upper back on bench. Bar padded at hips. Drive through heels — squeeze glutes at top for 2 secs. Full hip extension. The best glute isolator that exists</div></td>
+            <td><div class="ex-target">Glutes — Peak Contraction Mass</div></td>
+            <td class="badge-col"><span class="set-badge">5 Sets</span><span class="rep-badge">8–10 Reps</span><span class="rest-badge">⏱ 2.5 min rest</span></td>
+          </tr>
+          <tr class="exercise-row">
+            <td class="ex-num">3</td>
+            <td><div class="ex-name">Sumo Deadlift</div><div class="ex-detail">Wide stance — toes pointed out 45°. Bar close to body, drive knees out. Targets inner thighs and glutes more than conventional. Go heavy</div></td>
+            <td><div class="ex-target">Glutes / Inner Thigh / Hamstrings</div></td>
+            <td class="badge-col"><span class="set-badge">4 Sets</span><span class="rep-badge">5 Reps</span><span class="rest-badge">⏱ 3 min rest</span></td>
+          </tr>
+          <tr class="exercise-row">
+            <td class="ex-num">4</td>
+            <td><div class="ex-name">Leg Press (Feet High & Wide)</div><div class="ex-detail">Feet high on platform + wide stance — shifts load entirely to glutes and hamstrings away from quads. Full ROM — controlled 3-sec negative</div></td>
+            <td><div class="ex-target">Glutes / Hamstrings — Loaded Stretch</div></td>
+            <td class="badge-col"><span class="set-badge">3 Sets</span><span class="rep-badge">12 Reps</span><span class="rest-badge">⏱ 2 min rest</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="section-title">Phase <span class="accent">03</span> — Isolation & Detail</div>
+    <div class="phase">
+      <div class="phase-header">
+        <span class="phase-num">03</span>
+        <div class="phase-info">
+          <div class="phase-name">Ham & Glute Sculpting</div>
+          <div class="phase-desc">Isolate the biceps femoris — carve the glute-ham tie-in — detail work</div>
+        </div>
+        <span class="phase-badge">Hypertrophy</span>
+      </div>
+      <table class="exercise-table">
+        <thead><tr><th>#</th><th>Exercise</th><th>Target</th><th>Sets / Reps / Rest</th></tr></thead>
+        <tbody>
+          <tr class="exercise-row">
+            <td class="ex-num">1</td>
+            <td><div class="ex-name">Lying Leg Curl</div><div class="ex-detail">Full stretch at bottom — 2-sec squeeze at top. Curl heels toward glutes. This is the primary hamstring isolation — do NOT rush the reps</div></td>
+            <td><div class="ex-target">Hamstrings — Biceps Femoris</div></td>
+            <td class="badge-col"><span class="set-badge">4 Sets</span><span class="rep-badge">12–15 Reps</span><span class="rest-badge">⏱ 75s rest</span></td>
+          </tr>
+          <tr class="exercise-row">
+            <td class="ex-num">2</td>
+            <td><div class="ex-name">Single-Leg RDL (Dumbbell)</div><div class="ex-detail">Balance on one leg — hinge until dumbbell reaches shin level. Return by driving hip forward. Builds glute-ham tie-in and balance. Equal both sides</div></td>
+            <td><div class="ex-target">Hamstrings / Glutes — Unilateral</div></td>
+            <td class="badge-col"><span class="set-badge">3 Sets</span><span class="rep-badge">12 Reps each</span><span class="rest-badge">⏱ 75s rest</span></td>
+          </tr>
+          <tr class="exercise-row">
+            <td class="ex-num">3</td>
+            <td><div class="ex-name">Cable Kickback</div><div class="ex-detail">Ankle strap on cable — kick leg back and up, squeeze glute hard at top. Don't swing the torso. The glute-tie-in detail finisher</div></td>
+            <td><div class="ex-target">Glutes — Upper / Tie-In Detail</div></td>
+            <td class="badge-col"><span class="set-badge">3 Sets</span><span class="rep-badge">15 Reps each</span><span class="rest-badge">⏱ 60s rest</span></td>
+          </tr>
+          <tr class="exercise-row">
+            <td class="ex-num">4</td>
+            <td><div class="ex-name">Seated Leg Curl</div><div class="ex-detail">Superset with lying curl. Seated position puts hamstrings in a stretched position at start — different stimulus than lying curl. Maximum hamstring volume</div></td>
+            <td><div class="ex-target">Hamstrings — Stretched Position</div></td>
+            <td class="badge-col"><span class="set-badge">3 Sets</span><span class="rep-badge">15 Reps</span><span class="rest-badge">⏱ 60s rest</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="section-title">Phase <span class="accent">04</span> — Finisher & Calf Work</div>
+    <div class="phase">
+      <div class="phase-header">
+        <span class="phase-num">04</span>
+        <div class="phase-info">
+          <div class="phase-name">Posterior Burnout + Calf Protocol</div>
+          <div class="phase-desc">Drop set hamstrings + calf superset — leave nothing behind</div>
+        </div>
+        <span class="phase-badge">🔥 Burnout</span>
+      </div>
+      <table class="exercise-table">
+        <thead><tr><th>#</th><th>Exercise</th><th>Target</th><th>Sets / Reps / Rest</th></tr></thead>
+        <tbody>
+          <tr class="exercise-row">
+            <td class="ex-num">1</td>
+            <td><div class="ex-name">Lying Leg Curl — Triple Drop Set</div><div class="ex-detail">Heavy → drop 30% → drop 30% again. No rest between drops. Hold the squeeze at top. 3 rounds. Complete hamstring failure</div></td>
+            <td><div class="ex-target">Hamstrings — Full Failure</div></td>
+            <td class="badge-col"><span class="set-badge">3 Drops</span><span class="rep-badge">8/10/15</span><span class="rest-badge">⏱ 2 min between rounds</span></td>
+          </tr>
+          <tr class="exercise-row">
+            <td class="ex-num">2</td>
+            <td><div class="ex-name">Sahil's Posterior Giant Set</div><div class="ex-detail">Zero rest: Hip Thrust → Single-Leg Curl → Cable Kickback → RDL (light). 2 min rest. Repeat 3x. Glutes and hamstrings completely exhausted</div></td>
+            <td><div class="ex-target">Full Posterior — All Fibres Burnout</div></td>
+            <td class="badge-col"><span class="set-badge">3 Rounds</span><span class="rep-badge">10 each</span><span class="rest-badge">⏱ 2 min between rounds</span></td>
+          </tr>
+          <tr class="exercise-row">
+            <td class="ex-num">3</td>
+            <td><div class="ex-name">Donkey Calf Raise + Seated Calf Superset</div><div class="ex-detail">10 donkey raises (bodyweight, knees bent) immediately into 15 seated calf raises. Full ROM every rep. Calves hit from both positions. 3 rounds</div></td>
+            <td><div class="ex-target">Gastroc + Soleus — Complete</div></td>
+            <td class="badge-col"><span class="set-badge">3 Rounds</span><span class="rep-badge">10 + 15</span><span class="rest-badge">⏱ 60s rest</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="section-title">Coach <span class="accent">Sahil's</span> Posterior Chain Tips</div>
+    <div class="tips-grid">
+      <div class="tip-card"><span class="tip-icon">🔗</span><div class="tip-title">Hinge, Don't Squat Your RDL</div><p class="tip-text">The RDL is a hip hinge — not a squat. Soft knee bend only. Push your hips back like closing a door with them. Feel the hamstring stretch, not your lower back.</p></div>
+      <div class="tip-card"><span class="tip-icon">🍑</span><div class="tip-title">Squeeze Glutes Every Rep</div><p class="tip-text">On hip thrusts, squeeze your glutes as hard as possible at the top. If you're not consciously contracting, you're not maximally activating. Intent = activation.</p></div>
+      <div class="tip-card"><span class="tip-icon">📏</span><div class="tip-title">Hamstring Stretch = Growth</div><p class="tip-text">Like lats, hamstrings grow most in the stretched position. Always use full ROM on leg curls and RDLs. The bottom of the movement is where the growth signal is strongest.</p></div>
+      <div class="tip-card"><span class="tip-icon">⚖️</span><div class="tip-title">Fix Imbalances Early</div><p class="tip-text">Single-leg work (single-leg RDL, single-leg curl) reveals side differences. Correct them now — a weak posterior chain imbalance is an injury waiting to happen.</p></div>
+      <div class="tip-card"><span class="tip-icon">🧠</span><div class="tip-title">Mind-Muscle on Curls</div><p class="tip-text">Most people feel leg curls in their knees, not their hamstrings. Consciously think about curling from your hamstring belly — not pulling with the ankle. Big difference.</p></div>
+      <div class="tip-card"><span class="tip-icon">📈</span><div class="tip-title">Volume Builds Glutes</div><p class="tip-text">Glutes are one of the largest muscles and require high volume to grow. 18–24 sets per week across hip thrusts, RDLs, kickbacks, and squats delivers the best results.</p></div>
+    </div>
+
+    <div class="section-title">Peri-Workout <span class="accent">Nutrition</span></div>
+    <div class="nutrition-bar">
+      <p style="font-size:13px; color:#888; letter-spacing:1px; margin-bottom:16px;">Coach Sahil's recommended macros for hamstring/glute day (based on 80kg athlete)</p>
+      <div class="nutrition-grid">
+        <div class="nutrient"><span class="nutrient-value">3100<span class="nutrient-unit"> kcal</span></span><div class="nutrient-bar-wrap"><div class="nutrient-bar-fill" style="width:100%"></div></div><span class="nutrient-name">Total Calories</span></div>
+        <div class="nutrient"><span class="nutrient-value">215<span class="nutrient-unit"> g</span></span><div class="nutrient-bar-wrap"><div class="nutrient-bar-fill" style="width:88%"></div></div><span class="nutrient-name">Protein</span></div>
+        <div class="nutrient"><span class="nutrient-value">380<span class="nutrient-unit"> g</span></span><div class="nutrient-bar-wrap"><div class="nutrient-bar-fill" style="width:78%"></div></div><span class="nutrient-name">Carbohydrates</span></div>
+        <div class="nutrient"><span class="nutrient-value">72<span class="nutrient-unit"> g</span></span><div class="nutrient-bar-wrap"><div class="nutrient-bar-fill" style="width:42%"></div></div><span class="nutrient-name">Healthy Fats</span></div>
+        <div class="nutrient"><span class="nutrient-value">4<span class="nutrient-unit"> L</span></span><div class="nutrient-bar-wrap"><div class="nutrient-bar-fill" style="width:92%"></div></div><span class="nutrient-name">Water</span></div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+
+<!-- ================================================================ -->
+<!-- LEGS DAY 3 — FULL LEG DESTRUCTION                                 -->
+<!-- ================================================================ -->
+<div id="tab-legs3" class="tab-panel">
+
+  <div class="section-program-header">
+    <p class="section-program-label">Elite Training Protocol — Legs Day 03</p>
+    <h2 class="section-program-title">Full Leg <span>Destruction</span></h2>
+  </div>
+
+  <div class="stats-bar">
+    <div class="stat-item"><span class="stat-num">4</span><span class="stat-label">Phases</span></div>
+    <div class="stat-item"><span class="stat-num">13</span><span class="stat-label">Exercises</span></div>
+    <div class="stat-item"><span class="stat-num">90</span><span class="stat-label">Min Duration</span></div>
+    <div class="stat-item"><span class="stat-num">Full Leg</span><span class="stat-label">Primary Focus</span></div>
+  </div>
+
+  <div class="warning-strip">⚡ &nbsp; Advanced Level — Complete Leg Session — Frontal + Posterior + Adductors + Calves — Elite Volume &nbsp; ⚡</div>
+
+  <div class="container">
+
+    <div class="section-title">Phase <span class="accent">01</span> — Activation & Warm-Up</div>
+    <div class="phase">
+      <div class="phase-header">
+        <span class="phase-num">01</span>
+        <div class="phase-info">
+          <div class="phase-name">Full Lower Body Priming</div>
+          <div class="phase-desc">Activate every muscle group — full mobility prep — prime CNS for high volume</div>
+        </div>
+        <span class="phase-badge">12–15 mins</span>
+      </div>
+      <table class="exercise-table">
+        <thead><tr><th>#</th><th>Exercise</th><th>Target</th><th>Sets / Reps / Rest</th></tr></thead>
+        <tbody>
+          <tr class="exercise-row">
+            <td class="ex-num">1</td>
+            <td><div class="ex-name">Rowing Machine / Bike (Moderate Pace)</div><div class="ex-detail">5 minutes continuous — raises core temperature, lubricates knee and hip joints, and elevates heart rate before loading</div></td>
+            <td><div class="ex-target">Full Body — Temperature</div></td>
+            <td class="badge-col"><span class="set-badge">1 Set</span><span class="rep-badge">5 mins</span><span class="rest-badge">⏱ Go directly into next</span></td>
+          </tr>
+          <tr class="exercise-row">
+            <td class="ex-num">2</td>
+            <td><div class="ex-name">World's Greatest Stretch + 90/90 Hip Stretch</div><div class="ex-detail">5 reps each side of world's greatest. Then 60s each side 90/90. Opens hips, thoracic spine, and ankles — critical for squat and hinge patterns</div></td>
+            <td><div class="ex-target">Hip Flexors / Thoracic / Ankles</div></td>
+            <td class="badge-col"><span class="set-badge">2 Sets</span><span class="rep-badge">5 + 60s each</span><span class="rest-badge">⏱ No rest</span></td>
+          </tr>
+          <tr class="exercise-row">
+            <td class="ex-num">3</td>
+            <td><div class="ex-name">Light Front Squat + Glute Bridge Circuit</div><div class="ex-detail">10 light front squats (bar on fingers) + 15 glute bridges. Activates anterior and posterior simultaneously. Primes both movement patterns</div></td>
+            <td><div class="ex-target">Full Leg Circuit Activation</div></td>
+            <td class="badge-col"><span class="set-badge">2 Sets</span><span class="rep-badge">10 + 15</span><span class="rest-badge">⏱ 45s rest</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="section-title">Phase <span class="accent">02</span> — Heavy Compound Strength</div>
+    <div class="phase">
+      <div class="phase-header">
+        <span class="phase-num">02</span>
+        <div class="phase-info">
+          <div class="phase-name">Full Leg Power Loading</div>
+          <div class="phase-desc">Front-back loading — total leg stimulus — maximum mechanical tension</div>
+        </div>
+        <span class="phase-badge">Heavy Load</span>
+      </div>
+      <table class="exercise-table">
+        <thead><tr><th>#</th><th>Exercise</th><th>Target</th><th>Sets / Reps / Rest</th></tr></thead>
+        <tbody>
+          <tr class="exercise-row">
+            <td class="ex-num">1</td>
+            <td><div class="ex-name">Front Squat (Barbell)</div><div class="ex-detail">Bar racked on front delts. Upright torso — maximises quad recruitment. Deep squat. Develops the quad sweep more than back squat. Elbows high throughout</div></td>
+            <td><div class="ex-target">Quads — Sweep / Rectus Femoris</div></td>
+            <td class="badge-col"><span class="set-badge">4 Sets</span><span class="rep-badge">6 Reps</span><span class="rest-badge">⏱ 3.5 min rest</span></td>
+          </tr>
+          <tr class="exercise-row">
+            <td class="ex-num">2</td>
+            <td><div class="ex-name">Romanian Deadlift (Dumbbell)</div><div class="ex-detail">Dumbbells allow greater ROM and shoulder-neutral position. Feel full hamstring stretch. Drive hips forward explosively. Superset partner to front squat</div></td>
+            <td><div class="ex-target">Hamstrings / Glutes — Hip Hinge</div></td>
+            <td class="badge-col"><span class="set-badge">4 Sets</span><span class="rep-badge">10 Reps</span><span class="rest-badge">⏱ 2.5 min rest</span></td>
+          </tr>
+          <tr class="exercise-row">
+            <td class="ex-num">3</td>
+            <td><div class="ex-name">Smith Machine Squat (Narrow Stance)</div><div class="ex-detail">Feet slightly forward of bar line — sit back into the squat. Smith allows focus on VMO without balance demands. Good for high volume</div></td>
+            <td><div class="ex-target">VMO / Quads — Volume Loading</div></td>
+            <td class="badge-col"><span class="set-badge">3 Sets</span><span class="rep-badge">15 Reps</span><span class="rest-badge">⏱ 2 min rest</span></td>
+          </tr>
+          <tr class="exercise-row">
+            <td class="ex-num">4</td>
+            <td><div class="ex-name">Pendulum Squat or V-Squat Machine</div><div class="ex-detail">Provides both quad and glute loading in one movement. Excellent for day 3 when the spine is fatigued from prior sessions. Load heavy — very joint friendly</div></td>
+            <td><div class="ex-target">Full Quads + Glutes</div></td>
+            <td class="badge-col"><span class="set-badge">3 Sets</span><span class="rep-badge">10–12 Reps</span><span class="rest-badge">⏱ 2 min rest</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="section-title">Phase <span class="accent">03</span> — Adductors, Abductors & Isolation</div>
+    <div class="phase">
+      <div class="phase-header">
+        <span class="phase-num">03</span>
+        <div class="phase-info">
+          <div class="phase-name">Complete Leg Sculpting</div>
+          <div class="phase-desc">Inner thigh, outer thigh, and full isolation — hit every angle of the leg</div>
+        </div>
+        <span class="phase-badge">Hypertrophy</span>
+      </div>
+      <table class="exercise-table">
+        <thead><tr><th>#</th><th>Exercise</th><th>Target</th><th>Sets / Reps / Rest</th></tr></thead>
+        <tbody>
+          <tr class="exercise-row">
+            <td class="ex-num">1</td>
+            <td><div class="ex-name">Seated Hip Adduction Machine</div><div class="ex-detail">Slow tempo — 3-sec squeeze at close position. Inner thigh is almost always undertrained. This builds the inner sweep visible from the front. Don't rush</div></td>
+            <td><div class="ex-target">Adductors / Inner Thigh</div></td>
+            <td class="badge-col"><span class="set-badge">4 Sets</span><span class="rep-badge">15–20 Reps</span><span class="rest-badge">⏱ 75s rest</span></td>
+          </tr>
+          <tr class="exercise-row">
+            <td class="ex-num">2</td>
+            <td><div class="ex-name">Seated Hip Abduction Machine</div><div class="ex-detail">Drive knees outward — 2-sec squeeze at the open position. Builds the outer sweep and hip width. Superset with adduction for full thigh detail</div></td>
+            <td><div class="ex-target">Abductors / Outer Thigh / Glute Med</div></td>
+            <td class="badge-col"><span class="set-badge">4 Sets</span><span class="rep-badge">15–20 Reps</span><span class="rest-badge">⏱ 75s rest</span></td>
+          </tr>
+          <tr class="exercise-row">
+            <td class="ex-num">3</td>
+            <td><div class="ex-name">Leg Extension Superset with Lying Leg Curl</div><div class="ex-detail">No rest between movements — exhaust the quad then immediately the hamstring. Massive blood volume into entire thigh. 4 rounds. Extreme pump</div></td>
+            <td><div class="ex-target">Quads + Hamstrings — Paired</div></td>
+            <td class="badge-col"><span class="set-badge">4 Rounds</span><span class="rep-badge">12 each</span><span class="rest-badge">⏱ 90s between rounds</span></td>
+          </tr>
+          <tr class="exercise-row">
+            <td class="ex-num">4</td>
+            <td><div class="ex-name">Step-Ups (Dumbbell, High Box)</div><div class="ex-detail">Box at knee height or above — drive through the heel of the working leg. No push from back foot. Builds the glute-quad tie-in and unilateral stability</div></td>
+            <td><div class="ex-target">Glutes / Quads — Tie-In</div></td>
+            <td class="badge-col"><span class="set-badge">3 Sets</span><span class="rep-badge">12 Reps each</span><span class="rest-badge">⏱ 75s rest</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="section-title">Phase <span class="accent">04</span> — Total Finisher & Calf Destruction</div>
+    <div class="phase">
+      <div class="phase-header">
+        <span class="phase-num">04</span>
+        <div class="phase-info">
+          <div class="phase-name">Sahil's Leg Annihilation Finisher</div>
+          <div class="phase-desc">Giant set + calf triple — the last thing you do before you can barely walk</div>
+        </div>
+        <span class="phase-badge">🔥 Total Burnout</span>
+      </div>
+      <table class="exercise-table">
+        <thead><tr><th>#</th><th>Exercise</th><th>Target</th><th>Sets / Reps / Rest</th></tr></thead>
+        <tbody>
+          <tr class="exercise-row">
+            <td class="ex-num">1</td>
+            <td><div class="ex-name">Sahil's Full Leg Giant Set</div><div class="ex-detail">Zero rest: Leg Extension → Leg Curl → Leg Press (moderate) → Walking Lunge (20 steps). 2.5 min rest. Repeat 3x. Every fibre of the leg obliterated</div></td>
+            <td><div class="ex-target">Full Leg — Complete Failure</div></td>
+            <td class="badge-col"><span class="set-badge">3 Rounds</span><span class="rep-badge">10/10/15/20</span><span class="rest-badge">⏱ 2.5 min between rounds</span></td>
+          </tr>
+          <tr class="exercise-row">
+            <td class="ex-num">2</td>
+            <td><div class="ex-name">Calf Triple Set (Standing → Seated → Single-Leg)</div><div class="ex-detail">15 standing calf raises → 15 seated → 10 single-leg bodyweight. No rest between. This triple hits gastrocnemius, soleus, and unilateral balance. 3 rounds</div></td>
+            <td><div class="ex-target">Gastroc + Soleus — Complete</div></td>
+            <td class="badge-col"><span class="set-badge">3 Rounds</span><span class="rep-badge">15/15/10</span><span class="rest-badge">⏱ 75s between rounds</span></td>
+          </tr>
+          <tr class="exercise-row">
+            <td class="ex-num">3</td>
+            <td><div class="ex-name">Wall Sit — Time Under Tension</div><div class="ex-detail">Back flat on wall, thighs parallel to floor. Hold for maximum time. Quads screaming — this is the final insult. Log your time and beat it next session</div></td>
+            <td><div class="ex-target">Quads — Isometric / Mental Toughness</div></td>
+            <td class="badge-col"><span class="set-badge">3 Sets</span><span class="rep-badge">MAX Hold</span><span class="rest-badge">⏱ 90s rest</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="section-title">Coach <span class="accent">Sahil's</span> Full Leg Day Tips</div>
+    <div class="tips-grid">
+      <div class="tip-card"><span class="tip-icon">🎯</span><div class="tip-title">Front vs Back Balance</div><p class="tip-text">Day 3 hits both quad and posterior chain. This ensures the leg is loaded from all angles. Prioritise whichever is lagging — do it first when you're freshest.</p></div>
+      <div class="tip-card"><span class="tip-icon">🦿</span><div class="tip-title">Don't Neglect Inner/Outer Thigh</div><p class="tip-text">Adductors and abductors are the forgotten muscles of leg training. They create the full round appearance. Add them to every leg day, not just Day 3.</p></div>
+      <div class="tip-card"><span class="tip-icon">⚡</span><div class="tip-title">Front Squat Technique</div><p class="tip-text">Keep elbows as high as possible throughout the front squat. If elbows drop, the bar rolls forward and the exercise becomes dangerous. Practice with a light bar first.</p></div>
+      <div class="tip-card"><span class="tip-icon">🔥</span><div class="tip-title">Supersets for Maximum Pump</div><p class="tip-text">Pairing extension and curl works antagonist muscles simultaneously. Blood floods the entire thigh — the pump is extraordinary and growth stimulus is maximised.</p></div>
+      <div class="tip-card"><span class="tip-icon">💧</span><div class="tip-title">Hydration is Critical</div><p class="tip-text">Heavy legs sessions demand 4–5L of water. Cramps mid-session are a sign of dehydration. Sip 500ml before the session and 250ml every 20 minutes during.</p></div>
+      <div class="tip-card"><span class="tip-icon">😤</span><div class="tip-title">Mental Toughness is Trained</div><p class="tip-text">Legs training hurts more than any other session. The wall sit and giant set are designed to make you quit. The ones who push through those moments are the ones who transform.</p></div>
+    </div>
+
+    <div class="section-title">Peri-Workout <span class="accent">Nutrition</span></div>
+    <div class="nutrition-bar">
+      <p style="font-size:13px; color:#888; letter-spacing:1px; margin-bottom:16px;">Coach Sahil's recommended macros for full leg day (based on 80kg athlete) — maximum calorie day</p>
+      <div class="nutrition-grid">
+        <div class="nutrient"><span class="nutrient-value">3300<span class="nutrient-unit"> kcal</span></span><div class="nutrient-bar-wrap"><div class="nutrient-bar-fill" style="width:100%"></div></div><span class="nutrient-name">Total Calories</span></div>
+        <div class="nutrient"><span class="nutrient-value">220<span class="nutrient-unit"> g</span></span><div class="nutrient-bar-wrap"><div class="nutrient-bar-fill" style="width:90%"></div></div><span class="nutrient-name">Protein</span></div>
+        <div class="nutrient"><span class="nutrient-value">420<span class="nutrient-unit"> g</span></span><div class="nutrient-bar-wrap"><div class="nutrient-bar-fill" style="width:82%"></div></div><span class="nutrient-name">Carbohydrates</span></div>
+        <div class="nutrient"><span class="nutrient-value">72<span class="nutrient-unit"> g</span></span><div class="nutrient-bar-wrap"><div class="nutrient-bar-fill" style="width:42%"></div></div><span class="nutrient-name">Healthy Fats</span></div>
+        <div class="nutrient"><span class="nutrient-value">4.5<span class="nutrient-unit"> L</span></span><div class="nutrient-bar-wrap"><div class="nutrient-bar-fill" style="width:95%"></div></div><span class="nutrient-name">Water</span></div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+
+<!-- ================================================================ -->
+<!-- HIIT TAB                                                          -->
+<!-- ================================================================ -->
+<div id="tab-hiit" class="tab-panel">
+
+  <div class="section-program-header">
+    <p class="section-program-label gold">Elite Conditioning Protocol</p>
+    <h2 class="section-program-title">Advanced <span class="gold">HIIT</span> System</h2>
+  </div>
+
+  <div class="stats-bar gold-border">
+    <div class="stat-item"><span class="stat-num">4</span><span class="stat-label">Protocols</span></div>
+    <div class="stat-item"><span class="stat-num">20–45</span><span class="stat-label">Min Duration</span></div>
+    <div class="stat-item"><span class="stat-num">Max</span><span class="stat-label">Intensity</span></div>
+    <div class="stat-item"><span class="stat-num">Fat Loss</span><span class="stat-label">+ Conditioning</span></div>
+  </div>
+
+  <div class="warning-strip gold-strip">⚡ &nbsp; Max Effort Only — 2–3x Per Week — Rest 48hrs Between Sessions — Warm Up Fully &nbsp; ⚡</div>
+
+  <div class="container">
+
+    <!-- PROTOCOL OVERVIEW -->
+    <div class="section-title gold-line">HIIT <span class="accent-gold">Protocols</span> Overview</div>
+    <div class="protocol-block">
+      <div class="protocol-title">⚡ Sahil's 4-Protocol HIIT System</div>
+      <div class="protocol-row">
+        <div class="protocol-label">Protocol A</div>
+        <div class="protocol-value">Tabata</div>
+        <div class="protocol-desc">20s work / 10s rest × 8 rounds per exercise. 4 minutes per block. Pure metabolic destruction. Best for fat loss.</div>
+      </div>
+      <div class="protocol-row">
+        <div class="protocol-label">Protocol B</div>
+        <div class="protocol-value">30/30 EMOM</div>
+        <div class="protocol-desc">30s max effort / 30s rest. Every Minute On the Minute. 20 minutes. Sustainable intensity with full recovery between efforts.</div>
+      </div>
+      <div class="protocol-row">
+        <div class="protocol-label">Protocol C</div>
+        <div class="protocol-value">Sprint Intervals</div>
+        <div class="protocol-desc">10–15s all-out sprint / 45–60s walk. 10 rounds. Peak power output. Best for athletic conditioning and leg drive.</div>
+      </div>
+      <div class="protocol-row">
+        <div class="protocol-label">Protocol D</div>
+        <div class="protocol-value">Sahil's Circuit</div>
+        <div class="protocol-desc">6 exercises, 40s work / 20s rest. 3–4 full rounds. No rest between exercises. The complete conditioning finisher.</div>
+      </div>
+    </div>
+
+    <!-- PROTOCOL A: TABATA -->
+    <div class="section-title gold-line">Protocol <span class="accent-gold">A</span> — Tabata Destruction</div>
+    <div class="phase gold-phase">
+      <div class="phase-header gold-header">
+        <span class="phase-num gold-num">A</span>
+        <div class="phase-info">
+          <div class="phase-name">Tabata Protocol</div>
+          <div class="phase-desc gold-desc">20s MAX effort / 10s rest — 8 rounds per exercise — 4 minutes per block</div>
+        </div>
+        <span class="phase-badge">4 mins × 4 blocks</span>
+      </div>
+      <table class="exercise-table">
+        <thead><tr><th>#</th><th>Exercise</th><th>Target</th><th>Protocol</th></tr></thead>
+        <tbody>
+          <tr class="exercise-row gold-row">
+            <td class="ex-num gold-num">1</td>
+            <td><div class="ex-name">Jump Squats</div><div class="ex-detail">Squat to parallel → explode up → land softly. Maximum height every rep. Arms drive overhead on the jump. No half reps — full depth every time</div></td>
+            <td><div class="ex-target gold-target">Quads / Glutes / Power</div></td>
+            <td class="badge-col"><span class="set-badge gold-badge">8 Rounds</span><span class="rep-badge">20s / 10s</span><span class="rest-badge">⏱ 1 min between blocks</span></td>
+          </tr>
+          <tr class="exercise-row gold-row">
+            <td class="ex-num gold-num">2</td>
+            <td><div class="ex-name">Mountain Climbers</div><div class="ex-detail">Hips down — drive knees to chest alternately at max speed. Core engaged. Shoulders over wrists. This is a full-body fat burner disguised as a plank</div></td>
+            <td><div class="ex-target gold-target">Core / Cardio / Shoulders</div></td>
+            <td class="badge-col"><span class="set-badge gold-badge">8 Rounds</span><span class="rep-badge">20s / 10s</span><span class="rest-badge">⏱ 1 min between blocks</span></td>
+          </tr>
+          <tr class="exercise-row gold-row">
+            <td class="ex-num gold-num">3</td>
+            <td><div class="ex-name">Burpees</div><div class="ex-detail">Full chest to floor → push up → jump with hands overhead. Count your reps — beat your previous round. 6–8 per 20s is elite level</div></td>
+            <td><div class="ex-target gold-target">Full Body / Max Metabolic Demand</div></td>
+            <td class="badge-col"><span class="set-badge gold-badge">8 Rounds</span><span class="rep-badge">20s / 10s</span><span class="rest-badge">⏱ 1 min between blocks</span></td>
+          </tr>
+          <tr class="exercise-row gold-row">
+            <td class="ex-num gold-num">4</td>
+            <td><div class="ex-name">High Knees</div><div class="ex-detail">Drive knees above hip height. Arms pump aggressively. Stay on balls of feet. Maximum pace — this is a sprint, not a jog. Works hip flexors and cardio</div></td>
+            <td><div class="ex-target gold-target">Hip Flexors / Cardio / Coordination</div></td>
+            <td class="badge-col"><span class="set-badge gold-badge">8 Rounds</span><span class="rep-badge">20s / 10s</span><span class="rest-badge">⏱ Done</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- PROTOCOL B: EMOM -->
+    <div class="section-title gold-line">Protocol <span class="accent-gold">B</span> — 30/30 EMOM</div>
+    <div class="phase gold-phase">
+      <div class="phase-header gold-header">
+        <span class="phase-num gold-num">B</span>
+        <div class="phase-info">
+          <div class="phase-name">Every Minute On the Minute</div>
+          <div class="phase-desc gold-desc">30s max effort / 30s complete rest — 20 minutes total — 20 rounds</div>
+        </div>
+        <span class="phase-badge">20 mins</span>
+      </div>
+      <table class="exercise-table">
+        <thead><tr><th>#</th><th>Exercise</th><th>Target</th><th>Protocol</th></tr></thead>
+        <tbody>
+          <tr class="exercise-row gold-row">
+            <td class="ex-num gold-num">1</td>
+            <td><div class="ex-name">Kettlebell Swings</div><div class="ex-detail">Hip hinge driven — not a squat. Hike the KB back, snap hips forward. Bell floats to shoulder height. 15–20 swings per 30s is the target. Power, not endurance</div></td>
+            <td><div class="ex-target gold-target">Posterior Chain / Power</div></td>
+            <td class="badge-col"><span class="set-badge gold-badge">5 Rounds</span><span class="rep-badge">30s on / 30s off</span><span class="rest-badge">⏱ Switch exercise round 6</span></td>
+          </tr>
+          <tr class="exercise-row gold-row">
+            <td class="ex-num gold-num">2</td>
+            <td><div class="ex-name">Box Jumps</div><div class="ex-detail">Swing arms, explode, land softly with knees slightly bent. Step down — don't jump down. Max height box you can land safely. 8–10 per 30s is the target</div></td>
+            <td><div class="ex-target gold-target">Explosive Power / Quads</div></td>
+            <td class="badge-col"><span class="set-badge gold-badge">5 Rounds</span><span class="rep-badge">30s on / 30s off</span><span class="rest-badge">⏱ Switch exercise round 11</span></td>
+          </tr>
+          <tr class="exercise-row gold-row">
+            <td class="ex-num gold-num">3</td>
+            <td><div class="ex-name">Battle Rope Alternating Slams</div><div class="ex-detail">Full body drive — hinge, slam the rope hard, alternate hands. The rope should never go slack. 30 slams per 30s is the target. Upper body and conditioning combined</div></td>
+            <td><div class="ex-target gold-target">Full Body / Cardio / Grip</div></td>
+            <td class="badge-col"><span class="set-badge gold-badge">5 Rounds</span><span class="rep-badge">30s on / 30s off</span><span class="rest-badge">⏱ Switch exercise round 16</span></td>
+          </tr>
+          <tr class="exercise-row gold-row">
+            <td class="ex-num gold-num">4</td>
+            <td><div class="ex-name">Sled Push / Prowler Sprint</div><div class="ex-detail">Load the sled at moderate weight. Drive hard from hips — short powerful steps. 20m push per interval. Nothing develops athletic conditioning like the sled</div></td>
+            <td><div class="ex-target gold-target">Full Leg Drive / Cardio</div></td>
+            <td class="badge-col"><span class="set-badge gold-badge">5 Rounds</span><span class="rep-badge">30s on / 30s off</span><span class="rest-badge">⏱ Done</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- PROTOCOL C: SPRINT INTERVALS -->
+    <div class="section-title gold-line">Protocol <span class="accent-gold">C</span> — Sprint Intervals</div>
+    <div class="phase gold-phase">
+      <div class="phase-header gold-header">
+        <span class="phase-num gold-num">C</span>
+        <div class="phase-info">
+          <div class="phase-name">All-Out Sprint Protocol</div>
+          <div class="phase-desc gold-desc">10–15s absolute max sprint / 45–60s walk — 10 rounds — pure speed and power</div>
+        </div>
+        <span class="phase-badge">20–25 mins</span>
+      </div>
+      <table class="exercise-table">
+        <thead><tr><th>#</th><th>Exercise</th><th>Target</th><th>Protocol</th></tr></thead>
+        <tbody>
+          <tr class="exercise-row gold-row">
+            <td class="ex-num gold-num">1</td>
+            <td><div class="ex-name">Flat Ground Sprint (Outdoor / Treadmill)</div><div class="ex-detail">Warm up with 3 mins light jog. Then 10s absolute max sprint → 50s walk. 10 rounds. This is the single most effective fat-burning protocol that exists. Run like your life depends on it</div></td>
+            <td><div class="ex-target gold-target">Full Body / Fat Loss / VO2 Max</div></td>
+            <td class="badge-col"><span class="set-badge gold-badge">10 Rounds</span><span class="rep-badge">10s sprint / 50s walk</span><span class="rest-badge">⏱ 3 min warmup + 3 min cooldown</span></td>
+          </tr>
+          <tr class="exercise-row gold-row">
+            <td class="ex-num gold-num">2</td>
+            <td><div class="ex-name">Hill Sprint (Alternative)</div><div class="ex-detail">Find a 6–10% gradient. Sprint up hard for 10–15 seconds, walk back down. Increases resistance and reduces impact vs flat sprinting. Builds glutes and calves simultaneously</div></td>
+            <td><div class="ex-target gold-target">Posterior Chain + Conditioning</div></td>
+            <td class="badge-col"><span class="set-badge gold-badge">8 Rounds</span><span class="rep-badge">15s sprint / 60s walk</span><span class="rest-badge">⏱ Swap with round sprints</span></td>
+          </tr>
+          <tr class="exercise-row gold-row">
+            <td class="ex-num gold-num">3</td>
+            <td><div class="ex-name">Cycling Sprint (Bike or Assault Bike)</div><div class="ex-detail">Assault bike is the most brutal cardio machine on the planet. 10s all-out → 50s light pedal. Arms and legs simultaneously. For advanced athletes only. 10 rounds</div></td>
+            <td><div class="ex-target gold-target">Full Body / Cardio / Conditioning</div></td>
+            <td class="badge-col"><span class="set-badge gold-badge">10 Rounds</span><span class="rep-badge">10s sprint / 50s easy</span><span class="rest-badge">⏱ Track watts each round</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- PROTOCOL D: SAHIL'S CIRCUIT -->
+    <div class="section-title gold-line">Protocol <span class="accent-gold">D</span> — Sahil's HIIT Circuit</div>
+    <div class="phase gold-phase">
+      <div class="phase-header gold-header">
+        <span class="phase-num gold-num">D</span>
+        <div class="phase-info">
+          <div class="phase-name">Complete Conditioning Circuit</div>
+          <div class="phase-desc gold-desc">40s work / 20s rest — 6 exercises — no rest between — 3–4 full rounds</div>
+        </div>
+        <span class="phase-badge">🔥 30–40 mins</span>
+      </div>
+      <table class="exercise-table">
+        <thead><tr><th>#</th><th>Exercise</th><th>Target</th><th>Protocol</th></tr></thead>
+        <tbody>
+          <tr class="exercise-row gold-row">
+            <td class="ex-num gold-num">1</td>
+            <td><div class="ex-name">Jump Rope (Double Under Attempts)</div><div class="ex-detail">Single unders if beginner. Work toward double unders. 40s of consistent skipping. Calves, coordination, cardio — the underrated HIIT tool</div></td>
+            <td><div class="ex-target gold-target">Calves / Coordination / Cardio</div></td>
+            <td class="badge-col"><span class="set-badge gold-badge">40s Work</span><span class="rep-badge">20s Rest</span><span class="rest-badge">⏱ Into next immediately</span></td>
+          </tr>
+          <tr class="exercise-row gold-row">
+            <td class="ex-num gold-num">2</td>
+            <td><div class="ex-name">Dumbbell Thrusters</div><div class="ex-detail">Squat with dumbbells at shoulders → press overhead as you stand. One fluid movement. 40s of consistent reps. Quads + shoulders + cardio in one exercise</div></td>
+            <td><div class="ex-target gold-target">Quads / Shoulders / Cardio</div></td>
+            <td class="badge-col"><span class="set-badge gold-badge">40s Work</span><span class="rep-badge">20s Rest</span><span class="rest-badge">⏱ Into next immediately</span></td>
+          </tr>
+          <tr class="exercise-row gold-row">
+            <td class="ex-num gold-num">3</td>
+            <td><div class="ex-name">TRX or Ring Rows (Explosive)</div><div class="ex-detail">Feet elevated, body horizontal. Explosive row to chest, slow negative. The horizontal pull in a circuit context destroys the upper back and rear delts</div></td>
+            <td><div class="ex-target gold-target">Back / Rear Delt / Biceps</div></td>
+            <td class="badge-col"><span class="set-badge gold-badge">40s Work</span><span class="rep-badge">20s Rest</span><span class="rest-badge">⏱ Into next immediately</span></td>
+          </tr>
+          <tr class="exercise-row gold-row">
+            <td class="ex-num gold-num">4</td>
+            <td><div class="ex-name">Lateral Bounds (Skater Jumps)</div><div class="ex-detail">Single-leg lateral jump — land on one foot, balance briefly, bound to the other side. Width and control is the goal. Trains athletic lateral movement and glute medius</div></td>
+            <td><div class="ex-target gold-target">Glute Med / Lateral Power</div></td>
+            <td class="badge-col"><span class="set-badge gold-badge">40s Work</span><span class="rep-badge">20s Rest</span><span class="rest-badge">⏱ Into next immediately</span></td>
+          </tr>
+          <tr class="exercise-row gold-row">
+            <td class="ex-num gold-num">5</td>
+            <td><div class="ex-name">Push-Up to Renegade Row</div><div class="ex-detail">Push-up → row left dumbbell → push-up → row right. Keep hips square. 40s of alternating. Pushes chest and pulls back simultaneously. Core stability is critical</div></td>
+            <td><div class="ex-target gold-target">Chest / Back / Core</div></td>
+            <td class="badge-col"><span class="set-badge gold-badge">40s Work</span><span class="rep-badge">20s Rest</span><span class="rest-badge">⏱ Into next immediately</span></td>
+          </tr>
+          <tr class="exercise-row gold-row">
+            <td class="ex-num gold-num">6</td>
+            <td><div class="ex-name">Tuck Jumps</div><div class="ex-detail">Jump and drive both knees to chest at the peak. Land softly, immediately repeat. The most explosive movement in the circuit — last by design. Give everything</div></td>
+            <td><div class="ex-target gold-target">Full Body / Explosive Power</div></td>
+            <td class="badge-col"><span class="set-badge gold-badge">40s Work</span><span class="rep-badge">20s Rest</span><span class="rest-badge">⏱ 2.5 min rest, repeat round</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="section-title gold-line">Coach <span class="accent-gold">Sahil's</span> HIIT Mastery Tips</div>
+    <div class="tips-grid">
+      <div class="tip-card gold-tip"><span class="tip-icon">⚡</span><div class="tip-title">True Max Effort Only</div><p class="tip-text">HIIT only works if the "work" intervals are truly all-out. 80% effort gives 20% of the results. If you can talk during a sprint interval, you're not working hard enough.</p></div>
+      <div class="tip-card gold-tip"><span class="tip-icon">🔄</span><div class="tip-title">2–3x Per Week Maximum</div><p class="tip-text">HIIT is a high-CNS demand activity. More than 3 sessions per week will cause overtraining, poor recovery, and muscle loss. Quality over quantity — every time.</p></div>
+      <div class="tip-card gold-tip"><span class="tip-icon">🕐</span><div class="tip-title">Rest Fully Between Intervals</div><p class="tip-text">The rest period is not optional. Cutting rest short means your next "work" interval is at 60% — defeating the purpose. Embrace the rest. Attack the work.</p></div>
+      <div class="tip-card gold-tip"><span class="tip-icon">📅</span><div class="tip-title">HIIT Placement Matters</div><p class="tip-text">Never do HIIT before a heavy strength session. Place it after lifting or on a separate day. Doing HIIT first depletes the glycogen you need for progressive overload.</p></div>
+      <div class="tip-card gold-tip"><span class="tip-icon">🥗</span><div class="tip-title">Fuel Before, Protein After</div><p class="tip-text">Eat 20–30g of fast carbs 30 minutes before HIIT. Immediately after, consume 30–40g of protein. This protects muscle while maximizing fat oxidation.</p></div>
+      <div class="tip-card gold-tip"><span class="tip-icon">📈</span><div class="tip-title">Track Progress Every Session</div><p class="tip-text">Count reps per interval, track sprint times, log watts on the bike. HIIT progress is measurable. If you're not beating your previous numbers, your intensity isn't increasing.</p></div>
+    </div>
+
+    <div class="section-title gold-line">HIIT <span class="accent-gold">Nutrition</span> Protocol</div>
+    <div class="nutrition-bar gold-nutrition">
+      <p style="font-size:13px; color:#888; letter-spacing:1px; margin-bottom:16px;">Coach Sahil's recommended macros for HIIT day (based on 80kg athlete) — moderate calories, prioritise carbs pre-session</p>
+      <div class="nutrition-grid">
+        <div class="nutrient"><span class="nutrient-value">2600<span class="nutrient-unit"> kcal</span></span><div class="nutrient-bar-wrap"><div class="nutrient-bar-fill gold-fill" style="width:85%"></div></div><span class="nutrient-name">Total Calories</span></div>
+        <div class="nutrient"><span class="nutrient-value">190<span class="nutrient-unit"> g</span></span><div class="nutrient-bar-wrap"><div class="nutrient-bar-fill gold-fill" style="width:80%"></div></div><span class="nutrient-name">Protein</span></div>
+        <div class="nutrient"><span class="nutrient-value">290<span class="nutrient-unit"> g</span></span><div class="nutrient-bar-wrap"><div class="nutrient-bar-fill gold-fill" style="width:65%"></div></div><span class="nutrient-name">Carbohydrates</span></div>
+        <div class="nutrient"><span class="nutrient-value">60<span class="nutrient-unit"> g</span></span><div class="nutrient-bar-wrap"><div class="nutrient-bar-fill gold-fill" style="width:36%"></div></div><span class="nutrient-name">Healthy Fats</span></div>
+        <div class="nutrient"><span class="nutrient-value">3.5<span class="nutrient-unit"> L</span></span><div class="nutrient-bar-wrap"><div class="nutrient-bar-fill gold-fill" style="width:90%"></div></div><span class="nutrient-name">Water</span></div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ===== FOOTER ===== -->
+<div class="footer">
+  <div class="footer-name">Sahil Bansal — Coach</div>
+  <div class="footer-sub">Advanced Legs & HIIT System &nbsp;|&nbsp; Legs Day 1 · 2 · 3 · HIIT Conditioning &nbsp;|&nbsp; Elite Performance Protocol</div>
+</div>
+
+<script>
+  function switchTab(name, btn) {
+    document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.getElementById('tab-' + name).classList.add('active');
+    btn.classList.add('active');
+    document.querySelector('.tab-nav').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+</script>
+
+</body>
+</html>
