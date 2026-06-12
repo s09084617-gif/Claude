@@ -1,26 +1,16 @@
 // ═══════════════════════════════════════════════════════════
-//  I-BLITZ FIREBASE CONFIG
-//  Follow these steps to connect real-time booking sync:
-//
-//  1. Go to https://console.firebase.google.com
-//  2. Click "Add project" → name it "iblitz-fitness"
-//  3. Disable Google Analytics → Create project
-//  4. Click </> (Web) → Register app as "iblitz-web"
-//  5. Copy the firebaseConfig object below
-//  6. Left menu → Build → Realtime Database
-//  7. Click "Create Database" → Start in TEST mode → Done
-//  8. Paste your config values below
+//  I-BLITZ FIREBASE CONFIG — iblitz-fitness (fitness-b506f)
 // ═══════════════════════════════════════════════════════════
 
 const FIREBASE_CONFIG = {
-  apiKey:            "PASTE_YOUR_API_KEY_HERE",
-  authDomain:        "YOUR_PROJECT.firebaseapp.com",
-  databaseURL:       "https://YOUR_PROJECT-default-rtdb.firebaseio.com",
-  projectId:         "YOUR_PROJECT",
-  storageBucket:     "YOUR_PROJECT.appspot.com",
-  messagingSenderId: "YOUR_SENDER_ID",
-  appId:             "YOUR_APP_ID"
+  apiKey:            "AIzaSyBaPX7qGGdedFHmPJz29MHRne4NMGtSNk",
+  authDomain:        "fitness-b506f.firebaseapp.com",
+  databaseURL:       "https://fitness-b506f-default-rtdb.firebaseio.com",
+  projectId:         "fitness-b506f",
+  storageBucket:     "fitness-b506f.firebasestorage.app",
+  messagingSenderId: "1186712903287",
+  appId:             "1:1186712903287:web:1b12ac0ce2a6e2025d8b92"
 };
 
-// Auto-detects whether Firebase is configured
-const FB_READY = FIREBASE_CONFIG.apiKey !== "PASTE_YOUR_API_KEY_HERE";
+// Firebase is now configured — live sync is active
+const FB_READY = true;
