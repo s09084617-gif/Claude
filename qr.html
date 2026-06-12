@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sahil Fitness — Scan to Train</title>
+<script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js"></script>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@300;400;600;700;800&display=swap');
+
+  :root {
+    --crimson: #C8102E;
+    --gold: #C9A84C;
+    --black: #0A0A0A;
+    --card: #141414;
+    --card2: #181818;
+    --border: #222;
+    --muted: #777;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--black);
+    color: #E8E8E8;
+    font-family: 'Inter', sans-serif;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 20px;
+  }
+
+  .card {
+    background: var(--card2);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 48px 40px;
+    max-width: 420px;
+    width: 100%;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, var(--crimson), var(--gold));
+  }
+
+  .glow {
+    position: absolute;
+    top: -60px; left: 50%; transform: translateX(-50%);
+    width: 300px; height: 300px;
+    background: radial-gradient(circle, rgba(200,16,46,0.15) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .eyebrow {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: var(--crimson);
+    margin-bottom: 6px;
+  }
+
+  .brand {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 36px;
+    letter-spacing: 3px;
+    color: var(--gold);
+    margin-bottom: 4px;
+  }
+
+  .tagline {
+    font-size: 12px;
+    color: var(--muted);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 32px;
+  }
+
+  .qr-wrap {
+    background: #fff;
+    border-radius: 16px;
+    padding: 20px;
+    display: inline-block;
+    margin-bottom: 28px;
+    box-shadow: 0 0 40px rgba(201,168,76,0.2);
+    position: relative;
+  }
+
+  .qr-wrap canvas {
+    display: block;
+    border-radius: 6px;
+  }
+
+  /* Corner accents */
+  .qr-wrap::before, .qr-wrap::after,
+  .corner-bl, .corner-br {
+    content: '';
+    position: absolute;
+    width: 20px; height: 20px;
+    border-color: var(--crimson);
+    border-style: solid;
+  }
+  .qr-wrap::before { top: 6px; left: 6px; border-width: 3px 0 0 3px; border-radius: 4px 0 0 0; }
+  .qr-wrap::after  { top: 6px; right: 6px; border-width: 3px 3px 0 0; border-radius: 0 4px 0 0; }
+  .corner-bl { bottom: 6px; left: 6px; border-width: 0 0 3px 3px; border-radius: 0 0 0 4px; }
+  .corner-br { bottom: 6px; right: 6px; border-width: 0 3px 3px 0; border-radius: 0 0 4px 0; }
+
+  .scan-label {
+    font-size: 13px;
+    color: #aaa;
+    margin-bottom: 6px;
+  }
+
+  .url-chip {
+    display: inline-block;
+    background: rgba(201,168,76,0.08);
+    border: 1px solid rgba(201,168,76,0.3);
+    border-radius: 6px;
+    padding: 8px 16px;
+    font-size: 12px;
+    color: var(--gold);
+    letter-spacing: 0.5px;
+    word-break: break-all;
+    margin-bottom: 28px;
+  }
+
+  .btn-row {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 22px;
+    border-radius: 8px;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    cursor: pointer;
+    border: none;
+    text-decoration: none;
+    transition: transform 0.2s, opacity 0.2s;
+  }
+  .btn:hover { transform: translateY(-2px); opacity: 0.9; }
+
+  .btn-primary {
+    background: linear-gradient(135deg, var(--crimson), #a50d25);
+    color: #fff;
+  }
+  .btn-secondary {
+    background: rgba(201,168,76,0.1);
+    color: var(--gold);
+    border: 1px solid rgba(201,168,76,0.4);
+  }
+
+  .divider {
+    border: none;
+    border-top: 1px solid var(--border);
+    margin: 28px 0;
+  }
+
+  .footer-text {
+    font-size: 11px;
+    color: #333;
+    letter-spacing: 1px;
+  }
+
+  .coach-line {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 16px;
+    letter-spacing: 2px;
+    color: var(--muted);
+    margin-top: 4px;
+  }
+
+  @media (max-width: 480px) {
+    .card { padding: 36px 24px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="card">
+  <div class="glow"></div>
+
+  <div class="eyebrow">Scan to Access</div>
+  <div class="brand">SAHIL FITNESS</div>
+  <div class="tagline">Women's Advanced Training Vault</div>
+
+  <div class="qr-wrap" id="qrWrap">
+    <canvas id="qrCanvas"></canvas>
+    <div class="corner-bl"></div>
+    <div class="corner-br"></div>
+  </div>
+
+  <div class="scan-label">Scan with your phone camera to open</div>
+  <div class="url-chip" id="urlDisplay">s09084617-gif.github.io/Claude</div>
+
+  <div class="btn-row">
+    <button class="btn btn-primary" onclick="downloadQR()">⬇ Download QR</button>
+    <a href="https://s09084617-gif.github.io/Claude/" target="_blank" class="btn btn-secondary">↗ Open Site</a>
+  </div>
+
+  <div class="divider"></div>
+  <div class="footer-text">I-Blitz Fitness Club · Bangalore</div>
+  <div class="coach-line">Coach Sahil Bansal</div>
+</div>
+
+<script>
+  const URL = 'https://s09084617-gif.github.io/Claude/';
+  const canvas = document.getElementById('qrCanvas');
+
+  QRCode.toCanvas(canvas, URL, {
+    width: 240,
+    margin: 1,
+    color: {
+      dark: '#0A0A0A',
+      light: '#FFFFFF'
+    },
+    errorCorrectionLevel: 'H'
+  }, function (err) {
+    if (err) console.error(err);
+  });
+
+  function downloadQR() {
+    // Create a new canvas with branding for download
+    const dl = document.createElement('canvas');
+    dl.width = 400;
+    dl.height = 500;
+    const ctx = dl.getContext('2d');
+
+    // Background
+    ctx.fillStyle = '#0A0A0A';
+    ctx.fillRect(0, 0, 400, 500);
+
+    // Gold top bar
+    const grad = ctx.createLinearGradient(0, 0, 400, 0);
+    grad.addColorStop(0, '#C8102E');
+    grad.addColorStop(1, '#C9A84C');
+    ctx.fillStyle = grad;
+    ctx.fillRect(0, 0, 400, 5);
+
+    // Brand name
+    ctx.fillStyle = '#C9A84C';
+    ctx.font = 'bold 32px Arial';
+    ctx.textAlign = 'center';
+    ctx.fillText('SAHIL FITNESS', 200, 52);
+
+    // Tagline
+    ctx.fillStyle = '#777777';
+    ctx.font = '12px Arial';
+    ctx.fillText("WOMEN'S ADVANCED TRAINING VAULT", 200, 76);
+
+    // White QR background
+    ctx.fillStyle = '#FFFFFF';
+    ctx.beginPath();
+    ctx.roundRect(80, 96, 240, 240, 12);
+    ctx.fill();
+
+    // Draw QR onto download canvas
+    ctx.drawImage(canvas, 0, 0, 240, 240, 80, 96, 240, 240);
+
+    // URL text
+    ctx.fillStyle = '#C9A84C';
+    ctx.font = '12px Arial';
+    ctx.fillText('s09084617-gif.github.io/Claude', 200, 372);
+
+    // Bottom line
+    ctx.fillStyle = '#555555';
+    ctx.font = '11px Arial';
+    ctx.fillText('I-Blitz Fitness Club · Bangalore', 200, 420);
+    ctx.fillStyle = '#777777';
+    ctx.fillText('Coach Sahil Bansal', 200, 444);
+
+    // Gold bottom bar
+    ctx.fillStyle = grad;
+    ctx.fillRect(0, 495, 400, 5);
+
+    // Trigger download
+    const link = document.createElement('a');
+    link.download = 'sahil-fitness-qr.png';
+    link.href = dl.toDataURL('image/png');
+    link.click();
+  }
+</script>
+
+</body>
+</html>
