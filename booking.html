@@ -1,0 +1,621 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Book Your Training Slot – I-BLITZ Fitness Club</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700&display=swap');
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --crimson: #C0112B;
+    --gold: #D4A017;
+    --black: #0A0A0A;
+    --dark: #111111;
+    --card: #1A1A1A;
+    --border: #2A2A2A;
+    --text: #E8E8E8;
+    --muted: #888;
+    --green: #25D366;
+  }
+
+  body {
+    background: var(--black);
+    color: var(--text);
+    font-family: 'Inter', sans-serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* ── HEADER ── */
+  header {
+    background: var(--dark);
+    border-bottom: 2px solid var(--crimson);
+    padding: 18px 24px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+  .logo-mark {
+    width: 48px; height: 48px;
+    background: var(--crimson);
+    border-radius: 4px;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 22px;
+    color: #fff;
+    letter-spacing: 1px;
+    flex-shrink: 0;
+  }
+  .header-text h1 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 22px;
+    letter-spacing: 2px;
+    color: #fff;
+    line-height: 1;
+  }
+  .header-text p {
+    font-size: 11px;
+    color: var(--gold);
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    margin-top: 2px;
+  }
+
+  /* ── HERO STRIP ── */
+  .hero {
+    background: linear-gradient(135deg, var(--crimson) 0%, #8B0000 100%);
+    padding: 32px 24px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: 'BOOK';
+    position: absolute;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 160px;
+    color: rgba(0,0,0,0.12);
+    top: -20px; right: -10px;
+    line-height: 1;
+    pointer-events: none;
+  }
+  .hero h2 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 38px;
+    letter-spacing: 3px;
+    color: #fff;
+    line-height: 1.1;
+  }
+  .hero p {
+    font-size: 14px;
+    color: rgba(255,255,255,0.8);
+    margin-top: 8px;
+    font-weight: 500;
+  }
+  .hero-badge {
+    display: inline-block;
+    background: var(--gold);
+    color: var(--black);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    padding: 4px 12px;
+    border-radius: 2px;
+    margin-bottom: 12px;
+  }
+
+  /* ── MAIN ── */
+  main {
+    max-width: 520px;
+    margin: 0 auto;
+    padding: 28px 20px 60px;
+  }
+
+  /* ── STEP CARDS ── */
+  .step-label {
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--gold);
+    font-weight: 700;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .step-label::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+
+  .card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 20px;
+  }
+  .card h3 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 20px;
+    letter-spacing: 1.5px;
+    color: #fff;
+    margin-bottom: 12px;
+  }
+
+  /* ── FORM ── */
+  label {
+    display: block;
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--muted);
+    margin-bottom: 6px;
+    margin-top: 14px;
+  }
+  label:first-of-type { margin-top: 0; }
+
+  input, select {
+    width: 100%;
+    background: #222;
+    border: 1px solid var(--border);
+    border-radius: 5px;
+    color: var(--text);
+    font-family: 'Inter', sans-serif;
+    font-size: 15px;
+    padding: 11px 14px;
+    outline: none;
+    transition: border-color 0.2s;
+    -webkit-appearance: none;
+    appearance: none;
+  }
+  input:focus, select:focus {
+    border-color: var(--crimson);
+  }
+  input::placeholder { color: #555; }
+
+  .time-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+    margin-top: 0;
+  }
+  .time-btn {
+    background: #222;
+    border: 1px solid var(--border);
+    border-radius: 5px;
+    color: var(--muted);
+    font-size: 13px;
+    font-weight: 600;
+    padding: 10px 6px;
+    cursor: pointer;
+    transition: all 0.15s;
+    text-align: center;
+  }
+  .time-btn:hover { border-color: var(--crimson); color: #fff; }
+  .time-btn.selected {
+    background: var(--crimson);
+    border-color: var(--crimson);
+    color: #fff;
+  }
+
+  /* ── CTA BUTTON ── */
+  .whatsapp-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    width: 100%;
+    background: var(--green);
+    color: #fff;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 22px;
+    letter-spacing: 2px;
+    padding: 16px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: transform 0.15s, box-shadow 0.15s;
+    text-decoration: none;
+    box-shadow: 0 4px 20px rgba(37,211,102,0.25);
+    margin-top: 4px;
+  }
+  .whatsapp-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 28px rgba(37,211,102,0.35);
+  }
+  .whatsapp-btn:active { transform: translateY(0); }
+  .whatsapp-icon {
+    width: 28px; height: 28px;
+    fill: #fff;
+    flex-shrink: 0;
+  }
+
+  .btn-note {
+    text-align: center;
+    font-size: 12px;
+    color: var(--muted);
+    margin-top: 10px;
+  }
+
+  /* ── PREVIEW BOX ── */
+  .preview-card {
+    background: #1a2a1a;
+    border: 1px solid #2d5a2d;
+    border-radius: 8px;
+    padding: 16px;
+    margin-bottom: 20px;
+    display: none;
+  }
+  .preview-card.show { display: block; }
+  .preview-card .preview-title {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: var(--green);
+    font-weight: 700;
+    margin-bottom: 10px;
+  }
+  .preview-card .msg-bubble {
+    background: #dcf8c6;
+    color: #111;
+    border-radius: 8px 8px 8px 0;
+    padding: 12px 14px;
+    font-size: 14px;
+    line-height: 1.6;
+    font-family: monospace;
+    white-space: pre-wrap;
+  }
+
+  /* ── HOW IT WORKS ── */
+  .steps-list {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+  .step-item {
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+  }
+  .step-num {
+    width: 32px; height: 32px;
+    background: var(--crimson);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 16px;
+    color: #fff;
+    flex-shrink: 0;
+  }
+  .step-content strong {
+    display: block;
+    font-size: 14px;
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 2px;
+  }
+  .step-content span {
+    font-size: 13px;
+    color: var(--muted);
+  }
+
+  /* ── INFO STRIP ── */
+  .info-strip {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-bottom: 20px;
+  }
+  .info-pill {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 12px;
+    text-align: center;
+  }
+  .info-pill .val {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 22px;
+    color: var(--gold);
+    letter-spacing: 1px;
+  }
+  .info-pill .lbl {
+    font-size: 11px;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-top: 2px;
+  }
+
+  /* ── FOOTER ── */
+  footer {
+    text-align: center;
+    padding: 20px;
+    border-top: 1px solid var(--border);
+    font-size: 12px;
+    color: var(--muted);
+  }
+  footer span { color: var(--gold); }
+
+  /* ── VALIDATION ── */
+  .error-msg {
+    font-size: 12px;
+    color: #ff6b6b;
+    margin-top: 5px;
+    display: none;
+  }
+  .error-msg.show { display: block; }
+  input.invalid, select.invalid { border-color: #ff6b6b; }
+</style>
+</head>
+<body>
+
+<nav style="position:sticky;top:0;z-index:300;background:rgba(10,10,10,0.98);border-bottom:1px solid rgba(192,17,43,0.5);backdrop-filter:blur(12px);padding:12px 24px;display:flex;align-items:center;justify-content:space-between;">
+  <a href="index.html" style="font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:4px;background:linear-gradient(to right,#C0112B,#D4A017);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;text-decoration:none;">Sahil Fitness</a>
+  <div style="display:flex;gap:20px;">
+    <a href="index.html" style="font-family:'Inter',sans-serif;font-size:11px;letter-spacing:2px;color:#888;text-decoration:none;text-transform:uppercase;">Home</a>
+    <a href="men.html" style="font-family:'Inter',sans-serif;font-size:11px;letter-spacing:2px;color:#C0112B;text-decoration:none;text-transform:uppercase;">Men's</a>
+    <a href="women.html" style="font-family:'Inter',sans-serif;font-size:11px;letter-spacing:2px;color:#d4a0d4;text-decoration:none;text-transform:uppercase;">Women's</a>
+  </div>
+</nav>
+
+<header>
+  <div class="logo-mark">IB</div>
+  <div class="header-text">
+    <h1>I-BLITZ FITNESS CLUB</h1>
+    <p>Head Coach · Sahil R · Bangalore</p>
+  </div>
+</header>
+
+<div class="hero">
+  <div class="hero-badge">📅 Slot Booking</div>
+  <h2>Book Your<br>Training Session</h2>
+  <p>Fill the form below — your message goes straight to Coach Sahil on WhatsApp</p>
+</div>
+
+<main>
+
+  <!-- INFO PILLS -->
+  <div class="info-strip">
+    <div class="info-pill">
+      <div class="val">6 AM</div>
+      <div class="lbl">Opens</div>
+    </div>
+    <div class="info-pill">
+      <div class="val">9 PM</div>
+      <div class="lbl">Last Slot</div>
+    </div>
+    <div class="info-pill">
+      <div class="val">Mon–Sat</div>
+      <div class="lbl">Available</div>
+    </div>
+    <div class="info-pill">
+      <div class="val">~1 Hr</div>
+      <div class="lbl">Per Session</div>
+    </div>
+  </div>
+
+  <!-- BOOKING FORM -->
+  <div class="step-label">Step 01 — Your Details</div>
+  <div class="card">
+    <h3>Personal Info</h3>
+
+    <label for="clientName">Your Full Name</label>
+    <input type="text" id="clientName" placeholder="e.g. Priya Sharma" autocomplete="name">
+    <div class="error-msg" id="nameErr">Please enter your name</div>
+
+    <label for="clientPhone">WhatsApp Number</label>
+    <input type="tel" id="clientPhone" placeholder="e.g. 9876543210" maxlength="10" autocomplete="tel">
+    <div class="error-msg" id="phoneErr">Enter a valid 10-digit number</div>
+  </div>
+
+  <div class="step-label">Step 02 — Pick Your Slot</div>
+  <div class="card">
+    <h3>Date & Time</h3>
+
+    <label for="slotDate">Preferred Date</label>
+    <input type="date" id="slotDate">
+    <div class="error-msg" id="dateErr">Please select a date</div>
+
+    <label style="margin-top:16px;">Preferred Time</label>
+    <div class="time-grid">
+      <div class="time-btn" onclick="selectTime(this, '6:00 AM')">6:00 AM</div>
+      <div class="time-btn" onclick="selectTime(this, '7:00 AM')">7:00 AM</div>
+      <div class="time-btn" onclick="selectTime(this, '8:00 AM')">8:00 AM</div>
+      <div class="time-btn" onclick="selectTime(this, '9:00 AM')">9:00 AM</div>
+      <div class="time-btn" onclick="selectTime(this, '10:00 AM')">10:00 AM</div>
+      <div class="time-btn" onclick="selectTime(this, '5:00 PM')">5:00 PM</div>
+      <div class="time-btn" onclick="selectTime(this, '6:00 PM')">6:00 PM</div>
+      <div class="time-btn" onclick="selectTime(this, '7:00 PM')">7:00 PM</div>
+      <div class="time-btn" onclick="selectTime(this, '8:00 PM')">8:00 PM</div>
+    </div>
+    <div class="error-msg" id="timeErr">Please select a time slot</div>
+  </div>
+
+  <!-- MESSAGE PREVIEW -->
+  <div class="preview-card" id="previewCard">
+    <div class="preview-title">📱 Your Message Preview</div>
+    <div class="msg-bubble" id="msgPreview"></div>
+  </div>
+
+  <!-- SEND BUTTON -->
+  <a class="whatsapp-btn" id="sendBtn" href="#" onclick="return sendToWhatsApp()">
+    <svg class="whatsapp-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+      <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+    </svg>
+    SEND BOOKING REQUEST
+  </a>
+  <p class="btn-note">Opens WhatsApp with your details pre-filled · Coach Sahil will confirm within 1 hour</p>
+
+  <!-- HOW IT WORKS -->
+  <div style="margin-top: 32px;">
+    <div class="step-label">How It Works</div>
+    <div class="card">
+      <div class="steps-list">
+        <div class="step-item">
+          <div class="step-num">1</div>
+          <div class="step-content">
+            <strong>Fill the form above</strong>
+            <span>Enter your name, number, and preferred slot</span>
+          </div>
+        </div>
+        <div class="step-item">
+          <div class="step-num">2</div>
+          <div class="step-content">
+            <strong>Tap "Send Booking Request"</strong>
+            <span>WhatsApp opens with your message ready — just hit Send</span>
+          </div>
+        </div>
+        <div class="step-item">
+          <div class="step-num">3</div>
+          <div class="step-content">
+            <strong>Coach Sahil confirms</strong>
+            <span>You'll get a confirmation message within 1 hour</span>
+          </div>
+        </div>
+        <div class="step-item">
+          <div class="step-num">4</div>
+          <div class="step-content">
+            <strong>Show up & train hard</strong>
+            <span>Arrive 5 mins early. Your slot is locked in 💪</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<footer>
+  <p>© I-BLITZ Fitness Club · Bangalore · <span>@sahil_r_fitness</span></p>
+  <p style="margin-top:4px;">Questions? WhatsApp Coach Sahil directly</p>
+</footer>
+
+<script>
+  // ── CONFIG — update your WhatsApp number here ──
+  const COACH_WHATSAPP = '917015552731';
+
+  let selectedTime = '';
+
+  // Set minimum date to today
+  document.addEventListener('DOMContentLoaded', () => {
+    const dateInput = document.getElementById('slotDate');
+    const today = new Date().toISOString().split('T')[0];
+    dateInput.min = today;
+
+    // Live preview on input change
+    ['clientName','clientPhone','slotDate'].forEach(id => {
+      document.getElementById(id).addEventListener('input', updatePreview);
+    });
+  });
+
+  function selectTime(el, time) {
+    document.querySelectorAll('.time-btn').forEach(b => b.classList.remove('selected'));
+    el.classList.add('selected');
+    selectedTime = time;
+    document.getElementById('timeErr').classList.remove('show');
+    updatePreview();
+  }
+
+  function formatDate(dateStr) {
+    if (!dateStr) return '';
+    const d = new Date(dateStr + 'T00:00:00');
+    return d.toLocaleDateString('en-IN', { weekday:'long', day:'numeric', month:'long', year:'numeric' });
+  }
+
+  function buildMessage() {
+    const name  = document.getElementById('clientName').value.trim();
+    const phone = document.getElementById('clientPhone').value.trim();
+    const date  = document.getElementById('slotDate').value;
+    const time  = selectedTime;
+
+    if (!name && !phone && !date && !time) return '';
+
+    return `🏋️ *SLOT BOOKING REQUEST*\n` +
+           `━━━━━━━━━━━━━━━━━━━\n` +
+           `👤 *Name:* ${name || '—'}\n` +
+           `📱 *WhatsApp:* ${phone || '—'}\n` +
+           `📅 *Date:* ${date ? formatDate(date) : '—'}\n` +
+           `⏰ *Time:* ${time || '—'}\n` +
+           `━━━━━━━━━━━━━━━━━━━\n` +
+           `📍 I-BLITZ Fitness Club, Bangalore\n` +
+           `\nPlease confirm my slot, Coach Sahil! 💪`;
+  }
+
+  function updatePreview() {
+    const msg = buildMessage();
+    const card = document.getElementById('previewCard');
+    const preview = document.getElementById('msgPreview');
+    if (msg) {
+      preview.textContent = msg;
+      card.classList.add('show');
+    } else {
+      card.classList.remove('show');
+    }
+  }
+
+  function validate() {
+    let ok = true;
+    const name  = document.getElementById('clientName');
+    const phone = document.getElementById('clientPhone');
+    const date  = document.getElementById('slotDate');
+
+    // Name
+    if (!name.value.trim()) {
+      name.classList.add('invalid');
+      document.getElementById('nameErr').classList.add('show');
+      ok = false;
+    } else {
+      name.classList.remove('invalid');
+      document.getElementById('nameErr').classList.remove('show');
+    }
+
+    // Phone
+    if (!/^\d{10}$/.test(phone.value.trim())) {
+      phone.classList.add('invalid');
+      document.getElementById('phoneErr').classList.add('show');
+      ok = false;
+    } else {
+      phone.classList.remove('invalid');
+      document.getElementById('phoneErr').classList.remove('show');
+    }
+
+    // Date
+    if (!date.value) {
+      date.classList.add('invalid');
+      document.getElementById('dateErr').classList.add('show');
+      ok = false;
+    } else {
+      date.classList.remove('invalid');
+      document.getElementById('dateErr').classList.remove('show');
+    }
+
+    // Time
+    if (!selectedTime) {
+      document.getElementById('timeErr').classList.add('show');
+      ok = false;
+    } else {
+      document.getElementById('timeErr').classList.remove('show');
+    }
+
+    return ok;
+  }
+
+  function sendToWhatsApp() {
+    if (!validate()) return false;
+    const msg = buildMessage();
+    const url = `https://wa.me/${COACH_WHATSAPP}?text=${encodeURIComponent(msg)}`;
+    window.open(url, '_blank');
+    return false;
+  }
+</script>
+</body>
+</html>
