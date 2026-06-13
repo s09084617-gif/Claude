@@ -1,0 +1,851 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Apply for Coaching — FitWid.fit</title>
+  <meta name="description" content="Apply for online fitness coaching with Coach Sahil at FitWid.fit. Fill in your details and get a response on WhatsApp within 24 hours." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Inter+Tight:wght@700;800;900&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #0A0A0A;
+      --surface: #161616;
+      --surface-2: #1E1E1E;
+      --primary: #C8102E;
+      --accent: #D4AF37;
+      --text: #F5F5F5;
+      --muted: #9A9A9A;
+      --radius-card: 12px;
+      --radius-btn: 8px;
+      --section-pad: 80px;
+      --max-w: 1200px;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Inter', sans-serif;
+      font-size: 16px;
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    a { color: inherit; text-decoration: none; }
+
+    /* NAV */
+    #navbar {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(10,10,10,0.94);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+    }
+
+    .nav-inner {
+      max-width: var(--max-w);
+      margin: 0 auto;
+      padding: 0 24px;
+      height: 64px;
+      display: flex;
+      align-items: center;
+      gap: 32px;
+    }
+
+    .nav-logo {
+      font-family: 'Inter Tight', sans-serif;
+      font-weight: 900;
+      font-size: 22px;
+      letter-spacing: 0.06em;
+      color: var(--text);
+      flex-shrink: 0;
+    }
+
+    .nav-links {
+      list-style: none;
+      display: flex;
+      gap: 28px;
+      margin-left: auto;
+    }
+
+    .nav-links a {
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--muted);
+      transition: color 0.2s;
+    }
+
+    .nav-links a:hover { color: var(--text); }
+
+    .nav-cta {
+      flex-shrink: 0;
+      background: var(--primary);
+      color: #fff;
+      font-size: 14px;
+      font-weight: 600;
+      padding: 9px 20px;
+      border-radius: var(--radius-btn);
+      transition: opacity 0.2s;
+      white-space: nowrap;
+    }
+
+    .nav-cta:hover { opacity: 0.88; }
+
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 4px;
+      margin-left: auto;
+    }
+
+    .hamburger span {
+      display: block;
+      width: 22px;
+      height: 2px;
+      background: var(--text);
+      border-radius: 2px;
+    }
+
+    .mobile-nav {
+      display: none;
+      flex-direction: column;
+      padding: 12px 24px 20px;
+      border-top: 1px solid rgba(255,255,255,0.06);
+      gap: 2px;
+    }
+
+    .mobile-nav.open { display: flex; }
+
+    .mobile-nav a {
+      padding: 11px 0;
+      font-size: 15px;
+      font-weight: 500;
+      color: var(--muted);
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+      transition: color 0.2s;
+    }
+
+    .mobile-nav a:last-child { border-bottom: none; }
+    .mobile-nav a:hover { color: var(--text); }
+
+    .mob-cta {
+      margin-top: 6px;
+      color: var(--primary) !important;
+      font-weight: 600 !important;
+      border-bottom: none !important;
+    }
+
+    /* PAGE LAYOUT */
+    .apply-section {
+      max-width: var(--max-w);
+      margin: 0 auto;
+      padding: 72px 24px var(--section-pad);
+      display: grid;
+      grid-template-columns: 1fr 380px;
+      gap: 64px;
+      align-items: start;
+    }
+
+    /* FORM SIDE */
+    .form-side h1 {
+      font-family: 'Inter Tight', sans-serif;
+      font-weight: 800;
+      font-size: 36px;
+      color: var(--text);
+      letter-spacing: -0.02em;
+      margin-bottom: 10px;
+      line-height: 1.1;
+    }
+
+    .form-side .sub {
+      font-size: 16px;
+      color: var(--muted);
+      margin-bottom: 40px;
+      line-height: 1.65;
+    }
+
+    /* FORM */
+    .apply-form {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 7px;
+    }
+
+    .form-group label {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text);
+      letter-spacing: 0.01em;
+    }
+
+    .form-group label .req {
+      color: var(--primary);
+      margin-left: 2px;
+    }
+
+    .form-input,
+    .form-select,
+    .form-textarea {
+      background: var(--surface-2);
+      border: 1.5px solid rgba(255,255,255,0.1);
+      border-radius: 12px;
+      color: var(--text);
+      font-family: 'Inter', sans-serif;
+      font-size: 15px;
+      padding: 13px 16px;
+      transition: border-color 0.2s, box-shadow 0.2s;
+      width: 100%;
+      outline: none;
+      -webkit-appearance: none;
+      appearance: none;
+    }
+
+    .form-input::placeholder,
+    .form-textarea::placeholder {
+      color: rgba(154,154,154,0.6);
+    }
+
+    .form-input:focus,
+    .form-select:focus,
+    .form-textarea:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(200,16,46,0.12);
+    }
+
+    .form-select {
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8' fill='none'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%239A9A9A' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 16px center;
+      padding-right: 40px;
+      cursor: pointer;
+    }
+
+    .form-select option {
+      background: var(--surface-2);
+      color: var(--text);
+    }
+
+    .form-textarea {
+      resize: vertical;
+      min-height: 108px;
+    }
+
+    /* RADIO GROUP */
+    .radio-group-label {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 10px;
+      display: block;
+    }
+
+    .radio-options {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .radio-option {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      cursor: pointer;
+      padding: 13px 16px;
+      border-radius: 12px;
+      border: 1.5px solid rgba(255,255,255,0.1);
+      background: var(--surface-2);
+      transition: border-color 0.2s, background 0.2s;
+      user-select: none;
+    }
+
+    .radio-option:has(input:checked) {
+      border-color: var(--primary);
+      background: rgba(200,16,46,0.07);
+    }
+
+    .radio-option input[type="radio"] {
+      appearance: none;
+      -webkit-appearance: none;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      border: 2px solid rgba(255,255,255,0.2);
+      flex-shrink: 0;
+      position: relative;
+      transition: border-color 0.2s;
+      cursor: pointer;
+    }
+
+    .radio-option input[type="radio"]:checked {
+      border-color: var(--primary);
+    }
+
+    .radio-option input[type="radio"]::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%) scale(0);
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--primary);
+      transition: transform 0.18s;
+    }
+
+    .radio-option input[type="radio"]:checked::after {
+      transform: translate(-50%, -50%) scale(1);
+    }
+
+    .radio-label-text {
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--text);
+    }
+
+    .radio-label-sub {
+      font-size: 12px;
+      color: var(--muted);
+      margin-top: 2px;
+    }
+
+    /* SUBMIT BUTTON */
+    .btn-submit {
+      width: 100%;
+      padding: 16px 24px;
+      background: var(--primary);
+      color: #fff;
+      font-family: 'Inter', sans-serif;
+      font-size: 16px;
+      font-weight: 700;
+      border: none;
+      border-radius: var(--radius-btn);
+      cursor: pointer;
+      transition: opacity 0.2s, transform 0.15s;
+      margin-top: 4px;
+    }
+
+    .btn-submit:hover:not(:disabled) { opacity: 0.88; transform: translateY(-1px); }
+    .btn-submit:disabled { opacity: 0.55; cursor: not-allowed; }
+
+    /* INFO SIDEBAR */
+    .info-sidebar {
+      position: sticky;
+      top: 84px;
+    }
+
+    .sidebar-card {
+      background: var(--surface);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: var(--radius-card);
+      padding: 32px;
+      display: flex;
+      flex-direction: column;
+      gap: 28px;
+    }
+
+    .sidebar-card h3 {
+      font-family: 'Inter Tight', sans-serif;
+      font-weight: 800;
+      font-size: 20px;
+      color: var(--text);
+    }
+
+    .steps-list {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .step {
+      display: flex;
+      gap: 14px;
+      align-items: flex-start;
+    }
+
+    .step-num {
+      flex-shrink: 0;
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      background: rgba(200,16,46,0.14);
+      border: 1.5px solid rgba(200,16,46,0.3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--primary);
+      margin-top: 1px;
+    }
+
+    .step-text {
+      font-size: 14px;
+      color: var(--muted);
+      line-height: 1.6;
+      padding-top: 5px;
+    }
+
+    .sidebar-divider {
+      height: 1px;
+      background: rgba(255,255,255,0.07);
+    }
+
+    .wa-link-wrap {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .wa-link-wrap p {
+      font-size: 13px;
+      color: var(--muted);
+    }
+
+    .btn-wa {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      padding: 13px 18px;
+      background: #1a472a;
+      border: 1px solid rgba(37,211,102,0.2);
+      border-radius: var(--radius-btn);
+      color: #25d366;
+      font-size: 14px;
+      font-weight: 600;
+      transition: background 0.2s, opacity 0.2s;
+    }
+
+    .btn-wa:hover { background: #1f5733; opacity: 0.92; }
+
+    .btn-wa svg { flex-shrink: 0; }
+
+    /* CONFIRMATION */
+    #confirmSection {
+      display: none;
+      justify-content: center;
+      align-items: center;
+      min-height: 60vh;
+      padding: 40px 24px;
+    }
+
+    .confirm-card {
+      background: #161616;
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 16px;
+      padding: 48px;
+      text-align: center;
+      max-width: 480px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .confirm-icon {
+      width: 64px;
+      height: 64px;
+      background: var(--primary);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 28px;
+      font-weight: 700;
+      color: #fff;
+      margin: 0 auto;
+    }
+
+    .confirm-card h2 {
+      font-family: 'Inter Tight', sans-serif;
+      font-weight: 800;
+      font-size: 28px;
+      color: var(--text);
+    }
+
+    .confirm-card p {
+      font-size: 15px;
+      color: var(--muted);
+      line-height: 1.65;
+    }
+
+    .confirm-card p strong { color: var(--text); }
+
+    .btn-primary {
+      display: inline-block;
+      background: var(--primary);
+      color: #fff;
+      font-size: 15px;
+      font-weight: 700;
+      padding: 14px 28px;
+      border-radius: var(--radius-btn);
+      transition: opacity 0.2s, transform 0.15s;
+    }
+
+    .btn-primary:hover { opacity: 0.88; transform: translateY(-1px); }
+
+    .btn-outline {
+      display: inline-block;
+      border: 1.5px solid rgba(255,255,255,0.15);
+      color: var(--muted);
+      font-size: 14px;
+      font-weight: 600;
+      padding: 12px 24px;
+      border-radius: var(--radius-btn);
+      transition: border-color 0.2s, color 0.2s;
+    }
+
+    .btn-outline:hover { border-color: rgba(255,255,255,0.3); color: var(--text); }
+
+    /* FOOTER */
+    footer {
+      background: var(--surface);
+      border-top: 1px solid rgba(255,255,255,0.07);
+    }
+
+    .footer-inner {
+      max-width: var(--max-w);
+      margin: 0 auto;
+      padding: 64px 24px 40px;
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr 1fr;
+      gap: 48px;
+    }
+
+    .footer-brand p {
+      font-size: 14px;
+      color: var(--muted);
+      margin: 12px 0 8px;
+      line-height: 1.6;
+    }
+
+    .footer-brand a:not(.nav-logo) {
+      font-size: 14px;
+      color: var(--muted);
+      transition: color 0.2s;
+    }
+
+    .footer-brand a:not(.nav-logo):hover { color: var(--text); }
+
+    .footer-col h4 {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 18px;
+    }
+
+    .footer-col {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .footer-col a {
+      font-size: 14px;
+      color: var(--muted);
+      padding: 5px 0;
+      transition: color 0.2s;
+    }
+
+    .footer-col a:hover { color: var(--text); }
+
+    .footer-bottom {
+      max-width: var(--max-w);
+      margin: 0 auto;
+      padding: 20px 24px;
+      border-top: 1px solid rgba(255,255,255,0.06);
+    }
+
+    .footer-bottom p { font-size: 13px; color: var(--muted); }
+
+    /* RESPONSIVE */
+    @media (max-width: 900px) {
+      .apply-section {
+        grid-template-columns: 1fr;
+        gap: 48px;
+        padding-top: 56px;
+      }
+
+      .info-sidebar { position: static; }
+
+      .footer-inner { grid-template-columns: 1fr 1fr; }
+      .footer-brand { grid-column: 1 / -1; }
+    }
+
+    @media (max-width: 640px) {
+      .nav-links, .nav-cta { display: none; }
+      .hamburger { display: flex; }
+
+      .apply-section { padding: 48px 24px var(--section-pad); }
+      .form-side h1 { font-size: 30px; }
+
+      .confirm-card { padding: 36px 24px; }
+
+      .footer-inner { grid-template-columns: 1fr; gap: 32px; }
+    }
+  </style>
+  <script defer src="/_vercel/speed-insights/script.js"></script>
+</head>
+<body>
+
+<!-- NAV -->
+<nav id="navbar">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo">FITWID</a>
+    <ul class="nav-links">
+      <li><a href="coaching.html">Coaching</a></li>
+      <li><a href="pricing.html">Pricing</a></li>
+      <li><a href="results.html">Results</a></li>
+      <li><a href="about.html">About</a></li>
+    </ul>
+    <a href="apply.html" class="nav-cta">Book Free Consult</a>
+    <button class="hamburger" onclick="document.getElementById('mobileNav').classList.toggle('open')" aria-label="Toggle menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+  <div class="mobile-nav" id="mobileNav">
+    <a href="coaching.html">Coaching</a>
+    <a href="pricing.html">Pricing</a>
+    <a href="results.html">Results</a>
+    <a href="about.html">About</a>
+    <a href="apply.html" class="mob-cta">Book Free Consult</a>
+  </div>
+</nav>
+
+<!-- MAIN -->
+<main>
+
+  <!-- FORM SECTION -->
+  <div id="formSection">
+    <div class="apply-section">
+
+      <!-- LEFT: FORM -->
+      <div class="form-side">
+        <h1>Apply for Coaching</h1>
+        <p class="sub">Fill in your details. We respond on WhatsApp within 24 hours.</p>
+
+        <form class="apply-form" id="applyForm" novalidate>
+
+          <!-- Name -->
+          <div class="form-group">
+            <label for="name">Full Name<span class="req">*</span></label>
+            <input class="form-input" type="text" id="name" name="name" placeholder="Your full name" required autocomplete="name" />
+          </div>
+
+          <!-- WhatsApp -->
+          <div class="form-group">
+            <label for="whatsapp">WhatsApp Number<span class="req">*</span></label>
+            <input class="form-input" type="tel" id="whatsapp" name="whatsapp" placeholder="+91 98765 43210" required autocomplete="tel" />
+          </div>
+
+          <!-- Email -->
+          <div class="form-group">
+            <label for="email">Email Address <span style="color:var(--muted);font-weight:400;">(optional)</span></label>
+            <input class="form-input" type="email" id="email" name="email" placeholder="you@example.com" autocomplete="email" />
+          </div>
+
+          <!-- Goal -->
+          <div class="form-group">
+            <label for="goal">Your Primary Goal</label>
+            <select class="form-select" id="goal" name="goal">
+              <option value="" disabled selected>Select your goal</option>
+              <option value="Build Muscle">Build Muscle</option>
+              <option value="Lose Fat">Lose Fat</option>
+              <option value="Body Recomposition">Body Recomposition</option>
+              <option value="Improve Strength">Improve Strength</option>
+              <option value="General Fitness">General Fitness</option>
+            </select>
+          </div>
+
+          <!-- Experience -->
+          <div class="form-group">
+            <label for="experience">Training Experience</label>
+            <select class="form-select" id="experience" name="experience">
+              <option value="" disabled selected>Select your experience level</option>
+              <option value="Beginner (0–1 year)">Beginner (0&ndash;1 year)</option>
+              <option value="Intermediate (1–3 years)">Intermediate (1&ndash;3 years)</option>
+              <option value="Advanced (3+ years)">Advanced (3+ years)</option>
+            </select>
+          </div>
+
+          <!-- Plan / Tier -->
+          <div class="form-group">
+            <span class="radio-group-label">Which plan interests you?</span>
+            <div class="radio-options">
+              <label class="radio-option">
+                <input type="radio" name="tier" value="self-guided" />
+                <div>
+                  <div class="radio-label-text">Self-Guided</div>
+                  <div class="radio-label-sub">Program vault + AI generator — &#8377;1,999/mo</div>
+                </div>
+              </label>
+              <label class="radio-option">
+                <input type="radio" name="tier" value="online-coaching" checked />
+                <div>
+                  <div class="radio-label-text">Online Coaching</div>
+                  <div class="radio-label-sub">Custom program + weekly check-ins — &#8377;4,999/mo</div>
+                </div>
+              </label>
+              <label class="radio-option">
+                <input type="radio" name="tier" value="premium" />
+                <div>
+                  <div class="radio-label-text">1:1 Premium</div>
+                  <div class="radio-label-sub">Full personalisation + video calls — &#8377;9,999/mo</div>
+                </div>
+              </label>
+            </div>
+          </div>
+
+          <!-- Notes -->
+          <div class="form-group">
+            <label for="notes">Anything else you'd like us to know?</label>
+            <textarea class="form-textarea" id="notes" name="notes" rows="4" placeholder="Injuries, equipment available, schedule constraints, current fitness level..."></textarea>
+          </div>
+
+          <button type="submit" class="btn-submit" id="submitBtn">Submit Application</button>
+
+        </form>
+      </div>
+
+      <!-- RIGHT: SIDEBAR -->
+      <aside class="info-sidebar">
+        <div class="sidebar-card">
+          <h3>What happens next</h3>
+
+          <div class="steps-list">
+            <div class="step">
+              <div class="step-num">1</div>
+              <div class="step-text">We review your application (within a few hours)</div>
+            </div>
+            <div class="step">
+              <div class="step-num">2</div>
+              <div class="step-text">Coach Sahil reaches out to you on WhatsApp</div>
+            </div>
+            <div class="step">
+              <div class="step-num">3</div>
+              <div class="step-text">Free consult call to build your personalised plan</div>
+            </div>
+          </div>
+
+          <div class="sidebar-divider"></div>
+
+          <div class="wa-link-wrap">
+            <p>Prefer to message directly?</p>
+            <a href="https://wa.me/917015552731?text=Hi%20Coach%20Sahil%2C%20I%27d%20like%20to%20apply%20for%20coaching." class="btn-wa" target="_blank" rel="noopener noreferrer">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="#25d366"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
+              Chat on WhatsApp
+            </a>
+          </div>
+        </div>
+      </aside>
+
+    </div>
+  </div>
+
+  <!-- CONFIRMATION SECTION -->
+  <div id="confirmSection"></div>
+
+</main>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <a href="index.html" class="nav-logo">FITWID</a>
+      <p>I-BLITZ Fitness Club · Bangalore</p>
+      <a href="mailto:coach@fitwid.fit">coach@fitwid.fit</a>
+    </div>
+    <div class="footer-col"><h4>Platform</h4><a href="coaching.html">Coaching</a><a href="pricing.html">Pricing</a><a href="results.html">Results</a><a href="apply.html">Apply</a><a href="about.html">About</a></div>
+    <div class="footer-col"><h4>Tools</h4><a href="generator.html">Workout Generator</a><a href="booking.html">Book Session</a><a href="client-portal.html">Client Login</a></div>
+    <div class="footer-col"><h4>Legal</h4><a href="#">Privacy</a><a href="#">Terms</a></div>
+  </div>
+  <div class="footer-bottom"><p>© 2025 FitWid.fit — I-BLITZ Fitness Club. All rights reserved.</p></div>
+</footer>
+
+<!-- Firebase SDKs -->
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+<script src="firebase-config.js"></script>
+
+<script>
+  // Read tier from URL param if present
+  const urlParams = new URLSearchParams(window.location.search);
+  const tierParam = urlParams.get('tier');
+  if (tierParam) {
+    const radio = document.querySelector(`input[name="tier"][value="${tierParam}"]`);
+    if (radio) radio.checked = true;
+  }
+
+  document.getElementById('applyForm').addEventListener('submit', async function(e) {
+    e.preventDefault();
+    const btn = document.getElementById('submitBtn');
+    btn.disabled = true;
+    btn.textContent = 'Submitting...';
+
+    const data = {
+      name: document.getElementById('name').value.trim(),
+      whatsapp: document.getElementById('whatsapp').value.trim(),
+      email: document.getElementById('email').value.trim(),
+      goal: document.getElementById('goal').value,
+      experience: document.getElementById('experience').value,
+      tier: document.querySelector('input[name="tier"]:checked')?.value || 'online-coaching',
+      notes: document.getElementById('notes').value.trim(),
+      source: 'apply',
+      status: 'new',
+      created_at: new Date().toISOString()
+    };
+
+    try {
+      // Guard against double-initialization
+      const app = firebase.apps.length
+        ? firebase.apps[0]
+        : firebase.initializeApp(FIREBASE_CONFIG);
+      const db = firebase.database();
+      await db.ref('leads').push(data);
+      showConfirmation(data);
+    } catch(err) {
+      console.error('Firebase error:', err);
+      btn.disabled = false;
+      btn.textContent = 'Submit Application';
+      alert('Something went wrong. Please WhatsApp us directly.');
+    }
+  });
+
+  function showConfirmation(data) {
+    document.getElementById('formSection').style.display = 'none';
+    const msg = `Hi Coach Sahil, I just applied for coaching on FitWid.fit. My name is ${data.name}, goal: ${data.goal}, interested in ${data.tier} plan.`;
+    const waUrl = `https://wa.me/917015552731?text=${encodeURIComponent(msg)}`;
+    document.getElementById('confirmSection').innerHTML = `
+      <div class="confirm-card">
+        <div class="confirm-icon">&#10003;</div>
+        <h2>Application Received!</h2>
+        <p>Thanks ${data.name}. Coach Sahil will reach out to you on WhatsApp <strong>${data.whatsapp}</strong> within 24 hours.</p>
+        <a href="${waUrl}" class="btn-primary" target="_blank" rel="noopener">Message Coach on WhatsApp</a>
+        <a href="index.html" class="btn-outline">Back to Home</a>
+      </div>
+    `;
+    document.getElementById('confirmSection').style.display = 'flex';
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+</script>
+
+</body>
+</html>
