@@ -16,3 +16,4 @@ frontend/.env.local
 
 # Docker
 pgdata/
+node_modules/
