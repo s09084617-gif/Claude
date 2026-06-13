@@ -1,692 +1,682 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Coaching Plans &amp; Pricing — FitWid.fit</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@700;800;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
-<style>
-  :root {
-    --bg: #0A0A0A;
-    --surface: #161616;
-    --surface2: #1E1E1E;
-    --primary: #C8102E;
-    --primary-dark: #a00d24;
-    --accent: #D4AF37;
-    --text: #F5F5F5;
-    --muted: #9A9A9A;
-    --border: rgba(255,255,255,0.08);
-    --card-radius: 12px;
-    --btn-radius: 8px;
-    --section-pad: 80px;
-  }
-
-  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
-  html { scroll-behavior: smooth; }
-
-  body {
-    background: var(--bg);
-    color: var(--text);
-    font-family: 'Inter', sans-serif;
-    font-size: 16px;
-    line-height: 1.6;
-    overflow-x: hidden;
-  }
-
-  .container {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 0 24px;
-  }
-
-  /* ===== NAV ===== */
-  #navbar {
-    position: sticky;
-    top: 0;
-    z-index: 300;
-    background: rgba(10,10,10,0.96);
-    border-bottom: 1px solid var(--border);
-    backdrop-filter: blur(14px);
-    -webkit-backdrop-filter: blur(14px);
-  }
-
-  .nav-inner {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 0 24px;
-    height: 64px;
-    display: flex;
-    align-items: center;
-    gap: 40px;
-  }
-
-  .nav-logo {
-    font-family: 'Inter Tight', sans-serif;
-    font-weight: 900;
-    font-size: 20px;
-    letter-spacing: 4px;
-    background: linear-gradient(90deg, var(--primary), var(--accent));
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    text-decoration: none;
-    flex-shrink: 0;
-  }
-
-  .nav-links {
-    display: flex;
-    gap: 28px;
-    list-style: none;
-    margin-left: auto;
-  }
-
-  .nav-links a {
-    font-family: 'Inter', sans-serif;
-    font-weight: 600;
-    font-size: 13px;
-    letter-spacing: 0.5px;
-    color: var(--muted);
-    text-decoration: none;
-    transition: color 0.25s;
-  }
-
-  .nav-links a:hover,
-  .nav-links a[href="pricing.html"] { color: var(--text); }
-
-  .nav-cta {
-    font-family: 'Inter', sans-serif;
-    font-weight: 600;
-    font-size: 13px;
-    background: var(--primary);
-    color: #fff;
-    text-decoration: none;
-    padding: 10px 20px;
-    border-radius: var(--btn-radius);
-    transition: background 0.25s, transform 0.2s;
-    flex-shrink: 0;
-    white-space: nowrap;
-  }
-
-  .nav-cta:hover { background: var(--primary-dark); transform: translateY(-1px); }
-
-  .hamburger {
-    display: none;
-    flex-direction: column;
-    gap: 5px;
-    background: none;
-    border: none;
-    cursor: pointer;
-    padding: 4px;
-    margin-left: auto;
-  }
-
-  .hamburger span {
-    display: block;
-    width: 22px;
-    height: 2px;
-    background: var(--text);
-    border-radius: 2px;
-    transition: 0.3s;
-  }
-
-  .mobile-nav {
-    display: none;
-    flex-direction: column;
-    background: var(--surface);
-    border-top: 1px solid var(--border);
-    padding: 16px 24px 20px;
-    gap: 4px;
-  }
-
-  .mobile-nav.open { display: flex; }
-
-  .mobile-nav a {
-    font-family: 'Inter', sans-serif;
-    font-weight: 500;
-    font-size: 15px;
-    color: var(--muted);
-    text-decoration: none;
-    padding: 10px 0;
-    border-bottom: 1px solid var(--border);
-    transition: color 0.2s;
-  }
-
-  .mobile-nav a:hover { color: var(--text); }
-  .mobile-nav .mob-cta {
-    margin-top: 12px;
-    background: var(--primary);
-    color: #fff;
-    text-align: center;
-    padding: 12px;
-    border-radius: var(--btn-radius);
-    border-bottom: none;
-    font-weight: 600;
-  }
-  .mobile-nav .mob-cta:hover { background: var(--primary-dark); }
-
-  @media (max-width: 768px) {
-    .nav-links, .nav-cta { display: none; }
-    .hamburger { display: flex; }
-  }
-
-  /* ===== PRICING HEADER ===== */
-  .pricing-header {
-    padding: calc(var(--section-pad) * 0.9) 0 60px;
-    text-align: center;
-  }
-
-  .section-label {
-    display: inline-block;
-    font-family: 'Inter', sans-serif;
-    font-weight: 600;
-    font-size: 11px;
-    letter-spacing: 3px;
-    text-transform: uppercase;
-    color: var(--accent);
-    margin-bottom: 18px;
-  }
-
-  .pricing-header h1 {
-    font-family: 'Inter Tight', sans-serif;
-    font-weight: 900;
-    font-size: clamp(38px, 6vw, 64px);
-    line-height: 1.05;
-    color: var(--text);
-    margin-bottom: 18px;
-  }
-
-  .pricing-header p {
-    font-size: 18px;
-    color: var(--muted);
-    max-width: 520px;
-    margin: 0 auto 40px;
-  }
-
-  /* ===== TOGGLE ===== */
-  .billing-toggle {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 14px;
-  }
-
-  .toggle-label {
-    font-family: 'Inter', sans-serif;
-    font-weight: 600;
-    font-size: 14px;
-    color: var(--muted);
-    transition: color 0.25s;
-    cursor: pointer;
-    user-select: none;
-  }
-
-  .toggle-label.active { color: var(--text); }
-
-  .toggle-pill {
-    position: relative;
-    width: 52px;
-    height: 28px;
-    background: var(--surface2);
-    border-radius: 14px;
-    cursor: pointer;
-    border: 1px solid var(--border);
-    transition: background 0.25s;
-    flex-shrink: 0;
-  }
-
-  .toggle-pill.quarterly { background: var(--primary); }
-
-  .toggle-pill::after {
-    content: '';
-    position: absolute;
-    top: 3px;
-    left: 3px;
-    width: 20px;
-    height: 20px;
-    border-radius: 50%;
-    background: #fff;
-    transition: transform 0.25s;
-  }
-
-  .toggle-pill.quarterly::after { transform: translateX(24px); }
-
-  .save-badge {
-    font-family: 'Inter', sans-serif;
-    font-weight: 700;
-    font-size: 11px;
-    letter-spacing: 0.5px;
-    background: var(--accent);
-    color: #000;
-    padding: 3px 8px;
-    border-radius: 20px;
-    opacity: 0;
-    transform: translateY(4px);
-    transition: opacity 0.25s, transform 0.25s;
-    pointer-events: none;
-  }
-
-  .save-badge.visible { opacity: 1; transform: translateY(0); }
-
-  /* ===== PRICING CARDS ===== */
-  .pricing-section {
-    padding: 0 0 var(--section-pad);
-  }
-
-  .pricing-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 24px;
-    align-items: start;
-  }
-
-  .pricing-card {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: var(--card-radius);
-    padding: 32px 28px 36px;
-    position: relative;
-    transition: transform 0.25s, border-color 0.25s;
-  }
-
-  .pricing-card:hover { transform: translateY(-4px); }
-
-  .pricing-card.popular {
-    border-color: var(--accent);
-    border-width: 2px;
-  }
-
-  .popular-chip {
-    position: absolute;
-    top: -13px;
-    left: 50%;
-    transform: translateX(-50%);
-    background: var(--accent);
-    color: #000;
-    font-family: 'Inter', sans-serif;
-    font-weight: 700;
-    font-size: 10px;
-    letter-spacing: 1.5px;
-    text-transform: uppercase;
-    padding: 4px 14px;
-    border-radius: 20px;
-    white-space: nowrap;
-  }
-
-  .card-plan-name {
-    font-family: 'Inter', sans-serif;
-    font-weight: 600;
-    font-size: 12px;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    color: var(--muted);
-    margin-bottom: 10px;
-  }
-
-  .card-title {
-    font-family: 'Inter Tight', sans-serif;
-    font-weight: 800;
-    font-size: 22px;
-    color: var(--text);
-    margin-bottom: 20px;
-  }
-
-  .card-price {
-    margin-bottom: 28px;
-  }
-
-  .price-amount {
-    font-family: 'Inter Tight', sans-serif;
-    font-weight: 900;
-    font-size: 44px;
-    color: var(--text);
-    line-height: 1;
-  }
-
-  .price-amount span {
-    font-size: 22px;
-    font-weight: 700;
-    vertical-align: top;
-    margin-top: 4px;
-    display: inline-block;
-  }
-
-  .price-period {
-    font-family: 'Inter', sans-serif;
-    font-size: 14px;
-    color: var(--muted);
-    margin-top: 6px;
-  }
-
-  .card-divider {
-    height: 1px;
-    background: var(--border);
-    margin-bottom: 24px;
-  }
-
-  .feature-list {
-    list-style: none;
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-    margin-bottom: 32px;
-  }
-
-  .feature-list li {
-    display: flex;
-    align-items: flex-start;
-    gap: 10px;
-    font-size: 14px;
-    color: var(--text);
-    line-height: 1.45;
-  }
-
-  .feature-check {
-    width: 18px;
-    height: 18px;
-    border-radius: 50%;
-    background: rgba(200,16,46,0.15);
-    border: 1px solid rgba(200,16,46,0.4);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-shrink: 0;
-    margin-top: 1px;
-  }
-
-  .pricing-card.popular .feature-check {
-    background: rgba(212,175,55,0.15);
-    border-color: rgba(212,175,55,0.4);
-  }
-
-  .feature-check svg {
-    width: 10px;
-    height: 10px;
-  }
-
-  .btn-plan {
-    display: block;
-    width: 100%;
-    text-align: center;
-    font-family: 'Inter', sans-serif;
-    font-weight: 600;
-    font-size: 15px;
-    padding: 14px 20px;
-    border-radius: var(--btn-radius);
-    text-decoration: none;
-    transition: background 0.25s, transform 0.2s, border-color 0.25s;
-    border: 2px solid transparent;
-  }
-
-  .btn-plan-outline {
-    background: transparent;
-    border-color: rgba(255,255,255,0.18);
-    color: var(--text);
-  }
-
-  .btn-plan-outline:hover {
-    background: var(--surface2);
-    border-color: rgba(255,255,255,0.3);
-    transform: translateY(-1px);
-  }
-
-  .btn-plan-primary {
-    background: var(--primary);
-    color: #fff;
-    border-color: var(--primary);
-  }
-
-  .btn-plan-primary:hover {
-    background: var(--primary-dark);
-    border-color: var(--primary-dark);
-    transform: translateY(-1px);
-  }
-
-  /* ===== GUARANTEE STRIP ===== */
-  .guarantee-strip {
-    background: var(--surface);
-    border-top: 1px solid var(--border);
-    border-bottom: 1px solid var(--border);
-    padding: 52px 24px;
-    text-align: center;
-  }
-
-  .guarantee-strip .guarantee-inner {
-    max-width: 700px;
-    margin: 0 auto;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 14px;
-  }
-
-  .guarantee-icon {
-    width: 56px;
-    height: 56px;
-    border-radius: 50%;
-    background: rgba(212,175,55,0.12);
-    border: 1px solid rgba(212,175,55,0.3);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 24px;
-  }
-
-  .guarantee-strip h3 {
-    font-family: 'Inter Tight', sans-serif;
-    font-weight: 800;
-    font-size: 22px;
-    color: var(--accent);
-  }
-
-  .guarantee-strip p {
-    font-size: 16px;
-    color: var(--muted);
-    line-height: 1.65;
-  }
-
-  /* ===== FAQ ===== */
-  .faq-section {
-    padding: var(--section-pad) 0;
-  }
-
-  .section-header-centered {
-    text-align: center;
-    margin-bottom: 48px;
-  }
-
-  .section-header-centered h2 {
-    font-family: 'Inter Tight', sans-serif;
-    font-weight: 800;
-    font-size: clamp(28px, 4vw, 40px);
-    color: var(--text);
-    margin-bottom: 12px;
-  }
-
-  .section-header-centered p {
-    font-size: 16px;
-    color: var(--muted);
-  }
-
-  .faq-list {
-    max-width: 720px;
-    margin: 0 auto;
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-  }
-
-  .faq-item {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: var(--card-radius);
-    overflow: hidden;
-  }
-
-  .faq-question {
-    width: 100%;
-    background: none;
-    border: none;
-    color: var(--text);
-    font-family: 'Inter', sans-serif;
-    font-weight: 600;
-    font-size: 16px;
-    text-align: left;
-    padding: 20px 24px;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 16px;
-    transition: color 0.2s;
-  }
-
-  .faq-question:hover { color: var(--accent); }
-
-  .faq-chevron {
-    width: 20px;
-    height: 20px;
-    flex-shrink: 0;
-    transition: transform 0.3s;
-    color: var(--muted);
-  }
-
-  .faq-item.open .faq-chevron { transform: rotate(180deg); }
-
-  .faq-answer {
-    max-height: 0;
-    overflow: hidden;
-    transition: max-height 0.35s ease, padding 0.35s ease;
-  }
-
-  .faq-item.open .faq-answer { max-height: 300px; }
-
-  .faq-answer-inner {
-    padding: 0 24px 20px;
-    font-size: 15px;
-    color: var(--muted);
-    line-height: 1.65;
-    border-top: 1px solid var(--border);
-    padding-top: 16px;
-  }
-
-  /* ===== CTA STRIP ===== */
-  .cta-strip {
-    padding: var(--section-pad) 0;
-    text-align: center;
-  }
-
-  .cta-strip h2 {
-    font-family: 'Inter Tight', sans-serif;
-    font-weight: 900;
-    font-size: clamp(28px, 4vw, 42px);
-    color: var(--text);
-    margin-bottom: 14px;
-  }
-
-  .cta-strip p {
-    font-size: 17px;
-    color: var(--muted);
-    margin-bottom: 32px;
-    max-width: 480px;
-    margin-left: auto;
-    margin-right: auto;
-  }
-
-  .btn-primary {
-    display: inline-block;
-    font-family: 'Inter', sans-serif;
-    font-weight: 600;
-    font-size: 16px;
-    background: var(--primary);
-    color: #fff;
-    text-decoration: none;
-    padding: 16px 36px;
-    border-radius: var(--btn-radius);
-    transition: background 0.25s, transform 0.2s;
-  }
-
-  .btn-primary:hover {
-    background: var(--primary-dark);
-    transform: translateY(-2px);
-  }
-
-  /* ===== FOOTER ===== */
-  footer {
-    background: var(--surface);
-    border-top: 1px solid var(--border);
-    padding: 60px 0 0;
-  }
-
-  .footer-inner {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 0 24px;
-    display: grid;
-    grid-template-columns: 2fr 1fr 1fr 1fr;
-    gap: 48px;
-    padding-bottom: 48px;
-  }
-
-  .footer-brand p,
-  .footer-brand a:not(.nav-logo) {
-    font-size: 14px;
-    color: var(--muted);
-    text-decoration: none;
-    display: block;
-    margin-top: 8px;
-    transition: color 0.2s;
-  }
-
-  .footer-brand a:not(.nav-logo):hover { color: var(--text); }
-
-  .footer-col h4 {
-    font-family: 'Inter Tight', sans-serif;
-    font-weight: 700;
-    font-size: 13px;
-    letter-spacing: 1px;
-    text-transform: uppercase;
-    color: var(--text);
-    margin-bottom: 16px;
-  }
-
-  .footer-col a {
-    display: block;
-    font-size: 14px;
-    color: var(--muted);
-    text-decoration: none;
-    margin-bottom: 10px;
-    transition: color 0.2s;
-  }
-
-  .footer-col a:hover { color: var(--text); }
-
-  .footer-bottom {
-    border-top: 1px solid var(--border);
-    padding: 20px 24px;
-    max-width: 1200px;
-    margin: 0 auto;
-  }
-
-  .footer-bottom p {
-    font-size: 13px;
-    color: var(--muted);
-  }
-
-  @media (max-width: 900px) {
-    .footer-inner {
-      grid-template-columns: 1fr 1fr;
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Coaching Plans &amp; Pricing — FitWid.fit</title>
+  <meta name="description" content="Transparent coaching plans with no hidden fees. Choose from Self-Guided, Online Coaching, or 1:1 Premium — all with a 30-day satisfaction guarantee." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Inter+Tight:wght@700;800;900&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #0A0A0A;
+      --surface: #161616;
+      --surface-2: #1E1E1E;
+      --primary: #C8102E;
+      --accent: #D4AF37;
+      --text: #F5F5F5;
+      --muted: #9A9A9A;
+      --radius-card: 12px;
+      --radius-btn: 8px;
+      --section-pad: 80px;
+      --max-w: 1200px;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Inter', sans-serif;
+      font-size: 16px;
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    a { color: inherit; text-decoration: none; }
+
+    /* NAV */
+    #navbar {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(10,10,10,0.94);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+    }
+
+    .nav-inner {
+      max-width: var(--max-w);
+      margin: 0 auto;
+      padding: 0 24px;
+      height: 64px;
+      display: flex;
+      align-items: center;
       gap: 32px;
     }
-    .footer-brand { grid-column: 1 / -1; }
-    .pricing-grid { grid-template-columns: 1fr; max-width: 440px; margin: 0 auto; }
-  }
 
-  @media (max-width: 600px) {
-    .footer-inner { grid-template-columns: 1fr; }
-    :root { --section-pad: 56px; }
-  }
-</style>
-<script defer src="/_vercel/speed-insights/script.js"></script>
+    .nav-logo {
+      font-family: 'Inter Tight', sans-serif;
+      font-weight: 900;
+      font-size: 22px;
+      letter-spacing: 0.06em;
+      color: var(--text);
+      flex-shrink: 0;
+    }
+
+    .nav-links {
+      list-style: none;
+      display: flex;
+      gap: 28px;
+      margin-left: auto;
+    }
+
+    .nav-links a {
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--muted);
+      transition: color 0.2s;
+    }
+
+    .nav-links a:hover,
+    .nav-links a[aria-current="page"] { color: var(--text); }
+
+    .nav-cta {
+      flex-shrink: 0;
+      background: var(--primary);
+      color: #fff;
+      font-size: 14px;
+      font-weight: 600;
+      padding: 9px 20px;
+      border-radius: var(--radius-btn);
+      transition: opacity 0.2s;
+      white-space: nowrap;
+    }
+
+    .nav-cta:hover { opacity: 0.88; }
+
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 4px;
+      margin-left: auto;
+    }
+
+    .hamburger span {
+      display: block;
+      width: 22px;
+      height: 2px;
+      background: var(--text);
+      border-radius: 2px;
+    }
+
+    .mobile-nav {
+      display: none;
+      flex-direction: column;
+      padding: 12px 24px 20px;
+      border-top: 1px solid rgba(255,255,255,0.06);
+      gap: 2px;
+    }
+
+    .mobile-nav.open { display: flex; }
+
+    .mobile-nav a {
+      padding: 11px 0;
+      font-size: 15px;
+      font-weight: 500;
+      color: var(--muted);
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+      transition: color 0.2s;
+    }
+
+    .mobile-nav a:last-child { border-bottom: none; }
+    .mobile-nav a:hover { color: var(--text); }
+
+    .mob-cta {
+      margin-top: 6px;
+      color: var(--primary) !important;
+      font-weight: 600 !important;
+      border-bottom: none !important;
+    }
+
+    /* HERO / HEADER */
+    .pricing-header {
+      padding: 88px 24px 64px;
+      text-align: center;
+    }
+
+    .pricing-header .inner {
+      max-width: 640px;
+      margin: 0 auto;
+    }
+
+    .section-label {
+      display: inline-block;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--primary);
+      margin-bottom: 18px;
+    }
+
+    .pricing-header h1 {
+      font-family: 'Inter Tight', sans-serif;
+      font-weight: 900;
+      font-size: clamp(38px, 6vw, 64px);
+      line-height: 1.05;
+      letter-spacing: -0.02em;
+      color: var(--text);
+      margin-bottom: 18px;
+    }
+
+    .pricing-header .sub {
+      font-size: 18px;
+      color: var(--muted);
+      margin-bottom: 44px;
+      line-height: 1.6;
+    }
+
+    /* TOGGLE */
+    .toggle-wrap {
+      display: inline-flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .toggle-pill {
+      position: relative;
+      display: inline-flex;
+      background: var(--surface-2);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 50px;
+      padding: 4px;
+    }
+
+    .toggle-pill input[type="radio"] {
+      position: absolute;
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+
+    .toggle-opt {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 108px;
+      height: 38px;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--muted);
+      cursor: pointer;
+      border-radius: 36px;
+      transition: color 0.25s;
+      user-select: none;
+    }
+
+    .toggle-slider {
+      position: absolute;
+      top: 4px;
+      left: 4px;
+      width: 108px;
+      height: 38px;
+      background: var(--primary);
+      border-radius: 36px;
+      transition: transform 0.28s cubic-bezier(0.4,0,0.2,1);
+      z-index: 0;
+    }
+
+    #billing-quarterly:checked ~ .toggle-slider {
+      transform: translateX(108px);
+    }
+
+    #billing-monthly:checked ~ .toggle-opt-monthly,
+    #billing-quarterly:checked ~ .toggle-opt-quarterly {
+      color: #fff;
+    }
+
+    .save-badge {
+      font-size: 12px;
+      font-weight: 700;
+      background: rgba(212,175,55,0.14);
+      color: var(--accent);
+      padding: 5px 12px;
+      border-radius: 20px;
+      border: 1px solid rgba(212,175,55,0.28);
+      display: none;
+      white-space: nowrap;
+    }
+
+    /* PRICING CARDS */
+    .pricing-cards-section {
+      padding: 0 24px var(--section-pad);
+    }
+
+    .cards-grid {
+      max-width: var(--max-w);
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+      align-items: start;
+    }
+
+    .plan-card {
+      background: var(--surface);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: var(--radius-card);
+      padding: 36px 32px 32px;
+      display: flex;
+      flex-direction: column;
+      gap: 28px;
+      position: relative;
+      transition: border-color 0.2s, transform 0.2s, box-shadow 0.2s;
+    }
+
+    .plan-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 16px 48px rgba(0,0,0,0.4);
+    }
+
+    .plan-card.featured {
+      border-color: var(--accent);
+      background: linear-gradient(155deg, rgba(212,175,55,0.07) 0%, var(--surface) 55%);
+      padding-top: 44px;
+    }
+
+    .popular-chip {
+      position: absolute;
+      top: -13px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--accent);
+      color: #0A0A0A;
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 5px 16px;
+      border-radius: 20px;
+      white-space: nowrap;
+    }
+
+    .plan-name {
+      font-family: 'Inter Tight', sans-serif;
+      font-weight: 800;
+      font-size: 22px;
+      color: var(--text);
+    }
+
+    .plan-price-wrap {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+    }
+
+    .plan-price {
+      font-family: 'Inter Tight', sans-serif;
+      font-weight: 900;
+      font-size: 44px;
+      color: var(--text);
+      line-height: 1;
+      display: flex;
+      align-items: flex-start;
+      gap: 1px;
+    }
+
+    .plan-price .currency {
+      font-size: 24px;
+      font-weight: 700;
+      margin-top: 5px;
+    }
+
+    .plan-period {
+      font-size: 13px;
+      color: var(--muted);
+    }
+
+    .plan-features {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 13px;
+      flex: 1;
+    }
+
+    .plan-features li {
+      display: flex;
+      align-items: flex-start;
+      gap: 11px;
+      font-size: 14px;
+      color: var(--muted);
+      line-height: 1.5;
+    }
+
+    .check {
+      flex-shrink: 0;
+      width: 18px;
+      height: 18px;
+      background: rgba(200,16,46,0.14);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-top: 2px;
+    }
+
+    .check svg {
+      width: 10px;
+      height: 10px;
+      stroke: var(--primary);
+      stroke-width: 2.5;
+      fill: none;
+    }
+
+    .plan-card.featured .check {
+      background: rgba(212,175,55,0.14);
+    }
+
+    .plan-card.featured .check svg {
+      stroke: var(--accent);
+    }
+
+    .btn-plan {
+      display: block;
+      width: 100%;
+      text-align: center;
+      padding: 14px 20px;
+      border-radius: var(--radius-btn);
+      font-size: 15px;
+      font-weight: 700;
+      transition: opacity 0.2s, transform 0.15s;
+      border: 2px solid transparent;
+      cursor: pointer;
+    }
+
+    .btn-plan:hover { opacity: 0.88; transform: translateY(-1px); }
+
+    .btn-plan-outline {
+      border-color: rgba(255,255,255,0.16);
+      color: var(--text);
+    }
+
+    .btn-plan-primary {
+      background: var(--primary);
+      color: #fff;
+    }
+
+    .btn-plan-accent {
+      background: var(--accent);
+      color: #0A0A0A;
+    }
+
+    /* GUARANTEE STRIP */
+    .guarantee-strip {
+      background: var(--surface);
+      border-top: 1px solid rgba(255,255,255,0.06);
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+    }
+
+    .guarantee-inner {
+      max-width: 760px;
+      margin: 0 auto;
+      padding: 56px 24px;
+      text-align: center;
+    }
+
+    .g-icon {
+      width: 54px;
+      height: 54px;
+      border-radius: 50%;
+      border: 2px solid var(--accent);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 22px;
+      color: var(--accent);
+    }
+
+    .guarantee-inner h3 {
+      font-family: 'Inter Tight', sans-serif;
+      font-weight: 800;
+      font-size: 24px;
+      color: var(--text);
+      margin-bottom: 14px;
+    }
+
+    .guarantee-inner p {
+      font-size: 16px;
+      color: var(--muted);
+      line-height: 1.75;
+      max-width: 580px;
+      margin: 0 auto;
+    }
+
+    /* FAQ */
+    .faq-section {
+      padding: var(--section-pad) 24px;
+    }
+
+    .faq-inner {
+      max-width: 720px;
+      margin: 0 auto;
+    }
+
+    .faq-heading {
+      text-align: center;
+      margin-bottom: 52px;
+    }
+
+    .faq-heading h2 {
+      font-family: 'Inter Tight', sans-serif;
+      font-weight: 800;
+      font-size: clamp(28px, 4vw, 42px);
+      color: var(--text);
+      letter-spacing: -0.01em;
+    }
+
+    .faq-item { border-bottom: 1px solid rgba(255,255,255,0.08); }
+    .faq-item:first-of-type { border-top: 1px solid rgba(255,255,255,0.08); }
+
+    .faq-question {
+      width: 100%;
+      background: none;
+      border: none;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      padding: 22px 0;
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--text);
+      cursor: pointer;
+      text-align: left;
+      font-family: 'Inter', sans-serif;
+      transition: color 0.2s;
+    }
+
+    .faq-question:hover { color: var(--muted); }
+
+    .faq-icon {
+      flex-shrink: 0;
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      border: 1.5px solid rgba(255,255,255,0.18);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: transform 0.28s, border-color 0.2s, background 0.2s;
+    }
+
+    .faq-icon svg {
+      width: 10px;
+      height: 10px;
+      stroke: var(--muted);
+      stroke-width: 2.5;
+      fill: none;
+      transition: stroke 0.2s;
+    }
+
+    .faq-item.open .faq-icon {
+      transform: rotate(45deg);
+      border-color: var(--primary);
+      background: rgba(200,16,46,0.12);
+    }
+
+    .faq-item.open .faq-icon svg { stroke: var(--primary); }
+
+    .faq-answer {
+      font-size: 15px;
+      color: var(--muted);
+      line-height: 1.75;
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.35s cubic-bezier(0.4,0,0.2,1), padding-bottom 0.25s;
+      padding-bottom: 0;
+    }
+
+    .faq-item.open .faq-answer {
+      max-height: 220px;
+      padding-bottom: 22px;
+    }
+
+    /* CTA STRIP */
+    .cta-strip {
+      padding: var(--section-pad) 24px;
+      text-align: center;
+      background: linear-gradient(180deg, transparent 0%, rgba(200,16,46,0.05) 50%, transparent 100%);
+    }
+
+    .cta-strip-inner {
+      max-width: 580px;
+      margin: 0 auto;
+    }
+
+    .cta-strip h2 {
+      font-family: 'Inter Tight', sans-serif;
+      font-weight: 800;
+      font-size: clamp(26px, 4vw, 42px);
+      color: var(--text);
+      margin-bottom: 16px;
+      letter-spacing: -0.01em;
+    }
+
+    .cta-strip p {
+      font-size: 17px;
+      color: var(--muted);
+      margin-bottom: 36px;
+      line-height: 1.65;
+    }
+
+    .btn-primary {
+      display: inline-block;
+      background: var(--primary);
+      color: #fff;
+      font-size: 16px;
+      font-weight: 700;
+      padding: 15px 34px;
+      border-radius: var(--radius-btn);
+      transition: opacity 0.2s, transform 0.15s;
+    }
+
+    .btn-primary:hover { opacity: 0.88; transform: translateY(-2px); }
+
+    /* FOOTER */
+    footer {
+      background: var(--surface);
+      border-top: 1px solid rgba(255,255,255,0.07);
+    }
+
+    .footer-inner {
+      max-width: var(--max-w);
+      margin: 0 auto;
+      padding: 64px 24px 40px;
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr 1fr;
+      gap: 48px;
+    }
+
+    .footer-brand p {
+      font-size: 14px;
+      color: var(--muted);
+      margin: 12px 0 8px;
+      line-height: 1.6;
+    }
+
+    .footer-brand a:not(.nav-logo) {
+      font-size: 14px;
+      color: var(--muted);
+      transition: color 0.2s;
+    }
+
+    .footer-brand a:not(.nav-logo):hover { color: var(--text); }
+
+    .footer-col h4 {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 18px;
+    }
+
+    .footer-col {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .footer-col a {
+      font-size: 14px;
+      color: var(--muted);
+      padding: 5px 0;
+      transition: color 0.2s;
+    }
+
+    .footer-col a:hover { color: var(--text); }
+
+    .footer-bottom {
+      max-width: var(--max-w);
+      margin: 0 auto;
+      padding: 20px 24px;
+      border-top: 1px solid rgba(255,255,255,0.06);
+    }
+
+    .footer-bottom p {
+      font-size: 13px;
+      color: var(--muted);
+    }
+
+    /* RESPONSIVE */
+    @media (max-width: 980px) {
+      .footer-inner { grid-template-columns: 1fr 1fr; }
+      .footer-brand { grid-column: 1 / -1; }
+      .cards-grid { grid-template-columns: 1fr; max-width: 480px; }
+      .plan-card.featured { order: -1; }
+    }
+
+    @media (max-width: 640px) {
+      .nav-links, .nav-cta { display: none; }
+      .hamburger { display: flex; }
+      .pricing-header { padding: 60px 24px 44px; }
+      .pricing-header h1 { font-size: 36px; }
+      .pricing-header .sub { font-size: 16px; margin-bottom: 36px; }
+      .footer-inner { grid-template-columns: 1fr; gap: 32px; }
+    }
+  </style>
+  <script defer src="/_vercel/speed-insights/script.js"></script>
 </head>
 <body>
 
@@ -696,12 +686,12 @@
     <a href="index.html" class="nav-logo">FITWID</a>
     <ul class="nav-links">
       <li><a href="coaching.html">Coaching</a></li>
-      <li><a href="pricing.html">Pricing</a></li>
+      <li><a href="pricing.html" aria-current="page">Pricing</a></li>
       <li><a href="results.html">Results</a></li>
       <li><a href="about.html">About</a></li>
     </ul>
     <a href="apply.html" class="nav-cta">Book Free Consult</a>
-    <button class="hamburger" onclick="document.getElementById('mobileNav').classList.toggle('open')">
+    <button class="hamburger" onclick="document.getElementById('mobileNav').classList.toggle('open')" aria-label="Toggle menu">
       <span></span><span></span><span></span>
     </button>
   </div>
@@ -714,231 +704,150 @@
   </div>
 </nav>
 
-<!-- PRICING HEADER -->
+<!-- SECTION 1: HEADER -->
 <section class="pricing-header">
-  <div class="container">
+  <div class="inner">
     <span class="section-label">Transparent Pricing</span>
     <h1>Coaching Plans</h1>
-    <p>No hidden fees, no upsells. Pick the plan that fits your goals.</p>
+    <p class="sub">No hidden fees, no upsells. Pick the plan that fits your goals.</p>
 
-    <div class="billing-toggle">
-      <span class="toggle-label active" id="labelMonthly">Monthly</span>
-      <div class="toggle-pill" id="togglePill" onclick="switchBilling()"></div>
-      <span class="toggle-label" id="labelQuarterly">Quarterly</span>
+    <!-- Monthly / Quarterly Toggle -->
+    <div class="toggle-wrap">
+      <div class="toggle-pill">
+        <input type="radio" name="billing" id="billing-monthly" value="monthly" checked />
+        <label class="toggle-opt toggle-opt-monthly" for="billing-monthly">Monthly</label>
+        <input type="radio" name="billing" id="billing-quarterly" value="quarterly" />
+        <label class="toggle-opt toggle-opt-quarterly" for="billing-quarterly">Quarterly</label>
+        <div class="toggle-slider"></div>
+      </div>
       <span class="save-badge" id="saveBadge">SAVE 17%</span>
     </div>
   </div>
 </section>
 
-<!-- PRICING CARDS -->
-<section class="pricing-section">
-  <div class="container">
-    <div class="pricing-grid">
+<!-- SECTION 2: PRICING CARDS -->
+<section class="pricing-cards-section">
+  <div class="cards-grid">
 
-      <!-- Plan A: Self-Guided -->
-      <div class="pricing-card">
-        <div class="card-plan-name">Plan A</div>
-        <div class="card-title">Self-Guided</div>
-        <div class="card-price">
-          <div class="price-amount"><span>₹</span><span id="priceA">1,999</span></div>
-          <div class="price-period" id="periodA">per month</div>
+    <!-- Plan A: Self-Guided -->
+    <div class="plan-card">
+      <div class="plan-name">Self-Guided</div>
+      <div class="plan-price-wrap">
+        <div class="plan-price">
+          <span class="currency">&#8377;</span><span class="price-amount" data-monthly="1,999" data-quarterly="4,999">1,999</span>
         </div>
-        <div class="card-divider"></div>
-        <ul class="feature-list">
-          <li>
-            <span class="feature-check">
-              <svg viewBox="0 0 10 10" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M1.5 5L4 7.5L8.5 2.5" stroke="#C8102E" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
-            </span>
-            Full program vault (50+ programs)
-          </li>
-          <li>
-            <span class="feature-check">
-              <svg viewBox="0 0 10 10" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M1.5 5L4 7.5L8.5 2.5" stroke="#C8102E" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
-            </span>
-            AI workout generator
-          </li>
-          <li>
-            <span class="feature-check">
-              <svg viewBox="0 0 10 10" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M1.5 5L4 7.5L8.5 2.5" stroke="#C8102E" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
-            </span>
-            Client app access
-          </li>
-          <li>
-            <span class="feature-check">
-              <svg viewBox="0 0 10 10" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M1.5 5L4 7.5L8.5 2.5" stroke="#C8102E" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
-            </span>
-            Monthly program swap
-          </li>
-        </ul>
-        <a href="apply.html?tier=self-guided" class="btn-plan btn-plan-outline">Choose Self-Guided</a>
-      </div>
-
-      <!-- Plan B: Online Coaching (Popular) -->
-      <div class="pricing-card popular">
-        <div class="popular-chip">Most Popular</div>
-        <div class="card-plan-name">Plan B</div>
-        <div class="card-title">Online Coaching</div>
-        <div class="card-price">
-          <div class="price-amount"><span>₹</span><span id="priceB">4,999</span></div>
-          <div class="price-period" id="periodB">per month</div>
+        <div class="plan-period">
+          <span class="period-label" data-monthly="per month" data-quarterly="per quarter">per month</span>
         </div>
-        <div class="card-divider"></div>
-        <ul class="feature-list">
-          <li>
-            <span class="feature-check">
-              <svg viewBox="0 0 10 10" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M1.5 5L4 7.5L8.5 2.5" stroke="#D4AF37" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
-            </span>
-            Everything in Self-Guided
-          </li>
-          <li>
-            <span class="feature-check">
-              <svg viewBox="0 0 10 10" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M1.5 5L4 7.5L8.5 2.5" stroke="#D4AF37" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
-            </span>
-            Fully custom training program
-          </li>
-          <li>
-            <span class="feature-check">
-              <svg viewBox="0 0 10 10" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M1.5 5L4 7.5L8.5 2.5" stroke="#D4AF37" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
-            </span>
-            Weekly check-in reviews
-          </li>
-          <li>
-            <span class="feature-check">
-              <svg viewBox="0 0 10 10" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M1.5 5L4 7.5L8.5 2.5" stroke="#D4AF37" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
-            </span>
-            Program adjustments every week
-          </li>
-          <li>
-            <span class="feature-check">
-              <svg viewBox="0 0 10 10" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M1.5 5L4 7.5L8.5 2.5" stroke="#D4AF37" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
-            </span>
-            WhatsApp access to Coach Sahil
-          </li>
-          <li>
-            <span class="feature-check">
-              <svg viewBox="0 0 10 10" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M1.5 5L4 7.5L8.5 2.5" stroke="#D4AF37" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
-            </span>
-            Basic nutrition guidance
-          </li>
-        </ul>
-        <a href="apply.html?tier=online-coaching" class="btn-plan btn-plan-primary">Choose Online Coaching</a>
       </div>
-
-      <!-- Plan C: 1:1 Premium -->
-      <div class="pricing-card">
-        <div class="card-plan-name">Plan C</div>
-        <div class="card-title">1:1 Premium</div>
-        <div class="card-price">
-          <div class="price-amount"><span>₹</span><span id="priceC">9,999</span></div>
-          <div class="price-period" id="periodC">per month</div>
-        </div>
-        <div class="card-divider"></div>
-        <ul class="feature-list">
-          <li>
-            <span class="feature-check">
-              <svg viewBox="0 0 10 10" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M1.5 5L4 7.5L8.5 2.5" stroke="#C8102E" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
-            </span>
-            Everything in Online Coaching
-          </li>
-          <li>
-            <span class="feature-check">
-              <svg viewBox="0 0 10 10" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M1.5 5L4 7.5L8.5 2.5" stroke="#C8102E" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
-            </span>
-            2x monthly video call sessions
-          </li>
-          <li>
-            <span class="feature-check">
-              <svg viewBox="0 0 10 10" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M1.5 5L4 7.5L8.5 2.5" stroke="#C8102E" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
-            </span>
-            Detailed nutrition &amp; meal planning
-          </li>
-          <li>
-            <span class="feature-check">
-              <svg viewBox="0 0 10 10" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M1.5 5L4 7.5L8.5 2.5" stroke="#C8102E" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
-            </span>
-            Priority WhatsApp response
-          </li>
-          <li>
-            <span class="feature-check">
-              <svg viewBox="0 0 10 10" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M1.5 5L4 7.5L8.5 2.5" stroke="#C8102E" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
-            </span>
-            Progress photo reviews
-          </li>
-          <li>
-            <span class="feature-check">
-              <svg viewBox="0 0 10 10" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M1.5 5L4 7.5L8.5 2.5" stroke="#C8102E" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
-            </span>
-            Supplement guidance
-          </li>
-        </ul>
-        <a href="apply.html?tier=premium" class="btn-plan btn-plan-outline">Choose 1:1 Premium</a>
-      </div>
-
+      <ul class="plan-features">
+        <li><span class="check"><svg viewBox="0 0 12 12"><polyline points="1.5,6 4.5,9 10.5,3"/></svg></span>Full program vault (50+ programs)</li>
+        <li><span class="check"><svg viewBox="0 0 12 12"><polyline points="1.5,6 4.5,9 10.5,3"/></svg></span>AI workout generator</li>
+        <li><span class="check"><svg viewBox="0 0 12 12"><polyline points="1.5,6 4.5,9 10.5,3"/></svg></span>Client app access</li>
+        <li><span class="check"><svg viewBox="0 0 12 12"><polyline points="1.5,6 4.5,9 10.5,3"/></svg></span>Monthly program swap</li>
+      </ul>
+      <a href="apply.html?tier=self-guided" class="btn-plan btn-plan-outline">Choose Self-Guided</a>
     </div>
+
+    <!-- Plan B: Online Coaching (Featured) -->
+    <div class="plan-card featured">
+      <div class="popular-chip">MOST POPULAR</div>
+      <div class="plan-name">Online Coaching</div>
+      <div class="plan-price-wrap">
+        <div class="plan-price">
+          <span class="currency">&#8377;</span><span class="price-amount" data-monthly="4,999" data-quarterly="11,999">4,999</span>
+        </div>
+        <div class="plan-period">
+          <span class="period-label" data-monthly="per month" data-quarterly="per quarter">per month</span>
+        </div>
+      </div>
+      <ul class="plan-features">
+        <li><span class="check"><svg viewBox="0 0 12 12"><polyline points="1.5,6 4.5,9 10.5,3"/></svg></span>Everything in Self-Guided</li>
+        <li><span class="check"><svg viewBox="0 0 12 12"><polyline points="1.5,6 4.5,9 10.5,3"/></svg></span>Fully custom training program</li>
+        <li><span class="check"><svg viewBox="0 0 12 12"><polyline points="1.5,6 4.5,9 10.5,3"/></svg></span>Weekly check-in reviews</li>
+        <li><span class="check"><svg viewBox="0 0 12 12"><polyline points="1.5,6 4.5,9 10.5,3"/></svg></span>Program adjustments every week</li>
+        <li><span class="check"><svg viewBox="0 0 12 12"><polyline points="1.5,6 4.5,9 10.5,3"/></svg></span>WhatsApp access to Coach Sahil</li>
+        <li><span class="check"><svg viewBox="0 0 12 12"><polyline points="1.5,6 4.5,9 10.5,3"/></svg></span>Basic nutrition guidance</li>
+      </ul>
+      <a href="apply.html?tier=online-coaching" class="btn-plan btn-plan-accent">Choose Online Coaching</a>
+    </div>
+
+    <!-- Plan C: 1:1 Premium -->
+    <div class="plan-card">
+      <div class="plan-name">1:1 Premium</div>
+      <div class="plan-price-wrap">
+        <div class="plan-price">
+          <span class="currency">&#8377;</span><span class="price-amount" data-monthly="9,999" data-quarterly="24,999">9,999</span>
+        </div>
+        <div class="plan-period">
+          <span class="period-label" data-monthly="per month" data-quarterly="per quarter">per month</span>
+        </div>
+      </div>
+      <ul class="plan-features">
+        <li><span class="check"><svg viewBox="0 0 12 12"><polyline points="1.5,6 4.5,9 10.5,3"/></svg></span>Everything in Online Coaching</li>
+        <li><span class="check"><svg viewBox="0 0 12 12"><polyline points="1.5,6 4.5,9 10.5,3"/></svg></span>2x monthly video call sessions</li>
+        <li><span class="check"><svg viewBox="0 0 12 12"><polyline points="1.5,6 4.5,9 10.5,3"/></svg></span>Detailed nutrition &amp; meal planning</li>
+        <li><span class="check"><svg viewBox="0 0 12 12"><polyline points="1.5,6 4.5,9 10.5,3"/></svg></span>Priority WhatsApp response</li>
+        <li><span class="check"><svg viewBox="0 0 12 12"><polyline points="1.5,6 4.5,9 10.5,3"/></svg></span>Progress photo reviews</li>
+        <li><span class="check"><svg viewBox="0 0 12 12"><polyline points="1.5,6 4.5,9 10.5,3"/></svg></span>Supplement guidance</li>
+      </ul>
+      <a href="apply.html?tier=premium" class="btn-plan btn-plan-primary">Choose 1:1 Premium</a>
+    </div>
+
   </div>
 </section>
 
-<!-- GUARANTEE STRIP -->
+<!-- SECTION 3: GUARANTEE STRIP -->
 <div class="guarantee-strip">
   <div class="guarantee-inner">
-    <div class="guarantee-icon">&#9679;</div>
+    <div class="g-icon">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+        <polyline points="9,12 11,14 15,10"/>
+      </svg>
+    </div>
     <h3>30-Day Satisfaction Guarantee</h3>
     <p>If you follow the program and don't see results in 30 days, we'll refund your first month. No questions asked.</p>
   </div>
 </div>
 
-<!-- FAQ -->
+<!-- SECTION 4: FAQ -->
 <section class="faq-section">
-  <div class="container">
-    <div class="section-header-centered">
+  <div class="faq-inner">
+    <div class="faq-heading">
       <h2>Frequently Asked Questions</h2>
-      <p>Everything you need to know before signing up.</p>
     </div>
-    <div class="faq-list">
 
-      <div class="faq-item" id="faq1">
-        <button class="faq-question" onclick="toggleFaq('faq1')">
-          Are there any hidden fees?
-          <svg class="faq-chevron" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M5 7.5L10 12.5L15 7.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
-          </svg>
-        </button>
-        <div class="faq-answer">
-          <div class="faq-answer-inner">No. The price you see is everything. No setup fees, no cancellation fees.</div>
-        </div>
-      </div>
-
-      <div class="faq-item" id="faq2">
-        <button class="faq-question" onclick="toggleFaq('faq2')">
-          Can I switch plans?
-          <svg class="faq-chevron" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M5 7.5L10 12.5L15 7.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
-          </svg>
-        </button>
-        <div class="faq-answer">
-          <div class="faq-answer-inner">Yes, you can upgrade or downgrade at any time. The difference is prorated.</div>
-        </div>
-      </div>
-
-      <div class="faq-item" id="faq3">
-        <button class="faq-question" onclick="toggleFaq('faq3')">
-          How do I pay?
-          <svg class="faq-chevron" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M5 7.5L10 12.5L15 7.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
-          </svg>
-        </button>
-        <div class="faq-answer">
-          <div class="faq-answer-inner">After your application is reviewed, Coach Sahil will send you a secure Razorpay payment link via WhatsApp. We accept UPI, debit/credit cards, and net banking.</div>
-        </div>
-      </div>
-
+    <div class="faq-item">
+      <button class="faq-question" aria-expanded="false">
+        Are there any hidden fees?
+        <span class="faq-icon"><svg viewBox="0 0 12 12"><line x1="6" y1="1" x2="6" y2="11"/><line x1="1" y1="6" x2="11" y2="6"/></svg></span>
+      </button>
+      <div class="faq-answer" role="region">No. The price you see is everything. No setup fees, no cancellation fees.</div>
     </div>
+
+    <div class="faq-item">
+      <button class="faq-question" aria-expanded="false">
+        Can I switch plans?
+        <span class="faq-icon"><svg viewBox="0 0 12 12"><line x1="6" y1="1" x2="6" y2="11"/><line x1="1" y1="6" x2="11" y2="6"/></svg></span>
+      </button>
+      <div class="faq-answer" role="region">Yes, you can upgrade or downgrade at any time. The difference is prorated.</div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-question" aria-expanded="false">
+        How do I pay?
+        <span class="faq-icon"><svg viewBox="0 0 12 12"><line x1="6" y1="1" x2="6" y2="11"/><line x1="1" y1="6" x2="11" y2="6"/></svg></span>
+      </button>
+      <div class="faq-answer" role="region">After your application is reviewed, Coach Sahil will send you a secure Razorpay payment link via WhatsApp. We accept UPI, debit/credit cards, and net banking.</div>
+    </div>
+
   </div>
 </section>
 
-<!-- CTA STRIP -->
+<!-- SECTION 5: CTA STRIP -->
 <section class="cta-strip">
-  <div class="container">
+  <div class="cta-strip-inner">
     <h2>Not sure which plan is right?</h2>
     <p>Book a free consult and Coach Sahil will recommend the best fit.</p>
     <a href="apply.html" class="btn-primary">Book a Free Consult &rarr;</a>
@@ -957,56 +866,45 @@
     <div class="footer-col"><h4>Tools</h4><a href="generator.html">Workout Generator</a><a href="booking.html">Book Session</a><a href="client-portal.html">Client Login</a></div>
     <div class="footer-col"><h4>Legal</h4><a href="#">Privacy</a><a href="#">Terms</a></div>
   </div>
-  <div class="footer-bottom"><p>&copy; 2025 FitWid.fit — I-BLITZ Fitness Club. All rights reserved.</p></div>
+  <div class="footer-bottom"><p>© 2025 FitWid.fit — I-BLITZ Fitness Club. All rights reserved.</p></div>
 </footer>
 
 <script>
-  // ===== BILLING TOGGLE =====
-  let isQuarterly = false;
+  // Billing toggle
+  const billingRadios = document.querySelectorAll('input[name="billing"]');
+  const saveBadge = document.getElementById('saveBadge');
 
-  const prices = {
-    monthly:   { A: '1,999', B: '4,999',  C: '9,999',  periodA: 'per month',    periodB: 'per month',    periodC: 'per month' },
-    quarterly: { A: '4,999', B: '11,999', C: '24,999', periodA: 'per quarter',  periodB: 'per quarter',  periodC: 'per quarter' }
-  };
-
-  function switchBilling() {
-    isQuarterly = !isQuarterly;
-    const pill   = document.getElementById('togglePill');
-    const labelM = document.getElementById('labelMonthly');
-    const labelQ = document.getElementById('labelQuarterly');
-    const badge  = document.getElementById('saveBadge');
-    const set    = isQuarterly ? prices.quarterly : prices.monthly;
-
-    pill.classList.toggle('quarterly', isQuarterly);
-    labelM.classList.toggle('active', !isQuarterly);
-    labelQ.classList.toggle('active', isQuarterly);
-    badge.classList.toggle('visible', isQuarterly);
-
-    document.getElementById('priceA').textContent = set.A;
-    document.getElementById('priceB').textContent = set.B;
-    document.getElementById('priceC').textContent = set.C;
-    document.getElementById('periodA').textContent = isQuarterly ? 'per quarter' : 'per month';
-    document.getElementById('periodB').textContent = isQuarterly ? 'per quarter' : 'per month';
-    document.getElementById('periodC').textContent = isQuarterly ? 'per quarter' : 'per month';
+  function updatePrices(billing) {
+    const quarterly = billing === 'quarterly';
+    saveBadge.style.display = quarterly ? 'inline-block' : 'none';
+    document.querySelectorAll('.price-amount').forEach(el => {
+      el.textContent = quarterly ? el.dataset.quarterly : el.dataset.monthly;
+    });
+    document.querySelectorAll('.period-label').forEach(el => {
+      el.textContent = quarterly ? el.dataset.quarterly : el.dataset.monthly;
+    });
   }
 
-  // ===== FAQ ACCORDION =====
-  function toggleFaq(id) {
-    const item = document.getElementById(id);
-    const isOpen = item.classList.contains('open');
-    document.querySelectorAll('.faq-item').forEach(el => el.classList.remove('open'));
-    if (!isOpen) item.classList.add('open');
-  }
+  billingRadios.forEach(radio => {
+    radio.addEventListener('change', () => updatePrices(radio.value));
+  });
 
-  // ===== NAV SCROLL =====
-  window.addEventListener('scroll', function() {
-    const nav = document.getElementById('navbar');
-    if (window.scrollY > 20) {
-      nav.style.borderBottomColor = 'rgba(255,255,255,0.06)';
-    } else {
-      nav.style.borderBottomColor = 'rgba(255,255,255,0.08)';
-    }
+  // FAQ accordion
+  document.querySelectorAll('.faq-question').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const item = btn.closest('.faq-item');
+      const isOpen = item.classList.contains('open');
+      document.querySelectorAll('.faq-item').forEach(i => {
+        i.classList.remove('open');
+        i.querySelector('.faq-question').setAttribute('aria-expanded', 'false');
+      });
+      if (!isOpen) {
+        item.classList.add('open');
+        btn.setAttribute('aria-expanded', 'true');
+      }
+    });
   });
 </script>
+
 </body>
 </html>

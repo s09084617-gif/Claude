@@ -32,6 +32,7 @@
     font-size: 16px;
     line-height: 1.6;
     overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
   }
 
   .container {
@@ -91,8 +92,7 @@
     transition: color 0.2s;
   }
 
-  .nav-links a:hover,
-  .nav-links a[aria-current="page"] { color: var(--text); }
+  .nav-links a:hover { color: var(--text); }
 
   .nav-cta {
     font-family: 'Inter', sans-serif;
@@ -176,6 +176,7 @@
     color: var(--primary);
     text-transform: uppercase;
     margin-bottom: 16px;
+    display: block;
   }
 
   h1 {
@@ -392,6 +393,8 @@
     border-radius: 16px;
     padding: 60px;
     text-align: center;
+    max-width: 640px;
+    margin: 0 auto;
   }
 
   .cta-card h2 { margin-bottom: 12px; }
@@ -427,11 +430,10 @@
   .footer-inner {
     max-width: var(--max-w);
     margin: 0 auto;
-    padding: 0 24px;
+    padding: 0 24px 48px;
     display: grid;
     grid-template-columns: 2fr 1fr 1fr 1fr;
     gap: 48px;
-    padding-bottom: 48px;
   }
 
   .footer-brand p {
@@ -514,7 +516,7 @@
     <ul class="nav-links">
       <li><a href="coaching.html">Coaching</a></li>
       <li><a href="pricing.html">Pricing</a></li>
-      <li><a href="results.html" aria-current="page">Results</a></li>
+      <li><a href="results.html">Results</a></li>
       <li><a href="about.html">About</a></li>
     </ul>
     <a href="apply.html" class="nav-cta">Book Free Consult</a>
@@ -534,7 +536,7 @@
 <!-- PAGE HEADER -->
 <div class="page-header">
   <div class="container">
-    <p class="section-label">Client Results</p>
+    <span class="section-label">CLIENT RESULTS</span>
     <h1>Real transformations. Real numbers.</h1>
     <p class="lead">200+ clients transformed across Bangalore and online. Here are some of their stories.</p>
   </div>
@@ -624,7 +626,7 @@
 
 <!-- STATS BAR -->
 <div class="stats-bar">
-  <div class="container" style="padding: 0;">
+  <div class="container" style="padding: 0 24px;">
     <div class="stats-row">
       <div class="stat-item">
         <div class="stat-value">200+</div>
@@ -649,43 +651,43 @@
 <!-- TESTIMONIALS -->
 <section class="testimonials-section">
   <div class="container">
-    <p class="section-label">Testimonials</p>
+    <span class="section-label">TESTIMONIALS</span>
     <h2>In their own words</h2>
     <div class="testimonials-grid">
 
       <div class="testimonial-card">
         <div class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
-        <p class="quote-text">"Coach Sahil's programming is the most intelligent I've ever followed. Progressive overload built into every session, and it shows."</p>
+        <p class="quote-text">&ldquo;Coach Sahil&rsquo;s programming is the most intelligent I&rsquo;ve ever followed. Progressive overload built into every session, and it shows.&rdquo;</p>
         <div class="quote-author">Aditya K. &mdash; Online Coaching</div>
       </div>
 
       <div class="testimonial-card">
         <div class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
-        <p class="quote-text">"Lost 10kg in 4 months without losing strength. The nutrition guidance was the missing piece I never had before."</p>
+        <p class="quote-text">&ldquo;Lost 10kg in 4 months without losing strength. The nutrition guidance was the missing piece I never had before.&rdquo;</p>
         <div class="quote-author">Meera J. &mdash; 1:1 Premium</div>
       </div>
 
       <div class="testimonial-card">
         <div class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
-        <p class="quote-text">"I've been training for 3 years on my own with zero progress. 2 months with Coach Sahil and everything changed."</p>
+        <p class="quote-text">&ldquo;I&rsquo;ve been training for 3 years on my own with zero progress. 2 months with Coach Sahil and everything changed.&rdquo;</p>
         <div class="quote-author">Rohit P. &mdash; Online Coaching</div>
       </div>
 
       <div class="testimonial-card">
         <div class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
-        <p class="quote-text">"The weekly check-ins keep me accountable. I've never been this consistent in my life."</p>
+        <p class="quote-text">&ldquo;The weekly check-ins keep me accountable. I&rsquo;ve never been this consistent in my life.&rdquo;</p>
         <div class="quote-author">Divya M. &mdash; Online Coaching</div>
       </div>
 
       <div class="testimonial-card">
         <div class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
-        <p class="quote-text">"Worth every rupee. Coach Sahil responds fast and actually adjusts the program based on how I'm feeling."</p>
+        <p class="quote-text">&ldquo;Worth every rupee. Coach Sahil responds fast and actually adjusts the program based on how I&rsquo;m feeling.&rdquo;</p>
         <div class="quote-author">Suresh B. &mdash; 1:1 Premium</div>
       </div>
 
       <div class="testimonial-card">
         <div class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
-        <p class="quote-text">"Got abs for the first time in my life at 34. This program works if you do the work."</p>
+        <p class="quote-text">&ldquo;Got abs for the first time in my life at 34. This program works if you do the work.&rdquo;</p>
         <div class="quote-author">Nikhil A. &mdash; Online Coaching</div>
       </div>
 
@@ -719,7 +721,6 @@
 </footer>
 
 <script>
-  // Close mobile nav when a link is clicked
   document.querySelectorAll('.mobile-nav a').forEach(function(link) {
     link.addEventListener('click', function() {
       document.getElementById('mobileNav').classList.remove('open');
