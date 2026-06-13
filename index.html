@@ -3,1186 +3,1631 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Sahil Bansal — Sahil Fitness Club | Elite Training Programs</title>
-<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<title>FitWid.fit — Online Strength Coaching with Coach Sahil Bansal | I-BLITZ Fitness Club Bangalore</title>
+<meta name="description" content="Coach-programmed online strength training for men and women in Bangalore. Custom programs, weekly check-ins, WhatsApp support. Book a free consult with Coach Sahil Bansal at I-BLITZ Fitness Club.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Inter+Tight:wght@700;800;900&display=swap" rel="stylesheet">
 <style>
-  :root {
-    --crimson: #8B0000;
-    --crimson-bright: #CC0000;
-    --gold: #C9A84C;
-    --gold-light: #F0C96A;
-    --dark: #0A0A0A;
-    --dark-2: #111111;
-    --dark-3: #1A1A1A;
-    --white: #F5F0E8;
-    --gray: #888;
+/* ==============================
+   RESET & BASE
+============================== */
+*, *::before, *::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  font-size: 16px;
+}
+
+body {
+  background: #0A0A0A;
+  color: #F5F5F5;
+  font-family: 'Inter', sans-serif;
+  font-weight: 400;
+  line-height: 1.6;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ==============================
+   DESIGN TOKENS
+============================== */
+:root {
+  --bg: #0A0A0A;
+  --surface-1: #161616;
+  --surface-2: #1E1E1E;
+  --crimson: #C8102E;
+  --gold: #D4AF37;
+  --text: #F5F5F5;
+  --muted: #9A9A9A;
+  --radius-card: 12px;
+  --radius-btn: 8px;
+}
+
+/* ==============================
+   UTILITIES
+============================== */
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+.section {
+  padding: 80px 0;
+}
+
+.section-label {
+  font-family: 'Inter', sans-serif;
+  font-weight: 600;
+  font-size: 11px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--crimson);
+  margin-bottom: 12px;
+}
+
+.section-title {
+  font-family: 'Inter Tight', sans-serif;
+  font-weight: 900;
+  font-size: clamp(28px, 4vw, 42px);
+  color: var(--text);
+  line-height: 1.1;
+  margin-bottom: 16px;
+}
+
+.btn-primary {
+  display: inline-block;
+  background: var(--crimson);
+  color: #fff;
+  font-family: 'Inter', sans-serif;
+  font-weight: 600;
+  font-size: 15px;
+  text-decoration: none;
+  padding: 14px 28px;
+  border-radius: var(--radius-btn);
+  border: 2px solid var(--crimson);
+  transition: background 0.2s, transform 0.2s, box-shadow 0.2s;
+}
+
+.btn-primary:hover {
+  background: #a50d24;
+  border-color: #a50d24;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(200,16,46,0.35);
+}
+
+.btn-outline {
+  display: inline-block;
+  background: transparent;
+  color: var(--text);
+  font-family: 'Inter', sans-serif;
+  font-weight: 600;
+  font-size: 15px;
+  text-decoration: none;
+  padding: 14px 28px;
+  border-radius: var(--radius-btn);
+  border: 2px solid rgba(245,245,245,0.25);
+  transition: border-color 0.2s, transform 0.2s;
+}
+
+.btn-outline:hover {
+  border-color: var(--text);
+  transform: translateY(-2px);
+}
+
+/* ==============================
+   NAVBAR
+============================== */
+#navbar {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  background: rgba(10,10,10,0.85);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+  transition: box-shadow 0.3s;
+}
+
+#navbar.scrolled {
+  box-shadow: 0 2px 24px rgba(0,0,0,0.7);
+}
+
+.nav-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 24px;
+  height: 64px;
+  display: flex;
+  align-items: center;
+  gap: 32px;
+}
+
+.nav-logo {
+  font-family: 'Inter Tight', sans-serif;
+  font-weight: 900;
+  font-size: 20px;
+  letter-spacing: 3px;
+  color: var(--text);
+  text-decoration: none;
+  flex-shrink: 0;
+}
+
+.nav-logo:hover {
+  color: var(--crimson);
+}
+
+.nav-links {
+  display: flex;
+  list-style: none;
+  gap: 28px;
+  flex: 1;
+}
+
+.nav-links a {
+  font-family: 'Inter', sans-serif;
+  font-weight: 500;
+  font-size: 14px;
+  color: var(--muted);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.nav-links a:hover {
+  color: var(--text);
+}
+
+.nav-cta {
+  flex-shrink: 0;
+  background: var(--crimson);
+  color: #fff;
+  font-family: 'Inter', sans-serif;
+  font-weight: 600;
+  font-size: 14px;
+  text-decoration: none;
+  padding: 10px 20px;
+  border-radius: var(--radius-btn);
+  border: 2px solid var(--crimson);
+  transition: background 0.2s, transform 0.2s;
+}
+
+.nav-cta:hover {
+  background: #a50d24;
+  border-color: #a50d24;
+  transform: translateY(-1px);
+}
+
+.hamburger {
+  display: none;
+  flex-direction: column;
+  gap: 5px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px;
+  margin-left: auto;
+}
+
+.hamburger span {
+  display: block;
+  width: 22px;
+  height: 2px;
+  background: var(--text);
+  border-radius: 2px;
+  transition: 0.3s;
+}
+
+.mobile-nav {
+  display: none;
+  flex-direction: column;
+  padding: 16px 24px 20px;
+  border-top: 1px solid rgba(255,255,255,0.06);
+  gap: 4px;
+}
+
+.mobile-nav.open {
+  display: flex;
+  flex-direction: column;
+}
+
+.mobile-nav a {
+  font-family: 'Inter', sans-serif;
+  font-weight: 500;
+  font-size: 15px;
+  color: var(--muted);
+  text-decoration: none;
+  padding: 10px 0;
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+  transition: color 0.2s;
+}
+
+.mobile-nav a:last-child {
+  border-bottom: none;
+}
+
+.mobile-nav a:hover {
+  color: var(--text);
+}
+
+.mobile-nav .mob-cta {
+  margin-top: 8px;
+  display: inline-block;
+  background: var(--crimson);
+  color: #fff;
+  padding: 12px 20px;
+  border-radius: var(--radius-btn);
+  border: none;
+  text-align: center;
+  font-weight: 600;
+}
+
+.mobile-nav .mob-cta:hover {
+  background: #a50d24;
+  color: #fff;
+}
+
+@media (max-width: 768px) {
+  .nav-links,
+  .nav-cta {
+    display: none;
   }
 
-  * { margin: 0; padding: 0; box-sizing: border-box; }
+  .hamburger {
+    display: flex;
+  }
+}
 
-  html { scroll-behavior: smooth; }
+/* ==============================
+   HERO
+============================== */
+.hero {
+  padding: 80px 0 60px;
+}
 
-  body {
-    background: var(--dark);
-    color: var(--white);
-    font-family: 'Montserrat', sans-serif;
-    overflow-x: hidden;
+.hero-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 24px;
+  display: grid;
+  grid-template-columns: 60% 40%;
+  gap: 48px;
+  align-items: center;
+}
+
+.hero-label {
+  display: inline-block;
+  background: rgba(200,16,46,0.12);
+  border: 1px solid rgba(200,16,46,0.4);
+  color: var(--crimson);
+  font-family: 'Inter', sans-serif;
+  font-weight: 600;
+  font-size: 11px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  padding: 6px 14px;
+  border-radius: 4px;
+  margin-bottom: 20px;
+}
+
+.hero-h1 {
+  font-family: 'Inter Tight', sans-serif;
+  font-weight: 900;
+  font-size: clamp(40px, 5.5vw, 72px);
+  line-height: 1.05;
+  color: var(--text);
+  margin-bottom: 20px;
+}
+
+.hero-sub {
+  font-family: 'Inter', sans-serif;
+  font-weight: 400;
+  font-size: 18px;
+  color: var(--muted);
+  line-height: 1.65;
+  margin-bottom: 36px;
+  max-width: 520px;
+}
+
+.hero-ctas {
+  display: flex;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+
+/* Hero Right — Before/After Card */
+.hero-card {
+  background: var(--surface-1);
+  border-radius: 16px;
+  border-left: 4px solid var(--crimson);
+  padding: 28px 24px 24px;
+  box-shadow: 0 8px 40px rgba(0,0,0,0.5);
+}
+
+.hero-card-label {
+  font-family: 'Inter', sans-serif;
+  font-weight: 600;
+  font-size: 11px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 16px;
+}
+
+.hero-ba-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.hero-ba-box {
+  border-radius: 10px;
+  height: 140px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  padding-bottom: 14px;
+  position: relative;
+  overflow: hidden;
+}
+
+.hero-ba-box.before {
+  background: linear-gradient(160deg, #2a2a2a 0%, #1a1a1a 100%);
+  border: 1px solid rgba(255,255,255,0.07);
+}
+
+.hero-ba-box.after {
+  background: linear-gradient(160deg, #3d0a12 0%, #C8102E 100%);
+  border: 1px solid rgba(200,16,46,0.3);
+}
+
+.hero-ba-tag {
+  font-family: 'Inter Tight', sans-serif;
+  font-weight: 800;
+  font-size: 11px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  padding: 4px 10px;
+  border-radius: 4px;
+}
+
+.hero-ba-box.before .hero-ba-tag {
+  background: rgba(255,255,255,0.08);
+  color: var(--muted);
+}
+
+.hero-ba-box.after .hero-ba-tag {
+  background: rgba(0,0,0,0.3);
+  color: #fff;
+}
+
+.hero-card-stats {
+  text-align: center;
+  padding: 14px 0 0;
+  border-top: 1px solid rgba(255,255,255,0.07);
+}
+
+.hero-card-stats strong {
+  font-family: 'Inter Tight', sans-serif;
+  font-weight: 800;
+  font-size: 16px;
+  color: var(--gold);
+  letter-spacing: 0.5px;
+}
+
+.hero-card-stats p {
+  font-size: 12px;
+  color: var(--muted);
+  margin-top: 4px;
+}
+
+@media (max-width: 768px) {
+  .hero-inner {
+    grid-template-columns: 1fr;
+    gap: 40px;
   }
 
-  body::before {
-    content: '';
-    position: fixed;
-    inset: 0;
-    background:
-      radial-gradient(ellipse at 50% 0%, rgba(139,0,0,0.2) 0%, transparent 55%),
-      radial-gradient(ellipse at 15% 60%, rgba(139,0,0,0.07) 0%, transparent 45%),
-      radial-gradient(ellipse at 85% 80%, rgba(201,168,76,0.06) 0%, transparent 40%);
-    pointer-events: none;
-    z-index: 0;
+  .hero-card {
+    max-width: 420px;
+  }
+}
+
+/* ==============================
+   SOCIAL PROOF BAR
+============================== */
+.proof-bar {
+  background: var(--surface-1);
+  border-top: 1px solid rgba(255,255,255,0.06);
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+}
+
+.proof-bar-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 24px;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+}
+
+.proof-stat {
+  padding: 40px 20px;
+  text-align: center;
+  position: relative;
+}
+
+.proof-stat + .proof-stat::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 25%;
+  height: 50%;
+  width: 1px;
+  background: rgba(255,255,255,0.08);
+}
+
+.proof-num {
+  font-family: 'Inter Tight', sans-serif;
+  font-weight: 900;
+  font-size: 36px;
+  color: var(--text);
+  display: block;
+  line-height: 1;
+  margin-bottom: 8px;
+}
+
+.proof-label {
+  font-family: 'Inter', sans-serif;
+  font-weight: 500;
+  font-size: 13px;
+  color: var(--muted);
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+
+@media (max-width: 768px) {
+  .proof-bar-inner {
+    grid-template-columns: 1fr;
   }
 
-  /* ===== NAV ===== */
-  nav {
-    position: sticky;
+  .proof-stat + .proof-stat::before {
     top: 0;
-    z-index: 300;
-    background: rgba(10,10,10,0.97);
-    border-bottom: 1px solid rgba(139,0,0,0.4);
-    backdrop-filter: blur(14px);
-    padding: 0 32px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    height: 60px;
-  }
-
-  .nav-logo {
-    font-family: 'Montserrat', sans-serif;
-    font-weight: 900;
-    font-size: 20px;
-    letter-spacing: 4px;
-    background: linear-gradient(to right, var(--crimson-bright), var(--gold));
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    text-decoration: none;
-  }
-
-  .nav-links {
-    display: flex;
-    gap: 30px;
-    list-style: none;
-  }
-
-  .nav-links a {
-    font-family: 'Montserrat', sans-serif;
-    font-weight: 700;
-    font-size: 10px;
-    letter-spacing: 2px;
-    color: var(--gray);
-    text-decoration: none;
-    text-transform: uppercase;
-    transition: color 0.3s;
-  }
-
-  .nav-links a:hover { color: var(--gold); }
-  .nav-links a.men { color: var(--crimson-bright); }
-  .nav-links a.women { color: #d4a0d4; }
-  .nav-links a.men:hover { color: #ff4444; }
-  .nav-links a.women:hover { color: #e8c0e8; }
-
-  @media (max-width: 640px) {
-    .nav-links { gap: 16px; }
-    .nav-links a { font-size: 10px; letter-spacing: 2px; }
-    nav { padding: 0 16px; }
-  }
-
-  @media (max-width: 440px) {
-    .nav-links li:nth-child(3),
-    .nav-links li:nth-child(4) { display: none; }
-  }
-
-  /* ===== HERO ===== */
-  .hero {
-    position: relative;
-    min-height: 100vh;
-    display: grid;
-    grid-template-columns: 1fr auto;
-    align-items: center;
-    overflow: hidden;
-  }
-
-  .hero-bg {
-    position: absolute;
-    inset: 0;
-    z-index: 0;
-  }
-
-  .hero-bg img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    object-position: center center;
-    filter: saturate(0.5) contrast(1.1) brightness(0.35);
-  }
-
-  .hero-overlay {
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(105deg, rgba(10,10,10,0.92) 0%, rgba(10,10,10,0.75) 50%, rgba(10,10,10,0.2) 100%);
-    z-index: 1;
-  }
-
-  .hero-content {
-    position: relative;
-    z-index: 2;
-    padding: 80px 60px 80px 60px;
-    max-width: 680px;
-  }
-
-  .hero-badge {
-    display: inline-block;
-    background: linear-gradient(135deg, var(--crimson), #4A0000);
-    border: 1px solid var(--crimson-bright);
-    color: var(--white);
-    font-family: 'Montserrat', sans-serif;
-    font-weight: 700;
-    font-size: 9px;
-    letter-spacing: 4px;
-    padding: 6px 22px;
-    text-transform: uppercase;
-    margin-bottom: 20px;
-    clip-path: polygon(10px 0%, 100% 0%, calc(100% - 10px) 100%, 0% 100%);
-  }
-
-  .hero-name {
-    font-family: 'Montserrat', sans-serif;
-    font-weight: 900;
-    font-size: clamp(58px, 9vw, 105px);
-    letter-spacing: 2px;
-    line-height: 0.88;
-    background: linear-gradient(180deg, var(--white) 0%, var(--gold-light) 55%, var(--gold) 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    filter: drop-shadow(0 0 50px rgba(201,168,76,0.25));
-  }
-
-  .hero-title {
-    font-family: 'Montserrat', sans-serif;
-    font-weight: 600;
-    font-size: 11px;
-    letter-spacing: 5px;
-    color: var(--crimson-bright);
-    text-transform: uppercase;
-    margin-top: 14px;
-    margin-bottom: 30px;
-  }
-
-  .hero-desc {
-    font-size: 16px;
-    color: #aaa;
-    line-height: 1.7;
-    max-width: 520px;
-    margin-bottom: 40px;
-  }
-
-  .hero-desc strong { color: var(--white); }
-
-  .hero-ctas {
-    display: flex;
-    gap: 14px;
-    flex-wrap: wrap;
-  }
-
-  .cta-btn {
-    font-family: 'Montserrat', sans-serif;
-    font-weight: 800;
-    font-size: 10px;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    text-decoration: none;
-    padding: 15px 30px;
-    border: 2px solid;
-    transition: all 0.3s;
-    display: inline-block;
-    border-radius: 2px;
-  }
-
-  .cta-men {
-    background: var(--crimson-bright);
-    border-color: var(--crimson-bright);
-    color: var(--white);
-  }
-
-  .cta-men:hover {
-    background: #a50000;
-    border-color: #a50000;
-    box-shadow: 0 0 30px rgba(204,0,0,0.5);
-    transform: translateY(-2px);
-  }
-
-  .cta-women {
-    background: rgba(212,160,212,0.1);
-    border-color: rgba(212,160,212,0.5);
-    color: #e0b8e0;
-  }
-
-  .cta-women:hover {
-    background: rgba(212,160,212,0.2);
-    border-color: rgba(212,160,212,0.9);
-  }
-
-  .cta-wa {
-    background: rgba(37,211,102,0.1);
-    border-color: rgba(37,211,102,0.5);
-    color: #25D366;
-  }
-
-  .cta-wa:hover { background: rgba(37,211,102,0.2); }
-
-  .hero-photo-wrap {
-    position: relative;
-    z-index: 2;
-    height: 100vh;
-    width: 380px;
-    flex-shrink: 0;
-    overflow: hidden;
-  }
-
-  .hero-photo-wrap img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    object-position: center top;
-    mask-image: linear-gradient(to left, rgba(0,0,0,0.9) 50%, transparent 100%);
-    -webkit-mask-image: linear-gradient(to left, rgba(0,0,0,0.9) 50%, transparent 100%);
-  }
-
-  @media (max-width: 900px) {
-    .hero { grid-template-columns: 1fr; }
-    .hero-photo-wrap { display: none; }
-    .hero-content { padding: 60px 28px; }
-  }
-
-  /* ===== STATS BAR ===== */
-  .stats-bar {
-    display: flex;
-    border-top: 1px solid rgba(139,0,0,0.3);
-    border-bottom: 1px solid rgba(139,0,0,0.3);
-    background: rgba(0,0,0,0.5);
-    position: relative;
-    z-index: 1;
-  }
-
-  .stat-item {
-    flex: 1;
-    text-align: center;
-    padding: 22px 10px;
-    border-right: 1px solid rgba(139,0,0,0.2);
-  }
-
-  .stat-item:last-child { border-right: none; }
-
-  .stat-num {
-    font-family: 'Montserrat', sans-serif;
-    font-weight: 900;
-    font-size: 34px;
-    color: var(--crimson-bright);
-    display: block;
-    line-height: 1;
-  }
-
-  .stat-label {
-    font-family: 'Montserrat', sans-serif;
-    font-weight: 600;
-    font-size: 9px;
-    letter-spacing: 2px;
-    color: var(--gray);
-    text-transform: uppercase;
-    display: block;
-    margin-top: 5px;
-  }
-
-  @media (max-width: 600px) {
-    .stat-item { padding: 16px 6px; }
-    .stat-num { font-size: 22px; }
-    .stat-label { font-size: 8px; }
-  }
-
-  /* ===== SECTION WRAPPER ===== */
-  .section {
-    padding: 80px 0;
-    position: relative;
-    z-index: 1;
-  }
-
-  .section-inner {
-    max-width: 1140px;
-    margin: 0 auto;
-    padding: 0 28px;
-  }
-
-  .section-eyebrow {
-    font-family: 'Montserrat', sans-serif;
-    font-weight: 700;
-    font-size: 10px;
-    letter-spacing: 4px;
-    color: var(--crimson-bright);
-    text-transform: uppercase;
-    margin-bottom: 10px;
-  }
-
-  .section-title {
-    font-family: 'Montserrat', sans-serif;
-    font-weight: 900;
-    font-size: clamp(34px, 5.5vw, 58px);
-    letter-spacing: 1px;
-    line-height: 1;
-    color: var(--white);
-    margin-bottom: 10px;
-  }
-
-  .section-title span { color: var(--crimson-bright); }
-  .section-title span.gold { color: var(--gold-light); }
-
-  .section-sub {
-    font-family: 'Montserrat', sans-serif;
-    font-weight: 600;
-    font-size: 10px;
-    letter-spacing: 3px;
-    color: var(--gray);
-    text-transform: uppercase;
-    margin-bottom: 48px;
-  }
-
-  /* ===== ABOUT ===== */
-  .about-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 48px;
-    align-items: center;
-  }
-
-  .about-img-wrap {
-    position: relative;
-    overflow: hidden;
-  }
-
-  .about-img-wrap img {
-    width: 100%;
-    height: 440px;
-    object-fit: cover;
-    object-position: center top;
-    filter: saturate(0.85) contrast(1.05);
-  }
-
-  .about-img-wrap::after {
-    content: '';
-    position: absolute;
-    bottom: 0; left: 0; right: 0;
-    height: 80px;
-    background: linear-gradient(to top, var(--dark), transparent);
-  }
-
-  .about-img-accent {
-    position: absolute;
-    top: 0; left: 0;
-    width: 3px; height: 100%;
-    background: linear-gradient(to bottom, var(--crimson-bright), transparent);
-  }
-
-  .about-text h3 {
-    font-family: 'Montserrat', sans-serif;
-    font-weight: 900;
-    font-size: 38px;
-    letter-spacing: 0px;
-    color: var(--white);
-    margin-bottom: 6px;
-  }
-
-  .about-text h3 span { color: var(--crimson-bright); }
-
-  .about-text .about-role {
-    font-family: 'Montserrat', sans-serif;
-    font-weight: 700;
-    font-size: 10px;
-    letter-spacing: 3px;
-    color: var(--gold);
-    text-transform: uppercase;
-    margin-bottom: 24px;
-  }
-
-  .about-text p {
-    font-size: 15px;
-    color: #aaa;
-    line-height: 1.8;
-    margin-bottom: 16px;
-  }
-
-  .about-text p strong { color: var(--white); }
-
-  .about-chips {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-    margin-top: 24px;
-  }
-
-  .chip {
-    font-family: 'Montserrat', sans-serif;
-    font-weight: 700;
-    font-size: 9px;
-    letter-spacing: 2px;
-    color: var(--crimson-bright);
-    border: 1px solid rgba(139,0,0,0.5);
-    padding: 6px 14px;
-    text-transform: uppercase;
-  }
-
-  @media (max-width: 760px) {
-    .about-grid { grid-template-columns: 1fr; }
-    .about-img-wrap img { height: 260px; }
-  }
-
-  /* ===== DIVIDER ===== */
-  .divider {
-    display: flex;
-    align-items: center;
-    gap: 16px;
-    margin: 0 auto 56px;
-    justify-content: center;
-  }
-
-  .divider-line {
-    width: 80px;
+    left: 25%;
+    width: 50%;
     height: 1px;
-    background: linear-gradient(to right, transparent, var(--crimson-bright), transparent);
   }
 
-  .divider-icon { color: var(--gold); font-size: 16px; }
+  .proof-stat {
+    padding: 28px 20px;
+  }
+}
 
-  /* ===== PROGRAMS ===== */
-  .programs-wrapper {
-    display: grid;
+/* ==============================
+   TRANSFORMATIONS
+============================== */
+.transforms-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+  margin-top: 40px;
+}
+
+.transform-card {
+  background: var(--surface-1);
+  border-radius: var(--radius-card);
+  overflow: hidden;
+  border: 1px solid rgba(255,255,255,0.06);
+  transition: border-color 0.2s, transform 0.2s;
+}
+
+.transform-card:hover {
+  border-color: rgba(200,16,46,0.3);
+  transform: translateY(-4px);
+}
+
+.transform-ba {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  height: 140px;
+}
+
+.transform-before {
+  background: linear-gradient(160deg, #252525 0%, #191919 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.transform-after {
+  background: linear-gradient(160deg, #2a0009 0%, #C8102E 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.transform-ba-label {
+  font-family: 'Inter Tight', sans-serif;
+  font-weight: 800;
+  font-size: 10px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  padding: 4px 8px;
+  border-radius: 4px;
+}
+
+.transform-before .transform-ba-label {
+  background: rgba(255,255,255,0.07);
+  color: var(--muted);
+}
+
+.transform-after .transform-ba-label {
+  background: rgba(0,0,0,0.25);
+  color: #fff;
+}
+
+.transform-info {
+  padding: 18px 20px;
+}
+
+.transform-name {
+  font-family: 'Inter Tight', sans-serif;
+  font-weight: 700;
+  font-size: 16px;
+  color: var(--text);
+  margin-bottom: 4px;
+}
+
+.transform-duration {
+  font-size: 13px;
+  color: var(--muted);
+  margin-bottom: 10px;
+}
+
+.transform-stats {
+  display: inline-block;
+  background: rgba(200,16,46,0.1);
+  border: 1px solid rgba(200,16,46,0.25);
+  color: var(--crimson);
+  font-family: 'Inter', sans-serif;
+  font-weight: 600;
+  font-size: 12px;
+  padding: 4px 10px;
+  border-radius: 4px;
+}
+
+@media (max-width: 768px) {
+  .transforms-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ==============================
+   SERVICES
+============================== */
+.services-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+  margin-top: 40px;
+  align-items: start;
+}
+
+.service-card {
+  background: var(--surface-1);
+  border-radius: var(--radius-card);
+  padding: 28px 24px 24px;
+  border: 1px solid rgba(255,255,255,0.07);
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  transition: border-color 0.2s, transform 0.2s;
+}
+
+.service-card:hover {
+  border-color: rgba(255,255,255,0.15);
+  transform: translateY(-4px);
+}
+
+.service-card.featured {
+  border-color: var(--gold);
+  background: var(--surface-2);
+}
+
+.service-card.featured:hover {
+  border-color: var(--gold);
+  box-shadow: 0 8px 40px rgba(212,175,55,0.15);
+}
+
+.service-popular-chip {
+  position: absolute;
+  top: -1px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--gold);
+  color: #0A0A0A;
+  font-family: 'Inter', sans-serif;
+  font-weight: 700;
+  font-size: 10px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  padding: 4px 14px;
+  border-radius: 0 0 6px 6px;
+  white-space: nowrap;
+}
+
+.service-name {
+  font-family: 'Inter Tight', sans-serif;
+  font-weight: 800;
+  font-size: 22px;
+  color: var(--text);
+  margin-bottom: 8px;
+  margin-top: 8px;
+}
+
+.service-desc {
+  font-size: 14px;
+  color: var(--muted);
+  margin-bottom: 16px;
+  line-height: 1.6;
+}
+
+.service-price {
+  font-family: 'Inter Tight', sans-serif;
+  font-weight: 900;
+  font-size: 26px;
+  color: var(--text);
+  margin-bottom: 20px;
+}
+
+.service-price span {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--muted);
+}
+
+.service-features {
+  list-style: none;
+  margin-bottom: 24px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.service-features li {
+  font-size: 14px;
+  color: var(--muted);
+  padding-left: 18px;
+  position: relative;
+  line-height: 1.5;
+}
+
+.service-features li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 8px;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--crimson);
+}
+
+.service-cta {
+  display: block;
+  text-align: center;
+  background: transparent;
+  color: var(--text);
+  font-family: 'Inter', sans-serif;
+  font-weight: 600;
+  font-size: 14px;
+  text-decoration: none;
+  padding: 12px 20px;
+  border-radius: var(--radius-btn);
+  border: 2px solid rgba(255,255,255,0.2);
+  transition: background 0.2s, border-color 0.2s;
+}
+
+.service-cta:hover {
+  background: rgba(255,255,255,0.06);
+  border-color: rgba(255,255,255,0.4);
+}
+
+.service-card.featured .service-cta {
+  background: var(--crimson);
+  border-color: var(--crimson);
+  color: #fff;
+}
+
+.service-card.featured .service-cta:hover {
+  background: #a50d24;
+  border-color: #a50d24;
+}
+
+@media (max-width: 768px) {
+  .services-grid {
+    grid-template-columns: 1fr;
+    max-width: 480px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+}
+
+/* ==============================
+   TESTIMONIALS
+============================== */
+.testimonials-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+  margin-top: 40px;
+}
+
+.testimonial-card {
+  background: var(--surface-1);
+  border-radius: var(--radius-card);
+  padding: 28px 24px;
+  border: 1px solid rgba(255,255,255,0.07);
+  transition: border-color 0.2s;
+}
+
+.testimonial-card:hover {
+  border-color: rgba(212,175,55,0.2);
+}
+
+.testimonial-stars {
+  color: var(--gold);
+  font-size: 16px;
+  letter-spacing: 2px;
+  margin-bottom: 16px;
+}
+
+.testimonial-quote {
+  font-family: 'Inter', sans-serif;
+  font-style: italic;
+  font-size: 15px;
+  color: var(--text);
+  line-height: 1.7;
+  margin-bottom: 20px;
+}
+
+.testimonial-author {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.testimonial-name {
+  font-family: 'Inter', sans-serif;
+  font-weight: 600;
+  font-size: 14px;
+  color: var(--text);
+}
+
+.testimonial-role {
+  font-size: 12px;
+  color: var(--muted);
+}
+
+@media (max-width: 768px) {
+  .testimonials-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ==============================
+   COACH INTRO
+============================== */
+.coach-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 48px;
+  margin-top: 40px;
+  align-items: start;
+}
+
+.coach-badges {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+
+.coach-badge {
+  background: var(--surface-1);
+  border-radius: var(--radius-card);
+  border: 1px solid rgba(255,255,255,0.07);
+  padding: 20px 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  transition: border-color 0.2s;
+}
+
+.coach-badge:hover {
+  border-color: rgba(200,16,46,0.25);
+}
+
+.coach-badge-icon {
+  font-size: 22px;
+  line-height: 1;
+}
+
+.coach-badge-text {
+  font-family: 'Inter Tight', sans-serif;
+  font-weight: 700;
+  font-size: 13px;
+  color: var(--text);
+  letter-spacing: 0.3px;
+  line-height: 1.3;
+}
+
+.coach-bio {
+  font-family: 'Inter', sans-serif;
+  font-size: 15px;
+  color: var(--muted);
+  line-height: 1.75;
+  margin-bottom: 28px;
+}
+
+.coach-bio strong {
+  color: var(--text);
+}
+
+.coach-philosophy {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.coach-philosophy li {
+  font-size: 15px;
+  color: var(--muted);
+  padding-left: 22px;
+  position: relative;
+  line-height: 1.5;
+}
+
+.coach-philosophy li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 8px;
+  width: 8px;
+  height: 2px;
+  background: var(--crimson);
+  border-radius: 1px;
+}
+
+@media (max-width: 768px) {
+  .coach-grid {
+    grid-template-columns: 1fr;
+    gap: 32px;
+  }
+
+  .coach-badges {
     grid-template-columns: 1fr 1fr;
-    gap: 24px;
-    margin-bottom: 60px;
+  }
+}
+
+/* ==============================
+   FAQ ACCORDION
+============================== */
+.faq-list {
+  margin-top: 40px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.faq-item {
+  background: var(--surface-1);
+  border-radius: var(--radius-card);
+  border: 1px solid rgba(255,255,255,0.07);
+  overflow: hidden;
+  transition: border-color 0.2s;
+}
+
+.faq-item.open {
+  border-color: rgba(200,16,46,0.25);
+}
+
+.faq-question {
+  width: 100%;
+  background: none;
+  border: none;
+  color: var(--text);
+  font-family: 'Inter', sans-serif;
+  font-weight: 600;
+  font-size: 15px;
+  text-align: left;
+  padding: 20px 24px;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  transition: color 0.2s;
+}
+
+.faq-question:hover {
+  color: var(--crimson);
+}
+
+.faq-icon {
+  flex-shrink: 0;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  border: 1px solid rgba(255,255,255,0.15);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  line-height: 1;
+  color: var(--muted);
+  transition: transform 0.3s, border-color 0.2s, color 0.2s;
+  user-select: none;
+}
+
+.faq-item.open .faq-icon {
+  transform: rotate(45deg);
+  border-color: var(--crimson);
+  color: var(--crimson);
+}
+
+.faq-answer {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s ease;
+}
+
+.faq-item.open .faq-answer {
+  max-height: 400px;
+}
+
+.faq-answer-inner {
+  padding: 0 24px 20px;
+  font-size: 15px;
+  color: var(--muted);
+  line-height: 1.7;
+  border-top: 1px solid rgba(255,255,255,0.05);
+  padding-top: 16px;
+}
+
+/* ==============================
+   FINAL CTA SECTION
+============================== */
+.cta-section {
+  background: #1A0608;
+  border-top: 1px solid rgba(200,16,46,0.2);
+  border-bottom: 1px solid rgba(200,16,46,0.2);
+}
+
+.cta-section-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 80px 24px;
+  text-align: center;
+}
+
+.cta-section-title {
+  font-family: 'Inter Tight', sans-serif;
+  font-weight: 900;
+  font-size: clamp(28px, 4vw, 46px);
+  color: var(--text);
+  line-height: 1.1;
+  margin-bottom: 16px;
+}
+
+.cta-section-sub {
+  font-size: 17px;
+  color: var(--muted);
+  margin-bottom: 36px;
+}
+
+.cta-section-btns {
+  display: flex;
+  gap: 14px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+/* ==============================
+   FOOTER
+============================== */
+footer {
+  background: #0D0D0D;
+  border-top: 1px solid rgba(255,255,255,0.07);
+  padding: 60px 0 0;
+}
+
+.footer-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 24px 40px;
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr;
+  gap: 40px;
+}
+
+.footer-brand {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.footer-brand p {
+  font-size: 14px;
+  color: var(--muted);
+  line-height: 1.5;
+}
+
+.footer-brand a {
+  font-size: 14px;
+  color: var(--muted);
+  text-decoration: none;
+  transition: color 0.2s;
+  width: fit-content;
+}
+
+.footer-brand a:hover {
+  color: var(--text);
+}
+
+.footer-brand .nav-logo {
+  font-size: 18px;
+  margin-bottom: 4px;
+}
+
+.footer-col {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.footer-col h4 {
+  font-family: 'Inter', sans-serif;
+  font-weight: 600;
+  font-size: 12px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--text);
+  margin-bottom: 4px;
+}
+
+.footer-col a {
+  font-size: 14px;
+  color: var(--muted);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.footer-col a:hover {
+  color: var(--text);
+}
+
+.footer-bottom {
+  border-top: 1px solid rgba(255,255,255,0.06);
+  padding: 20px 24px;
+  text-align: center;
+}
+
+.footer-bottom p {
+  font-size: 13px;
+  color: var(--muted);
+}
+
+@media (max-width: 768px) {
+  .footer-inner {
+    grid-template-columns: 1fr 1fr;
+    gap: 32px;
   }
 
-  .program-block {
-    border: 1px solid rgba(139,0,0,0.3);
-    background: linear-gradient(135deg, rgba(26,26,26,0.9), rgba(15,15,15,0.95));
-    overflow: hidden;
-    transition: border-color 0.3s, transform 0.3s;
+  .footer-brand {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (max-width: 480px) {
+  .footer-inner {
+    grid-template-columns: 1fr;
   }
 
-  .program-block:hover {
-    border-color: rgba(204,0,0,0.6);
-    transform: translateY(-3px);
+  .footer-brand {
+    grid-column: auto;
   }
+}
 
-  .program-block.women-block {
-    border-color: rgba(212,160,212,0.2);
-  }
+/* ==============================
+   SECTION BG VARIANTS
+============================== */
+.bg-surface {
+  background: var(--surface-1);
+}
 
-  .program-block.women-block:hover {
-    border-color: rgba(212,160,212,0.5);
-  }
-
-  .program-block-img {
-    width: 100%;
-    height: 240px;
-    object-fit: cover;
-    object-position: center top;
-    filter: saturate(0.7) brightness(0.65);
-    transition: filter 0.4s;
-  }
-
-  .program-block:hover .program-block-img {
-    filter: saturate(0.85) brightness(0.75);
-  }
-
-  .program-block-body {
-    padding: 28px;
-  }
-
-  .program-block-tag {
-    font-family: 'Montserrat', sans-serif;
-    font-weight: 700;
-    font-size: 9px;
-    letter-spacing: 3px;
-    text-transform: uppercase;
-    margin-bottom: 10px;
-    display: block;
-  }
-
-  .men-tag { color: var(--crimson-bright); }
-  .women-tag { color: #d4a0d4; }
-
-  .program-block-title {
-    font-family: 'Montserrat', sans-serif;
-    font-weight: 900;
-    font-size: 32px;
-    letter-spacing: 0px;
-    color: var(--white);
-    line-height: 1.05;
-    margin-bottom: 8px;
-  }
-
-  .program-block-title .men-accent { color: var(--crimson-bright); }
-  .program-block-title .women-accent { color: #d4a0d4; }
-
-  .program-block-desc {
-    font-size: 14px;
-    color: var(--gray);
-    line-height: 1.6;
-    margin-bottom: 20px;
-  }
-
-  .program-block-meta {
-    display: flex;
-    gap: 10px;
-    flex-wrap: wrap;
-    margin-bottom: 22px;
-  }
-
-  .meta-tag {
-    font-family: 'Montserrat', sans-serif;
-    font-weight: 600;
-    font-size: 9px;
-    letter-spacing: 1px;
-    color: var(--gray);
-    border: 1px solid rgba(255,255,255,0.1);
-    padding: 4px 12px;
-    text-transform: uppercase;
-  }
-
-  .meta-tag.red {
-    color: var(--crimson-bright);
-    border-color: rgba(139,0,0,0.5);
-    background: rgba(139,0,0,0.1);
-  }
-
-  .meta-tag.purple {
-    color: #d4a0d4;
-    border-color: rgba(212,160,212,0.3);
-    background: rgba(212,160,212,0.06);
-  }
-
-  .program-block-link {
-    display: inline-flex;
-    align-items: center;
-    gap: 10px;
-    font-family: 'Montserrat', sans-serif;
-    font-weight: 800;
-    font-size: 10px;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    text-decoration: none;
-    padding: 13px 22px;
-    border: 2px solid;
-    transition: all 0.3s;
-  }
-
-  .men-link {
-    color: var(--white);
-    border-color: var(--crimson-bright);
-    background: rgba(139,0,0,0.2);
-  }
-
-  .men-link:hover {
-    background: var(--crimson);
-    box-shadow: 0 0 20px rgba(204,0,0,0.3);
-  }
-
-  .women-link {
-    color: #e0b8e0;
-    border-color: rgba(212,160,212,0.5);
-    background: rgba(212,160,212,0.08);
-  }
-
-  .women-link:hover {
-    background: rgba(212,160,212,0.18);
-    border-color: rgba(212,160,212,0.8);
-  }
-
-  @media (max-width: 720px) {
-    .programs-wrapper { grid-template-columns: 1fr; }
-  }
-
-  /* ===== MEN'S WORKOUT CARDS ===== */
-  .workouts-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 16px;
-  }
-
-  .workout-mini {
-    border: 1px solid rgba(139,0,0,0.25);
-    background: rgba(22,22,22,0.9);
-    padding: 22px 24px;
-    text-decoration: none;
-    color: inherit;
-    display: block;
-    transition: border-color 0.3s, transform 0.3s;
-    position: relative;
-    overflow: hidden;
-  }
-
-  .workout-mini::before {
-    content: '';
-    position: absolute;
-    top: 0; left: 0;
-    width: 3px; height: 100%;
-    background: linear-gradient(to bottom, var(--crimson-bright), transparent);
-  }
-
-  .workout-mini:hover {
-    border-color: rgba(204,0,0,0.6);
-    transform: translateY(-3px);
-  }
-
-  .mini-num {
-    font-family: 'Montserrat', sans-serif;
-    font-weight: 900;
-    font-size: 44px;
-    color: rgba(139,0,0,0.15);
-    line-height: 1;
-    position: absolute;
-    top: 10px; right: 14px;
-  }
-
-  .mini-title {
-    font-family: 'Montserrat', sans-serif;
-    font-weight: 900;
-    font-size: 18px;
-    letter-spacing: 0px;
-    color: var(--white);
-    margin-bottom: 4px;
-  }
-
-  .mini-title span { color: var(--crimson-bright); }
-
-  .mini-muscle {
-    font-family: 'Montserrat', sans-serif;
-    font-weight: 700;
-    font-size: 9px;
-    letter-spacing: 1.5px;
-    color: var(--gold);
-    text-transform: uppercase;
-    margin-bottom: 12px;
-  }
-
-  .mini-meta {
-    display: flex;
-    gap: 8px;
-    flex-wrap: wrap;
-  }
-
-  .mini-pill {
-    font-family: 'Montserrat', sans-serif;
-    font-weight: 600;
-    font-size: 8px;
-    letter-spacing: 1px;
-    color: var(--gray);
-    border: 1px solid rgba(255,255,255,0.1);
-    padding: 3px 10px;
-    text-transform: uppercase;
-  }
-
-  .mini-pill.red {
-    color: var(--crimson-bright);
-    border-color: rgba(139,0,0,0.4);
-  }
-
-  /* ===== WOMEN'S WORKOUT CARDS ===== */
-  .women-workouts-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 16px;
-  }
-
-  .workout-mini.women-mini::before {
-    background: linear-gradient(to bottom, #d4a0d4, transparent);
-  }
-
-  .workout-mini.women-mini:hover {
-    border-color: rgba(212,160,212,0.5);
-  }
-
-  .workout-mini.women-mini .mini-title span { color: #d4a0d4; }
-  .workout-mini.women-mini .mini-muscle { color: #d4a0d4; }
-  .workout-mini.women-mini .mini-pill.red {
-    color: #d4a0d4;
-    border-color: rgba(212,160,212,0.4);
-  }
-  .workout-mini.women-mini .mini-num { color: rgba(212,160,212,0.12); }
-
-  /* ===== CONTACT ===== */
-  #contact {
-    background: linear-gradient(135deg, rgba(139,0,0,0.08), transparent 60%);
-    border-top: 1px solid rgba(139,0,0,0.3);
-  }
-
-  .contact-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-    gap: 20px;
-    margin-bottom: 36px;
-  }
-
-  .contact-card {
-    border: 1px solid rgba(255,255,255,0.08);
-    background: rgba(22,22,22,0.8);
-    padding: 28px 24px;
-    text-align: center;
-    text-decoration: none;
-    color: inherit;
-    transition: border-color 0.3s, transform 0.3s;
-    display: block;
-  }
-
-  .contact-card:hover { border-color: var(--gold); transform: translateY(-3px); }
-
-  .contact-card.insta { border-color: rgba(225,48,108,0.3); }
-  .contact-card.insta:hover { border-color: rgba(225,48,108,0.8); }
-
-  .contact-card.wa { border-color: rgba(37,211,102,0.3); }
-  .contact-card.wa:hover { border-color: rgba(37,211,102,0.8); }
-
-  .contact-icon { font-size: 32px; margin-bottom: 10px; display: block; }
-
-  .contact-label {
-    font-family: 'Montserrat', sans-serif;
-    font-weight: 600;
-    font-size: 9px;
-    letter-spacing: 3px;
-    color: var(--gray);
-    text-transform: uppercase;
-    margin-bottom: 6px;
-  }
-
-  .contact-value {
-    font-family: 'Montserrat', sans-serif;
-    font-weight: 900;
-    font-size: 16px;
-    letter-spacing: 1px;
-    color: var(--white);
-  }
-
-  @media (max-width: 640px) {
-    .contact-grid { grid-template-columns: 1fr; }
-  }
-
-  /* ===== QR SECTION ===== */
-  .qr-strip {
-    background: rgba(0,0,0,0.4);
-    border-top: 1px solid rgba(201,168,76,0.2);
-    padding: 40px 28px;
-    text-align: center;
-    position: relative;
-    z-index: 1;
-  }
-
-  .qr-title {
-    font-family: 'Montserrat', sans-serif;
-    font-weight: 900;
-    font-size: 22px;
-    letter-spacing: 2px;
-    color: var(--white);
-    margin-bottom: 8px;
-  }
-
-  .qr-sub {
-    font-size: 13px;
-    color: var(--gray);
-    margin-bottom: 20px;
-    letter-spacing: 1px;
-  }
-
-  .qr-btn {
-    display: inline-flex;
-    align-items: center;
-    gap: 10px;
-    font-family: 'Montserrat', sans-serif;
-    font-weight: 700;
-    font-size: 10px;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    text-decoration: none;
-    color: var(--gold);
-    border: 1px solid rgba(201,168,76,0.5);
-    padding: 12px 28px;
-    background: rgba(201,168,76,0.08);
-    transition: all 0.3s;
-  }
-
-  .qr-btn:hover {
-    background: rgba(201,168,76,0.18);
-    border-color: var(--gold);
-    box-shadow: 0 0 20px rgba(201,168,76,0.2);
-  }
-
-  /* ===== FOOTER ===== */
-  footer {
-    border-top: 1px solid rgba(139,0,0,0.3);
-    padding: 40px 28px 28px;
-    text-align: center;
-    background: rgba(0,0,0,0.5);
-    position: relative;
-    z-index: 1;
-  }
-
-  .footer-avatar {
-    width: 68px;
-    height: 68px;
-    border-radius: 50%;
-    object-fit: cover;
-    object-position: top center;
-    border: 2px solid var(--crimson-bright);
-    margin-bottom: 14px;
-  }
-
-  .footer-name {
-    font-family: 'Montserrat', sans-serif;
-    font-weight: 900;
-    font-size: 22px;
-    letter-spacing: 2px;
-    background: linear-gradient(to right, var(--crimson-bright), var(--gold));
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    margin-bottom: 4px;
-  }
-
-  .footer-sub {
-    font-family: 'Montserrat', sans-serif;
-    font-weight: 500;
-    font-size: 9px;
-    letter-spacing: 3px;
-    color: var(--gray);
-    text-transform: uppercase;
-    margin-bottom: 22px;
-  }
-
-  .footer-nav {
-    display: flex;
-    justify-content: center;
-    gap: 24px;
-    flex-wrap: wrap;
-  }
-
-  .footer-nav a {
-    font-family: 'Montserrat', sans-serif;
-    font-weight: 600;
-    font-size: 9px;
-    letter-spacing: 2px;
-    color: var(--gray);
-    text-decoration: none;
-    text-transform: uppercase;
-    transition: color 0.2s;
-  }
-
-  .footer-nav a:hover { color: var(--gold); }
-
-  /* ===== ANIMATIONS ===== */
-  @keyframes fadeUp {
-    from { opacity: 0; transform: translateY(24px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
-
-  .hero-content { animation: fadeUp 1s ease both; }
+.section-header {
+  margin-bottom: 0;
+}
 </style>
 <script defer src="/_vercel/speed-insights/script.js"></script>
 </head>
 <body>
 
-<!-- ===== LAUNCH BANNER ===== -->
-<div style="background:linear-gradient(90deg,#8B0000,#CC0000,#8B0000);background-size:200% 100%;animation:bannerSlide 4s linear infinite;padding:10px 20px;text-align:center;font-family:'Montserrat',sans-serif;font-size:11px;font-weight:800;letter-spacing:2px;color:#fff;position:relative;z-index:300;">
-  🔥 WEBSITE IS LIVE! &nbsp;·&nbsp; Workout Generator · Online Booking · Advanced Programs &nbsp;·&nbsp;
-  <a href="launch.html" style="color:#C9A84C;text-decoration:none;border-bottom:1px solid rgba(201,168,76,0.5);">See Everything →</a>
-</div>
-<style>@keyframes bannerSlide{0%{background-position:0% 50%}100%{background-position:200% 50%}}</style>
-
-<!-- ===== NAV ===== -->
-<nav>
-  <a href="index.html" class="nav-logo">Sahil Fitness</a>
-  <ul class="nav-links">
-    <li><a href="men.html" class="men">Men's ⚡</a></li>
-    <li><a href="women.html" class="women">Women's</a></li>
-    <li><a href="generator.html" style="color:#C9A84C;">⚡ Generator</a></li>
-    <li><a href="slots.html" style="color:#25D366;">📅 Book Slot</a></li>
-    <li><a href="#contact">Contact</a></li>
-    <li><a href="qr.html">QR</a></li>
-    <li><a href="IBLITZ_LINKS.html" style="color:#C9A84C;">All Links</a></li>
-  </ul>
+<!-- ==============================
+     NAVBAR
+============================== -->
+<nav id="navbar">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo">FITWID</a>
+    <ul class="nav-links">
+      <li><a href="coaching.html">Coaching</a></li>
+      <li><a href="pricing.html">Pricing</a></li>
+      <li><a href="results.html">Results</a></li>
+      <li><a href="about.html">About</a></li>
+    </ul>
+    <a href="apply.html" class="nav-cta">Book Free Consult</a>
+    <button class="hamburger" id="hamburger" onclick="toggleMobileNav()">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+  <div class="mobile-nav" id="mobileNav">
+    <a href="coaching.html">Coaching</a>
+    <a href="pricing.html">Pricing</a>
+    <a href="results.html">Results</a>
+    <a href="about.html">About</a>
+    <a href="apply.html" class="mob-cta">Book Free Consult</a>
+  </div>
 </nav>
 
-<!-- ===== HERO ===== -->
+<!-- ==============================
+     HERO
+============================== -->
 <section class="hero">
-  <div class="hero-bg">
-    <img src="images/sahil-poster.png" alt="Sahil Fitness Club Fitness" />
-  </div>
-  <div class="hero-overlay"></div>
-  <div class="hero-content">
-    <div class="hero-badge">⚡ Sahil Fitness Club · Bangalore</div>
-    <h1 class="hero-name">Sahil<br>Bansal</h1>
-    <p class="hero-title">Coach &nbsp;·&nbsp; Strength &amp; Physique Specialist</p>
-    <p class="hero-desc">
-      <strong>Advanced training programs</strong> for men and women who train seriously. Science-backed, coach-programmed, no shortcuts. Build the physique you've been working toward.
-    </p>
-    <div class="hero-ctas">
-      <a href="men.html" class="cta-btn cta-men">⚡ Men's Programs</a>
-      <a href="women.html" class="cta-btn cta-women">Women's Programs</a>
-      <a href="https://wa.me/917015552731?text=Hi%20Coach%20Sahil%2C%20I%27m%20interested%20in%20training!" target="_blank" rel="noopener" class="cta-btn cta-wa">💬 WhatsApp</a>
-      <a href="slots.html" class="cta-btn" style="background:rgba(37,211,102,0.1);border-color:rgba(37,211,102,0.6);color:#25D366;">📅 Book a Slot</a>
+  <div class="hero-inner">
+    <!-- Left Column -->
+    <div class="hero-left">
+      <div class="hero-label">Online Strength Coaching &middot; Bangalore</div>
+      <h1 class="hero-h1">Build a serious physique with Bangalore's strength coach</h1>
+      <p class="hero-sub">Coach-programmed online training for men and women who train hard. No fluff, no shortcuts &mdash; just results.</p>
+      <div class="hero-ctas">
+        <a href="apply.html" class="btn-primary">Book a Free Consult</a>
+        <a href="https://wa.me/917015552731" class="btn-outline">WhatsApp Us</a>
+      </div>
     </div>
-  </div>
-  <div class="hero-photo-wrap">
-    <img src="images/sahil-physique.png" alt="Coach Sahil Bansal" />
+
+    <!-- Right Column — Before/After Placeholder Card -->
+    <div class="hero-card">
+      <div class="hero-card-label">Client Transformation</div>
+      <div class="hero-ba-row">
+        <div class="hero-ba-box before">
+          <span class="hero-ba-tag">BEFORE</span>
+        </div>
+        <div class="hero-ba-box after">
+          <span class="hero-ba-tag">AFTER</span>
+        </div>
+      </div>
+      <div class="hero-card-stats">
+        <strong>+8kg Muscle &middot; &minus;12kg Fat &middot; 16 Weeks</strong>
+        <p>Real client result &mdash; photos coming soon</p>
+      </div>
+    </div>
   </div>
 </section>
 
-<!-- ===== STATS ===== -->
-<div class="stats-bar">
-  <div class="stat-item"><span class="stat-num">12</span><span class="stat-label">Programs</span></div>
-  <div class="stat-item"><span class="stat-num">100+</span><span class="stat-label">Exercises</span></div>
-  <div class="stat-item"><span class="stat-num">Elite</span><span class="stat-label">Level Only</span></div>
-  <div class="stat-item"><span class="stat-num">Men</span><span class="stat-label">& Women</span></div>
-  <div class="stat-item"><span class="stat-num">Zero</span><span class="stat-label">Shortcuts</span></div>
+<!-- ==============================
+     SOCIAL PROOF BAR
+============================== -->
+<div class="proof-bar">
+  <div class="proof-bar-inner">
+    <div class="proof-stat">
+      <span class="proof-num">200+</span>
+      <span class="proof-label">Clients Transformed</span>
+    </div>
+    <div class="proof-stat">
+      <span class="proof-num">4.9 &#9733;</span>
+      <span class="proof-label">Average Rating</span>
+    </div>
+    <div class="proof-stat">
+      <span class="proof-num">5+</span>
+      <span class="proof-label">Years Coaching Experience</span>
+    </div>
+  </div>
 </div>
 
-<!-- ===== ABOUT ===== -->
-<section class="section" id="about">
-  <div class="section-inner">
-    <div class="about-grid">
-      <div class="about-img-wrap">
-        <div class="about-img-accent"></div>
-        <img src="images/coach-profile.png" alt="Coach Sahil Bansal" />
-      </div>
-      <div class="about-text">
-        <p class="section-eyebrow">About the Coach</p>
-        <h2 class="about-text h3" style="font-family:'Montserrat',sans-serif;font-weight:900;font-size:38px;letter-spacing:0px;color:var(--white);margin-bottom:6px;">Coach <span style="color:var(--crimson-bright);">Sahil</span> Bansal</h2>
-        <p class="about-role" style="font-family:'Montserrat',sans-serif;font-weight:700;font-size:10px;letter-spacing:3px;color:var(--gold);text-transform:uppercase;margin-bottom:24px;">Strength &amp; Physique Specialist · Sahil Fitness Club</p>
-        <p style="font-size:15px;color:#aaa;line-height:1.8;margin-bottom:16px;">
-          Bangalore's leading <strong style="color:var(--white);">Strength &amp; Physique Specialist</strong>, coaching men and women to build serious physiques through progressive overload, science-backed programming, and zero excuses.
-        </p>
-        <p style="font-size:15px;color:#aaa;line-height:1.8;margin-bottom:24px;">
-          At <strong style="color:var(--white);">Sahil Fitness Club</strong>, Sahil has helped hundreds of athletes move beyond generic workouts to build real muscle, real strength, and real confidence — through elite training protocols that respect individual physiology and demand maximum effort.
-        </p>
-        <div class="about-chips">
-          <span class="chip">Advanced Programming</span>
-          <span class="chip">Strength Coach</span>
-          <span class="chip">Physique Specialist</span>
-          <span class="chip">Nutrition Protocol</span>
-          <span class="chip">Sahil Fitness Club</span>
-        </div>
-      </div>
+<!-- ==============================
+     TRANSFORMATIONS
+============================== -->
+<section class="section">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-label">Results</div>
+      <h2 class="section-title">Real transformations. Real numbers.</h2>
     </div>
-  </div>
-</section>
 
-<!-- ===== PROGRAMS HUB ===== -->
-<section class="section" id="programs" style="background: rgba(0,0,0,0.2); border-top: 1px solid rgba(139,0,0,0.2);">
-  <div class="section-inner">
-    <p class="section-eyebrow">Elite Training Vault</p>
-    <h2 class="section-title">Choose Your <span>Program</span></h2>
-    <p class="section-sub">Men's · Women's · All Advanced Level · Zero Shortcuts</p>
-
-    <div class="programs-wrapper">
-      <!-- MEN'S BLOCK -->
-      <div class="program-block">
-        <img src="images/sahil-physique.png" alt="Men's Training" class="program-block-img" />
-        <div class="program-block-body">
-          <span class="program-block-tag men-tag">⚡ Men's Training</span>
-          <h3 class="program-block-title">Men's Advanced <span class="men-accent">Vault</span></h3>
-          <p class="program-block-desc">5 elite men's programs covering every muscle group. Back, Chest, Shoulders, Arms and a complete Legs & HIIT system. 4 phases each, 65+ exercises total.</p>
-          <div class="program-block-meta">
-            <span class="meta-tag red">5 Programs</span>
-            <span class="meta-tag">65+ Exercises</span>
-            <span class="meta-tag">Advanced</span>
+    <div class="transforms-grid">
+      <!-- Card 1 -->
+      <div class="transform-card">
+        <div class="transform-ba">
+          <div class="transform-before">
+            <span class="transform-ba-label">BEFORE</span>
           </div>
-          <a href="men.html" class="program-block-link men-link">View All Men's Programs →</a>
-        </div>
-      </div>
-
-      <!-- WOMEN'S BLOCK -->
-      <div class="program-block women-block">
-        <img src="images/iblitz-sahil.png" alt="Women's Training" class="program-block-img" />
-        <div class="program-block-body">
-          <span class="program-block-tag women-tag">Women's Training</span>
-          <h3 class="program-block-title">Women's Advanced <span class="women-accent">Vault</span></h3>
-          <p class="program-block-desc">7 elite women's programs: Legs, Glutes, Back, Shoulders, Arms, Chest and Core. Designed specifically for women who train seriously — not generic workouts.</p>
-          <div class="program-block-meta">
-            <span class="meta-tag purple">7 Programs</span>
-            <span class="meta-tag">40+ Exercises</span>
-            <span class="meta-tag">Advanced</span>
+          <div class="transform-after">
+            <span class="transform-ba-label">AFTER</span>
           </div>
-          <a href="women.html" class="program-block-link women-link">View All Women's Programs →</a>
+        </div>
+        <div class="transform-info">
+          <div class="transform-name">Rahul M.</div>
+          <div class="transform-duration">12 Weeks</div>
+          <span class="transform-stats">+6kg Muscle &nbsp;|&nbsp; &minus;8kg Fat</span>
+        </div>
+      </div>
+
+      <!-- Card 2 -->
+      <div class="transform-card">
+        <div class="transform-ba">
+          <div class="transform-before">
+            <span class="transform-ba-label">BEFORE</span>
+          </div>
+          <div class="transform-after">
+            <span class="transform-ba-label">AFTER</span>
+          </div>
+        </div>
+        <div class="transform-info">
+          <div class="transform-name">Priya S.</div>
+          <div class="transform-duration">20 Weeks</div>
+          <span class="transform-stats">+5kg Muscle &nbsp;|&nbsp; &minus;14kg Fat</span>
+        </div>
+      </div>
+
+      <!-- Card 3 -->
+      <div class="transform-card">
+        <div class="transform-ba">
+          <div class="transform-before">
+            <span class="transform-ba-label">BEFORE</span>
+          </div>
+          <div class="transform-after">
+            <span class="transform-ba-label">AFTER</span>
+          </div>
+        </div>
+        <div class="transform-info">
+          <div class="transform-name">Karan T.</div>
+          <div class="transform-duration">16 Weeks</div>
+          <span class="transform-stats">+8kg Muscle &nbsp;|&nbsp; &minus;10kg Fat</span>
         </div>
       </div>
     </div>
-
-    <!-- MEN'S WORKOUT QUICK ACCESS -->
-    <p class="section-eyebrow" style="margin-bottom:16px;">Men's Training — Quick Access</p>
-    <div class="workouts-grid" style="margin-bottom:48px;">
-      <a href="men-back.html" class="workout-mini">
-        <span class="mini-num">01</span>
-        <div class="mini-title">Advanced <span>Back</span></div>
-        <div class="mini-muscle">Lats · Traps · Rhomboids · Erectors</div>
-        <div class="mini-meta">
-          <span class="mini-pill red">4 Phases</span>
-          <span class="mini-pill">13 Exercises</span>
-          <span class="mini-pill">80 Min</span>
-        </div>
-      </a>
-      <a href="men-chest.html" class="workout-mini">
-        <span class="mini-num">02</span>
-        <div class="mini-title">Advanced <span>Chest</span></div>
-        <div class="mini-muscle">Upper · Mid · Lower Pec · Serratus</div>
-        <div class="mini-meta">
-          <span class="mini-pill red">4 Phases</span>
-          <span class="mini-pill">13 Exercises</span>
-          <span class="mini-pill">75 Min</span>
-        </div>
-      </a>
-      <a href="men-shoulders.html" class="workout-mini">
-        <span class="mini-num">03</span>
-        <div class="mini-title">Advanced <span>Shoulders</span></div>
-        <div class="mini-muscle">Anterior · Medial · Posterior Delt</div>
-        <div class="mini-meta">
-          <span class="mini-pill red">4 Phases</span>
-          <span class="mini-pill">12 Exercises</span>
-          <span class="mini-pill">75 Min</span>
-        </div>
-      </a>
-      <a href="men-arms.html" class="workout-mini">
-        <span class="mini-num">04</span>
-        <div class="mini-title">Advanced <span>Arms</span></div>
-        <div class="mini-muscle">Biceps · Triceps · Brachialis · Forearms</div>
-        <div class="mini-meta">
-          <span class="mini-pill red">4 Phases</span>
-          <span class="mini-pill">14 Exercises</span>
-          <span class="mini-pill">75 Min</span>
-        </div>
-      </a>
-      <a href="men-legs.html" class="workout-mini">
-        <span class="mini-num">05</span>
-        <div class="mini-title">Advanced <span>Legs</span> &amp; HIIT</div>
-        <div class="mini-muscle">Quad · Hamstring · Glute · Calf · Conditioning</div>
-        <div class="mini-meta">
-          <span class="mini-pill red">4 Protocols</span>
-          <span class="mini-pill">16 Phases</span>
-          <span class="mini-pill">45+ Exercises</span>
-        </div>
-      </a>
-    </div>
-
-    <!-- WOMEN'S WORKOUT QUICK ACCESS -->
-    <p class="section-eyebrow" style="margin-bottom:16px;">Women's Training — Quick Access</p>
-    <div class="women-workouts-grid">
-      <a href="women.html#workouts" class="workout-mini women-mini">
-        <span class="mini-num">01</span>
-        <div class="mini-title">Advanced <span>Legs</span></div>
-        <div class="mini-muscle">Quads · Hamstrings · Calves</div>
-        <div class="mini-meta"><span class="mini-pill red">Neural → Strength → Hypertrophy</span></div>
-      </a>
-      <a href="women.html#workouts" class="workout-mini women-mini">
-        <span class="mini-num">02</span>
-        <div class="mini-title">Advanced <span>Glutes</span></div>
-        <div class="mini-muscle">Glutes · Hip Flexors · Posterior</div>
-        <div class="mini-meta"><span class="mini-pill red">Stretch Overload Focus</span></div>
-      </a>
-      <a href="women.html#workouts" class="workout-mini women-mini">
-        <span class="mini-num">03</span>
-        <div class="mini-title">Advanced <span>Back</span></div>
-        <div class="mini-muscle">Lats · Rhomboids · Rear Delts</div>
-        <div class="mini-meta"><span class="mini-pill red">V-Taper Protocol</span></div>
-      </a>
-      <a href="women.html#workouts" class="workout-mini women-mini">
-        <span class="mini-num">04</span>
-        <div class="mini-title">Advanced <span>Shoulders</span></div>
-        <div class="mini-muscle">All 3 Delt Heads · Rotator Cuff</div>
-        <div class="mini-meta"><span class="mini-pill red">3D Sculpting</span></div>
-      </a>
-      <a href="women.html#workouts" class="workout-mini women-mini">
-        <span class="mini-num">05</span>
-        <div class="mini-title">Advanced <span>Arms</span></div>
-        <div class="mini-muscle">Biceps · Triceps · Forearms</div>
-        <div class="mini-meta"><span class="mini-pill red">Definition Protocol</span></div>
-      </a>
-      <a href="women.html#workouts" class="workout-mini women-mini">
-        <span class="mini-num">06</span>
-        <div class="mini-title">Advanced <span>Chest</span></div>
-        <div class="mini-muscle">Upper · Mid · Lower Pec</div>
-        <div class="mini-meta"><span class="mini-pill red">Full Pec Domination</span></div>
-      </a>
-      <a href="women.html#workouts" class="workout-mini women-mini">
-        <span class="mini-num">07</span>
-        <div class="mini-title">Advanced <span>Core</span></div>
-        <div class="mini-muscle">Rectus · Obliques · Transverse</div>
-        <div class="mini-meta"><span class="mini-pill red">Athletic Core Protocol</span></div>
-      </a>
-    </div>
-
   </div>
 </section>
 
-<!-- ===== CONTACT ===== -->
-<section class="section" id="contact">
-  <div class="section-inner">
-    <p class="section-eyebrow">Train With Coach Sahil</p>
-    <h2 class="section-title">Get In <span>Touch</span></h2>
-    <p class="section-sub">Direct Line · No Middlemen · Personal Coaching</p>
+<!-- ==============================
+     SERVICES
+============================== -->
+<section class="section bg-surface">
+  <div class="container">
+    <div class="section-label">What We Offer</div>
+    <h2 class="section-title">Choose your coaching path</h2>
 
-    <div class="contact-grid">
-      <a href="https://instagram.com/sahil_r_fitness" target="_blank" rel="noopener" class="contact-card insta">
-        <span class="contact-icon">📸</span>
-        <div class="contact-label">Instagram</div>
-        <div class="contact-value">@sahil_r_fitness</div>
-      </a>
-      <a href="https://wa.me/917015552731?text=Hi%20Coach%20Sahil%2C%20I%27m%20interested%20in%20training!" target="_blank" rel="noopener" class="contact-card wa">
-        <span class="contact-icon">💬</span>
-        <div class="contact-label">WhatsApp</div>
-        <div class="contact-value">+91 70155 52731</div>
-      </a>
-      <a href="mailto:s09084617@gmail.com" class="contact-card">
-        <span class="contact-icon">✉</span>
-        <div class="contact-label">Email</div>
-        <div class="contact-value">s09084617@gmail.com</div>
-      </a>
+    <div class="services-grid">
+      <!-- Self-Guided -->
+      <div class="service-card">
+        <div class="service-name">Self-Guided</div>
+        <p class="service-desc">Program vault, workout generator, and full app access. Train on your schedule with expert-designed programs.</p>
+        <div class="service-price">From &#8377;1,999<span>/mo</span></div>
+        <ul class="service-features">
+          <li>Full program vault access</li>
+          <li>AI workout generator tool</li>
+          <li>Mobile-friendly app access</li>
+          <li>Exercise library and video guides</li>
+        </ul>
+        <a href="pricing.html" class="service-cta">View Plans</a>
+      </div>
+
+      <!-- Online Coaching — Featured -->
+      <div class="service-card featured">
+        <div class="service-popular-chip">MOST POPULAR</div>
+        <div class="service-name">Online Coaching</div>
+        <p class="service-desc">Custom training program built around you, with weekly check-ins and direct WhatsApp access to Coach Sahil.</p>
+        <div class="service-price">From &#8377;4,999<span>/mo</span></div>
+        <ul class="service-features">
+          <li>Fully custom training program</li>
+          <li>Weekly check-ins and adjustments</li>
+          <li>Direct WhatsApp support</li>
+          <li>Nutrition guidance included</li>
+        </ul>
+        <a href="apply.html" class="service-cta">Get Started</a>
+      </div>
+
+      <!-- 1:1 Premium -->
+      <div class="service-card">
+        <div class="service-name">1:1 Premium</div>
+        <p class="service-desc">The full experience. Everything in Online Coaching plus video calls, detailed nutrition coaching, and priority access.</p>
+        <div class="service-price">From &#8377;9,999<span>/mo</span></div>
+        <ul class="service-features">
+          <li>Everything in Online Coaching</li>
+          <li>Bi-weekly video coaching calls</li>
+          <li>Detailed nutrition meal plan</li>
+          <li>Priority response and access</li>
+        </ul>
+        <a href="apply.html" class="service-cta">Apply Now</a>
+      </div>
     </div>
   </div>
 </section>
 
-<!-- ===== QR STRIP ===== -->
-<div class="qr-strip">
-  <div class="qr-title">Share This Site</div>
-  <p class="qr-sub">Scan or download the QR code to share Coach Sahil's training programs</p>
-  <a href="qr.html" class="qr-btn">📱 Get QR Code →</a>
-</div>
+<!-- ==============================
+     TESTIMONIALS
+============================== -->
+<section class="section">
+  <div class="container">
+    <div class="section-label">Testimonials</div>
+    <h2 class="section-title">What our clients say</h2>
 
-<!-- ===== FOOTER ===== -->
+    <div class="testimonials-grid">
+      <!-- Quote 1 -->
+      <div class="testimonial-card">
+        <div class="testimonial-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+        <p class="testimonial-quote">"Coach Sahil completely transformed my approach to training. I gained 7kg of muscle in 4 months following his program."</p>
+        <div class="testimonial-author">
+          <span class="testimonial-name">Aditya R.</span>
+          <span class="testimonial-role">Online Client</span>
+        </div>
+      </div>
+
+      <!-- Quote 2 -->
+      <div class="testimonial-card">
+        <div class="testimonial-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+        <p class="testimonial-quote">"The check-in process and program adjustments kept me progressing every single week. Best investment I've made."</p>
+        <div class="testimonial-author">
+          <span class="testimonial-name">Priya S.</span>
+          <span class="testimonial-role">1:1 Premium Client</span>
+        </div>
+      </div>
+
+      <!-- Quote 3 -->
+      <div class="testimonial-card">
+        <div class="testimonial-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+        <p class="testimonial-quote">"I tried gym programs from YouTube for years with no results. 3 months with Sahil and I finally know what I'm doing."</p>
+        <div class="testimonial-author">
+          <span class="testimonial-name">Karan M.</span>
+          <span class="testimonial-role">Online Client</span>
+        </div>
+      </div>
+
+      <!-- Quote 4 -->
+      <div class="testimonial-card">
+        <div class="testimonial-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+        <p class="testimonial-quote">"The nutrition coaching alongside the workout program was a game-changer. Down 10kg and stronger than ever."</p>
+        <div class="testimonial-author">
+          <span class="testimonial-name">Neha T.</span>
+          <span class="testimonial-role">Online Client</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ==============================
+     COACH INTRO
+============================== -->
+<section class="section bg-surface">
+  <div class="container">
+    <div class="section-label">Your Coach</div>
+    <h2 class="section-title">Coach Sahil Bansal</h2>
+
+    <div class="coach-grid">
+      <!-- Left: Credential Badges -->
+      <div class="coach-badges">
+        <div class="coach-badge">
+          <div class="coach-badge-icon">&#127947;</div>
+          <div class="coach-badge-text">Strength &amp; Physique Coach</div>
+        </div>
+        <div class="coach-badge">
+          <div class="coach-badge-icon">&#128197;</div>
+          <div class="coach-badge-text">5+ Years Experience</div>
+        </div>
+        <div class="coach-badge">
+          <div class="coach-badge-icon">&#128200;</div>
+          <div class="coach-badge-text">200+ Clients Coached</div>
+        </div>
+        <div class="coach-badge">
+          <div class="coach-badge-icon">&#127968;</div>
+          <div class="coach-badge-text">I-BLITZ Fitness Club Bangalore</div>
+        </div>
+      </div>
+
+      <!-- Right: Bio + Philosophy -->
+      <div>
+        <p class="coach-bio">
+          Sahil Bansal is Bangalore's leading strength and physique coach, based at <strong>I-BLITZ Fitness Club</strong>. With over 5 years of coaching experience and 200+ clients transformed, Sahil builds programs rooted in progressive overload and real science — not trends. His approach is simple: <strong>do the hard work, trust the process, and the results follow.</strong>
+        </p>
+        <ul class="coach-philosophy">
+          <li>Science-based programming for real, measurable results</li>
+          <li>Weekly check-ins with program adjustments based on your progress</li>
+          <li>No cookie-cutter plans &mdash; every program is built around you</li>
+          <li>Available on WhatsApp for support throughout your coaching</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ==============================
+     FAQ
+============================== -->
+<section class="section">
+  <div class="container">
+    <div class="section-label">FAQ</div>
+    <h2 class="section-title">Common questions</h2>
+
+    <div class="faq-list">
+      <!-- FAQ 1 -->
+      <div class="faq-item">
+        <button class="faq-question">
+          How does online coaching work?
+          <span class="faq-icon">+</span>
+        </button>
+        <div class="faq-answer">
+          <div class="faq-answer-inner">
+            After you apply, we schedule a free consult call to understand your goals. You're then assigned a custom training program accessible from your phone or laptop. Each week you submit a check-in with your weight, adherence, and any questions &mdash; and I adjust your program accordingly.
+          </div>
+        </div>
+      </div>
+
+      <!-- FAQ 2 -->
+      <div class="faq-item">
+        <button class="faq-question">
+          Do I need a gym membership?
+          <span class="faq-icon">+</span>
+        </button>
+        <div class="faq-answer">
+          <div class="faq-answer-inner">
+            Most programs are gym-based, but we can design home or home-gym programs with minimal equipment. Let us know what you have access to in your application.
+          </div>
+        </div>
+      </div>
+
+      <!-- FAQ 3 -->
+      <div class="faq-item">
+        <button class="faq-question">
+          How long before I see results?
+          <span class="faq-icon">+</span>
+        </button>
+        <div class="faq-answer">
+          <div class="faq-answer-inner">
+            Most clients see noticeable changes in 6&ndash;8 weeks with consistent training and nutrition. Significant physique transformations typically take 3&ndash;6 months.
+          </div>
+        </div>
+      </div>
+
+      <!-- FAQ 4 -->
+      <div class="faq-item">
+        <button class="faq-question">
+          What's included in Online Coaching?
+          <span class="faq-icon">+</span>
+        </button>
+        <div class="faq-answer">
+          <div class="faq-answer-inner">
+            A fully custom training program, weekly check-in reviews with program adjustments, direct WhatsApp access to Coach Sahil, and nutrition guidance (not a detailed meal plan unless on 1:1 Premium).
+          </div>
+        </div>
+      </div>
+
+      <!-- FAQ 5 -->
+      <div class="faq-item">
+        <button class="faq-question">
+          Is there a minimum commitment?
+          <span class="faq-icon">+</span>
+        </button>
+        <div class="faq-answer">
+          <div class="faq-answer-inner">
+            We recommend at minimum 3 months to see real results. There are no long-term lock-ins &mdash; you can pause or cancel anytime.
+          </div>
+        </div>
+      </div>
+
+      <!-- FAQ 6 -->
+      <div class="faq-item">
+        <button class="faq-question">
+          How do I get started?
+          <span class="faq-icon">+</span>
+        </button>
+        <div class="faq-answer">
+          <div class="faq-answer-inner">
+            Click 'Book a Free Consult' anywhere on the site, fill out your details, and we'll get back to you within 24 hours.
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ==============================
+     FINAL CTA
+============================== -->
+<section class="cta-section">
+  <div class="cta-section-inner">
+    <h2 class="cta-section-title">Ready to build the physique you've always wanted?</h2>
+    <p class="cta-section-sub">Apply today and get a free consult with Coach Sahil.</p>
+    <div class="cta-section-btns">
+      <a href="apply.html" class="btn-primary">Book a Free Consult</a>
+      <a href="https://wa.me/917015552731" class="btn-outline">WhatsApp Us</a>
+    </div>
+  </div>
+</section>
+
+<!-- ==============================
+     FOOTER
+============================== -->
 <footer>
-  <img src="images/coach-profile.png" alt="Coach Sahil" class="footer-avatar" />
-  <div class="footer-name">Sahil Bansal — Coach</div>
-  <div class="footer-sub">Sahil Fitness Club · Bangalore · Advanced Training Programs</div>
-  <nav class="footer-nav">
-    <a href="men.html">Men's Training</a>
-    <a href="women.html">Women's Training</a>
-    <a href="generator.html">⚡ Generator</a>
-    <a href="slots.html">Book a Slot</a>
-    <a href="launch.html">Launch Page</a>
-    <a href="qr.html">QR Code</a>
-    <a href="https://instagram.com/sahil_r_fitness" target="_blank" rel="noopener">Instagram</a>
-    <a href="https://wa.me/917015552731" target="_blank" rel="noopener">WhatsApp</a>
-    <a href="mailto:s09084617@gmail.com">Email</a>
-  </nav>
-  <div style="margin-top:20px;padding-top:16px;border-top:1px solid rgba(139,0,0,0.15)">
-    <a href="dashboard.html" style="font-size:11px;color:#333;text-decoration:none;letter-spacing:1px;">🔐 Coach Login</a>
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <a href="index.html" class="nav-logo">FITWID</a>
+      <p>I-BLITZ Fitness Club &middot; Bangalore</p>
+      <a href="mailto:coach@fitwid.fit">coach@fitwid.fit</a>
+      <a href="https://wa.me/917015552731" target="_blank" rel="noopener" style="color:#25D366">WhatsApp Coach Sahil</a>
+    </div>
+    <div class="footer-col">
+      <h4>Platform</h4>
+      <a href="coaching.html">Coaching</a>
+      <a href="pricing.html">Pricing</a>
+      <a href="results.html">Results</a>
+      <a href="apply.html">Apply</a>
+      <a href="about.html">About</a>
+    </div>
+    <div class="footer-col">
+      <h4>Tools</h4>
+      <a href="generator.html">Workout Generator</a>
+      <a href="booking.html">Book a Session</a>
+      <a href="client-portal.html">Client Login</a>
+      <a href="qr.html">QR Code</a>
+    </div>
+    <div class="footer-col">
+      <h4>Legal</h4>
+      <a href="#">Privacy Policy</a>
+      <a href="#">Terms of Service</a>
+      <a href="#">Disclaimer</a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>&copy; 2025 FitWid.fit &mdash; I-BLITZ Fitness Club. All rights reserved.</p>
   </div>
 </footer>
 
+<script>
+/* ==============================
+   MOBILE NAV TOGGLE
+============================== */
+function toggleMobileNav() {
+  document.getElementById('mobileNav').classList.toggle('open');
+}
+
+/* ==============================
+   FAQ ACCORDION
+============================== */
+document.querySelectorAll('.faq-question').forEach(q => {
+  q.addEventListener('click', () => {
+    const item = q.parentElement;
+    // Close all others
+    document.querySelectorAll('.faq-item').forEach(other => {
+      if (other !== item) other.classList.remove('open');
+    });
+    item.classList.toggle('open');
+  });
+});
+
+/* ==============================
+   NAVBAR SCROLL SHADOW
+============================== */
+window.addEventListener('scroll', () => {
+  document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 20);
+});
+</script>
 </body>
 </html>

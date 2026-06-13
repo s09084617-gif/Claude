@@ -1,0 +1,845 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Online Coaching Services — FitWid.fit</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Inter+Tight:wght@700;800;900&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0A0A0A;
+    --surface: #161616;
+    --surface2: #1E1E1E;
+    --primary: #C8102E;
+    --accent: #D4AF37;
+    --text: #F5F5F5;
+    --muted: #9A9A9A;
+    --radius-card: 12px;
+    --radius-btn: 8px;
+    --section-pad: 80px;
+    --max-w: 1200px;
+  }
+
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Inter', sans-serif;
+    font-size: 16px;
+    line-height: 1.6;
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .container {
+    max-width: var(--max-w);
+    margin: 0 auto;
+    padding: 0 24px;
+  }
+
+  /* ===== NAV ===== */
+  #navbar {
+    position: sticky;
+    top: 0;
+    z-index: 500;
+    background: rgba(10,10,10,0.96);
+    border-bottom: 1px solid rgba(200,16,46,0.25);
+    backdrop-filter: blur(14px);
+  }
+
+  .nav-inner {
+    max-width: var(--max-w);
+    margin: 0 auto;
+    padding: 0 24px;
+    height: 64px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+  }
+
+  .nav-logo {
+    font-family: 'Inter Tight', sans-serif;
+    font-weight: 900;
+    font-size: 20px;
+    letter-spacing: 4px;
+    background: linear-gradient(90deg, var(--primary), var(--accent));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    text-decoration: none;
+    flex-shrink: 0;
+  }
+
+  .nav-links {
+    display: flex;
+    gap: 28px;
+    list-style: none;
+  }
+
+  .nav-links a {
+    font-family: 'Inter', sans-serif;
+    font-weight: 600;
+    font-size: 13px;
+    letter-spacing: 1px;
+    color: var(--muted);
+    text-decoration: none;
+    text-transform: uppercase;
+    transition: color 0.2s;
+  }
+
+  .nav-links a:hover { color: var(--text); }
+
+  .nav-cta {
+    font-family: 'Inter', sans-serif;
+    font-weight: 600;
+    font-size: 13px;
+    color: var(--text);
+    background: var(--primary);
+    border-radius: var(--radius-btn);
+    padding: 10px 20px;
+    text-decoration: none;
+    transition: opacity 0.2s;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  .nav-cta:hover { opacity: 0.88; }
+
+  .hamburger {
+    display: none;
+    flex-direction: column;
+    gap: 5px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 6px;
+    flex-shrink: 0;
+  }
+
+  .hamburger span {
+    display: block;
+    width: 22px;
+    height: 2px;
+    background: var(--text);
+    border-radius: 2px;
+  }
+
+  .mobile-nav {
+    display: none;
+    flex-direction: column;
+    background: var(--surface);
+    padding: 16px 24px 24px;
+    gap: 4px;
+    border-top: 1px solid rgba(255,255,255,0.06);
+  }
+
+  .mobile-nav.open { display: flex; }
+
+  .mobile-nav a {
+    font-family: 'Inter', sans-serif;
+    font-weight: 600;
+    font-size: 15px;
+    color: var(--muted);
+    text-decoration: none;
+    padding: 10px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+    transition: color 0.2s;
+  }
+
+  .mobile-nav a:last-child { border-bottom: none; }
+  .mobile-nav a:hover { color: var(--text); }
+
+  .mob-cta {
+    margin-top: 12px;
+    background: var(--primary) !important;
+    color: var(--text) !important;
+    border-radius: var(--radius-btn);
+    padding: 12px 20px !important;
+    text-align: center;
+    border-bottom: none !important;
+  }
+
+  /* ===== TYPOGRAPHY ===== */
+  section { padding: var(--section-pad) 0; }
+
+  .section-label {
+    display: block;
+    font-family: 'Inter', sans-serif;
+    font-weight: 600;
+    font-size: 11px;
+    letter-spacing: 3px;
+    color: var(--primary);
+    text-transform: uppercase;
+    margin-bottom: 16px;
+  }
+
+  h1 {
+    font-family: 'Inter Tight', sans-serif;
+    font-weight: 900;
+    font-size: clamp(36px, 5vw, 56px);
+    line-height: 1.08;
+    color: var(--text);
+    margin-bottom: 20px;
+  }
+
+  h2 {
+    font-family: 'Inter Tight', sans-serif;
+    font-weight: 800;
+    font-size: clamp(28px, 3.5vw, 40px);
+    line-height: 1.1;
+    color: var(--text);
+    margin-bottom: 16px;
+  }
+
+  /* ===== PAGE HEADER ===== */
+  .page-header {
+    padding: 80px 0 64px;
+    text-align: center;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+  }
+
+  .page-header .lead {
+    font-size: 17px;
+    color: var(--muted);
+    max-width: 580px;
+    margin: 0 auto;
+    line-height: 1.7;
+  }
+
+  /* ===== SERVICE CARDS ===== */
+  .services-section { padding: var(--section-pad) 0; }
+
+  .services-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+    margin-top: 48px;
+    align-items: start;
+  }
+
+  .service-card {
+    background: var(--surface);
+    border-radius: var(--radius-card);
+    padding: 32px;
+    border: 1px solid rgba(255,255,255,0.05);
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    transition: border-color 0.2s, transform 0.2s;
+  }
+
+  .service-card:hover {
+    border-color: rgba(200,16,46,0.3);
+    transform: translateY(-4px);
+  }
+
+  .service-card.featured {
+    border-color: var(--accent);
+    position: relative;
+  }
+
+  .popular-badge {
+    position: absolute;
+    top: -13px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--accent);
+    color: #000;
+    font-family: 'Inter', sans-serif;
+    font-weight: 700;
+    font-size: 10px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    padding: 4px 14px;
+    border-radius: 20px;
+    white-space: nowrap;
+  }
+
+  .service-tier {
+    font-family: 'Inter', sans-serif;
+    font-weight: 600;
+    font-size: 11px;
+    letter-spacing: 2px;
+    color: var(--muted);
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+
+  .service-name {
+    font-family: 'Inter Tight', sans-serif;
+    font-weight: 800;
+    font-size: 24px;
+    color: var(--text);
+    margin-bottom: 4px;
+  }
+
+  .service-price {
+    font-family: 'Inter Tight', sans-serif;
+    font-weight: 700;
+    font-size: 28px;
+    color: var(--primary);
+    margin-bottom: 20px;
+    line-height: 1.1;
+  }
+
+  .service-price span {
+    font-size: 14px;
+    font-weight: 400;
+    color: var(--muted);
+    font-family: 'Inter', sans-serif;
+  }
+
+  .service-desc {
+    font-size: 14px;
+    color: var(--muted);
+    line-height: 1.65;
+    margin-bottom: 24px;
+    padding-bottom: 24px;
+    border-bottom: 1px solid rgba(255,255,255,0.07);
+  }
+
+  .feature-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 28px;
+    flex: 1;
+  }
+
+  .feature-list li {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    font-size: 14px;
+    color: var(--muted);
+    line-height: 1.5;
+  }
+
+  .feature-list li::before {
+    content: '';
+    flex-shrink: 0;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: rgba(200,16,46,0.15);
+    border: 1.5px solid var(--primary);
+    margin-top: 1px;
+  }
+
+  .btn-service {
+    display: block;
+    text-align: center;
+    font-family: 'Inter', sans-serif;
+    font-weight: 700;
+    font-size: 14px;
+    padding: 13px 24px;
+    border-radius: var(--radius-btn);
+    text-decoration: none;
+    transition: opacity 0.2s, transform 0.2s;
+  }
+
+  .btn-service-outline {
+    border: 1.5px solid rgba(255,255,255,0.15);
+    color: var(--text);
+  }
+
+  .btn-service-outline:hover { border-color: var(--text); }
+
+  .btn-service-primary {
+    background: var(--primary);
+    color: var(--text);
+  }
+
+  .btn-service-primary:hover { opacity: 0.88; transform: translateY(-1px); }
+
+  .btn-service-gold {
+    background: var(--accent);
+    color: #000;
+  }
+
+  .btn-service-gold:hover { opacity: 0.88; transform: translateY(-1px); }
+
+  /* ===== HOW IT WORKS ===== */
+  .process-section { padding: var(--section-pad) 0; }
+
+  .steps-container {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0;
+    margin-top: 48px;
+    position: relative;
+  }
+
+  /* Connecting dashed line */
+  .steps-container::before {
+    content: '';
+    position: absolute;
+    top: 28px;
+    left: calc(12.5% + 20px);
+    right: calc(12.5% + 20px);
+    height: 2px;
+    background: repeating-linear-gradient(
+      90deg,
+      rgba(200,16,46,0.35) 0px,
+      rgba(200,16,46,0.35) 8px,
+      transparent 8px,
+      transparent 18px
+    );
+    z-index: 0;
+  }
+
+  .step {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 0 16px;
+    position: relative;
+    z-index: 1;
+  }
+
+  .step-num {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    background: var(--primary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Inter Tight', sans-serif;
+    font-weight: 900;
+    font-size: 20px;
+    color: #fff;
+    flex-shrink: 0;
+    margin-bottom: 20px;
+    position: relative;
+    z-index: 2;
+  }
+
+  .step-title {
+    font-family: 'Inter Tight', sans-serif;
+    font-weight: 700;
+    font-size: 17px;
+    color: var(--text);
+    margin-bottom: 10px;
+  }
+
+  .step-desc {
+    font-size: 14px;
+    color: var(--muted);
+    line-height: 1.65;
+  }
+
+  /* ===== COMPARISON TABLE ===== */
+  .table-section { padding: var(--section-pad) 0; }
+
+  .table-wrapper {
+    margin-top: 40px;
+    border: 1px solid rgba(255,255,255,0.07);
+    border-radius: var(--radius-card);
+    overflow: hidden;
+    overflow-x: auto;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 480px;
+  }
+
+  thead th {
+    background: var(--surface2);
+    padding: 16px 20px;
+    text-align: left;
+    font-family: 'Inter Tight', sans-serif;
+    font-weight: 700;
+    font-size: 14px;
+    color: var(--text);
+    border-bottom: 1px solid rgba(255,255,255,0.07);
+  }
+
+  thead th:first-child {
+    width: 40%;
+    color: var(--muted);
+    font-weight: 600;
+    font-size: 12px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+
+  thead th.col-featured { color: var(--accent); }
+
+  tbody tr {
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+    transition: background 0.15s;
+  }
+
+  tbody tr:last-child { border-bottom: none; }
+  tbody tr:hover { background: var(--surface2); }
+
+  tbody td {
+    padding: 15px 20px;
+    font-size: 14px;
+    color: var(--muted);
+    vertical-align: middle;
+  }
+
+  tbody td:first-child { color: var(--text); font-weight: 500; }
+  tbody td:not(:first-child) { text-align: center; }
+
+  .check { color: #4ade80; font-size: 16px; font-weight: 700; }
+  .dash { color: var(--muted); font-size: 18px; }
+
+  /* ===== CTA CARD ===== */
+  .cta-section { padding: var(--section-pad) 0; }
+
+  .cta-card {
+    border: 1px solid var(--primary);
+    background: rgba(200,16,46,0.05);
+    border-radius: 16px;
+    padding: 60px;
+    text-align: center;
+    max-width: 640px;
+    margin: 0 auto;
+  }
+
+  .cta-card h2 { margin-bottom: 12px; }
+
+  .cta-card p {
+    font-size: 17px;
+    color: var(--muted);
+    margin-bottom: 32px;
+  }
+
+  .btn-primary {
+    display: inline-block;
+    font-family: 'Inter', sans-serif;
+    font-weight: 700;
+    font-size: 15px;
+    color: var(--text);
+    background: var(--primary);
+    border-radius: var(--radius-btn);
+    padding: 14px 36px;
+    text-decoration: none;
+    transition: opacity 0.2s, transform 0.2s;
+  }
+
+  .btn-primary:hover { opacity: 0.88; transform: translateY(-1px); }
+
+  /* ===== FOOTER ===== */
+  footer {
+    background: var(--surface);
+    border-top: 1px solid rgba(255,255,255,0.06);
+    padding: 64px 0 0;
+  }
+
+  .footer-inner {
+    max-width: var(--max-w);
+    margin: 0 auto;
+    padding: 0 24px 48px;
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1fr;
+    gap: 48px;
+  }
+
+  .footer-brand p {
+    font-size: 14px;
+    color: var(--muted);
+    margin: 12px 0 8px;
+  }
+
+  .footer-brand a[href^="mailto"] {
+    font-size: 14px;
+    color: var(--primary);
+    text-decoration: none;
+  }
+
+  .footer-col h4 {
+    font-family: 'Inter Tight', sans-serif;
+    font-weight: 700;
+    font-size: 13px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--text);
+    margin-bottom: 16px;
+  }
+
+  .footer-col a {
+    display: block;
+    font-size: 14px;
+    color: var(--muted);
+    text-decoration: none;
+    margin-bottom: 10px;
+    transition: color 0.2s;
+  }
+
+  .footer-col a:hover { color: var(--text); }
+
+  .footer-bottom {
+    border-top: 1px solid rgba(255,255,255,0.06);
+    padding: 20px 24px;
+    max-width: var(--max-w);
+    margin: 0 auto;
+  }
+
+  .footer-bottom p {
+    font-size: 13px;
+    color: var(--muted);
+  }
+
+  /* ===== RESPONSIVE ===== */
+  @media (max-width: 900px) {
+    .nav-links, .nav-cta { display: none; }
+    .hamburger { display: flex; }
+
+    .services-grid { grid-template-columns: 1fr; max-width: 480px; margin-left: auto; margin-right: auto; }
+
+    .steps-container { grid-template-columns: repeat(2, 1fr); gap: 32px; }
+    .steps-container::before { display: none; }
+
+    .footer-inner { grid-template-columns: 1fr 1fr; }
+  }
+
+  @media (max-width: 600px) {
+    .steps-container { grid-template-columns: 1fr; }
+    .footer-inner { grid-template-columns: 1fr; gap: 32px; }
+    .cta-card { padding: 36px 24px; }
+    .services-grid { max-width: 100%; }
+  }
+</style>
+<script defer src="/_vercel/speed-insights/script.js"></script>
+</head>
+<body>
+
+<nav id="navbar">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo">FITWID</a>
+    <ul class="nav-links">
+      <li><a href="coaching.html">Coaching</a></li>
+      <li><a href="pricing.html">Pricing</a></li>
+      <li><a href="results.html">Results</a></li>
+      <li><a href="about.html">About</a></li>
+    </ul>
+    <a href="apply.html" class="nav-cta">Book Free Consult</a>
+    <button class="hamburger" onclick="document.getElementById('mobileNav').classList.toggle('open')">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+  <div class="mobile-nav" id="mobileNav">
+    <a href="coaching.html">Coaching</a>
+    <a href="pricing.html">Pricing</a>
+    <a href="results.html">Results</a>
+    <a href="about.html">About</a>
+    <a href="apply.html" class="mob-cta">Book Free Consult</a>
+  </div>
+</nav>
+
+<!-- PAGE HEADER -->
+<div class="page-header">
+  <div class="container">
+    <span class="section-label">ONLINE COACHING</span>
+    <h1>How the coaching works</h1>
+    <p class="lead">A complete system built to get results &mdash; not just hand you a PDF and disappear.</p>
+  </div>
+</div>
+
+<!-- SERVICES -->
+<section class="services-section">
+  <div class="container">
+    <div class="services-grid">
+
+      <!-- Self-Guided -->
+      <div class="service-card">
+        <div class="service-tier">Tier 1</div>
+        <div class="service-name">Self-Guided</div>
+        <div class="service-price">&#8377;1,999<span>/mo</span></div>
+        <p class="service-desc">Access our full program vault, AI workout generator, and client app. Ideal for experienced lifters who want structure without hand-holding.</p>
+        <ul class="feature-list">
+          <li>Full program vault (50+ programs)</li>
+          <li>AI workout generator</li>
+          <li>Client app access</li>
+          <li>Monthly program swap option</li>
+        </ul>
+        <a href="apply.html?tier=self-guided" class="btn-service btn-service-outline">Get Started</a>
+      </div>
+
+      <!-- Online Coaching -->
+      <div class="service-card featured" style="position: relative;">
+        <div class="popular-badge">MOST POPULAR</div>
+        <div class="service-tier">Tier 2</div>
+        <div class="service-name">Online Coaching</div>
+        <div class="service-price">&#8377;4,999<span>/mo</span></div>
+        <p class="service-desc">A fully custom training program built for your goals, with weekly check-ins and direct coach access. Our most popular option.</p>
+        <ul class="feature-list">
+          <li>Custom program built for you</li>
+          <li>Weekly progress check-ins</li>
+          <li>Program adjustments every week</li>
+          <li>WhatsApp coach access</li>
+          <li>Basic nutrition guidance</li>
+          <li>Progress photo reviews</li>
+        </ul>
+        <a href="apply.html?tier=online-coaching" class="btn-service btn-service-primary">Apply Now</a>
+      </div>
+
+      <!-- 1:1 Premium -->
+      <div class="service-card">
+        <div class="service-tier">Tier 3</div>
+        <div class="service-name">1:1 Premium</div>
+        <div class="service-price">&#8377;9,999<span>/mo</span></div>
+        <p class="service-desc">The highest level of coaching. Monthly video calls, detailed nutrition planning, and priority access to Coach Sahil.</p>
+        <ul class="feature-list">
+          <li>Everything in Online Coaching</li>
+          <li>2x monthly video call sessions</li>
+          <li>Detailed nutrition &amp; meal planning</li>
+          <li>Supplement guidance</li>
+          <li>Priority WhatsApp response</li>
+          <li>Real-time program modifications</li>
+          <li>Progress analysis and reporting</li>
+          <li>Dedicated coach attention</li>
+        </ul>
+        <a href="apply.html?tier=premium" class="btn-service btn-service-gold">Apply Now</a>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section class="process-section">
+  <div class="container">
+    <span class="section-label">THE PROCESS</span>
+    <h2>From application to results</h2>
+    <div class="steps-container">
+
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-title">Apply</div>
+        <p class="step-desc">Fill in your details and goals on the apply page. We respond within 24 hours.</p>
+      </div>
+
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-title">Free Consult</div>
+        <p class="step-desc">Coach Sahil jumps on a call to understand your training history, goals, and schedule.</p>
+      </div>
+
+      <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-title">Get Your Program</div>
+        <p class="step-desc">You receive your fully custom program through the client app within 48 hours of signing up.</p>
+      </div>
+
+      <div class="step">
+        <div class="step-num">4</div>
+        <div class="step-title">Weekly Loop</div>
+        <p class="step-desc">Submit weekly check-ins. Coach reviews and adjusts your program every week.</p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- COMPARISON TABLE -->
+<section class="table-section">
+  <div class="container">
+    <span class="section-label">COMPARISON</span>
+    <h2>What&rsquo;s included in each plan</h2>
+    <div class="table-wrapper">
+      <table>
+        <thead>
+          <tr>
+            <th>Feature</th>
+            <th>Self-Guided</th>
+            <th class="col-featured">Online Coaching</th>
+            <th>Premium</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Custom Program</td>
+            <td class="dash">&mdash;</td>
+            <td><span class="check">&#10003;</span></td>
+            <td><span class="check">&#10003;</span></td>
+          </tr>
+          <tr>
+            <td>Weekly Check-ins</td>
+            <td class="dash">&mdash;</td>
+            <td><span class="check">&#10003;</span></td>
+            <td><span class="check">&#10003;</span></td>
+          </tr>
+          <tr>
+            <td>WhatsApp Access</td>
+            <td class="dash">&mdash;</td>
+            <td><span class="check">&#10003;</span></td>
+            <td><span class="check">&#10003;</span></td>
+          </tr>
+          <tr>
+            <td>Nutrition Plan</td>
+            <td class="dash">&mdash;</td>
+            <td class="dash">&mdash;</td>
+            <td><span class="check">&#10003;</span></td>
+          </tr>
+          <tr>
+            <td>Video Calls</td>
+            <td class="dash">&mdash;</td>
+            <td class="dash">&mdash;</td>
+            <td><span class="check">&#10003;</span></td>
+          </tr>
+          <tr>
+            <td>Priority Support</td>
+            <td class="dash">&mdash;</td>
+            <td class="dash">&mdash;</td>
+            <td><span class="check">&#10003;</span></td>
+          </tr>
+          <tr>
+            <td>Progress Reviews</td>
+            <td class="dash">&mdash;</td>
+            <td><span class="check">&#10003;</span></td>
+            <td><span class="check">&#10003;</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section">
+  <div class="container">
+    <div class="cta-card">
+      <h2>Ready to get started?</h2>
+      <p>Book your free consult and let&rsquo;s build your program.</p>
+      <a href="apply.html" class="btn-primary">Book Free Consult</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <a href="index.html" class="nav-logo">FITWID</a>
+      <p>I-BLITZ Fitness Club &middot; Bangalore</p>
+      <a href="mailto:coach@fitwid.fit">coach@fitwid.fit</a>
+    </div>
+    <div class="footer-col"><h4>Platform</h4><a href="coaching.html">Coaching</a><a href="pricing.html">Pricing</a><a href="results.html">Results</a><a href="apply.html">Apply</a><a href="about.html">About</a></div>
+    <div class="footer-col"><h4>Tools</h4><a href="generator.html">Workout Generator</a><a href="booking.html">Book Session</a><a href="client-portal.html">Client Login</a></div>
+    <div class="footer-col"><h4>Legal</h4><a href="#">Privacy</a><a href="#">Terms</a></div>
+  </div>
+  <div class="footer-bottom"><p>&copy; 2025 FitWid.fit &mdash; I-BLITZ Fitness Club. All rights reserved.</p></div>
+</footer>
+
+<script>
+  document.querySelectorAll('.mobile-nav a').forEach(function(link) {
+    link.addEventListener('click', function() {
+      document.getElementById('mobileNav').classList.remove('open');
+    });
+  });
+</script>
+</body>
+</html>
