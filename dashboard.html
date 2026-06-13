@@ -179,6 +179,38 @@ select.form-input option{background:#1e1e1e}
 .prog-fill.gold{background:var(--gold)}
 .prog-fill.green{background:var(--green)}
 
+/* ─── CLIENT PLANS ─── */
+.plans-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:24px}
+@media(max-width:900px){.plans-grid{grid-template-columns:1fr}}
+.client-plan-card{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:16px;transition:border-color .2s}
+.client-plan-card:hover{border-color:rgba(192,17,43,0.35)}
+.cp-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+.cp-name{font-weight:700;font-size:15px;color:#fff}
+.cp-phone{font-size:12px;color:var(--muted2);margin-top:2px}
+.cp-goal-chip{display:inline-block;font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;padding:3px 9px;border-radius:3px;background:rgba(212,160,23,.12);color:var(--gold);border:1px solid rgba(212,160,23,.25)}
+.cp-pin{font-size:12px;color:var(--muted);margin-top:6px}
+.cp-pin strong{color:var(--text);font-size:13px;letter-spacing:1px}
+.cp-actions{display:flex;gap:6px;margin-top:12px;flex-wrap:wrap}
+
+/* Edit Panel */
+.edit-panel{background:var(--card);border:1px solid var(--border2);border-radius:10px;padding:20px;margin-top:20px;display:none}
+.edit-panel.open{display:block}
+.edit-panel-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;padding-bottom:14px;border-bottom:1px solid var(--border)}
+.edit-panel-title{font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:1.5px;color:#fff}
+
+.ep-section{margin-bottom:20px}
+.ep-section-title{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:var(--gold);margin-bottom:12px;padding-bottom:6px;border-bottom:1px solid var(--border)}
+.meal-editor-row{background:var(--card2);border:1px solid var(--border);border-radius:6px;padding:12px;margin-bottom:8px;position:relative}
+.meal-editor-row .remove-btn{position:absolute;top:10px;right:10px;background:none;border:none;color:var(--muted);cursor:pointer;font-size:16px;line-height:1;transition:color .15s}
+.meal-editor-row .remove-btn:hover{color:#ff6b6b}
+.ex-editor-row{background:var(--card2);border:1px solid var(--border);border-radius:6px;padding:10px;margin-bottom:6px;position:relative}
+.day-block{background:var(--dark);border:1px solid var(--border);border-radius:8px;padding:14px;margin-bottom:12px}
+.day-block-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;cursor:pointer}
+.day-block-name{font-weight:700;font-size:13px;color:#fff;text-transform:uppercase;letter-spacing:1px}
+.day-toggle-icon{color:var(--muted);font-size:12px;transition:transform .2s}
+.day-block-body{display:none}
+.day-block-body.open{display:block}
+
 /* ─── PIN LOCK ─── */
 #pinLock{position:fixed;inset:0;background:#080808;z-index:9999;display:flex;flex-direction:column;align-items:center;justify-content:center;transition:opacity .4s}
 #pinLock.unlocked{opacity:0;pointer-events:none}
@@ -264,6 +296,7 @@ select.form-input option{background:#1e1e1e}
     <div class="nav-section">Reports</div>
     <div class="nav-item" onclick="goTo('monthly',this)"><span class="ni">📈</span> Monthly Report</div>
     <div class="nav-section">Tools</div>
+    <div class="nav-item" onclick="goTo('plans',this)"><span class="ni">📋</span> Client Plans</div>
     <div class="nav-item" onclick="window.open('booking.html','_blank')"><span class="ni">🔗</span> Booking Page</div>
   </div>
   <div class="sidebar-footer">Coach <span>Sahil R</span> · SAHIL FITNESS<br>Bangalore<br><a href="index.html" style="color:var(--gold);font-size:10px;text-decoration:none;margin-top:6px;display:inline-block;">← Public Site</a>&nbsp;&nbsp;<span onclick="changePin()" style="color:var(--muted);font-size:10px;cursor:pointer;text-decoration:underline;">Change PIN</span></div>
@@ -494,6 +527,142 @@ select.form-input option{background:#1e1e1e}
       </div>
     </div>
 
+    <!-- ══════ CLIENT PLANS PAGE ══════ -->
+    <div class="page" id="page-plans">
+      <div class="sec-header">
+        <div>
+          <div class="sec-title">Client Plans</div>
+          <div class="sec-sub">Assign diet &amp; workout plans to clients</div>
+        </div>
+      </div>
+
+      <!-- Add New Client for Plans -->
+      <div class="table-wrap" style="padding:18px 20px;margin-bottom:20px">
+        <div class="sec-title" style="margin-bottom:14px;font-size:14px">Add / Update Client Portal Access</div>
+        <div class="form-row">
+          <div class="form-group" style="margin-bottom:10px">
+            <label class="form-label">Client Name</label>
+            <input class="form-input" id="cp-name" placeholder="Full name">
+          </div>
+          <div class="form-group" style="margin-bottom:10px">
+            <label class="form-label">Phone (used as login ID)</label>
+            <input class="form-input" id="cp-phone" type="tel" placeholder="10-digit number" maxlength="15">
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group" style="margin-bottom:10px">
+            <label class="form-label">Goal</label>
+            <select class="form-input" id="cp-goal">
+              <option value="Fat Loss">Fat Loss</option>
+              <option value="Muscle Gain">Muscle Gain</option>
+              <option value="Strength">Strength</option>
+              <option value="General Fitness">General Fitness</option>
+            </select>
+          </div>
+          <div class="form-group" style="margin-bottom:10px">
+            <label class="form-label">PIN (client uses to login)</label>
+            <div style="display:flex;gap:8px;align-items:center">
+              <input class="form-input" id="cp-pin" placeholder="e.g. 1234" maxlength="6" style="flex:1">
+              <button class="btn btn-ghost btn-sm" onclick="genPin()" type="button">Auto</button>
+            </div>
+          </div>
+        </div>
+        <div class="form-group" style="margin-bottom:14px">
+          <label class="form-label">Coach Notes (shown to client)</label>
+          <input class="form-input" id="cp-notes" placeholder="e.g. Drink 3L water daily, sleep 8 hours">
+        </div>
+        <button class="btn btn-primary" onclick="saveClientPortal()">Save to Portal</button>
+        <span id="cpSaveStatus" style="font-size:12px;color:var(--green);margin-left:10px;display:none">Saved!</span>
+      </div>
+
+      <!-- Client List with Plans -->
+      <div class="sec-header" style="margin-bottom:14px">
+        <div class="sec-title">Portal Clients</div>
+        <button class="btn btn-ghost btn-sm" onclick="loadPortalClients()">&#8635; Refresh</button>
+      </div>
+
+      <div id="portalClientList">
+        <div class="empty"><div class="empty-icon">&#128100;</div><p>Loading portal clients...</p></div>
+      </div>
+
+      <!-- Edit Plan Panel -->
+      <div class="edit-panel" id="editPlanPanel">
+        <div class="edit-panel-header">
+          <div class="edit-panel-title" id="editPlanTitle">Edit Plan — Client</div>
+          <button class="btn btn-ghost btn-sm" onclick="closeEditPanel()">&#10005; Close</button>
+        </div>
+
+        <!-- Next Session -->
+        <div class="ep-section">
+          <div class="ep-section-title">Next Session</div>
+          <div class="form-group" style="margin-bottom:0">
+            <label class="form-label">Next Session Date &amp; Time</label>
+            <input class="form-input" type="datetime-local" id="ep-nextSession">
+          </div>
+        </div>
+
+        <!-- Coach Notes in Edit -->
+        <div class="ep-section">
+          <div class="ep-section-title">Coach Notes</div>
+          <div class="form-group" style="margin-bottom:0">
+            <textarea class="form-input" id="ep-coachNotes" rows="2" placeholder="Motivational note or instructions for client" style="resize:vertical"></textarea>
+          </div>
+        </div>
+
+        <!-- Diet Plan -->
+        <div class="ep-section">
+          <div class="ep-section-title">Diet Plan</div>
+          <div class="form-row" style="margin-bottom:12px">
+            <div class="form-group" style="margin-bottom:0">
+              <label class="form-label">Calories</label>
+              <input class="form-input" type="number" id="ep-cal" placeholder="e.g. 2400">
+            </div>
+            <div class="form-group" style="margin-bottom:0">
+              <label class="form-label">Protein (g)</label>
+              <input class="form-input" type="number" id="ep-protein" placeholder="e.g. 180">
+            </div>
+          </div>
+          <div class="form-row" style="margin-bottom:14px">
+            <div class="form-group" style="margin-bottom:0">
+              <label class="form-label">Carbs (g)</label>
+              <input class="form-input" type="number" id="ep-carbs" placeholder="e.g. 240">
+            </div>
+            <div class="form-group" style="margin-bottom:0">
+              <label class="form-label">Fats (g)</label>
+              <input class="form-input" type="number" id="ep-fats" placeholder="e.g. 70">
+            </div>
+          </div>
+
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">
+            <div class="form-label" style="margin-bottom:0">Meals</div>
+            <button class="btn btn-ghost btn-sm" onclick="addMealRow()" type="button">+ Add Meal</button>
+          </div>
+          <div id="mealEditorRows"></div>
+        </div>
+
+        <!-- Workout Plan -->
+        <div class="ep-section">
+          <div class="ep-section-title">Workout Plan</div>
+          <div class="form-group" style="margin-bottom:14px">
+            <label class="form-label">Split Name</label>
+            <input class="form-input" id="ep-split" placeholder="e.g. 5-Day PPL Split">
+          </div>
+
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
+            <div class="form-label" style="margin-bottom:0">Days</div>
+          </div>
+          <div id="dayEditors"></div>
+        </div>
+
+        <div style="padding-top:10px;border-top:1px solid var(--border);display:flex;gap:8px;align-items:center">
+          <button class="btn btn-primary" onclick="savePlan()">Save Plan to Firebase</button>
+          <button class="btn btn-ghost" onclick="closeEditPanel()">Cancel</button>
+          <span id="planSaveStatus" style="font-size:12px;color:var(--green);display:none">Plan saved!</span>
+        </div>
+      </div>
+
+    </div>
+
   </div><!-- /content -->
 </div><!-- /main -->
 </div><!-- /layout -->
@@ -710,7 +879,7 @@ const MEM_BADGE = {
 // ══════════════════════════════════════════
 //  NAVIGATION
 // ══════════════════════════════════════════
-const PAGE_TITLES = {dashboard:'Dashboard',slots:'Bookings',clients:'Clients',monthly:'Monthly Report'};
+const PAGE_TITLES = {dashboard:'Dashboard',slots:'Bookings',clients:'Clients',monthly:'Monthly Report',plans:'Client Plans'};
 let currentFilter = 'all';
 let selectedDay = null;
 
@@ -724,6 +893,7 @@ function goTo(page, el){
   if(page==='slots') renderAllSlots();
   if(page==='clients') renderClients();
   if(page==='monthly') renderMonthly();
+  if(page==='plans') loadPortalClients();
   if(window.innerWidth<=768) toggleSidebar(false);
 }
 
@@ -1241,6 +1411,310 @@ document.addEventListener('keydown', e=>{
 // ══════════════════════════════════════════
 //  INIT
 // ══════════════════════════════════════════
+// ══════════════════════════════════════════
+//  CLIENT PLANS — PORTAL MANAGEMENT
+// ══════════════════════════════════════════
+let editingPortalPhone = null;
+const DAY_NAMES_PLANS = ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'];
+
+function genPin() {
+  const pin = String(Math.floor(100000 + Math.random() * 900000)).slice(0,6);
+  document.getElementById('cp-pin').value = pin;
+}
+
+function saveClientPortal() {
+  const name  = document.getElementById('cp-name').value.trim();
+  const phone = document.getElementById('cp-phone').value.trim().replace(/\s/g,'');
+  const goal  = document.getElementById('cp-goal').value;
+  const pin   = document.getElementById('cp-pin').value.trim();
+  const notes = document.getElementById('cp-notes').value.trim();
+
+  if(!name || !phone) { showToast('Enter name and phone','error'); return; }
+  if(!pin) { showToast('Enter a PIN for the client','error'); return; }
+
+  const data = { name, phone, goal, pin, coachNotes: notes, createdAt: new Date().toISOString() };
+
+  if(FB_READY && fbDB) {
+    fbDB.ref('clients/' + phone).update(data)
+      .then(() => {
+        showToast('Client portal access saved ✓', 'success');
+        const s = document.getElementById('cpSaveStatus');
+        s.style.display = 'inline';
+        setTimeout(()=>s.style.display='none', 2500);
+        document.getElementById('cp-name').value='';
+        document.getElementById('cp-phone').value='';
+        document.getElementById('cp-pin').value='';
+        document.getElementById('cp-notes').value='';
+        loadPortalClients();
+      })
+      .catch(e => showToast('Error: ' + e.message, 'error'));
+  } else {
+    showToast('Firebase not connected. Cannot save.','error');
+  }
+}
+
+function loadPortalClients() {
+  const container = document.getElementById('portalClientList');
+  if(!FB_READY || !fbDB) {
+    container.innerHTML = '<div class="empty"><div class="empty-icon">⚠️</div><p style="color:var(--muted2)">Firebase not connected. Portal client management requires Firebase.</p></div>';
+    return;
+  }
+  container.innerHTML = '<div class="empty"><div class="empty-icon" style="font-size:24px">⏳</div><p style="color:var(--muted2)">Loading...</p></div>';
+
+  fbDB.ref('clients').once('value', snap => {
+    const data = snap.val();
+    if(!data) {
+      container.innerHTML = '<div class="empty"><div class="empty-icon">👤</div><p>No portal clients yet. Add one above.</p></div>';
+      return;
+    }
+
+    // Filter to clients that have a PIN (portal clients)
+    const portalClients = Object.values(data).filter(c => c.pin);
+
+    if(!portalClients.length) {
+      container.innerHTML = '<div class="empty"><div class="empty-icon">👤</div><p>No portal clients yet. Add one above.</p></div>';
+      return;
+    }
+
+    const goalColors = {
+      'Fat Loss':'badge-green', 'Muscle Gain':'badge-red',
+      'Strength':'badge-yellow', 'General Fitness':'badge-blue', 'default':'badge-gray'
+    };
+
+    container.innerHTML = '<div class="plans-grid">' + portalClients.map(c => {
+      const badgeClass = goalColors[c.goal] || goalColors.default;
+      const hasPhone = c.phone || '';
+      return `
+      <div class="client-plan-card">
+        <div class="cp-header">
+          <div>
+            <div class="cp-name">${c.name || 'Unknown'}</div>
+            <div class="cp-phone">${hasPhone}</div>
+          </div>
+          <span class="badge ${badgeClass}">${c.goal || '—'}</span>
+        </div>
+        <div class="cp-pin">Portal PIN: <strong>${c.pin}</strong></div>
+        ${c.dietPlan ? '<div style="font-size:11px;color:var(--green);margin-top:4px">✓ Diet plan set · ' + (c.dietPlan.calories||'?') + ' kcal</div>' : '<div style="font-size:11px;color:var(--muted2);margin-top:4px">No diet plan yet</div>'}
+        ${c.workoutPlan ? '<div style="font-size:11px;color:var(--green);margin-top:2px">✓ Workout plan set · ' + (c.workoutPlan.split||'') + '</div>' : '<div style="font-size:11px;color:var(--muted2);margin-top:2px">No workout plan yet</div>'}
+        <div class="cp-actions">
+          <button class="btn btn-primary btn-sm" onclick="openEditPlan('${hasPhone}', ${JSON.stringify(c).replace(/"/g,'&quot;')})">✏️ Edit Plan</button>
+          <a class="btn btn-wa btn-sm" href="https://wa.me/${hasPhone.startsWith('+')?hasPhone.slice(1):'91'+hasPhone}" target="_blank">💬 WhatsApp</a>
+          <button class="btn btn-ghost btn-sm" onclick="deletePortalClient('${hasPhone}')">🗑</button>
+        </div>
+      </div>`;
+    }).join('') + '</div>';
+  });
+}
+
+function deletePortalClient(phone) {
+  if(!confirm('Remove portal access for ' + phone + '?')) return;
+  if(FB_READY && fbDB) {
+    fbDB.ref('clients/' + phone + '/pin').remove()
+      .then(() => { showToast('Portal access removed','success'); loadPortalClients(); })
+      .catch(e => showToast('Error: ' + e.message,'error'));
+  }
+}
+
+function openEditPlan(phone, clientData) {
+  editingPortalPhone = phone;
+  const panel = document.getElementById('editPlanPanel');
+  document.getElementById('editPlanTitle').textContent = 'Edit Plan — ' + (clientData.name || phone);
+  panel.classList.add('open');
+  panel.scrollIntoView({behavior:'smooth', block:'start'});
+
+  // Populate fields
+  const d = clientData;
+  document.getElementById('ep-coachNotes').value = d.coachNotes || '';
+  if(d.nextSession) {
+    // Convert ISO to datetime-local format
+    try {
+      const dt = new Date(d.nextSession);
+      const local = new Date(dt.getTime() - dt.getTimezoneOffset()*60000).toISOString().slice(0,16);
+      document.getElementById('ep-nextSession').value = local;
+    } catch(e) { document.getElementById('ep-nextSession').value = ''; }
+  } else {
+    document.getElementById('ep-nextSession').value = '';
+  }
+
+  // Diet
+  const diet = d.dietPlan || {};
+  document.getElementById('ep-cal').value = diet.calories || '';
+  document.getElementById('ep-protein').value = diet.protein || '';
+  document.getElementById('ep-carbs').value = diet.carbs || '';
+  document.getElementById('ep-fats').value = diet.fats || '';
+
+  // Meals
+  const meals = diet.meals || [];
+  renderMealEditor(meals);
+
+  // Workout
+  const wp = d.workoutPlan || {};
+  document.getElementById('ep-split').value = wp.split || '';
+  renderDayEditors(wp.days || {});
+}
+
+function closeEditPanel() {
+  document.getElementById('editPlanPanel').classList.remove('open');
+  editingPortalPhone = null;
+  document.getElementById('planSaveStatus').style.display = 'none';
+}
+
+// ── Meal editor ──
+function renderMealEditor(meals) {
+  const container = document.getElementById('mealEditorRows');
+  container.innerHTML = '';
+  if(meals.length === 0) {
+    addMealRow();
+  } else {
+    meals.forEach((m,i) => addMealRow(m, i));
+  }
+}
+
+function addMealRow(meal, idx) {
+  const container = document.getElementById('mealEditorRows');
+  const div = document.createElement('div');
+  div.className = 'meal-editor-row';
+  div.innerHTML = `
+    <button class="remove-btn" onclick="this.parentElement.remove()" type="button">✕</button>
+    <div class="form-row" style="margin-bottom:8px">
+      <div class="form-group" style="margin-bottom:0">
+        <label class="form-label">Time</label>
+        <input class="form-input meal-time" placeholder="7:00 AM" value="${meal ? meal.time||'' : ''}">
+      </div>
+      <div class="form-group" style="margin-bottom:0">
+        <label class="form-label">Meal Name</label>
+        <input class="form-input meal-name" placeholder="Breakfast" value="${meal ? meal.name||'' : ''}">
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group" style="margin-bottom:0">
+        <label class="form-label">Foods (comma-separated)</label>
+        <input class="form-input meal-foods" placeholder="Oats 100g, Banana 1, Whey 30g" value="${meal ? (meal.foods||[]).join(', ') : ''}">
+      </div>
+      <div class="form-group" style="margin-bottom:0">
+        <label class="form-label">Calories</label>
+        <input class="form-input meal-cal" type="number" placeholder="520" value="${meal ? meal.calories||'' : ''}">
+      </div>
+    </div>`;
+  container.appendChild(div);
+}
+
+// ── Day editors ──
+function renderDayEditors(days) {
+  const container = document.getElementById('dayEditors');
+  container.innerHTML = DAY_NAMES_PLANS.map(day => {
+    const dayData = days[day] || { focus: '', exercises: [] };
+    const exRows = (dayData.exercises||[]).map((ex,i) => buildExRow(ex, i)).join('');
+    return `
+    <div class="day-block" id="day-block-${day}">
+      <div class="day-block-header" onclick="toggleDayBlock('${day}')">
+        <div class="day-block-name">${day}</div>
+        <div class="day-toggle-icon" id="day-icon-${day}">▶</div>
+      </div>
+      <div class="day-block-body" id="day-body-${day}">
+        <div class="form-group" style="margin-bottom:10px">
+          <label class="form-label">Focus</label>
+          <input class="form-input day-focus" id="focus-${day}" placeholder="Chest & Triceps" value="${dayData.focus||''}">
+        </div>
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px">
+          <div class="form-label" style="margin-bottom:0">Exercises</div>
+          <button class="btn btn-ghost btn-sm" onclick="addExRow('${day}')" type="button">+ Add</button>
+        </div>
+        <div id="ex-rows-${day}">${exRows}</div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function buildExRow(ex, idx) {
+  return `<div class="ex-editor-row">
+    <button class="remove-btn" onclick="this.parentElement.remove()" type="button" style="position:absolute;top:8px;right:8px">✕</button>
+    <div style="display:grid;grid-template-columns:1fr 60px 80px 70px;gap:6px;padding-right:24px">
+      <input class="form-input ex-name" placeholder="Exercise name" value="${ex?ex.name||'':''}" style="padding:8px 10px;font-size:13px">
+      <input class="form-input ex-sets" placeholder="Sets" type="number" value="${ex?ex.sets||'':''}" style="padding:8px 10px;font-size:13px">
+      <input class="form-input ex-reps" placeholder="Reps" value="${ex?ex.reps||'':''}" style="padding:8px 10px;font-size:13px">
+      <input class="form-input ex-rest" placeholder="Rest" value="${ex?ex.rest||'':''}" style="padding:8px 10px;font-size:13px">
+    </div>
+  </div>`;
+}
+
+function addExRow(day) {
+  document.getElementById('ex-rows-'+day).insertAdjacentHTML('beforeend', buildExRow(null, 0));
+}
+
+function toggleDayBlock(day) {
+  const body = document.getElementById('day-body-'+day);
+  const icon = document.getElementById('day-icon-'+day);
+  const open = body.classList.toggle('open');
+  icon.textContent = open ? '▼' : '▶';
+  icon.style.transform = '';
+}
+
+// ── Save plan ──
+function savePlan() {
+  if(!editingPortalPhone) { showToast('No client selected','error'); return; }
+  if(!FB_READY || !fbDB) { showToast('Firebase not connected','error'); return; }
+
+  const coachNotes = document.getElementById('ep-coachNotes').value.trim();
+  const nextSessionRaw = document.getElementById('ep-nextSession').value;
+  const nextSession = nextSessionRaw ? new Date(nextSessionRaw).toISOString() : null;
+
+  // Diet plan
+  const dietPlan = {
+    calories: parseInt(document.getElementById('ep-cal').value) || 0,
+    protein: parseInt(document.getElementById('ep-protein').value) || 0,
+    carbs: parseInt(document.getElementById('ep-carbs').value) || 0,
+    fats: parseInt(document.getElementById('ep-fats').value) || 0,
+    meals: []
+  };
+
+  document.querySelectorAll('.meal-editor-row').forEach(row => {
+    const time = row.querySelector('.meal-time').value.trim();
+    const name = row.querySelector('.meal-name').value.trim();
+    const foodsRaw = row.querySelector('.meal-foods').value.trim();
+    const cal = parseInt(row.querySelector('.meal-cal').value) || 0;
+    if(name) {
+      dietPlan.meals.push({
+        time, name,
+        foods: foodsRaw ? foodsRaw.split(',').map(f=>f.trim()).filter(Boolean) : [],
+        calories: cal
+      });
+    }
+  });
+
+  // Workout plan
+  const split = document.getElementById('ep-split').value.trim();
+  const days = {};
+  DAY_NAMES_PLANS.forEach(day => {
+    const focus = (document.getElementById('focus-'+day)||{}).value?.trim() || '';
+    const exercises = [];
+    const exRows = document.querySelectorAll('#ex-rows-'+day+' .ex-editor-row');
+    exRows.forEach(row => {
+      const name = row.querySelector('.ex-name').value.trim();
+      const sets = parseInt(row.querySelector('.ex-sets').value) || 0;
+      const reps = row.querySelector('.ex-reps').value.trim();
+      const rest = row.querySelector('.ex-rest').value.trim();
+      if(name) exercises.push({name, sets, reps, rest});
+    });
+    days[day] = { focus, exercises };
+  });
+
+  const workoutPlan = { split, days };
+
+  const updateData = { coachNotes, workoutPlan, dietPlan };
+  if(nextSession) updateData.nextSession = nextSession;
+
+  fbDB.ref('clients/' + editingPortalPhone).update(updateData)
+    .then(() => {
+      showToast('Plan saved to Firebase ✓', 'success');
+      const s = document.getElementById('planSaveStatus');
+      s.style.display = 'inline';
+      setTimeout(()=>s.style.display='none', 3000);
+      loadPortalClients();
+    })
+    .catch(e => showToast('Error saving: ' + e.message, 'error'));
+}
+
 document.addEventListener('DOMContentLoaded',()=>{
   checkAuth();
   const now = new Date();
