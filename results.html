@@ -1,0 +1,730 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Client Results &amp; Transformations — FitWid.fit</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Inter+Tight:wght@700;800;900&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0A0A0A;
+    --surface: #161616;
+    --surface2: #1E1E1E;
+    --primary: #C8102E;
+    --accent: #D4AF37;
+    --text: #F5F5F5;
+    --muted: #9A9A9A;
+    --radius-card: 12px;
+    --radius-btn: 8px;
+    --section-pad: 80px;
+    --max-w: 1200px;
+  }
+
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Inter', sans-serif;
+    font-size: 16px;
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
+
+  .container {
+    max-width: var(--max-w);
+    margin: 0 auto;
+    padding: 0 24px;
+  }
+
+  /* ===== NAV ===== */
+  #navbar {
+    position: sticky;
+    top: 0;
+    z-index: 500;
+    background: rgba(10,10,10,0.96);
+    border-bottom: 1px solid rgba(200,16,46,0.25);
+    backdrop-filter: blur(14px);
+  }
+
+  .nav-inner {
+    max-width: var(--max-w);
+    margin: 0 auto;
+    padding: 0 24px;
+    height: 64px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+  }
+
+  .nav-logo {
+    font-family: 'Inter Tight', sans-serif;
+    font-weight: 900;
+    font-size: 20px;
+    letter-spacing: 4px;
+    background: linear-gradient(90deg, var(--primary), var(--accent));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    text-decoration: none;
+    flex-shrink: 0;
+  }
+
+  .nav-links {
+    display: flex;
+    gap: 28px;
+    list-style: none;
+  }
+
+  .nav-links a {
+    font-family: 'Inter', sans-serif;
+    font-weight: 600;
+    font-size: 13px;
+    letter-spacing: 1px;
+    color: var(--muted);
+    text-decoration: none;
+    text-transform: uppercase;
+    transition: color 0.2s;
+  }
+
+  .nav-links a:hover,
+  .nav-links a[aria-current="page"] { color: var(--text); }
+
+  .nav-cta {
+    font-family: 'Inter', sans-serif;
+    font-weight: 600;
+    font-size: 13px;
+    color: var(--text);
+    background: var(--primary);
+    border-radius: var(--radius-btn);
+    padding: 10px 20px;
+    text-decoration: none;
+    transition: background 0.2s, opacity 0.2s;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  .nav-cta:hover { opacity: 0.88; }
+
+  .hamburger {
+    display: none;
+    flex-direction: column;
+    gap: 5px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 6px;
+    flex-shrink: 0;
+  }
+
+  .hamburger span {
+    display: block;
+    width: 22px;
+    height: 2px;
+    background: var(--text);
+    border-radius: 2px;
+    transition: opacity 0.2s;
+  }
+
+  .mobile-nav {
+    display: none;
+    flex-direction: column;
+    background: var(--surface);
+    padding: 16px 24px 24px;
+    gap: 4px;
+    border-top: 1px solid rgba(255,255,255,0.06);
+  }
+
+  .mobile-nav.open { display: flex; }
+
+  .mobile-nav a {
+    font-family: 'Inter', sans-serif;
+    font-weight: 600;
+    font-size: 15px;
+    color: var(--muted);
+    text-decoration: none;
+    padding: 10px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+    transition: color 0.2s;
+  }
+
+  .mobile-nav a:last-child { border-bottom: none; }
+  .mobile-nav a:hover { color: var(--text); }
+
+  .mob-cta {
+    margin-top: 12px;
+    background: var(--primary) !important;
+    color: var(--text) !important;
+    border-radius: var(--radius-btn);
+    padding: 12px 20px !important;
+    text-align: center;
+    border-bottom: none !important;
+  }
+
+  /* ===== SECTIONS ===== */
+  section { padding: var(--section-pad) 0; }
+
+  .section-label {
+    font-family: 'Inter', sans-serif;
+    font-weight: 600;
+    font-size: 11px;
+    letter-spacing: 3px;
+    color: var(--primary);
+    text-transform: uppercase;
+    margin-bottom: 16px;
+  }
+
+  h1 {
+    font-family: 'Inter Tight', sans-serif;
+    font-weight: 900;
+    font-size: clamp(36px, 5vw, 56px);
+    line-height: 1.08;
+    color: var(--text);
+    margin-bottom: 20px;
+  }
+
+  h2 {
+    font-family: 'Inter Tight', sans-serif;
+    font-weight: 800;
+    font-size: clamp(28px, 3.5vw, 40px);
+    line-height: 1.1;
+    color: var(--text);
+    margin-bottom: 16px;
+  }
+
+  .lead {
+    font-size: 17px;
+    color: var(--muted);
+    max-width: 600px;
+    line-height: 1.7;
+  }
+
+  /* ===== PAGE HEADER ===== */
+  .page-header {
+    padding: 80px 0 64px;
+    text-align: center;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+  }
+
+  .page-header .lead { margin: 0 auto; }
+
+  /* ===== TRANSFORMATIONS GRID ===== */
+  .transform-section { padding: var(--section-pad) 0; }
+
+  .transform-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+    margin-bottom: 24px;
+  }
+
+  .transform-card {
+    background: var(--surface);
+    border-radius: var(--radius-card);
+    overflow: hidden;
+    border: 1px solid rgba(255,255,255,0.05);
+    transition: transform 0.2s, border-color 0.2s;
+  }
+
+  .transform-card:hover {
+    transform: translateY(-3px);
+    border-color: rgba(200,16,46,0.25);
+  }
+
+  .before-after {
+    display: flex;
+    height: 140px;
+    position: relative;
+  }
+
+  .ba-panel {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Inter Tight', sans-serif;
+    font-weight: 800;
+    font-size: 12px;
+    letter-spacing: 2px;
+    color: var(--muted);
+  }
+
+  .ba-panel.before {
+    background: linear-gradient(135deg, #2a2a2a, #1a1a1a);
+    border-right: 1px solid rgba(255,255,255,0.12);
+  }
+
+  .ba-panel.after {
+    background: linear-gradient(135deg, #3a0a10, rgba(200,16,46,0.13));
+    color: rgba(200,16,46,0.6);
+  }
+
+  .transform-info {
+    padding: 18px 20px 20px;
+  }
+
+  .client-name {
+    font-family: 'Inter', sans-serif;
+    font-weight: 700;
+    font-size: 16px;
+    color: var(--text);
+    margin-bottom: 8px;
+  }
+
+  .duration-chip {
+    display: inline-block;
+    font-family: 'Inter', sans-serif;
+    font-weight: 600;
+    font-size: 11px;
+    letter-spacing: 1px;
+    color: var(--accent);
+    background: rgba(212,175,55,0.1);
+    border-radius: 4px;
+    padding: 3px 10px;
+    margin-bottom: 8px;
+  }
+
+  .client-stats {
+    font-size: 13px;
+    color: var(--muted);
+  }
+
+  .results-disclaimer {
+    font-style: italic;
+    font-size: 13px;
+    color: var(--muted);
+    text-align: center;
+  }
+
+  /* ===== STATS BAR ===== */
+  .stats-bar {
+    background: var(--surface);
+    border-top: 1px solid rgba(255,255,255,0.06);
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+    padding: 0;
+  }
+
+  .stats-row {
+    display: flex;
+    align-items: stretch;
+  }
+
+  .stat-item {
+    flex: 1;
+    padding: 36px 24px;
+    text-align: center;
+    border-right: 1px solid rgba(255,255,255,0.06);
+  }
+
+  .stat-item:last-child { border-right: none; }
+
+  .stat-value {
+    font-family: 'Inter Tight', sans-serif;
+    font-weight: 900;
+    font-size: 36px;
+    color: var(--primary);
+    line-height: 1;
+    margin-bottom: 6px;
+  }
+
+  .stat-label {
+    font-family: 'Inter', sans-serif;
+    font-weight: 500;
+    font-size: 13px;
+    color: var(--muted);
+    letter-spacing: 0.5px;
+  }
+
+  /* ===== TESTIMONIALS ===== */
+  .testimonials-section { padding: var(--section-pad) 0; }
+
+  .testimonials-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+    margin-top: 48px;
+  }
+
+  .testimonial-card {
+    background: var(--surface);
+    border-radius: var(--radius-card);
+    padding: 24px;
+    border: 1px solid rgba(255,255,255,0.05);
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    transition: border-color 0.2s;
+  }
+
+  .testimonial-card:hover { border-color: rgba(212,175,55,0.2); }
+
+  .stars {
+    font-size: 14px;
+    color: var(--accent);
+    letter-spacing: 2px;
+  }
+
+  .quote-text {
+    font-style: italic;
+    font-size: 15px;
+    color: var(--text);
+    line-height: 1.65;
+    flex: 1;
+  }
+
+  .quote-author {
+    font-family: 'Inter', sans-serif;
+    font-weight: 600;
+    font-size: 13px;
+    color: var(--muted);
+  }
+
+  /* ===== CTA CARD ===== */
+  .cta-section { padding: var(--section-pad) 0; }
+
+  .cta-card {
+    border: 1px solid var(--primary);
+    background: rgba(200,16,46,0.05);
+    border-radius: 16px;
+    padding: 60px;
+    text-align: center;
+  }
+
+  .cta-card h2 { margin-bottom: 12px; }
+
+  .cta-card p {
+    font-size: 17px;
+    color: var(--muted);
+    margin-bottom: 32px;
+  }
+
+  .btn-primary {
+    display: inline-block;
+    font-family: 'Inter', sans-serif;
+    font-weight: 700;
+    font-size: 15px;
+    color: var(--text);
+    background: var(--primary);
+    border-radius: var(--radius-btn);
+    padding: 14px 36px;
+    text-decoration: none;
+    transition: opacity 0.2s, transform 0.2s;
+  }
+
+  .btn-primary:hover { opacity: 0.88; transform: translateY(-1px); }
+
+  /* ===== FOOTER ===== */
+  footer {
+    background: var(--surface);
+    border-top: 1px solid rgba(255,255,255,0.06);
+    padding: 64px 0 0;
+  }
+
+  .footer-inner {
+    max-width: var(--max-w);
+    margin: 0 auto;
+    padding: 0 24px;
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1fr;
+    gap: 48px;
+    padding-bottom: 48px;
+  }
+
+  .footer-brand p {
+    font-size: 14px;
+    color: var(--muted);
+    margin: 12px 0 8px;
+  }
+
+  .footer-brand a[href^="mailto"] {
+    font-size: 14px;
+    color: var(--primary);
+    text-decoration: none;
+  }
+
+  .footer-col h4 {
+    font-family: 'Inter Tight', sans-serif;
+    font-weight: 700;
+    font-size: 13px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--text);
+    margin-bottom: 16px;
+  }
+
+  .footer-col a {
+    display: block;
+    font-size: 14px;
+    color: var(--muted);
+    text-decoration: none;
+    margin-bottom: 10px;
+    transition: color 0.2s;
+  }
+
+  .footer-col a:hover { color: var(--text); }
+
+  .footer-bottom {
+    border-top: 1px solid rgba(255,255,255,0.06);
+    padding: 20px 24px;
+    max-width: var(--max-w);
+    margin: 0 auto;
+  }
+
+  .footer-bottom p {
+    font-size: 13px;
+    color: var(--muted);
+  }
+
+  /* ===== RESPONSIVE ===== */
+  @media (max-width: 900px) {
+    .nav-links, .nav-cta { display: none; }
+    .hamburger { display: flex; }
+
+    .transform-grid { grid-template-columns: repeat(2, 1fr); }
+
+    .stats-row { flex-wrap: wrap; }
+    .stat-item { flex: 1 1 50%; border-bottom: 1px solid rgba(255,255,255,0.06); }
+    .stat-item:nth-child(2) { border-right: none; }
+    .stat-item:nth-child(3), .stat-item:nth-child(4) { border-bottom: none; }
+
+    .footer-inner { grid-template-columns: 1fr 1fr; }
+  }
+
+  @media (max-width: 600px) {
+    .transform-grid { grid-template-columns: 1fr; }
+    .testimonials-grid { grid-template-columns: 1fr; }
+    .footer-inner { grid-template-columns: 1fr; gap: 32px; }
+    .cta-card { padding: 36px 24px; }
+    .stats-row { flex-direction: column; }
+    .stat-item { border-right: none; border-bottom: 1px solid rgba(255,255,255,0.06); }
+    .stat-item:last-child { border-bottom: none; }
+  }
+</style>
+<script defer src="/_vercel/speed-insights/script.js"></script>
+</head>
+<body>
+
+<nav id="navbar">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo">FITWID</a>
+    <ul class="nav-links">
+      <li><a href="coaching.html">Coaching</a></li>
+      <li><a href="pricing.html">Pricing</a></li>
+      <li><a href="results.html" aria-current="page">Results</a></li>
+      <li><a href="about.html">About</a></li>
+    </ul>
+    <a href="apply.html" class="nav-cta">Book Free Consult</a>
+    <button class="hamburger" onclick="document.getElementById('mobileNav').classList.toggle('open')">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+  <div class="mobile-nav" id="mobileNav">
+    <a href="coaching.html">Coaching</a>
+    <a href="pricing.html">Pricing</a>
+    <a href="results.html">Results</a>
+    <a href="about.html">About</a>
+    <a href="apply.html" class="mob-cta">Book Free Consult</a>
+  </div>
+</nav>
+
+<!-- PAGE HEADER -->
+<div class="page-header">
+  <div class="container">
+    <p class="section-label">Client Results</p>
+    <h1>Real transformations. Real numbers.</h1>
+    <p class="lead">200+ clients transformed across Bangalore and online. Here are some of their stories.</p>
+  </div>
+</div>
+
+<!-- TRANSFORMATIONS -->
+<section class="transform-section">
+  <div class="container">
+    <div class="transform-grid">
+
+      <div class="transform-card">
+        <div class="before-after">
+          <div class="ba-panel before">BEFORE</div>
+          <div class="ba-panel after">AFTER</div>
+        </div>
+        <div class="transform-info">
+          <div class="client-name">Rahul M.</div>
+          <div class="duration-chip">16 Weeks</div>
+          <div class="client-stats">+8kg Muscle, -12kg Fat</div>
+        </div>
+      </div>
+
+      <div class="transform-card">
+        <div class="before-after">
+          <div class="ba-panel before">BEFORE</div>
+          <div class="ba-panel after">AFTER</div>
+        </div>
+        <div class="transform-info">
+          <div class="client-name">Priya S.</div>
+          <div class="duration-chip">12 Weeks</div>
+          <div class="client-stats">-9kg Fat, +5kg Muscle</div>
+        </div>
+      </div>
+
+      <div class="transform-card">
+        <div class="before-after">
+          <div class="ba-panel before">BEFORE</div>
+          <div class="ba-panel after">AFTER</div>
+        </div>
+        <div class="transform-info">
+          <div class="client-name">Karan T.</div>
+          <div class="duration-chip">20 Weeks</div>
+          <div class="client-stats">+11kg Muscle, -6kg Fat</div>
+        </div>
+      </div>
+
+      <div class="transform-card">
+        <div class="before-after">
+          <div class="ba-panel before">BEFORE</div>
+          <div class="ba-panel after">AFTER</div>
+        </div>
+        <div class="transform-info">
+          <div class="client-name">Anjali R.</div>
+          <div class="duration-chip">10 Weeks</div>
+          <div class="client-stats">-7kg Fat, +3kg Muscle</div>
+        </div>
+      </div>
+
+      <div class="transform-card">
+        <div class="before-after">
+          <div class="ba-panel before">BEFORE</div>
+          <div class="ba-panel after">AFTER</div>
+        </div>
+        <div class="transform-info">
+          <div class="client-name">Vikram N.</div>
+          <div class="duration-chip">14 Weeks</div>
+          <div class="client-stats">+6kg Muscle, -10kg Fat</div>
+        </div>
+      </div>
+
+      <div class="transform-card">
+        <div class="before-after">
+          <div class="ba-panel before">BEFORE</div>
+          <div class="ba-panel after">AFTER</div>
+        </div>
+        <div class="transform-info">
+          <div class="client-name">Sneha G.</div>
+          <div class="duration-chip">18 Weeks</div>
+          <div class="client-stats">-15kg Fat, +4kg Muscle</div>
+        </div>
+      </div>
+
+    </div>
+    <p class="results-disclaimer">Client permission obtained. Individual results vary based on adherence, starting point, and consistency.</p>
+  </div>
+</section>
+
+<!-- STATS BAR -->
+<div class="stats-bar">
+  <div class="container" style="padding: 0;">
+    <div class="stats-row">
+      <div class="stat-item">
+        <div class="stat-value">200+</div>
+        <div class="stat-label">Clients Coached</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-value">4.9</div>
+        <div class="stat-label">Average Rating</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-value">5+</div>
+        <div class="stat-label">Years Coaching</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-value">90%</div>
+        <div class="stat-label">Retention Rate</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TESTIMONIALS -->
+<section class="testimonials-section">
+  <div class="container">
+    <p class="section-label">Testimonials</p>
+    <h2>In their own words</h2>
+    <div class="testimonials-grid">
+
+      <div class="testimonial-card">
+        <div class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+        <p class="quote-text">"Coach Sahil's programming is the most intelligent I've ever followed. Progressive overload built into every session, and it shows."</p>
+        <div class="quote-author">Aditya K. &mdash; Online Coaching</div>
+      </div>
+
+      <div class="testimonial-card">
+        <div class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+        <p class="quote-text">"Lost 10kg in 4 months without losing strength. The nutrition guidance was the missing piece I never had before."</p>
+        <div class="quote-author">Meera J. &mdash; 1:1 Premium</div>
+      </div>
+
+      <div class="testimonial-card">
+        <div class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+        <p class="quote-text">"I've been training for 3 years on my own with zero progress. 2 months with Coach Sahil and everything changed."</p>
+        <div class="quote-author">Rohit P. &mdash; Online Coaching</div>
+      </div>
+
+      <div class="testimonial-card">
+        <div class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+        <p class="quote-text">"The weekly check-ins keep me accountable. I've never been this consistent in my life."</p>
+        <div class="quote-author">Divya M. &mdash; Online Coaching</div>
+      </div>
+
+      <div class="testimonial-card">
+        <div class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+        <p class="quote-text">"Worth every rupee. Coach Sahil responds fast and actually adjusts the program based on how I'm feeling."</p>
+        <div class="quote-author">Suresh B. &mdash; 1:1 Premium</div>
+      </div>
+
+      <div class="testimonial-card">
+        <div class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+        <p class="quote-text">"Got abs for the first time in my life at 34. This program works if you do the work."</p>
+        <div class="quote-author">Nikhil A. &mdash; Online Coaching</div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section">
+  <div class="container">
+    <div class="cta-card">
+      <h2>Your transformation starts here</h2>
+      <p>Apply today for a free consult with Coach Sahil.</p>
+      <a href="apply.html" class="btn-primary">Apply Now</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <a href="index.html" class="nav-logo">FITWID</a>
+      <p>I-BLITZ Fitness Club &middot; Bangalore</p>
+      <a href="mailto:coach@fitwid.fit">coach@fitwid.fit</a>
+    </div>
+    <div class="footer-col"><h4>Platform</h4><a href="coaching.html">Coaching</a><a href="pricing.html">Pricing</a><a href="results.html">Results</a><a href="apply.html">Apply</a><a href="about.html">About</a></div>
+    <div class="footer-col"><h4>Tools</h4><a href="generator.html">Workout Generator</a><a href="booking.html">Book Session</a><a href="client-portal.html">Client Login</a></div>
+    <div class="footer-col"><h4>Legal</h4><a href="#">Privacy</a><a href="#">Terms</a></div>
+  </div>
+  <div class="footer-bottom"><p>&copy; 2025 FitWid.fit &mdash; I-BLITZ Fitness Club. All rights reserved.</p></div>
+</footer>
+
+<script>
+  // Close mobile nav when a link is clicked
+  document.querySelectorAll('.mobile-nav a').forEach(function(link) {
+    link.addEventListener('click', function() {
+      document.getElementById('mobileNav').classList.remove('open');
+    });
+  });
+</script>
+</body>
+</html>
