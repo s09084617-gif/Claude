@@ -314,6 +314,7 @@ select.form-input option{background:#1e1e1e}
     <div class="nav-item" onclick="goTo('monthly',this)"><span class="ni">📈</span> Monthly Report</div>
     <div class="nav-section">Tools</div>
     <div class="nav-item" onclick="goTo('plans',this)"><span class="ni">📋</span> Client Plans</div>
+    <div class="nav-item" onclick="goTo('planbuilder',this)"><span class="ni">⚡</span> Plan Generator</div>
     <div class="nav-item" onclick="window.open('booking.html','_blank')"><span class="ni">🔗</span> Booking Page</div>
   </div>
   <div class="sidebar-footer">Coach <span>Sahil R</span> · SAHIL FITNESS<br>Bangalore<br><a href="index.html" style="color:var(--gold);font-size:10px;text-decoration:none;margin-top:6px;display:inline-block;">← Public Site</a>&nbsp;&nbsp;<span onclick="changePin()" style="color:var(--muted);font-size:10px;cursor:pointer;text-decoration:underline;">Change PIN</span></div>
@@ -730,6 +731,159 @@ select.form-input option{background:#1e1e1e}
       </div>
     </div>
 
+    <!-- ══════ PLAN GENERATOR PAGE ══════ -->
+    <div class="page" id="page-planbuilder">
+      <div class="sec-header" style="margin-bottom:20px">
+        <div>
+          <div class="sec-title">Plan Generator</div>
+          <div class="sec-sub">Enter client's InBody / BMI report — get instant workout + nutrition plan</div>
+        </div>
+      </div>
+
+      <div style="display:grid;grid-template-columns:420px 1fr;gap:20px;align-items:start">
+
+        <!-- INPUT FORM -->
+        <div class="table-wrap" style="padding:22px">
+          <div style="font-size:13px;font-weight:700;color:#fff;margin-bottom:18px;letter-spacing:.5px">CLIENT & INBODY DATA</div>
+
+          <div class="form-group" style="margin-bottom:12px">
+            <label class="form-label">Client Name</label>
+            <input class="form-input" id="pg-name" placeholder="e.g. Rahul Sharma">
+          </div>
+
+          <div class="form-row" style="margin-bottom:12px">
+            <div class="form-group">
+              <label class="form-label">Gender</label>
+              <select class="form-input" id="pg-gender">
+                <option value="male">Male</option>
+                <option value="female">Female</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Age</label>
+              <input class="form-input" id="pg-age" type="number" placeholder="25" min="16" max="80">
+            </div>
+          </div>
+
+          <div class="form-row" style="margin-bottom:12px">
+            <div class="form-group">
+              <label class="form-label">Height (cm)</label>
+              <input class="form-input" id="pg-height" type="number" placeholder="175" oninput="pg_autocalc()">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Weight (kg)</label>
+              <input class="form-input" id="pg-weight" type="number" placeholder="80" oninput="pg_autocalc()">
+            </div>
+          </div>
+
+          <div class="form-row" style="margin-bottom:12px">
+            <div class="form-group">
+              <label class="form-label">Skeletal Muscle Mass (kg)</label>
+              <input class="form-input" id="pg-smm" type="number" placeholder="32.5" step="0.1">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Body Fat Mass (kg)</label>
+              <input class="form-input" id="pg-bfm" type="number" placeholder="18.5" step="0.1" oninput="pg_autocalc()">
+            </div>
+          </div>
+
+          <div class="form-row" style="margin-bottom:12px">
+            <div class="form-group">
+              <label class="form-label">% Body Fat</label>
+              <input class="form-input" id="pg-bf-pct" type="number" placeholder="23.5" step="0.1">
+            </div>
+            <div class="form-group">
+              <label class="form-label">BMI</label>
+              <input class="form-input" id="pg-bmi" type="number" placeholder="26.1" step="0.1">
+            </div>
+          </div>
+
+          <div class="form-row" style="margin-bottom:12px">
+            <div class="form-group">
+              <label class="form-label">BMR (kcal)</label>
+              <input class="form-input" id="pg-bmr" type="number" placeholder="1750">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Visceral Fat Level</label>
+              <input class="form-input" id="pg-vfl" type="number" placeholder="8" min="1" max="20">
+            </div>
+          </div>
+
+          <div class="form-group" style="margin-bottom:12px">
+            <label class="form-label">InBody Score <span style="color:var(--muted2);font-weight:400">(optional)</span></label>
+            <input class="form-input" id="pg-score" type="number" placeholder="62" min="0" max="100">
+          </div>
+
+          <div style="background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:6px;padding:12px;margin-bottom:14px;font-size:12px;color:var(--muted2)" id="pg-auto-summary"></div>
+
+          <div class="form-group" style="margin-bottom:16px">
+            <label class="form-label">Primary Goal</label>
+            <select class="form-input" id="pg-goal">
+              <option value="fat_loss">Fat Loss</option>
+              <option value="muscle_gain">Muscle Gain</option>
+              <option value="recomp">Body Recomposition</option>
+              <option value="strength">Strength & Performance</option>
+            </select>
+          </div>
+
+          <div class="form-group" style="margin-bottom:16px">
+            <label class="form-label">Training Experience</label>
+            <select class="form-input" id="pg-exp">
+              <option value="beginner">Beginner (0–1 yr)</option>
+              <option value="intermediate" selected>Intermediate (1–3 yrs)</option>
+              <option value="advanced">Advanced (3+ yrs)</option>
+            </select>
+          </div>
+
+          <div class="form-group" style="margin-bottom:18px">
+            <label class="form-label">Days Available per Week</label>
+            <select class="form-input" id="pg-days">
+              <option value="3">3 days</option>
+              <option value="4" selected>4 days</option>
+              <option value="5">5 days</option>
+              <option value="6">6 days</option>
+            </select>
+          </div>
+
+          <button class="btn btn-primary" style="width:100%;padding:12px;font-size:14px" onclick="generatePlan()">⚡ Generate Plan</button>
+        </div>
+
+        <!-- OUTPUT -->
+        <div id="pg-output" style="display:none">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px">
+            <div style="font-size:13px;font-weight:700;color:#fff;letter-spacing:.5px">GENERATED PLAN</div>
+            <div style="display:flex;gap:8px">
+              <button class="btn btn-ghost btn-sm" onclick="copyPlan()">📋 Copy</button>
+              <button class="btn btn-primary btn-sm" onclick="sendToPortal()">📤 Send to Client Portal</button>
+            </div>
+          </div>
+
+          <!-- Summary Card -->
+          <div id="pg-summary-card" style="background:rgba(192,17,43,.08);border:1px solid rgba(192,17,43,.3);border-radius:8px;padding:16px;margin-bottom:16px;display:grid;grid-template-columns:repeat(4,1fr);gap:12px"></div>
+
+          <!-- Tabs -->
+          <div style="display:flex;gap:0;border-bottom:1px solid var(--border);margin-bottom:16px">
+            <button class="pg-tab active" onclick="pgTab('workout',this)" style="padding:10px 18px;background:none;border:none;color:#fff;font-weight:600;font-size:13px;cursor:pointer;border-bottom:2px solid var(--crimson);margin-bottom:-1px">Workout Plan</button>
+            <button class="pg-tab" onclick="pgTab('nutrition',this)" style="padding:10px 18px;background:none;border:none;color:var(--muted2);font-weight:600;font-size:13px;cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-1px">Nutrition Plan</button>
+            <button class="pg-tab" onclick="pgTab('notes',this)" style="padding:10px 18px;background:none;border:none;color:var(--muted2);font-weight:600;font-size:13px;cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-1px">Coach Notes</button>
+          </div>
+
+          <div id="pg-tab-workout" class="table-wrap" style="padding:20px"></div>
+          <div id="pg-tab-nutrition" class="table-wrap" style="padding:20px;display:none"></div>
+          <div id="pg-tab-notes" class="table-wrap" style="padding:20px;display:none"></div>
+        </div>
+
+        <div id="pg-placeholder" style="display:flex;align-items:center;justify-content:center;min-height:300px">
+          <div style="text-align:center;color:var(--muted2)">
+            <div style="font-size:48px;margin-bottom:16px">📋</div>
+            <div style="font-size:15px;font-weight:600;margin-bottom:8px;color:var(--muted)">No plan generated yet</div>
+            <div style="font-size:13px">Fill in the client's InBody data and click Generate Plan</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
   </div><!-- /content -->
 </div><!-- /main -->
 </div><!-- /layout -->
@@ -946,7 +1100,7 @@ const MEM_BADGE = {
 // ══════════════════════════════════════════
 //  NAVIGATION
 // ══════════════════════════════════════════
-const PAGE_TITLES = {dashboard:'Dashboard',leads:'Lead Inbox',slots:'Bookings',clients:'Clients',monthly:'Monthly Report',plans:'Client Plans'};
+const PAGE_TITLES = {dashboard:'Dashboard',leads:'Lead Inbox',slots:'Bookings',clients:'Clients',monthly:'Monthly Report',plans:'Client Plans',planbuilder:'Plan Generator'};
 let currentFilter = 'all';
 let selectedDay = null;
 
@@ -1903,6 +2057,338 @@ document.addEventListener('DOMContentLoaded',()=>{
   document.getElementById('f-date').min = todayStr();
   initFirebase();
 });
+
+// ══════════════════════════════════════════
+//  PLAN GENERATOR
+// ══════════════════════════════════════════
+
+function pg_autocalc(){
+  const h = parseFloat(document.getElementById('pg-height').value);
+  const w = parseFloat(document.getElementById('pg-weight').value);
+  const bfm = parseFloat(document.getElementById('pg-bfm').value);
+  const parts = [];
+  if(h && w){
+    const bmi = (w / ((h/100)**2)).toFixed(1);
+    document.getElementById('pg-bmi').value = bmi;
+    parts.push(`BMI: ${bmi}`);
+  }
+  if(w && bfm){
+    const pct = ((bfm/w)*100).toFixed(1);
+    document.getElementById('pg-bf-pct').value = pct;
+    parts.push(`Body Fat: ${pct}%`);
+  }
+  document.getElementById('pg-auto-summary').textContent = parts.length ? 'Auto-calculated → ' + parts.join(' · ') : '';
+}
+
+function pgTab(name, el){
+  ['workout','nutrition','notes'].forEach(t=>{
+    document.getElementById('pg-tab-'+t).style.display = t===name ? 'block' : 'none';
+  });
+  document.querySelectorAll('.pg-tab').forEach(b=>{
+    b.style.borderBottomColor = 'transparent';
+    b.style.color = 'var(--muted2)';
+  });
+  el.style.borderBottomColor = 'var(--crimson)';
+  el.style.color = '#fff';
+}
+
+let _lastPlanText = '';
+
+function generatePlan(){
+  const name    = document.getElementById('pg-name').value.trim() || 'Client';
+  const gender  = document.getElementById('pg-gender').value;
+  const age     = parseInt(document.getElementById('pg-age').value) || 28;
+  const weight  = parseFloat(document.getElementById('pg-weight').value) || 0;
+  const height  = parseFloat(document.getElementById('pg-height').value) || 170;
+  const smm     = parseFloat(document.getElementById('pg-smm').value) || 0;
+  const bfm     = parseFloat(document.getElementById('pg-bfm').value) || 0;
+  const bfPct   = parseFloat(document.getElementById('pg-bf-pct').value) || (weight ? (bfm/weight*100) : 20);
+  const bmi     = parseFloat(document.getElementById('pg-bmi').value) || (weight/((height/100)**2));
+  const bmr     = parseFloat(document.getElementById('pg-bmr').value) || Math.round(10*weight + 6.25*height - 5*age + (gender==='male' ? 5 : -161));
+  const vfl     = parseInt(document.getElementById('pg-vfl').value) || 5;
+  const goal    = document.getElementById('pg-goal').value;
+  const exp     = document.getElementById('pg-exp').value;
+  const days    = parseInt(document.getElementById('pg-days').value);
+  const score   = document.getElementById('pg-score').value;
+
+  // ── Calorie & Macro Targets ──
+  const activityMult = {fat_loss:1.35, muscle_gain:1.55, recomp:1.45, strength:1.5}[goal];
+  const tdee = Math.round(bmr * activityMult);
+  const goalAdj = {fat_loss:-450, muscle_gain:250, recomp:0, strength:150}[goal];
+  const targetCals = tdee + goalAdj;
+  const proteinG = Math.round(weight * (goal==='muscle_gain'||goal==='strength' ? 2.2 : 1.9));
+  const fatG = Math.round(targetCals * 0.27 / 9);
+  const carbG = Math.round((targetCals - proteinG*4 - fatG*9) / 4);
+
+  // ── Body classification ──
+  const fatCategory = gender==='male'
+    ? (bfPct < 12 ? 'Very Lean' : bfPct < 18 ? 'Lean' : bfPct < 25 ? 'Average' : bfPct < 30 ? 'Above Average' : 'Obese')
+    : (bfPct < 20 ? 'Very Lean' : bfPct < 26 ? 'Lean' : bfPct < 32 ? 'Average' : bfPct < 38 ? 'Above Average' : 'Obese');
+  const highVFL = vfl >= 10;
+
+  // ── Workout split by days ──
+  const splits = {
+    3: ['Full Body A','Full Body B','Full Body C'],
+    4: ['Upper A','Lower A','Upper B','Lower B'],
+    5: ['Push','Pull','Legs','Upper Power','Active Recovery / Core'],
+    6: ['Push','Pull','Legs','Push (Volume)','Pull (Volume)','Legs (Volume)'],
+  };
+  const split = splits[days] || splits[4];
+
+  // ── Exercise DB ──
+  const exercises = {
+    push:[
+      {name:'Barbell Bench Press',sets:'4',reps:'6–8',rest:'2–3 min',note:'Compound — control the eccentric'},
+      {name:'Incline Dumbbell Press',sets:'3',reps:'10–12',rest:'90 sec',note:'Focus on upper chest stretch'},
+      {name:'Cable Fly / Pec Deck',sets:'3',reps:'12–15',rest:'60 sec',note:'Full ROM, squeeze at peak'},
+      {name:'Overhead Press (BB or DB)',sets:'4',reps:'8–10',rest:'2 min',note:'Core braced, no lumbar arch'},
+      {name:'Lateral Raises',sets:'3',reps:'15–20',rest:'60 sec',note:'Partial rep technique works well'},
+      {name:'Tricep Pushdown (Cable)',sets:'3',reps:'12–15',rest:'60 sec',note:'Elbows fixed, full extension'},
+      {name:'Overhead Tricep Extension',sets:'3',reps:'10–12',rest:'60 sec',note:'Long head emphasis'},
+    ],
+    pull:[
+      {name:'Barbell / Dumbbell Row',sets:'4',reps:'6–10',rest:'2 min',note:'Chest supported preferred for form'},
+      {name:'Weighted Pull-Up / Lat Pulldown',sets:'4',reps:'6–10',rest:'90 sec',note:'Full stretch at the bottom'},
+      {name:'Seated Cable Row',sets:'3',reps:'10–12',rest:'90 sec',note:'Drive elbows back, not up'},
+      {name:'Face Pull',sets:'3',reps:'15–20',rest:'60 sec',note:'Critical for shoulder health'},
+      {name:'Barbell / Dumbbell Curl',sets:'3',reps:'10–12',rest:'60 sec',note:'Supinate at the top'},
+      {name:'Hammer Curl',sets:'3',reps:'12–15',rest:'60 sec',note:'Brachialis & brachioradialis'},
+    ],
+    legs:[
+      {name:'Barbell Back Squat',sets:'4',reps:'5–8',rest:'3 min',note:'Core brace, knees track toes'},
+      {name:'Romanian Deadlift',sets:'3',reps:'8–10',rest:'2 min',note:'Hip hinge, feel hamstring stretch'},
+      {name:'Leg Press',sets:'3',reps:'10–12',rest:'90 sec',note:'Feet high = glute/ham emphasis'},
+      {name:'Leg Curl (Seated or Lying)',sets:'3',reps:'12–15',rest:'60 sec',note:'Slow eccentric, 3 sec down'},
+      {name:'Leg Extension',sets:'3',reps:'15–20',rest:'60 sec',note:'Partial lockout to protect knees'},
+      {name:'Standing Calf Raise',sets:'4',reps:'15–20',rest:'45 sec',note:'Full ROM — stretch at bottom'},
+    ],
+    upper:[
+      {name:'Barbell Bench Press',sets:'4',reps:'6–8',rest:'2–3 min',note:'Primary chest compound'},
+      {name:'Barbell Row',sets:'4',reps:'6–8',rest:'2–3 min',note:'Match pressing volume'},
+      {name:'Overhead Press',sets:'3',reps:'8–10',rest:'90 sec',note:'Shoulder stability'},
+      {name:'Lat Pulldown',sets:'3',reps:'10–12',rest:'90 sec',note:'Wide grip, chest to bar'},
+      {name:'Lateral Raises',sets:'3',reps:'15',rest:'60 sec',note:'Shoulder width'},
+      {name:'Tricep Pushdown',sets:'2',reps:'15',rest:'45 sec',note:'Superset with curls'},
+      {name:'Barbell Curl',sets:'2',reps:'12',rest:'45 sec',note:'Superset with pushdown'},
+    ],
+    lower:[
+      {name:'Squat (BB or Goblet)',sets:'4',reps:'6–10',rest:'2–3 min',note:'Depth to parallel or below'},
+      {name:'Romanian Deadlift',sets:'4',reps:'8–10',rest:'2 min',note:'Hip hinge pattern'},
+      {name:'Leg Press',sets:'3',reps:'12–15',rest:'90 sec',note:'Higher foot position'},
+      {name:'Leg Curl',sets:'3',reps:'12–15',rest:'60 sec',note:'Hamstring isolation'},
+      {name:'Hip Thrust (BB or Machine)',sets:'3',reps:'12–15',rest:'60 sec',note:'Glute-dominant'},
+      {name:'Calf Raise',sets:'3',reps:'15–20',rest:'45 sec',note:'Full stretch'},
+    ],
+    fullbody:[
+      {name:'Squat',sets:'3',reps:'6–10',rest:'2 min',note:'Lead compound'},
+      {name:'Bench Press or OHP',sets:'3',reps:'8–10',rest:'90 sec',note:'Push pattern'},
+      {name:'Barbell / DB Row',sets:'3',reps:'8–10',rest:'90 sec',note:'Pull pattern'},
+      {name:'Romanian Deadlift',sets:'3',reps:'10–12',rest:'90 sec',note:'Posterior chain'},
+      {name:'Lat Pulldown or Pull-Up',sets:'3',reps:'10–12',rest:'60 sec',note:'Vertical pull'},
+      {name:'Accessory (Arms / Calves)',sets:'2–3',reps:'12–15',rest:'45 sec',note:'Vary each session'},
+    ],
+    core:[
+      {name:'Plank',sets:'3',reps:'45–60 sec',rest:'45 sec',note:'Neutral spine, glutes braced'},
+      {name:'Ab Wheel Rollout',sets:'3',reps:'8–12',rest:'60 sec',note:'Keep lower back flat'},
+      {name:'Hanging Leg Raise',sets:'3',reps:'12–15',rest:'60 sec',note:'Control the descent'},
+      {name:'Cable Crunch',sets:'3',reps:'15–20',rest:'45 sec',note:'Flex at the waist, not hips'},
+    ],
+    cardio: highVFL
+      ? [{name:'LISS Cardio (walk/cycle)',sets:'—',reps:'30–45 min',rest:'—',note:'7–10 min/km pace, every session'}]
+      : [{name:'Optional Cardio',sets:'—',reps:'20–30 min',rest:'—',note:'Post-session LISS or active recovery'}],
+  };
+
+  function getDayExercises(dayName){
+    const d = dayName.toLowerCase();
+    if(d.includes('full body')) return [...exercises.fullbody];
+    if(d.includes('push')) return [...exercises.push];
+    if(d.includes('pull')) return [...exercises.pull];
+    if(d.includes('leg')) return [...exercises.legs];
+    if(d.includes('upper')) return [...exercises.upper];
+    if(d.includes('lower')) return [...exercises.lower];
+    if(d.includes('core') || d.includes('recovery')) return [...exercises.core, ...exercises.cardio];
+    return [...exercises.fullbody];
+  }
+
+  // ── Adjust reps for goal ──
+  function adjustReps(repsStr){
+    if(goal==='fat_loss') return repsStr.replace(/6–8/,'10–12').replace(/5–8/,'8–12').replace(/8–10/,'12–15');
+    if(goal==='strength') return repsStr.replace(/10–12/,'5–8').replace(/12–15/,'8–10').replace(/15–20/,'10–12');
+    return repsStr;
+  }
+
+  // ── Build workout HTML ──
+  let workoutHTML = `<div style="font-size:13px;color:var(--muted2);margin-bottom:20px">
+    ${days}-day ${goal.replace('_',' ')} split · ${exp} level · ${name}
+    ${highVFL ? '<span style="background:rgba(245,158,11,.15);color:#f59e0b;padding:2px 8px;border-radius:4px;font-size:11px;font-weight:700;margin-left:8px">HIGH VFL — Add cardio daily</span>' : ''}
+  </div>`;
+
+  split.forEach((dayName, i) => {
+    const exs = getDayExercises(dayName);
+    workoutHTML += `
+    <div style="margin-bottom:24px">
+      <div style="font-weight:700;font-size:13px;color:var(--crimson);letter-spacing:1px;margin-bottom:10px;text-transform:uppercase">
+        Day ${i+1} — ${dayName}
+      </div>
+      <table style="width:100%;border-collapse:collapse;font-size:13px">
+        <tr style="color:var(--muted);font-size:11px;letter-spacing:.5px;text-transform:uppercase">
+          <th style="padding:6px 0;text-align:left;font-weight:600;width:35%">Exercise</th>
+          <th style="padding:6px 0;text-align:center;width:10%">Sets</th>
+          <th style="padding:6px 0;text-align:center;width:15%">Reps</th>
+          <th style="padding:6px 0;text-align:center;width:12%">Rest</th>
+          <th style="padding:6px 0;text-align:left;width:28%">Coaching Note</th>
+        </tr>`;
+    exs.forEach((ex,j) => {
+      const bg = j%2===0 ? 'rgba(255,255,255,.02)' : 'transparent';
+      workoutHTML += `<tr style="background:${bg}">
+        <td style="padding:8px 6px 8px 0;font-weight:600">${ex.name}</td>
+        <td style="padding:8px;text-align:center;color:var(--gold)">${ex.sets}</td>
+        <td style="padding:8px;text-align:center">${adjustReps(ex.reps)}</td>
+        <td style="padding:8px;text-align:center;color:var(--muted2)">${ex.rest}</td>
+        <td style="padding:8px;color:var(--muted2);font-size:12px">${ex.note}</td>
+      </tr>`;
+    });
+    workoutHTML += `</table></div>`;
+    if(highVFL && !dayName.toLowerCase().includes('recovery')){
+      workoutHTML += `<div style="font-size:12px;color:var(--yellow);margin-top:-16px;margin-bottom:20px">⚠ Add 20–30 min LISS cardio after this session (VFL ${vfl} — prioritise visceral fat reduction)</div>`;
+    }
+  });
+
+  // ── Build nutrition HTML ──
+  const mealCount = targetCals > 2200 ? 5 : 4;
+  const mealCals = Math.round(targetCals / mealCount);
+  const meals = goal==='fat_loss'
+    ? [
+        {name:'Breakfast (7–8 AM)',items:'3–4 eggs + 2 egg whites scrambled, 2 multigrain toast, 1 glass water'},
+        {name:'Mid-Morning (10–11 AM)',items:'1 cup low-fat Greek yoghurt + handful mixed nuts (25g)'},
+        {name:'Lunch (1–2 PM)',items:`${Math.round(weight*1.5)}g cooked rice or 2 chapati, 150g chicken breast / paneer, 1 cup sabzi, salad`},
+        {name:'Pre-Workout (4–5 PM)',items:'1 banana + 20g whey protein OR 4 egg whites'},
+        {name:'Dinner (7–8 PM)',items:`150g chicken / fish / paneer, 1 cup vegetables, 1 cup dal`},
+      ]
+    : goal==='muscle_gain'
+    ? [
+        {name:'Breakfast (7–8 AM)',items:'4–5 eggs scrambled, 3 multigrain toast with peanut butter, 1 glass milk'},
+        {name:'Mid-Morning (10–11 AM)',items:'Banana + 30g whey protein in milk OR Greek yoghurt with granola'},
+        {name:'Lunch (1–2 PM)',items:`${Math.round(weight*1.8)}g cooked rice, 200g chicken / paneer, sabzi, dal`},
+        {name:'Pre-Workout (4–5 PM)',items:'2 bananas + 30g whey protein OR bread with peanut butter'},
+        {name:'Post-Workout',items:'30–40g whey protein + simple carbs (banana / white rice)'},
+        {name:'Dinner (7–8 PM)',items:`200g chicken / fish, ${Math.round(weight)}g cooked rice or 2 roti, vegetables`},
+      ]
+    : [
+        {name:'Breakfast (7–8 AM)',items:'4 eggs + 1 multigrain toast, 1 glass milk or 1 cup oats'},
+        {name:'Mid-Morning (10–11 AM)',items:'20–25g whey protein + 1 fruit'},
+        {name:'Lunch (1–2 PM)',items:`${Math.round(weight*1.5)}g cooked rice, 150g protein, sabzi, salad`},
+        {name:'Pre-Workout (4–5 PM)',items:'1 banana + 25g whey protein'},
+        {name:'Dinner (7–8 PM)',items:'150–200g protein, 1 cup vegetables, 1 cup dal or 1 roti'},
+      ];
+
+  let nutritionHTML = `
+  <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:24px">
+    ${[['Target Calories', targetCals+' kcal', 'red'],['Protein', proteinG+'g', 'green'],['Carbs', carbG+'g', 'blue'],['Fat', fatG+'g', 'gold']].map(([l,v,c])=>`
+    <div style="background:var(--card2);border:1px solid var(--border);border-radius:8px;padding:14px;text-align:center">
+      <div style="font-size:20px;font-weight:800;color:var(--${c==='red'?'crimson':c==='gold'?'gold':c==='green'?'green':'blue'})">${v}</div>
+      <div style="font-size:11px;color:var(--muted2);margin-top:4px;text-transform:uppercase;letter-spacing:.5px">${l}</div>
+    </div>`).join('')}
+  </div>
+  <div style="font-size:13px;color:var(--muted2);margin-bottom:16px">BMR ${bmr} kcal × ${activityMult} activity = TDEE ${tdee} kcal · Adjustment: ${goalAdj>0?'+':''}${goalAdj} kcal</div>
+  `;
+
+  meals.forEach(m => {
+    nutritionHTML += `
+    <div style="border:1px solid var(--border);border-radius:8px;padding:14px 16px;margin-bottom:10px;display:flex;gap:16px;align-items:baseline">
+      <div style="font-size:12px;font-weight:700;color:var(--gold);min-width:160px;flex-shrink:0">${m.name}</div>
+      <div style="font-size:13px;color:var(--muted2)">${m.items}</div>
+    </div>`;
+  });
+
+  nutritionHTML += `
+  <div style="background:rgba(34,197,94,.05);border:1px solid rgba(34,197,94,.2);border-radius:8px;padding:14px 16px;margin-top:8px;font-size:13px;color:var(--muted2)">
+    <strong style="color:var(--green)">Hydration:</strong> ${Math.round(weight * 0.035)}–${Math.round(weight * 0.04)} litres water/day&nbsp;&nbsp;
+    <strong style="color:var(--green)">Protein target:</strong> ${proteinG}g spread across all meals&nbsp;&nbsp;
+    ${highVFL ? `<strong style="color:var(--yellow)">⚠ VFL ${vfl}:</strong> Reduce refined carbs & sugar. Add 2 tbsp psyllium husk/day.` : ''}
+  </div>`;
+
+  // ── Coach Notes ──
+  const riskFlags = [];
+  if(bmi > 30) riskFlags.push('BMI >30 — Start with lower impact, monitor joint health');
+  if(highVFL) riskFlags.push(`Visceral Fat Level ${vfl} — Prioritise fat loss, add daily cardio, restrict refined sugar`);
+  if(bfPct > (gender==='male'?28:35)) riskFlags.push('High body fat — Recomp approach even if goal is muscle gain');
+  if(smm && smm < (gender==='male'?27:20)) riskFlags.push('Low skeletal muscle mass — Compound movement priority, progressive overload key');
+
+  let notesHTML = `
+  <div style="margin-bottom:18px">
+    <div style="font-size:12px;font-weight:700;color:var(--crimson);letter-spacing:1px;margin-bottom:10px">ASSESSMENT SUMMARY</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;font-size:13px">
+      <div>Body Fat Category: <strong style="color:#fff">${fatCategory}</strong></div>
+      <div>Visceral Fat Level: <strong style="color:${vfl>=10?'var(--yellow)':'var(--green)'}">${vfl} ${vfl>=10?'(Elevated)':'(Normal)'}</strong></div>
+      <div>InBody Score: <strong style="color:#fff">${score || '—'}</strong></div>
+      <div>Est. BMR: <strong style="color:#fff">${bmr} kcal</strong></div>
+      <div>TDEE (est): <strong style="color:#fff">${tdee} kcal</strong></div>
+      <div>Target: <strong style="color:var(--gold)">${targetCals} kcal/day</strong></div>
+    </div>
+  </div>
+  ${riskFlags.length ? `
+  <div style="margin-bottom:18px">
+    <div style="font-size:12px;font-weight:700;color:var(--yellow);letter-spacing:1px;margin-bottom:10px">⚠ FLAGS FOR THIS CLIENT</div>
+    ${riskFlags.map(f=>`<div style="display:flex;gap:8px;font-size:13px;color:var(--muted2);margin-bottom:6px"><span style="color:var(--yellow);flex-shrink:0">→</span>${f}</div>`).join('')}
+  </div>` : ''}
+  <div style="margin-bottom:18px">
+    <div style="font-size:12px;font-weight:700;color:var(--muted);letter-spacing:1px;margin-bottom:10px">PROGRESSION PROTOCOL</div>
+    <div style="font-size:13px;color:var(--muted2);line-height:2">
+      Week 1–2: Establish form, track all lifts<br>
+      Week 3–4: Add weight when top-end reps are easy (double progression)<br>
+      Week 5–6: Deload or reassess — reduce load by 40%, same sets<br>
+      Check-in: Weekly weight + photos every 4 weeks
+    </div>
+  </div>
+  <div>
+    <div style="font-size:12px;font-weight:700;color:var(--muted);letter-spacing:1px;margin-bottom:10px">SUPPLEMENTS (OPTIONAL)</div>
+    <div style="font-size:13px;color:var(--muted2);line-height:2">
+      Creatine Monohydrate: 5g/day (loading optional)<br>
+      Whey Protein: ${Math.max(0,proteinG-120)}g/day from shakes to hit protein target<br>
+      Vitamin D3: 2000 IU/day<br>
+      Omega-3: 2–3g EPA+DHA/day
+      ${highVFL ? '<br>Green tea extract or L-Carnitine: May support fat oxidation' : ''}
+    </div>
+  </div>`;
+
+  // ── Render ──
+  document.getElementById('pg-summary-card').innerHTML = [
+    ['Goal', goal.replace('_',' ').toUpperCase(), 'var(--crimson)'],
+    ['Target Cal', targetCals+' kcal', 'var(--gold)'],
+    ['Protein', proteinG+'g/day', 'var(--green)'],
+    ['Body Fat', bfPct.toFixed(1)+'%', bfPct>(gender==='male'?25:32)?'var(--yellow)':'var(--blue)'],
+  ].map(([l,v,c])=>`
+    <div style="text-align:center">
+      <div style="font-size:18px;font-weight:800;color:${c}">${v}</div>
+      <div style="font-size:11px;color:var(--muted2);margin-top:4px">${l}</div>
+    </div>`).join('');
+
+  document.getElementById('pg-tab-workout').innerHTML = workoutHTML;
+  document.getElementById('pg-tab-nutrition').innerHTML = nutritionHTML;
+  document.getElementById('pg-tab-notes').innerHTML = notesHTML;
+
+  // Store plain text for copy
+  _lastPlanText = `PLAN FOR: ${name}\nGoal: ${goal.replace('_',' ')} | ${days} days/week | ${exp}\nCalories: ${targetCals} kcal | Protein: ${proteinG}g | Carbs: ${carbG}g | Fat: ${fatG}g\n\nWorkout Split: ${split.join(', ')}\n\n[Generated by FitWid Plan Generator — Coach Sahil]`;
+
+  document.getElementById('pg-placeholder').style.display = 'none';
+  document.getElementById('pg-output').style.display = 'block';
+
+  // Reset to workout tab
+  pgTab('workout', document.querySelectorAll('.pg-tab')[0]);
+}
+
+function copyPlan(){
+  navigator.clipboard.writeText(_lastPlanText).then(()=>{
+    showToast('Plan summary copied to clipboard','success');
+  });
+}
+
+function sendToPortal(){
+  const name = document.getElementById('pg-name').value.trim();
+  if(!name){ showToast('Enter client name first','error'); return; }
+  showToast('Go to Client Plans tab → select '+name+' to paste the generated plan','info');
+}
 </script>
 </body>
 </html>
