@@ -572,18 +572,31 @@
 <body>
 
 <!-- ===== TOP NAV ===== -->
-<nav class="top-nav">
-  <div class="top-nav-logo">Sahil Fitness</div>
-  <ul class="top-nav-links">
-    <li><a href="index.html">Home</a></li>
-    <li><a href="men.html" class="active">Men's</a></li>
-    <li><a href="women.html">Women's</a></li>
-    <li><a href="generator.html" style="color:#C9A84C;">⚡ Generator</a></li>
-    <li><a href="slots.html" style="color:#25D366;">📅 Book Slot</a></li>
-    <li><a href="#contact-strip">Contact</a></li>
-    <li><a href="qr.html">QR Code</a></li>
-  </ul>
+<nav id="navbar" style="position:sticky;top:0;z-index:999;background:rgba(10,10,10,0.95);backdrop-filter:blur(12px);border-bottom:1px solid rgba(255,255,255,0.08)">
+  <div style="max-width:1200px;margin:0 auto;padding:0 24px;height:64px;display:flex;align-items:center;gap:28px">
+    <a href="index.html" style="font-family:'Inter Tight',sans-serif;font-weight:900;font-size:20px;letter-spacing:3px;background:linear-gradient(135deg,#C8102E,#D4AF37);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;flex-shrink:0;text-decoration:none">FITWID</a>
+    <ul style="display:flex;gap:24px;list-style:none;margin-left:auto" id="desktopLinks">
+      <li><a href="coaching.html" style="font-size:14px;font-weight:500;color:#9A9A9A;text-decoration:none">Coaching</a></li>
+      <li><a href="pricing.html" style="font-size:14px;font-weight:500;color:#9A9A9A;text-decoration:none">Pricing</a></li>
+      <li><a href="results.html" style="font-size:14px;font-weight:500;color:#9A9A9A;text-decoration:none">Results</a></li>
+      <li><a href="about.html" style="font-size:14px;font-weight:500;color:#9A9A9A;text-decoration:none">About</a></li>
+    </ul>
+    <a href="apply.html" id="navCta" style="background:#C8102E;color:#fff;padding:10px 18px;border-radius:8px;font-size:14px;font-weight:600;text-decoration:none;flex-shrink:0">Book Free Consult</a>
+    <button onclick="document.getElementById('mobileNavMen').classList.toggle('open')" style="display:none;background:none;border:none;cursor:pointer;flex-direction:column;gap:5px;padding:8px" id="hamburgerMen">
+      <span style="display:block;width:22px;height:2px;background:#F5F5F5;border-radius:2px"></span>
+      <span style="display:block;width:22px;height:2px;background:#F5F5F5;border-radius:2px"></span>
+      <span style="display:block;width:22px;height:2px;background:#F5F5F5;border-radius:2px"></span>
+    </button>
+  </div>
+  <div id="mobileNavMen" style="display:none;flex-direction:column;border-top:1px solid rgba(255,255,255,0.08);padding:16px 24px 24px;background:#0A0A0A">
+    <a href="coaching.html" style="font-size:16px;font-weight:500;color:#9A9A9A;padding:12px 0;border-bottom:1px solid rgba(255,255,255,0.08);display:block;text-decoration:none">Coaching</a>
+    <a href="pricing.html" style="font-size:16px;font-weight:500;color:#9A9A9A;padding:12px 0;border-bottom:1px solid rgba(255,255,255,0.08);display:block;text-decoration:none">Pricing</a>
+    <a href="results.html" style="font-size:16px;font-weight:500;color:#9A9A9A;padding:12px 0;border-bottom:1px solid rgba(255,255,255,0.08);display:block;text-decoration:none">Results</a>
+    <a href="about.html" style="font-size:16px;font-weight:500;color:#9A9A9A;padding:12px 0;border-bottom:1px solid rgba(255,255,255,0.08);display:block;text-decoration:none">About</a>
+    <a href="apply.html" style="background:#C8102E;color:#fff;border-radius:8px;padding:12px 20px;text-align:center;margin-top:8px;font-weight:600;text-decoration:none;display:block">Book Free Consult</a>
+  </div>
 </nav>
+<style>@media(max-width:768px){#desktopLinks,#navCta{display:none!important}#hamburgerMen{display:flex!important}}.mobileNavMen.open{display:flex!important}</style>
 
 <!-- ===== HERO ===== -->
 <section class="hero">
@@ -728,11 +741,24 @@
     <a href="https://wa.me/917015552731?text=Hi%20Coach%20Sahil%2C%20I%27m%20interested%20in%20training!" target="_blank" rel="noopener" class="contact-pill wa">
       💬 +91 70155 52731
     </a>
-    <a href="mailto:s09084617@gmail.com" class="contact-pill">
-      ✉ s09084617@gmail.com
+    <a href="mailto:coach@fitwid.fit" class="contact-pill">
+      ✉ coach@fitwid.fit
     </a>
   </div>
 </div>
+
+<!-- COACHING CTA -->
+<section style="padding:64px 24px;background:#0A0A0A;border-top:1px solid rgba(255,255,255,0.06)">
+  <div style="max-width:700px;margin:0 auto;text-align:center;background:linear-gradient(135deg,rgba(200,16,46,0.08),rgba(10,10,10,0));border:1px solid rgba(200,16,46,0.3);border-radius:16px;padding:48px 36px">
+    <p style="font-size:11px;letter-spacing:2px;text-transform:uppercase;color:#C8102E;font-weight:600;margin-bottom:10px">WANT THIS CUSTOMISED FOR YOU?</p>
+    <h2 style="font-family:'Inter Tight',sans-serif;font-size:clamp(24px,4vw,36px);font-weight:800;color:#F5F5F5;margin-bottom:14px">Get a fully personalised program</h2>
+    <p style="color:#9A9A9A;font-size:16px;margin-bottom:28px;line-height:1.7">Coach Sahil will build a program adapted to your specific starting point, equipment, and goals — with weekly check-ins and progressive overload built in.</p>
+    <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap">
+      <a href="apply.html" style="display:inline-block;background:#C8102E;color:#fff;padding:14px 32px;border-radius:8px;font-weight:700;font-size:16px;text-decoration:none">Apply for Coaching</a>
+      <a href="pricing.html" style="display:inline-block;background:transparent;color:#F5F5F5;padding:14px 32px;border-radius:8px;font-weight:600;font-size:16px;text-decoration:none;border:1px solid rgba(255,255,255,0.15)">View Pricing</a>
+    </div>
+  </div>
+</section>
 
 <!-- ===== FOOTER ===== -->
 <div class="footer">

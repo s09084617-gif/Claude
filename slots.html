@@ -3,274 +3,666 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Available Training Slots · Sahil Fitness Club</title>
+<title>Training Schedule — FitWid.fit</title>
+<meta name="description" content="Coach Sahil Bansal's typical weekly training schedule. Sessions are booked by appointment. View available time slots and book your consultation.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Rajdhani:wght@400;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Inter+Tight:wght@700;800;900&display=swap" rel="stylesheet">
+<script defer src="/_vercel/speed-insights/script.js"></script>
 <style>
-*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-:root{
-  --crimson:#8B0000;
-  --crimson-bright:#CC0000;
-  --gold:#C9A84C;
-  --bg:#0a0a0a;
-  --card:#111;
-  --card2:#161616;
-  --border:rgba(139,0,0,0.25);
-  --text:#e8e8e8;
-  --muted:#888;
-  --green:#22c55e;
-  --wa:#25D366;
+*, *::before, *::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
-body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;min-height:100vh}
 
-/* NAV */
-nav{position:sticky;top:0;z-index:200;background:rgba(10,10,10,0.97);border-bottom:1px solid rgba(139,0,0,0.4);backdrop-filter:blur(12px);padding:12px 24px;display:flex;align-items:center;gap:20px;flex-wrap:wrap}
-nav a{font-family:'Rajdhani',sans-serif;font-size:15px;font-weight:600;color:#888;text-decoration:none;letter-spacing:0.5px;transition:color .2s}
-nav a:hover{color:var(--gold)}
-nav a.active{color:var(--crimson-bright)}
-nav .logo{font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:3px;color:var(--crimson-bright);margin-right:8px}
+:root {
+  --bg: #0A0A0A;
+  --surface: #161616;
+  --surface-2: #1E1E1E;
+  --border: rgba(255,255,255,0.08);
+  --crimson: #C8102E;
+  --gold: #D4AF37;
+  --text: #F5F5F5;
+  --muted: #9A9A9A;
+  --radius-card: 12px;
+  --radius-btn: 8px;
+}
 
-/* HERO STRIP */
-.hero-strip{background:linear-gradient(135deg,#0f0000 0%,#1a0000 50%,#0a0a0a 100%);border-bottom:1px solid rgba(139,0,0,0.3);padding:40px 24px;text-align:center}
-.hero-strip h1{font-family:'Bebas Neue',sans-serif;font-size:clamp(36px,7vw,64px);letter-spacing:4px;color:#fff;line-height:1}
-.hero-strip h1 span{color:var(--crimson-bright)}
-.hero-strip p{font-family:'Rajdhani',sans-serif;font-size:18px;color:var(--muted);margin-top:8px;letter-spacing:1px}
-.hero-strip .notice{display:inline-flex;align-items:center;gap:8px;background:rgba(139,0,0,0.15);border:1px solid rgba(139,0,0,0.4);border-radius:6px;padding:8px 16px;margin-top:16px;font-size:13px;color:var(--gold)}
+html {
+  scroll-behavior: smooth;
+  font-size: 16px;
+}
 
-/* CONTAINER */
-.container{max-width:860px;margin:0 auto;padding:32px 20px}
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Inter', sans-serif;
+  font-weight: 400;
+  line-height: 1.6;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
 
-/* DAY TABS */
-.day-tabs{display:flex;gap:8px;overflow-x:auto;scrollbar-width:none;padding-bottom:4px;margin-bottom:28px}
-.day-tabs::-webkit-scrollbar{display:none}
-.day-tab{flex-shrink:0;background:var(--card);border:1px solid var(--border);border-radius:8px;padding:10px 16px;cursor:pointer;text-align:center;transition:all .2s;min-width:72px}
-.day-tab:hover{border-color:var(--crimson-bright)}
-.day-tab.active{background:var(--crimson);border-color:var(--crimson-bright)}
-.day-tab .dt-name{font-size:11px;text-transform:uppercase;letter-spacing:1px;color:rgba(255,255,255,.5);font-weight:600}
-.day-tab.active .dt-name{color:rgba(255,255,255,.8)}
-.day-tab .dt-num{font-family:'Bebas Neue',sans-serif;font-size:26px;color:#fff;line-height:1.1;margin-top:2px}
-.day-tab.today{border-color:var(--gold)}
-.day-tab.today .dt-num{color:var(--gold)}
+/* ==============================
+   NAVBAR
+============================== */
+#navbar {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  background: rgba(10,10,10,0.85);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+  transition: box-shadow 0.3s;
+}
 
-/* SECTION HEADING */
-.day-heading{font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:2px;color:#fff;margin-bottom:16px}
-.day-heading span{color:var(--gold);font-size:16px;font-family:'Rajdhani',sans-serif;letter-spacing:1px;font-weight:600;margin-left:10px}
+#navbar.scrolled {
+  box-shadow: 0 2px 24px rgba(0,0,0,0.7);
+}
 
-/* SLOT GROUPS */
-.slot-group{margin-bottom:28px}
-.slot-group-title{font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);font-weight:700;margin-bottom:10px;padding-left:2px}
-.slots-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px}
+.nav-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 24px;
+  height: 64px;
+  display: flex;
+  align-items: center;
+  gap: 32px;
+}
 
-/* SLOT CARD */
-.slot-card{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:14px 16px;text-align:center;transition:all .2s}
-.slot-time{font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:1px;color:#fff}
-.slot-status{font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-top:4px}
-.slot-card.available{border-color:rgba(34,197,94,0.3);cursor:pointer}
-.slot-card.available:hover{border-color:var(--green);background:rgba(34,197,94,0.05);transform:translateY(-2px)}
-.slot-card.available .slot-status{color:var(--green)}
-.slot-card.booked{opacity:.55}
-.slot-card.booked .slot-time{color:var(--muted)}
-.slot-card.booked .slot-status{color:#555}
-.book-link{display:block;margin-top:8px;font-size:11px;color:var(--gold);text-decoration:none;font-weight:600;letter-spacing:.5px}
-.book-link:hover{color:#fff}
+.nav-logo {
+  font-family: 'Inter Tight', sans-serif;
+  font-weight: 900;
+  font-size: 20px;
+  letter-spacing: 3px;
+  color: var(--text);
+  text-decoration: none;
+  flex-shrink: 0;
+}
 
-/* LEGEND */
-.legend{display:flex;gap:20px;margin-bottom:24px;font-size:12px}
-.legend-item{display:flex;align-items:center;gap:6px;color:var(--muted)}
-.legend-dot{width:10px;height:10px;border-radius:50%}
-.legend-dot.green{background:var(--green)}
-.legend-dot.gray{background:#333}
+.nav-logo:hover {
+  color: var(--crimson);
+}
 
-/* CTA SECTION */
-.cta-bar{background:linear-gradient(135deg,rgba(139,0,0,0.2),rgba(10,10,10,0));border:1px solid rgba(139,0,0,0.3);border-radius:10px;padding:28px;text-align:center;margin-top:32px}
-.cta-bar h3{font-family:'Bebas Neue',sans-serif;font-size:28px;letter-spacing:2px;color:#fff;margin-bottom:6px}
-.cta-bar p{color:var(--muted);font-size:14px;margin-bottom:18px}
-.btn-wa{display:inline-flex;align-items:center;gap:10px;background:var(--wa);color:#fff;font-family:'Rajdhani',sans-serif;font-size:17px;font-weight:700;letter-spacing:1px;padding:13px 28px;border-radius:8px;text-decoration:none;transition:all .2s}
-.btn-wa:hover{background:#1aab52;transform:translateY(-2px)}
-.btn-book{display:inline-flex;align-items:center;gap:10px;background:var(--crimson);color:#fff;font-family:'Rajdhani',sans-serif;font-size:17px;font-weight:700;letter-spacing:1px;padding:13px 28px;border-radius:8px;text-decoration:none;transition:all .2s;margin-left:12px}
-.btn-book:hover{background:var(--crimson-bright);transform:translateY(-2px)}
+.nav-links {
+  display: flex;
+  list-style: none;
+  gap: 28px;
+  flex: 1;
+}
 
-/* EMPTY */
-.empty-state{text-align:center;padding:50px 20px;color:var(--muted)}
-.empty-state .ei{font-size:48px;margin-bottom:12px;opacity:.3}
+.nav-links a {
+  font-family: 'Inter', sans-serif;
+  font-weight: 500;
+  font-size: 14px;
+  color: var(--muted);
+  text-decoration: none;
+  transition: color 0.2s;
+}
 
-/* FOOTER */
-footer{text-align:center;padding:28px;border-top:1px solid rgba(139,0,0,0.2);color:#444;font-size:12px;letter-spacing:1px;margin-top:40px}
-footer a{color:var(--gold);text-decoration:none}
+.nav-links a:hover {
+  color: var(--text);
+}
 
-@media(max-width:500px){
-  .slots-grid{grid-template-columns:repeat(2,1fr)}
-  .btn-book{margin-left:0;margin-top:10px}
+.nav-cta {
+  flex-shrink: 0;
+  background: var(--crimson);
+  color: #fff;
+  font-family: 'Inter', sans-serif;
+  font-weight: 600;
+  font-size: 14px;
+  text-decoration: none;
+  padding: 10px 20px;
+  border-radius: var(--radius-btn);
+  border: 2px solid var(--crimson);
+  transition: background 0.2s, transform 0.2s;
+}
+
+.nav-cta:hover {
+  background: #a50d24;
+  border-color: #a50d24;
+  transform: translateY(-1px);
+}
+
+.hamburger {
+  display: none;
+  flex-direction: column;
+  gap: 5px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px;
+  margin-left: auto;
+}
+
+.hamburger span {
+  display: block;
+  width: 22px;
+  height: 2px;
+  background: var(--text);
+  border-radius: 2px;
+  transition: 0.3s;
+}
+
+.mobile-nav {
+  display: none;
+  flex-direction: column;
+  padding: 16px 24px 20px;
+  border-top: 1px solid rgba(255,255,255,0.06);
+  gap: 4px;
+}
+
+.mobile-nav.open {
+  display: flex;
+  flex-direction: column;
+}
+
+.mobile-nav a {
+  font-family: 'Inter', sans-serif;
+  font-weight: 500;
+  font-size: 15px;
+  color: var(--muted);
+  text-decoration: none;
+  padding: 10px 0;
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+  transition: color 0.2s;
+}
+
+.mobile-nav a:last-child {
+  border-bottom: none;
+}
+
+.mobile-nav a:hover {
+  color: var(--text);
+}
+
+.mobile-nav .mob-cta {
+  margin-top: 8px;
+  display: inline-block;
+  background: var(--crimson);
+  color: #fff;
+  padding: 12px 20px;
+  border-radius: var(--radius-btn);
+  border: none;
+  text-align: center;
+  font-weight: 600;
+}
+
+.mobile-nav .mob-cta:hover {
+  background: #a50d24;
+  color: #fff;
+}
+
+@media (max-width: 768px) {
+  .nav-links,
+  .nav-cta {
+    display: none;
+  }
+
+  .hamburger {
+    display: flex;
+  }
+}
+
+/* ==============================
+   PAGE HERO STRIP
+============================== */
+.page-hero {
+  background: linear-gradient(135deg, #0D0D0D 0%, #111 100%);
+  border-bottom: 1px solid var(--border);
+  padding: 56px 24px 48px;
+  text-align: center;
+}
+
+.page-hero .label {
+  font-family: 'Inter', sans-serif;
+  font-weight: 600;
+  font-size: 11px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--crimson);
+  margin-bottom: 14px;
+}
+
+.page-hero h1 {
+  font-family: 'Inter Tight', sans-serif;
+  font-weight: 900;
+  font-size: clamp(28px, 5vw, 48px);
+  color: var(--text);
+  line-height: 1.1;
+  margin-bottom: 14px;
+}
+
+.page-hero .note {
+  font-size: 15px;
+  color: var(--muted);
+  max-width: 480px;
+  margin: 0 auto;
+}
+
+/* ==============================
+   CONTAINER
+============================== */
+.container {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+.section {
+  padding: 56px 0;
+}
+
+/* ==============================
+   DAY TABS
+============================== */
+.day-tabs {
+  display: flex;
+  gap: 6px;
+  overflow-x: auto;
+  scrollbar-width: none;
+  padding-bottom: 2px;
+  margin-bottom: 32px;
+}
+
+.day-tabs::-webkit-scrollbar {
+  display: none;
+}
+
+.day-tab {
+  flex-shrink: 0;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 10px 18px;
+  cursor: pointer;
+  text-align: center;
+  transition: all 0.2s;
+  min-width: 68px;
+  font-family: 'Inter', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--muted);
+  letter-spacing: 0.5px;
+}
+
+.day-tab:hover {
+  border-color: rgba(255,255,255,0.2);
+  color: var(--text);
+}
+
+.day-tab.active {
+  background: var(--crimson);
+  border-color: var(--crimson);
+  color: #fff;
+}
+
+/* ==============================
+   SCHEDULE GRID
+============================== */
+.schedule-panel {
+  display: none;
+}
+
+.schedule-panel.active {
+  display: block;
+}
+
+.time-group {
+  margin-bottom: 32px;
+}
+
+.time-group-title {
+  font-family: 'Inter', sans-serif;
+  font-weight: 600;
+  font-size: 11px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 12px;
+}
+
+.slots-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 10px;
+}
+
+.slot-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 16px 14px;
+  text-align: center;
+  transition: border-color 0.2s;
+}
+
+.slot-card:hover {
+  border-color: rgba(255,255,255,0.15);
+}
+
+.slot-time {
+  font-family: 'Inter Tight', sans-serif;
+  font-weight: 700;
+  font-size: 18px;
+  color: var(--text);
+  line-height: 1;
+}
+
+/* ==============================
+   AVAILABILITY NOTICE
+============================== */
+.avail-notice {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-card);
+  padding: 18px 22px;
+  font-size: 14px;
+  color: var(--muted);
+  text-align: center;
+  margin: 0 0 40px;
+  line-height: 1.6;
+}
+
+/* ==============================
+   CTA
+============================== */
+.cta-block {
+  text-align: center;
+  padding: 48px 24px 64px;
+  border-top: 1px solid var(--border);
+}
+
+.cta-block h2 {
+  font-family: 'Inter Tight', sans-serif;
+  font-weight: 900;
+  font-size: clamp(24px, 4vw, 36px);
+  color: var(--text);
+  margin-bottom: 10px;
+}
+
+.cta-block p {
+  font-size: 15px;
+  color: var(--muted);
+  margin-bottom: 28px;
+}
+
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--crimson);
+  color: #fff;
+  font-family: 'Inter', sans-serif;
+  font-weight: 600;
+  font-size: 16px;
+  text-decoration: none;
+  padding: 14px 32px;
+  border-radius: var(--radius-btn);
+  border: 2px solid var(--crimson);
+  transition: background 0.2s, transform 0.2s;
+}
+
+.btn-primary:hover {
+  background: #a50d24;
+  border-color: #a50d24;
+  transform: translateY(-2px);
+}
+
+/* ==============================
+   FOOTER
+============================== */
+footer {
+  background: #0D0D0D;
+  border-top: 1px solid rgba(255,255,255,0.07);
+  padding: 60px 0 0;
+}
+
+.footer-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 24px 40px;
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr;
+  gap: 40px;
+}
+
+.footer-brand {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.footer-brand p {
+  font-size: 14px;
+  color: var(--muted);
+  line-height: 1.5;
+}
+
+.footer-brand a {
+  font-size: 14px;
+  color: var(--muted);
+  text-decoration: none;
+  transition: color 0.2s;
+  width: fit-content;
+}
+
+.footer-brand a:hover {
+  color: var(--text);
+}
+
+.footer-brand .nav-logo {
+  font-size: 18px;
+  margin-bottom: 4px;
+}
+
+.footer-col {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.footer-col h4 {
+  font-family: 'Inter', sans-serif;
+  font-weight: 600;
+  font-size: 12px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--text);
+  margin-bottom: 4px;
+}
+
+.footer-col a {
+  font-size: 14px;
+  color: var(--muted);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.footer-col a:hover {
+  color: var(--text);
+}
+
+.footer-bottom {
+  border-top: 1px solid rgba(255,255,255,0.06);
+  padding: 20px 24px;
+  text-align: center;
+}
+
+.footer-bottom p {
+  font-size: 13px;
+  color: var(--muted);
+}
+
+@media (max-width: 768px) {
+  .footer-inner {
+    grid-template-columns: 1fr 1fr;
+    gap: 32px;
+  }
+
+  .footer-brand {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (max-width: 480px) {
+  .footer-inner {
+    grid-template-columns: 1fr;
+  }
+
+  .footer-brand {
+    grid-column: auto;
+  }
+
+  .slots-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
 }
 </style>
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
-<script src="firebase-config.js"></script>
-<script defer src="/_vercel/speed-insights/script.js"></script>
 </head>
 <body>
 
-<nav>
-  <span class="logo">SAHIL FITNESS</span>
-  <a href="index.html">Home</a>
-  <a href="booking.html" class="active">📅 Book Slot</a>
-  <a href="men.html">Men's</a>
-  <a href="women.html">Women's</a>
+<nav id="navbar">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo">FITWID</a>
+    <ul class="nav-links">
+      <li><a href="coaching.html">Coaching</a></li>
+      <li><a href="pricing.html">Pricing</a></li>
+      <li><a href="results.html">Results</a></li>
+      <li><a href="about.html">About</a></li>
+    </ul>
+    <a href="apply.html" class="nav-cta">Book Free Consult</a>
+    <button class="hamburger" onclick="document.getElementById('mobileNav').classList.toggle('open')"><span></span><span></span><span></span></button>
+  </div>
+  <div class="mobile-nav" id="mobileNav">
+    <a href="coaching.html">Coaching</a>
+    <a href="pricing.html">Pricing</a>
+    <a href="results.html">Results</a>
+    <a href="about.html">About</a>
+    <a href="apply.html" class="mob-cta">Book Free Consult</a>
+  </div>
 </nav>
 
-<div class="hero-strip">
-  <h1>AVAILABLE <span>TRAINING</span> SLOTS</h1>
-  <p>Sahil Fitness Club · Bangalore · Coach Sahil Bansal</p>
-  <div class="notice">⚡ Green = Open · Grey = Booked · Pick a slot and request via WhatsApp</div>
+<div class="page-hero">
+  <div class="label">Schedule</div>
+  <h1>Typical Weekly Training Schedule</h1>
+  <p class="note">Sessions are booked by appointment. Book yours below.</p>
 </div>
 
 <div class="container">
+  <div class="section">
 
-  <div class="legend">
-    <div class="legend-item"><div class="legend-dot green"></div> Available — click to book</div>
-    <div class="legend-item"><div class="legend-dot gray"></div> Already Booked</div>
-  </div>
+    <!-- Day tabs -->
+    <div class="day-tabs" id="dayTabs">
+      <button class="day-tab active" data-day="0" onclick="selectDay(0, this)">Mon</button>
+      <button class="day-tab" data-day="1" onclick="selectDay(1, this)">Tue</button>
+      <button class="day-tab" data-day="2" onclick="selectDay(2, this)">Wed</button>
+      <button class="day-tab" data-day="3" onclick="selectDay(3, this)">Thu</button>
+      <button class="day-tab" data-day="4" onclick="selectDay(4, this)">Fri</button>
+      <button class="day-tab" data-day="5" onclick="selectDay(5, this)">Sat</button>
+    </div>
 
-  <!-- Day navigation tabs -->
-  <div class="day-tabs" id="dayTabs"></div>
+    <!-- Schedule panels — one per day, same time structure -->
+    <div id="scheduleContainer"></div>
 
-  <!-- Slot grid for selected day -->
-  <div id="slotDisplay"></div>
+    <div class="avail-notice">
+      Availability may vary. To confirm and book a session, use the button below.
+    </div>
 
-  <div class="cta-bar">
-    <h3>READY TO TRAIN?</h3>
-    <p>Select an available slot above or reach out to Coach Sahil directly on WhatsApp</p>
-    <a class="btn-book" href="booking.html">📅 Book via Form</a>
-    <a class="btn-wa" href="https://wa.me/917015552731?text=Hi%20Coach%20Sahil%2C%20I%20want%20to%20book%20a%20training%20slot%20at%20Sahil%20Fitness%20Club!" target="_blank">💬 WhatsApp Coach</a>
+    <div style="text-align:center;">
+      <a href="booking.html" class="btn-primary">Book a Slot</a>
+    </div>
+
   </div>
 </div>
 
+<div class="cta-block container">
+  <h2>Ready to Train?</h2>
+  <p>Start with a free consultation to build your personalised program.</p>
+  <a href="apply.html" class="btn-primary">Book a Consultation</a>
+</div>
+
 <footer>
-  © 2025 Sahil Fitness Club · Bangalore ·
-  <a href="index.html">Home</a> · <a href="booking.html">Book a Slot</a>
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <a href="index.html" class="nav-logo">FITWID</a>
+      <p>I-BLITZ Fitness Club &middot; Bangalore</p>
+      <a href="mailto:coach@fitwid.fit">coach@fitwid.fit</a>
+      <a href="https://wa.me/917015552731" target="_blank" rel="noopener" style="color:#25D366">WhatsApp Coach Sahil</a>
+    </div>
+    <div class="footer-col">
+      <h4>Platform</h4>
+      <a href="coaching.html">Coaching</a>
+      <a href="pricing.html">Pricing</a>
+      <a href="results.html">Results</a>
+      <a href="apply.html">Apply</a>
+      <a href="about.html">About</a>
+    </div>
+    <div class="footer-col">
+      <h4>Tools</h4>
+      <a href="generator.html">Workout Generator</a>
+      <a href="booking.html">Book a Session</a>
+      <a href="client-portal.html">Client Login</a>
+      <a href="qr.html">QR Code</a>
+    </div>
+    <div class="footer-col">
+      <h4>Legal</h4>
+      <a href="privacy.html">Privacy Policy</a>
+      <a href="terms.html">Terms of Service</a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>&copy; 2025 FitWid.fit &mdash; I-BLITZ Fitness Club. All rights reserved.</p>
+  </div>
 </footer>
 
 <script>
-// Fixed time slots offered at Sahil Fitness Club
-const MORNING_SLOTS = ['6:00 AM','7:00 AM','8:00 AM','9:00 AM','10:00 AM'];
-const EVENING_SLOTS = ['5:00 PM','6:00 PM','7:00 PM','8:00 PM','9:00 PM'];
+const MORNING = ['6:00 AM','7:00 AM','8:00 AM','9:00 AM','10:00 AM'];
+const EVENING = ['5:00 PM','6:00 PM','7:00 PM','8:00 PM','9:00 PM'];
 
-// Live slots cache — updated by Firebase listener or localStorage
-let liveSlots = [];
+function buildSchedule() {
+  const days = ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+  const container = document.getElementById('scheduleContainer');
+  let html = '';
 
-function loadFromLocalStorage(){
-  try{ liveSlots = JSON.parse(localStorage.getItem('iblitz_slots')) || []; }
-  catch(e){ liveSlots = []; }
-}
+  days.forEach((day, i) => {
+    html += `<div class="schedule-panel${i === 0 ? ' active' : ''}" id="panel-${i}">`;
+    html += `<div class="time-group">`;
+    html += `<div class="time-group-title">Morning Sessions</div>`;
+    html += `<div class="slots-grid">`;
+    MORNING.forEach(t => {
+      html += `<div class="slot-card"><div class="slot-time">${t}</div></div>`;
+    });
+    html += `</div></div>`;
 
-function isBooked(dateISO, timeStr){
-  return liveSlots.some(b =>
-    b.date === dateISO &&
-    b.time === timeStr &&
-    b.status !== 'cancelled'
-  );
-}
-
-function dateStr(d){ return d.toISOString().slice(0,10); }
-
-// Build the 7-day tab strip
-let selectedDate = null;
-
-function buildDayTabs(){
-  const tabs = document.getElementById('dayTabs');
-  tabs.innerHTML = '';
-  const today = new Date();
-  today.setHours(0,0,0,0);
-  for(let i=0;i<7;i++){
-    const d = new Date(today);
-    d.setDate(today.getDate()+i);
-    const ds = dateStr(d);
-    const dayName = d.toLocaleDateString('en-IN',{weekday:'short'});
-    const dayNum = d.getDate();
-    const isToday = i===0;
-    const tab = document.createElement('div');
-    tab.className = 'day-tab' + (isToday?' today':'') + (i===0?' active':'');
-    tab.dataset.date = ds;
-    tab.innerHTML = `<div class="dt-name">${dayName}</div><div class="dt-num">${dayNum}</div>`;
-    tab.onclick = () => selectDay(ds, tab);
-    tabs.appendChild(tab);
-    if(i===0) selectedDate = ds;
-  }
-}
-
-function selectDay(ds, tabEl){
-  selectedDate = ds;
-  document.querySelectorAll('.day-tab').forEach(t=>t.classList.remove('active'));
-  tabEl.classList.add('active');
-  renderSlots(ds);
-}
-
-function renderSlots(dateISO){
-  const display = document.getElementById('slotDisplay');
-  const d = new Date(dateISO+'T00:00:00');
-  const label = d.toLocaleDateString('en-IN',{weekday:'long',day:'numeric',month:'long'});
-
-  let html = `<div class="day-heading">${label} <span>— Select a time</span></div>`;
-
-  // Morning
-  html += `<div class="slot-group"><div class="slot-group-title">🌅 Morning Sessions</div><div class="slots-grid">`;
-  for(const t of MORNING_SLOTS){
-    html += slotCard(dateISO, t);
-  }
-  html += `</div></div>`;
-
-  // Evening
-  html += `<div class="slot-group"><div class="slot-group-title">🌆 Evening Sessions</div><div class="slots-grid">`;
-  for(const t of EVENING_SLOTS){
-    html += slotCard(dateISO, t);
-  }
-  html += `</div></div>`;
-
-  display.innerHTML = html;
-}
-
-function slotCard(dateISO, timeStr){
-  const booked = isBooked(dateISO, timeStr);
-  if(booked){
-    return `<div class="slot-card booked">
-      <div class="slot-time">${timeStr}</div>
-      <div class="slot-status">Booked</div>
-    </div>`;
-  } else {
-    const d = new Date(dateISO+'T00:00:00');
-    const dateLabel = d.toLocaleDateString('en-IN',{weekday:'long',day:'numeric',month:'short'});
-    const waMsg = encodeURIComponent(`🏋️ *SLOT BOOKING REQUEST*\n━━━━━━━━━━━━━━━━━━━\n📅 *Date:* ${dateLabel}\n⏰ *Time:* ${timeStr}\n━━━━━━━━━━━━━━━━━━━\n📍 Sahil Fitness Club, Bangalore\nPlease confirm my slot, Coach Sahil! 💪`);
-    return `<div class="slot-card available" onclick="bookSlot('${dateISO}','${timeStr}')">
-      <div class="slot-time">${timeStr}</div>
-      <div class="slot-status">Available</div>
-      <a class="book-link" href="booking.html?date=${dateISO}&time=${encodeURIComponent(timeStr)}">Book This →</a>
-    </div>`;
-  }
-}
-
-function bookSlot(dateISO, timeStr){
-  window.location.href = `booking.html?date=${dateISO}&time=${encodeURIComponent(timeStr)}`;
-}
-
-// Init
-buildDayTabs();
-// Init — Firebase real-time or localStorage fallback
-if(FB_READY){
-  firebase.initializeApp(FIREBASE_CONFIG);
-  firebase.database().ref('slots').on('value', snapshot => {
-    liveSlots = [];
-    snapshot.forEach(child => liveSlots.push(child.val()));
-    buildDayTabs();
-    if(selectedDate) renderSlots(selectedDate);
+    html += `<div class="time-group">`;
+    html += `<div class="time-group-title">Evening Sessions</div>`;
+    html += `<div class="slots-grid">`;
+    EVENING.forEach(t => {
+      html += `<div class="slot-card"><div class="slot-time">${t}</div></div>`;
+    });
+    html += `</div></div>`;
+    html += `</div>`;
   });
-} else {
-  // Fallback: localStorage (same device only)
-  loadFromLocalStorage();
-  buildDayTabs();
-  renderSlots(selectedDate);
-  // Auto-refresh every 30s
-  setInterval(()=>{ loadFromLocalStorage(); if(selectedDate) renderSlots(selectedDate); }, 30000);
+
+  container.innerHTML = html;
 }
+
+function selectDay(idx, tabEl) {
+  document.querySelectorAll('.day-tab').forEach(t => t.classList.remove('active'));
+  tabEl.classList.add('active');
+  document.querySelectorAll('.schedule-panel').forEach(p => p.classList.remove('active'));
+  document.getElementById('panel-' + idx).classList.add('active');
+}
+
+buildSchedule();
+
+// Navbar scroll shadow
+window.addEventListener('scroll', () => {
+  document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 10);
+});
 </script>
 </body>
 </html>

@@ -5,6 +5,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Workout Generator · Sahil Fitness Club</title>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Rajdhani:wght@400;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Inter+Tight:wght@700;800;900&display=swap" rel="stylesheet">
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
@@ -115,6 +118,34 @@ footer a{color:var(--gold);text-decoration:none}
   .ex-sets,.ex-reps,.ex-rest,.ex-tempo{display:none}
   .ex-name::after{content:attr(data-detail);display:block;font-size:11px;color:var(--muted);font-weight:400;margin-top:3px}
 }
+
+/* NEW NAV */
+.nav-inner{max-width:1200px;margin:0 auto;padding:0 24px;height:64px;display:flex;align-items:center;gap:28px}
+.nav-logo{font-family:'Inter Tight',sans-serif;font-weight:900;font-size:20px;letter-spacing:3px;background:linear-gradient(135deg,#C8102E,#D4AF37);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;flex-shrink:0;text-decoration:none}
+.nav-links{display:flex;gap:24px;list-style:none;margin-left:auto}
+.nav-links a{font-size:14px;font-weight:500;color:#9A9A9A;text-decoration:none;transition:color .2s}
+.nav-links a:hover{color:#F5F5F5}
+.nav-cta{background:#C8102E;color:#fff;padding:10px 18px;border-radius:8px;font-size:14px;font-weight:600;text-decoration:none;flex-shrink:0;transition:background .2s}
+.nav-cta:hover{background:#A50D25}
+.hamburger{display:none;background:none;border:none;cursor:pointer;flex-direction:column;gap:5px;padding:8px}
+.hamburger span{display:block;width:22px;height:2px;background:#F5F5F5;border-radius:2px}
+.mobile-nav{display:none;flex-direction:column;gap:0;border-top:1px solid rgba(255,255,255,0.08);padding:16px 24px 24px;background:#0A0A0A}
+.mobile-nav a{font-size:16px;font-weight:500;color:#9A9A9A;padding:12px 0;border-bottom:1px solid rgba(255,255,255,0.08);display:block;text-decoration:none}
+.mob-cta{background:#C8102E;color:#fff!important;border-radius:8px;padding:12px 20px;text-align:center;margin-top:8px;font-weight:600;border-bottom:none!important}
+.mobile-nav.open{display:flex}
+@media(max-width:768px){.nav-links,.nav-cta{display:none}.hamburger{display:flex;margin-left:auto}}
+
+/* EMAIL GATE */
+#emailGate{background:rgba(0,0,0,0.85);backdrop-filter:blur(8px);border-radius:16px;padding:40px 32px;text-align:center;margin:24px 0;border:1px solid rgba(200,16,46,0.3)}
+.gate-icon{font-size:48px;margin-bottom:16px}
+.gate-title{font-family:'Inter Tight',sans-serif;font-size:28px;font-weight:800;color:#F5F5F5;margin-bottom:8px}
+.gate-sub{font-size:15px;color:#9A9A9A;margin-bottom:24px;max-width:400px;margin-left:auto;margin-right:auto;line-height:1.6}
+.gate-input{width:100%;background:#1E1E1E;border:1px solid rgba(255,255,255,0.12);border-radius:8px;color:#F5F5F5;padding:14px 18px;font-size:16px;margin-bottom:12px;outline:none}
+.gate-input:focus{border-color:#C8102E}
+.gate-btn{width:100%;background:#C8102E;color:#fff;border:none;border-radius:8px;padding:14px;font-size:16px;font-weight:700;cursor:pointer;transition:background .2s}
+.gate-btn:hover{background:#A50D25}
+.gate-skip{margin-top:14px;font-size:13px;color:#666}
+.gate-skip a{color:#9A9A9A;text-decoration:underline}
 </style>
 <script defer src="/_vercel/speed-insights/script.js"></script>
 </head>
@@ -195,15 +226,34 @@ footer a{color:var(--gold);text-decoration:none}
     <p>Building your custom workout...</p>
   </div>
 
+  <!-- EMAIL GATE -->
+  <div id="emailGate" style="display:none">
+    <div style="background:rgba(10,10,10,0.95);backdrop-filter:blur(8px);border-radius:16px;padding:40px 32px;text-align:center;margin:24px 0;border:1px solid rgba(200,16,46,0.3)">
+      <div style="font-size:48px;margin-bottom:16px">📋</div>
+      <h2 style="font-family:'Inter Tight',sans-serif;font-size:28px;font-weight:800;color:#F5F5F5;margin-bottom:8px">Your workout is ready.</h2>
+      <p style="font-size:15px;color:#9A9A9A;margin-bottom:24px;max-width:400px;margin-left:auto;margin-right:auto;line-height:1.6">Enter your email to access it — we'll also send you a link to save it for later.</p>
+      <form id="gateForm" onsubmit="submitGate(event)">
+        <input type="email" id="gateEmail" placeholder="Enter your email address" required style="width:100%;background:#1E1E1E;border:1px solid rgba(255,255,255,0.12);border-radius:8px;color:#F5F5F5;padding:14px 18px;font-size:16px;margin-bottom:12px;outline:none;box-sizing:border-box">
+        <button type="submit" id="gateBtn" style="width:100%;background:#C8102E;color:#fff;border:none;border-radius:8px;padding:14px;font-size:16px;font-weight:700;cursor:pointer">Get My Plan</button>
+      </form>
+      <p style="margin-top:14px;font-size:13px;color:#666"><a href="#" onclick="skipGate(event)" style="color:#9A9A9A;text-decoration:underline">Skip — just show me the workout</a></p>
+    </div>
+  </div>
+
+
   <!-- RESULT -->
   <div id="result"></div>
 
 </div>
 
-<footer>
-  © 2025 Sahil Fitness Club · Bangalore ·
-  <a href="index.html">Home</a> · <a href="slots.html">Book a Slot</a>
+<footer style="border-top:1px solid rgba(255,255,255,0.06);padding:28px 24px;text-align:center;color:#666;font-size:13px">
+  <p>© 2025 FitWid.fit — I-BLITZ Fitness Club, Bangalore</p>
+  <p style="margin-top:6px"><a href="index.html" style="color:#9A9A9A;text-decoration:none">Home</a> · <a href="pricing.html" style="color:#9A9A9A;text-decoration:none">Pricing</a> · <a href="apply.html" style="color:#9A9A9A;text-decoration:none">Apply for Coaching</a> · <a href="terms.html" style="color:#9A9A9A;text-decoration:none">Terms</a> · <a href="privacy.html" style="color:#9A9A9A;text-decoration:none">Privacy</a></p>
 </footer>
+
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+<script src="firebase-config.js"></script>
 
 <script>
 // ─── EXERCISE DATABASE ───────────────────────────────────────────
@@ -768,10 +818,53 @@ Coach, I want to train this with you! 💪`
     `;
 
     loading.style.display = 'none';
-    result.style.display  = 'block';
     genBtn.disabled = false;
-    result.scrollIntoView({behavior:'smooth',block:'start'});
+    pendingWorkoutHTML = result.innerHTML; // store but don't show yet
+    result.innerHTML = '';
+    showEmailGate();
   }, 900);
+}
+
+let pendingWorkoutHTML = '';
+
+function showEmailGate() {
+  document.getElementById('emailGate').style.display = 'block';
+  document.getElementById('emailGate').scrollIntoView({behavior:'smooth', block:'center'});
+}
+
+function submitGate(e) {
+  e.preventDefault();
+  const email = document.getElementById('gateEmail').value.trim();
+  const btn = document.getElementById('gateBtn');
+  btn.disabled = true;
+  btn.textContent = 'Loading...';
+  try {
+    const app = firebase.apps.length ? firebase.app() : firebase.initializeApp(FIREBASE_CONFIG);
+    firebase.database().ref('generator_requests').push({
+      email, muscle: state.muscle, level: state.level, goal: state.goal, equipment: state.equip,
+      source: 'generator', created_at: new Date().toISOString()
+    }).catch(()=>{});
+  } catch(err) {}
+  revealPlan();
+}
+
+function skipGate(e) {
+  e.preventDefault();
+  revealPlan();
+}
+
+function revealPlan() {
+  document.getElementById('emailGate').style.display = 'none';
+  const resultEl = document.getElementById('result');
+  resultEl.innerHTML = pendingWorkoutHTML + `
+    <div style="background:linear-gradient(135deg,rgba(200,16,46,0.1),rgba(10,10,10,0));border:1px solid rgba(200,16,46,0.35);border-radius:16px;padding:36px 32px;text-align:center;margin-top:24px">
+      <p style="font-size:12px;letter-spacing:2px;text-transform:uppercase;color:#C8102E;font-weight:600;margin-bottom:8px">WANT MORE THAN ONE SESSION?</p>
+      <h3 style="font-family:'Inter Tight',sans-serif;font-size:26px;font-weight:800;color:#F5F5F5;margin-bottom:10px">Get a fully custom 4-week program</h3>
+      <p style="color:#9A9A9A;margin-bottom:24px;font-size:15px">Coach Sahil will build a progression-based program around your specific goals, schedule, and equipment.</p>
+      <a href="apply.html" style="display:inline-block;background:#C8102E;color:#fff;padding:14px 32px;border-radius:8px;font-weight:700;font-size:16px;text-decoration:none">Apply for Coaching</a>
+    </div>`;
+  resultEl.style.display = 'block';
+  resultEl.scrollIntoView({behavior:'smooth', block:'start'});
 }
 </script>
 </body>
