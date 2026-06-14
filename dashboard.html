@@ -2095,6 +2095,7 @@ function pgTab(name, el){
 
 let _lastPlanText = '';
 let _lastPlanData = null;
+let _portalClients = {};
 
 function generatePlan(){
   const name    = document.getElementById('pg-name').value.trim() || 'Client';
@@ -2380,7 +2381,28 @@ function generatePlan(){
       ['Target Cal', targetCals+' kcal', '#D4AF37'],
       ['Protein', proteinG+'g/day', '#22c55e'],
       ['Body Fat', bfPct.toFixed(1)+'%', bfPct>(gender==='male'?25:32)?'#facc15':'#3b82f6'],
-    ]
+    ],
+    splitName: `${days}-Day ${goal.replace('_',' ')} — ${exp}`,
+    rawWorkoutDays: split.map((dayName, i) => ({
+      weekday: DAY_NAMES_PLANS[i],
+      focus: dayName,
+      exercises: getDayExercises(dayName).map(ex => ({
+        name: ex.name,
+        sets: parseInt(ex.sets) || ex.sets,
+        reps: adjustReps(ex.reps),
+        rest: ex.rest
+      }))
+    })),
+    rawMeals: meals.map(m => {
+      const timeMatch = m.name.match(/\(([^)]+)\)/);
+      const time = timeMatch ? timeMatch[1] : '';
+      const cleanName = m.name.replace(/\s*\([^)]+\)/, '').trim();
+      return {
+        time, name: cleanName,
+        foods: m.items.split(',').map(f => f.trim()).filter(Boolean),
+        calories: Math.round(targetCals / meals.length)
+      };
+    })
   };
 
   document.getElementById('pg-placeholder').style.display = 'none';
@@ -2397,9 +2419,84 @@ function copyPlan(){
 }
 
 function sendToPortal(){
-  const name = document.getElementById('pg-name').value.trim();
-  if(!name){ showToast('Enter client name first','error'); return; }
-  showToast('Go to Client Plans tab → select '+name+' to paste the generated plan','info');
+  if(!_lastPlanData){ showToast('Generate a plan first','error'); return; }
+  if(!FB_READY || !fbDB){ showToast('Firebase not connected','error'); return; }
+
+  const modal = document.getElementById('portal-select-modal');
+  const list  = document.getElementById('portal-select-list');
+  list.innerHTML = '<div style="color:var(--muted2);font-size:13px;padding:12px 0;text-align:center">Loading clients…</div>';
+  modal.style.display = 'flex';
+
+  fbDB.ref('clients').once('value', snap => {
+    _portalClients = snap.val() || {};
+    const entries = Object.entries(_portalClients).filter(([,v]) => v.pin);
+    if(!entries.length){
+      list.innerHTML = '<div style="color:var(--muted2);font-size:13px;padding:12px 0;text-align:center">No portal clients yet.<br>Add one in Client Plans first.</div>';
+      return;
+    }
+    list.innerHTML = entries.map(([phone, c]) => `
+      <div onclick="selectPortalClient('${phone}')"
+           style="padding:12px 14px;border-radius:8px;cursor:pointer;border:1px solid rgba(255,255,255,.08);margin-bottom:8px;display:flex;justify-content:space-between;align-items:center;background:rgba(255,255,255,.03);transition:background .15s"
+           onmouseover="this.style.background='rgba(200,16,46,.15)'"
+           onmouseout="this.style.background='rgba(255,255,255,.03)'">
+        <div>
+          <div style="font-weight:700;color:#fff;font-size:13px">${c.name||phone}</div>
+          <div style="font-size:11px;color:var(--muted2);margin-top:2px">${phone}${c.goal?' · '+c.goal:''}</div>
+        </div>
+        <span style="color:var(--muted2);font-size:18px">→</span>
+      </div>`).join('');
+  }, () => {
+    list.innerHTML = '<div style="color:#f87171;font-size:13px;padding:12px 0;text-align:center">Failed to load clients.</div>';
+  });
+}
+
+function selectPortalClient(phone){
+  document.getElementById('portal-select-modal').style.display = 'none';
+  const clientData = _portalClients[phone];
+  if(!clientData){ showToast('Client not found','error'); return; }
+  const d = _lastPlanData;
+
+  // Navigate to Client Plans tab
+  const plansNavItem = document.querySelector('.nav-item[onclick*="\'plans\'"]');
+  goTo('plans', plansNavItem);
+
+  setTimeout(() => {
+    openEditPlan(phone, clientData);
+
+    setTimeout(() => {
+      // Pre-fill macros
+      document.getElementById('ep-cal').value     = d.targetCals;
+      document.getElementById('ep-protein').value = d.proteinG;
+      document.getElementById('ep-carbs').value   = d.carbG;
+      document.getElementById('ep-fats').value    = d.fatG;
+
+      // Pre-fill meals
+      renderMealEditor(d.rawMeals);
+
+      // Pre-fill workout split
+      document.getElementById('ep-split').value = d.splitName;
+
+      // Build days object (weekday → {focus, exercises})
+      const daysObj = {};
+      DAY_NAMES_PLANS.forEach(day => daysObj[day] = {focus:'', exercises:[]});
+      d.rawWorkoutDays.forEach(wd => {
+        daysObj[wd.weekday] = {focus: wd.focus, exercises: wd.exercises};
+      });
+      renderDayEditors(daysObj);
+
+      // Auto-expand training days
+      d.rawWorkoutDays.forEach(wd => {
+        const body = document.getElementById('day-body-'+wd.weekday);
+        const icon = document.getElementById('day-icon-'+wd.weekday);
+        if(body && !body.classList.contains('open')){
+          body.classList.add('open');
+          if(icon) icon.textContent = '▼';
+        }
+      });
+
+      showToast('Plan pre-filled for '+(clientData.name||phone)+' — review and save ✓','success');
+    }, 250);
+  }, 150);
 }
 
 function downloadPDF(){
@@ -2496,5 +2593,16 @@ ${fixVars(d.notesHTML)}
   setTimeout(()=>win.print(), 500);
 }
 </script>
+
+<!-- Client picker modal for Plan Generator → Send to Portal -->
+<div id="portal-select-modal" style="display:none;position:fixed;inset:0;z-index:3000;background:rgba(0,0,0,.75);align-items:center;justify-content:center">
+  <div style="background:#1e1e1e;border:1px solid rgba(255,255,255,.12);border-radius:14px;padding:24px;width:360px;max-width:92vw;max-height:80vh;overflow-y:auto">
+    <div style="font-size:15px;font-weight:800;color:#fff;margin-bottom:4px;letter-spacing:.3px">Send Plan to Client</div>
+    <div style="font-size:12px;color:var(--muted2);margin-bottom:18px">Select a portal client — the edit panel will pre-fill with this plan.</div>
+    <div id="portal-select-list"></div>
+    <button onclick="document.getElementById('portal-select-modal').style.display='none'" style="width:100%;margin-top:12px;padding:10px;background:none;border:1px solid rgba(255,255,255,.1);color:var(--muted2);border-radius:8px;cursor:pointer;font-size:13px;font-weight:600">Cancel</button>
+  </div>
+</div>
+
 </body>
 </html>
