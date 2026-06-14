@@ -90,6 +90,7 @@ function ExerciseList({ details }: { details: WorkoutDetails }) {
   )
 }
 
+export default function Workouts() {
   const { toast } = useToast()
 
   // Generate form state

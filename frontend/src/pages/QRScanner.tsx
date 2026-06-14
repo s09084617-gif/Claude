@@ -264,7 +264,7 @@ function ScanTab() {
 
   const stopCamera = useCallback(() => {
     if (readerRef.current) {
-      readerRef.current.reset()
+      // Note: reset() method not available in this version of @zxing/browser
       readerRef.current = null
     }
     setScanning(false)
