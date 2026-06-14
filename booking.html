@@ -3,660 +3,189 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Book Your Training Slot – Sahil Fitness Club</title>
-<style>
-  @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700&display=swap');
-
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-  :root {
-    --crimson: #C0112B;
-    --gold: #D4A017;
-    --black: #0A0A0A;
-    --dark: #111111;
-    --card: #1A1A1A;
-    --border: #2A2A2A;
-    --text: #E8E8E8;
-    --muted: #888;
-    --green: #25D366;
-  }
-
-  body {
-    background: var(--black);
-    color: var(--text);
-    font-family: 'Inter', sans-serif;
-    min-height: 100vh;
-    overflow-x: hidden;
-  }
-
-  /* ── HEADER ── */
-  header {
-    background: var(--dark);
-    border-bottom: 2px solid var(--crimson);
-    padding: 18px 24px;
-    display: flex;
-    align-items: center;
-    gap: 16px;
-  }
-  .logo-mark {
-    width: 48px; height: 48px;
-    background: var(--crimson);
-    border-radius: 4px;
-    display: flex; align-items: center; justify-content: center;
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 22px;
-    color: #fff;
-    letter-spacing: 1px;
-    flex-shrink: 0;
-  }
-  .header-text h1 {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 22px;
-    letter-spacing: 2px;
-    color: #fff;
-    line-height: 1;
-  }
-  .header-text p {
-    font-size: 11px;
-    color: var(--gold);
-    letter-spacing: 1.5px;
-    text-transform: uppercase;
-    margin-top: 2px;
-  }
-
-  /* ── HERO STRIP ── */
-  .hero {
-    background: linear-gradient(135deg, var(--crimson) 0%, #8B0000 100%);
-    padding: 32px 24px;
-    text-align: center;
-    position: relative;
-    overflow: hidden;
-  }
-  .hero::before {
-    content: 'BOOK';
-    position: absolute;
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 160px;
-    color: rgba(0,0,0,0.12);
-    top: -20px; right: -10px;
-    line-height: 1;
-    pointer-events: none;
-  }
-  .hero h2 {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 38px;
-    letter-spacing: 3px;
-    color: #fff;
-    line-height: 1.1;
-  }
-  .hero p {
-    font-size: 14px;
-    color: rgba(255,255,255,0.8);
-    margin-top: 8px;
-    font-weight: 500;
-  }
-  .hero-badge {
-    display: inline-block;
-    background: var(--gold);
-    color: var(--black);
-    font-size: 11px;
-    font-weight: 700;
-    letter-spacing: 1.5px;
-    text-transform: uppercase;
-    padding: 4px 12px;
-    border-radius: 2px;
-    margin-bottom: 12px;
-  }
-
-  /* ── MAIN ── */
-  main {
-    max-width: 520px;
-    margin: 0 auto;
-    padding: 28px 20px 60px;
-  }
-
-  /* ── STEP CARDS ── */
-  .step-label {
-    font-size: 11px;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    color: var(--gold);
-    font-weight: 700;
-    margin-bottom: 8px;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-  }
-  .step-label::after {
-    content: '';
-    flex: 1;
-    height: 1px;
-    background: var(--border);
-  }
-
-  .card {
-    background: var(--card);
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    padding: 20px;
-    margin-bottom: 20px;
-  }
-  .card h3 {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 20px;
-    letter-spacing: 1.5px;
-    color: #fff;
-    margin-bottom: 12px;
-  }
-
-  /* ── FORM ── */
-  label {
-    display: block;
-    font-size: 12px;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    color: var(--muted);
-    margin-bottom: 6px;
-    margin-top: 14px;
-  }
-  label:first-of-type { margin-top: 0; }
-
-  input, select {
-    width: 100%;
-    background: #222;
-    border: 1px solid var(--border);
-    border-radius: 5px;
-    color: var(--text);
-    font-family: 'Inter', sans-serif;
-    font-size: 15px;
-    padding: 11px 14px;
-    outline: none;
-    transition: border-color 0.2s;
-    -webkit-appearance: none;
-    appearance: none;
-  }
-  input:focus, select:focus {
-    border-color: var(--crimson);
-  }
-  input::placeholder { color: #555; }
-
-  .time-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 8px;
-    margin-top: 0;
-  }
-  .time-btn {
-    background: #222;
-    border: 1px solid var(--border);
-    border-radius: 5px;
-    color: var(--muted);
-    font-size: 13px;
-    font-weight: 600;
-    padding: 10px 6px;
-    cursor: pointer;
-    transition: all 0.15s;
-    text-align: center;
-  }
-  .time-btn:hover { border-color: var(--crimson); color: #fff; }
-  .time-btn.selected {
-    background: var(--crimson);
-    border-color: var(--crimson);
-    color: #fff;
-  }
-
-  /* ── CTA BUTTON ── */
-  .whatsapp-btn {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 12px;
-    width: 100%;
-    background: var(--green);
-    color: #fff;
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 22px;
-    letter-spacing: 2px;
-    padding: 16px;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-    transition: transform 0.15s, box-shadow 0.15s;
-    text-decoration: none;
-    box-shadow: 0 4px 20px rgba(37,211,102,0.25);
-    margin-top: 4px;
-  }
-  .whatsapp-btn:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 28px rgba(37,211,102,0.35);
-  }
-  .whatsapp-btn:active { transform: translateY(0); }
-  .whatsapp-icon {
-    width: 28px; height: 28px;
-    fill: #fff;
-    flex-shrink: 0;
-  }
-
-  .btn-note {
-    text-align: center;
-    font-size: 12px;
-    color: var(--muted);
-    margin-top: 10px;
-  }
-
-  /* ── PREVIEW BOX ── */
-  .preview-card {
-    background: #1a2a1a;
-    border: 1px solid #2d5a2d;
-    border-radius: 8px;
-    padding: 16px;
-    margin-bottom: 20px;
-    display: none;
-  }
-  .preview-card.show { display: block; }
-  .preview-card .preview-title {
-    font-size: 11px;
-    text-transform: uppercase;
-    letter-spacing: 1.5px;
-    color: var(--green);
-    font-weight: 700;
-    margin-bottom: 10px;
-  }
-  .preview-card .msg-bubble {
-    background: #dcf8c6;
-    color: #111;
-    border-radius: 8px 8px 8px 0;
-    padding: 12px 14px;
-    font-size: 14px;
-    line-height: 1.6;
-    font-family: monospace;
-    white-space: pre-wrap;
-  }
-
-  /* ── HOW IT WORKS ── */
-  .steps-list {
-    display: flex;
-    flex-direction: column;
-    gap: 14px;
-  }
-  .step-item {
-    display: flex;
-    gap: 14px;
-    align-items: flex-start;
-  }
-  .step-num {
-    width: 32px; height: 32px;
-    background: var(--crimson);
-    border-radius: 50%;
-    display: flex; align-items: center; justify-content: center;
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 16px;
-    color: #fff;
-    flex-shrink: 0;
-  }
-  .step-content strong {
-    display: block;
-    font-size: 14px;
-    font-weight: 700;
-    color: #fff;
-    margin-bottom: 2px;
-  }
-  .step-content span {
-    font-size: 13px;
-    color: var(--muted);
-  }
-
-  /* ── INFO STRIP ── */
-  .info-strip {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 10px;
-    margin-bottom: 20px;
-  }
-  .info-pill {
-    background: var(--card);
-    border: 1px solid var(--border);
-    border-radius: 6px;
-    padding: 12px;
-    text-align: center;
-  }
-  .info-pill .val {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 22px;
-    color: var(--gold);
-    letter-spacing: 1px;
-  }
-  .info-pill .lbl {
-    font-size: 11px;
-    color: var(--muted);
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    margin-top: 2px;
-  }
-
-  /* ── FOOTER ── */
-  footer {
-    text-align: center;
-    padding: 20px;
-    border-top: 1px solid var(--border);
-    font-size: 12px;
-    color: var(--muted);
-  }
-  footer span { color: var(--gold); }
-
-  /* ── VALIDATION ── */
-  .error-msg {
-    font-size: 12px;
-    color: #ff6b6b;
-    margin-top: 5px;
-    display: none;
-  }
-  .error-msg.show { display: block; }
-  input.invalid, select.invalid { border-color: #ff6b6b; }
-</style>
+<title>Book a Free Consult — FitWid.fit</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Inter+Tight:wght@700;800;900&display=swap" rel="stylesheet">
 <script defer src="/_vercel/speed-insights/script.js"></script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--bg:#0A0A0A;--surface:#161616;--surface-2:#1E1E1E;--border:rgba(255,255,255,0.08);--crimson:#C8102E;--gold:#D4AF37;--text:#F5F5F5;--muted:#9A9A9A}
+body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;min-height:100vh}
+a{text-decoration:none;color:inherit}
+
+/* NAV */
+nav{position:sticky;top:0;z-index:999;background:rgba(10,10,10,0.95);backdrop-filter:blur(12px);border-bottom:1px solid var(--border)}
+.nav-inner{max-width:1200px;margin:0 auto;padding:0 24px;height:64px;display:flex;align-items:center;gap:28px}
+.nav-logo{font-family:'Inter Tight',sans-serif;font-weight:900;font-size:20px;letter-spacing:3px;background:linear-gradient(135deg,var(--crimson),var(--gold));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;flex-shrink:0}
+.nav-links{display:flex;gap:24px;list-style:none;margin-left:auto}
+.nav-links a{font-size:14px;font-weight:500;color:var(--muted);transition:color .2s}
+.nav-links a:hover{color:var(--text)}
+.nav-cta{background:var(--crimson);color:#fff;padding:10px 18px;border-radius:8px;font-size:14px;font-weight:600;flex-shrink:0}
+.nav-cta:hover{background:#A50D25}
+.hamburger{display:none;background:none;border:none;cursor:pointer;flex-direction:column;gap:5px;padding:8px}
+.hamburger span{display:block;width:22px;height:2px;background:var(--text);border-radius:2px}
+.mobile-nav{display:none;flex-direction:column;border-top:1px solid var(--border);padding:16px 24px 24px;background:var(--bg)}
+.mobile-nav a{font-size:16px;font-weight:500;color:var(--muted);padding:12px 0;border-bottom:1px solid var(--border);display:block}
+.mob-cta{background:var(--crimson);color:#fff!important;border-radius:8px;padding:12px 20px;text-align:center;margin-top:8px;font-weight:600;border-bottom:none!important}
+.mobile-nav.open{display:flex}
+@media(max-width:768px){.nav-links,.nav-cta{display:none}.hamburger{display:flex;margin-left:auto}}
+
+/* PAGE LAYOUT */
+.page-wrap{max-width:1100px;margin:0 auto;padding:64px 24px 80px}
+
+/* HEADER */
+.page-header{text-align:center;margin-bottom:48px}
+.page-label{font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--crimson);font-weight:600;margin-bottom:12px}
+.page-header h1{font-family:'Inter Tight',sans-serif;font-size:clamp(32px,5vw,52px);font-weight:900;margin-bottom:12px}
+.page-header p{font-size:17px;color:var(--muted);max-width:520px;margin:0 auto;line-height:1.7}
+
+/* WHAT YOU GET STRIP */
+.perks{display:flex;gap:0;justify-content:center;margin-bottom:48px;background:var(--surface);border-radius:12px;overflow:hidden;border:1px solid var(--border)}
+.perk{flex:1;padding:20px 16px;text-align:center;border-right:1px solid var(--border);display:flex;flex-direction:column;gap:4px}
+.perk:last-child{border-right:none}
+.perk-title{font-size:13px;font-weight:700;color:var(--text)}
+.perk-sub{font-size:12px;color:var(--muted)}
+@media(max-width:600px){.perks{flex-direction:column}.perk{border-right:none;border-bottom:1px solid var(--border)}.perk:last-child{border-bottom:none}}
+
+/* CAL EMBED WRAPPER */
+.cal-wrap{background:var(--surface);border:1px solid var(--border);border-radius:16px;overflow:hidden;min-height:600px}
+#cal-embed{min-height:600px;width:100%}
+
+/* ALTERNATIVE — WHATSAPP */
+.alt-section{margin-top:40px;text-align:center;padding:32px;background:var(--surface);border-radius:12px;border:1px solid var(--border)}
+.alt-section p{color:var(--muted);font-size:15px;margin-bottom:16px}
+.wa-btn{display:inline-flex;align-items:center;gap:10px;background:#25D366;color:#000;font-weight:700;font-size:15px;padding:14px 28px;border-radius:8px;transition:background .2s}
+.wa-btn:hover{background:#1aab52}
+
+/* FOOTER */
+footer{background:var(--surface);border-top:1px solid var(--border);padding:32px 24px;text-align:center}
+footer p{font-size:13px;color:var(--muted)}
+footer a{color:var(--muted);margin:0 8px}
+footer a:hover{color:var(--text)}
+</style>
 </head>
 <body>
 
-<nav style="position:sticky;top:0;z-index:300;background:rgba(10,10,10,0.98);border-bottom:1px solid rgba(192,17,43,0.5);backdrop-filter:blur(12px);padding:12px 24px;display:flex;align-items:center;justify-content:space-between;">
-  <a href="index.html" style="font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:4px;background:linear-gradient(to right,#C0112B,#D4A017);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;text-decoration:none;">Sahil Fitness</a>
-  <div style="display:flex;gap:20px;">
-    <a href="index.html" style="font-family:'Inter',sans-serif;font-size:11px;letter-spacing:2px;color:#888;text-decoration:none;text-transform:uppercase;">Home</a>
-    <a href="slots.html" style="font-family:'Inter',sans-serif;font-size:11px;letter-spacing:2px;color:#25D366;text-decoration:none;text-transform:uppercase;">View Slots</a>
-    <a href="men.html" style="font-family:'Inter',sans-serif;font-size:11px;letter-spacing:2px;color:#C0112B;text-decoration:none;text-transform:uppercase;">Men's</a>
-    <a href="women.html" style="font-family:'Inter',sans-serif;font-size:11px;letter-spacing:2px;color:#d4a0d4;text-decoration:none;text-transform:uppercase;">Women's</a>
+<nav>
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo">FITWID</a>
+    <ul class="nav-links">
+      <li><a href="coaching.html">Coaching</a></li>
+      <li><a href="pricing.html">Pricing</a></li>
+      <li><a href="results.html">Results</a></li>
+      <li><a href="about.html">About</a></li>
+    </ul>
+    <a href="apply.html" class="nav-cta">Apply Now</a>
+    <button class="hamburger" onclick="document.getElementById('mobileNav').classList.toggle('open')">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+  <div class="mobile-nav" id="mobileNav">
+    <a href="coaching.html">Coaching</a>
+    <a href="pricing.html">Pricing</a>
+    <a href="results.html">Results</a>
+    <a href="about.html">About</a>
+    <a href="apply.html" class="mob-cta">Apply Now</a>
   </div>
 </nav>
 
-<header>
-  <div class="logo-mark">IB</div>
-  <div class="header-text">
-    <h1>SAHIL FITNESS CLUB</h1>
-    <p>Head Coach · Sahil R · Bangalore</p>
-  </div>
-</header>
+<div class="page-wrap">
 
-<div class="hero">
-  <div class="hero-badge">📅 Slot Booking</div>
-  <h2>Book Your<br>Training Session</h2>
-  <p>Fill the form below — your message goes straight to Coach Sahil on WhatsApp</p>
+  <div class="page-header">
+    <p class="page-label">Free Consultation</p>
+    <h1>Book a Call with Coach Sahil</h1>
+    <p>Pick a time that works for you. We'll talk through your goals, training history, and the right program for you — no obligation.</p>
+  </div>
+
+  <div class="perks">
+    <div class="perk">
+      <span class="perk-title">30 Minutes</span>
+      <span class="perk-sub">Free consultation call</span>
+    </div>
+    <div class="perk">
+      <span class="perk-title">Your Goals</span>
+      <span class="perk-sub">Personalized discussion</span>
+    </div>
+    <div class="perk">
+      <span class="perk-title">No Obligation</span>
+      <span class="perk-sub">No sales pressure</span>
+    </div>
+    <div class="perk">
+      <span class="perk-title">24h Confirm</span>
+      <span class="perk-sub">Instant booking confirmation</span>
+    </div>
+  </div>
+
+  <!-- CAL.ID INLINE EMBED -->
+  <div class="cal-wrap">
+    <div id="cal-embed"></div>
+  </div>
+
+  <!-- WHATSAPP ALTERNATIVE -->
+  <div class="alt-section">
+    <p>Prefer to message directly? Coach Sahil usually replies within a few hours.</p>
+    <a href="https://wa.me/917015552731?text=Hi%20Coach%20Sahil%2C%20I%27d%20like%20to%20book%20a%20free%20consultation%20call." class="wa-btn" target="_blank" rel="noopener">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.124.555 4.118 1.524 5.847L.057 23.882l6.195-1.63A11.94 11.94 0 0 0 12 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22c-1.937 0-3.742-.526-5.287-1.438l-.376-.224-3.898 1.025 1.04-3.797-.246-.391A9.952 9.952 0 0 1 2 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10z"/></svg>
+      WhatsApp Coach Sahil
+    </a>
+  </div>
+
 </div>
 
-<main>
-
-  <!-- INFO PILLS -->
-  <div class="info-strip">
-    <div class="info-pill">
-      <div class="val">6 AM</div>
-      <div class="lbl">Opens</div>
-    </div>
-    <div class="info-pill">
-      <div class="val">9 PM</div>
-      <div class="lbl">Last Slot</div>
-    </div>
-    <div class="info-pill">
-      <div class="val">Mon–Sat</div>
-      <div class="lbl">Available</div>
-    </div>
-    <div class="info-pill">
-      <div class="val">~1 Hr</div>
-      <div class="lbl">Per Session</div>
-    </div>
-  </div>
-
-  <!-- BOOKING FORM -->
-  <div class="step-label">Step 01 — Your Details</div>
-  <div class="card">
-    <h3>Personal Info</h3>
-
-    <label for="clientName">Your Full Name</label>
-    <input type="text" id="clientName" placeholder="e.g. Priya Sharma" autocomplete="name">
-    <div class="error-msg" id="nameErr">Please enter your name</div>
-
-    <label for="clientPhone">WhatsApp Number</label>
-    <input type="tel" id="clientPhone" placeholder="e.g. 9876543210" maxlength="10" autocomplete="tel">
-    <div class="error-msg" id="phoneErr">Enter a valid 10-digit number</div>
-  </div>
-
-  <div class="step-label">Step 02 — Pick Your Slot</div>
-  <div class="card">
-    <h3>Date & Time</h3>
-
-    <label for="slotDate">Preferred Date</label>
-    <input type="date" id="slotDate">
-    <div class="error-msg" id="dateErr">Please select a date</div>
-
-    <label style="margin-top:16px;">Preferred Time</label>
-    <div class="time-grid">
-      <div class="time-btn" onclick="selectTime(this, '6:00 AM')">6:00 AM</div>
-      <div class="time-btn" onclick="selectTime(this, '7:00 AM')">7:00 AM</div>
-      <div class="time-btn" onclick="selectTime(this, '8:00 AM')">8:00 AM</div>
-      <div class="time-btn" onclick="selectTime(this, '9:00 AM')">9:00 AM</div>
-      <div class="time-btn" onclick="selectTime(this, '10:00 AM')">10:00 AM</div>
-      <div class="time-btn" onclick="selectTime(this, '5:00 PM')">5:00 PM</div>
-      <div class="time-btn" onclick="selectTime(this, '6:00 PM')">6:00 PM</div>
-      <div class="time-btn" onclick="selectTime(this, '7:00 PM')">7:00 PM</div>
-      <div class="time-btn" onclick="selectTime(this, '8:00 PM')">8:00 PM</div>
-    </div>
-    <div class="error-msg" id="timeErr">Please select a time slot</div>
-  </div>
-
-  <!-- MESSAGE PREVIEW -->
-  <div class="preview-card" id="previewCard">
-    <div class="preview-title">📱 Your Message Preview</div>
-    <div class="msg-bubble" id="msgPreview"></div>
-  </div>
-
-  <!-- SEND BUTTON -->
-  <a class="whatsapp-btn" id="sendBtn" href="#" target="_blank" rel="noopener" onclick="return sendToWhatsApp(this)">
-    <svg class="whatsapp-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-      <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
-    </svg>
-    SEND BOOKING REQUEST
-  </a>
-  <p class="btn-note">Opens WhatsApp with your details pre-filled · Coach Sahil will confirm within 1 hour</p>
-
-  <!-- HOW IT WORKS -->
-  <div style="margin-top: 32px;">
-    <div class="step-label">How It Works</div>
-    <div class="card">
-      <div class="steps-list">
-        <div class="step-item">
-          <div class="step-num">1</div>
-          <div class="step-content">
-            <strong>Fill the form above</strong>
-            <span>Enter your name, number, and preferred slot</span>
-          </div>
-        </div>
-        <div class="step-item">
-          <div class="step-num">2</div>
-          <div class="step-content">
-            <strong>Tap "Send Booking Request"</strong>
-            <span>WhatsApp opens with your message ready — just hit Send</span>
-          </div>
-        </div>
-        <div class="step-item">
-          <div class="step-num">3</div>
-          <div class="step-content">
-            <strong>Coach Sahil confirms</strong>
-            <span>You'll get a confirmation message within 1 hour</span>
-          </div>
-        </div>
-        <div class="step-item">
-          <div class="step-num">4</div>
-          <div class="step-content">
-            <strong>Show up & train hard</strong>
-            <span>Arrive 5 mins early. Your slot is locked in 💪</span>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-</main>
-
 <footer>
-  <p>© Sahil Fitness Club · Bangalore · <span>@sahil_r_fitness</span></p>
-  <p style="margin-top:8px;display:flex;flex-wrap:wrap;gap:16px;justify-content:center;font-size:11px;">
-    <a href="index.html" style="color:#666;text-decoration:none;">Home</a>
-    <a href="generator.html" style="color:#C9A84C;text-decoration:none;">⚡ Generator</a>
-    <a href="slots.html" style="color:#25D366;text-decoration:none;">📅 Slots</a>
-    <a href="men.html" style="color:#CC0000;text-decoration:none;">Men's</a>
-    <a href="women.html" style="color:#d070c0;text-decoration:none;">Women's</a>
-    <a href="https://wa.me/917015552731" target="_blank" style="color:#25D366;text-decoration:none;">WhatsApp</a>
+  <p>
+    <a href="index.html">Home</a>
+    <a href="pricing.html">Pricing</a>
+    <a href="apply.html">Apply</a>
+    <a href="terms.html">Terms</a>
+    <a href="privacy.html">Privacy</a>
   </p>
+  <p style="margin-top:10px">© 2025 FitWid.fit — I-BLITZ Fitness Club, Bangalore. All rights reserved.</p>
 </footer>
 
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
-<script src="firebase-config.js"></script>
-<script>
-  // ── CONFIG — update your WhatsApp number here ──
-  const COACH_WHATSAPP = '917015552731';
-  let bookingFbDB = null;
-  if(FB_READY){ firebase.initializeApp(FIREBASE_CONFIG); bookingFbDB = firebase.database(); }
-
-  let selectedTime = '';
-
-  // Set minimum date to today
-  document.addEventListener('DOMContentLoaded', () => {
-    const dateInput = document.getElementById('slotDate');
-    const today = new Date().toISOString().split('T')[0];
-    dateInput.min = today;
-
-    // Pre-fill from URL params (e.g. when coming from slots.html)
-    const params = new URLSearchParams(window.location.search);
-    if(params.get('date')) dateInput.value = params.get('date');
-    if(params.get('time')){
-      const t = params.get('time');
-      selectedTime = t;
-      document.querySelectorAll('.time-btn').forEach(b=>{
-        if(b.textContent.trim()===t) b.classList.add('selected');
-      });
+<!-- CAL.ID EMBED SCRIPT -->
+<script type="text/javascript">
+(function (C, A, L) {
+  let p = function (a, ar) { a.q.push(ar); };
+  let d = C.document;
+  C.Cal = C.Cal || function () {
+    let cal = C.Cal;
+    let ar = arguments;
+    if (!cal.loaded) {
+      cal.ns = {};
+      cal.q = cal.q || [];
+      d.head.appendChild(d.createElement("script")).src = A;
+      cal.loaded = true;
     }
+    if (ar[0] === L) {
+      const api = function () { p(api, arguments); };
+      const namespace = ar[1];
+      api.q = api.q || [];
+      typeof namespace === "string" ? (cal.ns[namespace] = api) && p(api, ar) : p(cal, ar);
+      return;
+    }
+    p(cal, ar);
+  };
+})(window, "https://app.cal.com/embed/embed.js", "init");
 
-    // Live preview on input change
-    ['clientName','clientPhone','slotDate'].forEach(id => {
-      document.getElementById(id).addEventListener('input', updatePreview);
-    });
-    updatePreview();
-  });
+Cal("init", { origin: "https://cal.id" });
 
-  function selectTime(el, time) {
-    document.querySelectorAll('.time-btn').forEach(b => b.classList.remove('selected'));
-    el.classList.add('selected');
-    selectedTime = time;
-    document.getElementById('timeErr').classList.remove('show');
-    updatePreview();
+Cal("inline", {
+  elementOrSelector: "#cal-embed",
+  calLink: "sahil-r-bansal",
+  config: {
+    layout: "month_view",
+    theme: "dark"
   }
+});
 
-  function formatDate(dateStr) {
-    if (!dateStr) return '';
-    const d = new Date(dateStr + 'T00:00:00');
-    return d.toLocaleDateString('en-IN', { weekday:'long', day:'numeric', month:'long', year:'numeric' });
-  }
-
-  function buildMessage() {
-    const name  = document.getElementById('clientName').value.trim();
-    const phone = document.getElementById('clientPhone').value.trim();
-    const date  = document.getElementById('slotDate').value;
-    const time  = selectedTime;
-
-    if (!name && !phone && !date && !time) return '';
-
-    return `🏋️ *SLOT BOOKING REQUEST*\n` +
-           `━━━━━━━━━━━━━━━━━━━\n` +
-           `👤 *Name:* ${name || '—'}\n` +
-           `📱 *WhatsApp:* ${phone || '—'}\n` +
-           `📅 *Date:* ${date ? formatDate(date) : '—'}\n` +
-           `⏰ *Time:* ${time || '—'}\n` +
-           `━━━━━━━━━━━━━━━━━━━\n` +
-           `📍 Sahil Fitness Club, Bangalore\n` +
-           `\nPlease confirm my slot, Coach Sahil! 💪`;
-  }
-
-  function updatePreview() {
-    const msg = buildMessage();
-    const card = document.getElementById('previewCard');
-    const preview = document.getElementById('msgPreview');
-    if (msg) {
-      preview.textContent = msg;
-      card.classList.add('show');
-    } else {
-      card.classList.remove('show');
-    }
-  }
-
-  function validate() {
-    let ok = true;
-    const name  = document.getElementById('clientName');
-    const phone = document.getElementById('clientPhone');
-    const date  = document.getElementById('slotDate');
-
-    // Name
-    if (!name.value.trim()) {
-      name.classList.add('invalid');
-      document.getElementById('nameErr').classList.add('show');
-      ok = false;
-    } else {
-      name.classList.remove('invalid');
-      document.getElementById('nameErr').classList.remove('show');
-    }
-
-    // Phone
-    if (!/^\d{10}$/.test(phone.value.trim())) {
-      phone.classList.add('invalid');
-      document.getElementById('phoneErr').classList.add('show');
-      ok = false;
-    } else {
-      phone.classList.remove('invalid');
-      document.getElementById('phoneErr').classList.remove('show');
-    }
-
-    // Date
-    if (!date.value) {
-      date.classList.add('invalid');
-      document.getElementById('dateErr').classList.add('show');
-      ok = false;
-    } else {
-      date.classList.remove('invalid');
-      document.getElementById('dateErr').classList.remove('show');
-    }
-
-    // Time
-    if (!selectedTime) {
-      document.getElementById('timeErr').classList.add('show');
-      ok = false;
-    } else {
-      document.getElementById('timeErr').classList.remove('show');
-    }
-
-    return ok;
-  }
-
-  function sendToWhatsApp(el) {
-    if (!validate()) return false;
-    const name  = document.getElementById('clientName').value.trim();
-    const phone = document.getElementById('clientPhone').value.trim();
-    const date  = document.getElementById('slotDate').value;
-
-    // Write booking to Firebase so dashboard updates instantly
-    if(FB_READY && bookingFbDB){
-      const id = Date.now().toString(36) + Math.random().toString(36).slice(2,5);
-      bookingFbDB.ref('slots/' + id).set({
-        id, clientName: name, phone, date,
-        time: selectedTime, status: 'pending',
-        notes: 'Via online booking form',
-        createdAt: Date.now()
-      });
-    }
-
-    const msg = buildMessage();
-    const url = `https://wa.me/${COACH_WHATSAPP}?text=${encodeURIComponent(msg)}`;
-    el.href = url;
-    return true;
-  }
+Cal("ui", {
+  theme: "dark",
+  hideEventTypeDetails: false,
+  layout: "month_view"
+});
 </script>
+
 </body>
 </html>
