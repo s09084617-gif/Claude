@@ -1,76 +1,71 @@
-import { useEffect, useRef, useState } from 'react';
-import Navbar from './components/Navbar';
-import HeroContent from './components/HeroContent';
-import About from './components/About';
-import CaseStudies from './components/CaseStudies';
-import './index.css';
+import { useEffect, useState } from 'react'
+import Navbar from './components/Navbar'
+import HeroContent from './components/HeroContent'
+import About from './components/About'
+import CaseStudies from './components/CaseStudies'
 
-type ShaderModule = {
-  Shader: React.ComponentType<{ className?: string; children?: React.ReactNode }>;
-  Swirl: React.ComponentType<Record<string, unknown>>;
-  ChromaFlow: React.ComponentType<Record<string, unknown>>;
-  FlutedGlass: React.ComponentType<Record<string, unknown>>;
-  FilmGrain: React.ComponentType<Record<string, unknown>>;
-};
+type ShaderMod = {
+  Shader: React.ComponentType<{ children: React.ReactNode }>
+  Swirl: React.ComponentType<any>
+  ChromaFlow: React.ComponentType<any>
+  FlutedGlass: React.ComponentType<any>
+  FilmGrain: React.ComponentType<any>
+}
 
 export default function App() {
-  const [shaders, setShaders] = useState<ShaderModule | null>(null);
-  const heroRef = useRef<HTMLDivElement>(null);
+  const [shaderMod, setShaderMod] = useState<ShaderMod | null>(null)
 
   useEffect(() => {
+    // @ts-ignore
     import('shaders/react')
-      .then((mod) => setShaders(mod as ShaderModule))
-      .catch(() => {
-        // shaders unavailable — hero renders as plain gradient
-      });
-  }, []);
+      .then((mod: any) => setShaderMod(mod))
+      .catch(() => setShaderMod(null))
+  }, [])
 
   return (
-    <div className="min-h-screen bg-[#0a0a0a] text-white">
-      <Navbar />
+    <div className="min-h-screen">
+      <section className="relative bg-[#EFEFEF] min-h-screen flex flex-col">
+        {/* Shader overlay */}
+        {shaderMod && (() => {
+          const { Shader, Swirl, ChromaFlow, FlutedGlass, FilmGrain } = shaderMod
+          return (
+            <div className="absolute inset-0 z-10 pointer-events-none">
+              <Shader>
+                <Swirl colorA="#ffffff" colorB="#f0f0f0" detail={1.7} />
+                <ChromaFlow
+                  baseColor="#ffffff"
+                  downColor="#ff5f03"
+                  leftColor="#ff5f03"
+                  rightColor="#ff5f03"
+                  upColor="#ff5f03"
+                  momentum={13}
+                  radius={3.5}
+                />
+                <FlutedGlass
+                  aberration={0.61}
+                  angle={31}
+                  frequency={8}
+                  highlight={0.12}
+                  highlightSoftness={0}
+                  lightAngle={-90}
+                  refraction={4}
+                  shape="rounded"
+                  softness={1}
+                  speed={0.15}
+                />
+                <FilmGrain strength={0.05} />
+              </Shader>
+            </div>
+          )
+        })()}
 
-      {/* Hero */}
-      <section
-        ref={heroRef}
-        className="relative h-screen overflow-hidden bg-[#0a0a0a]"
-      >
-        {shaders ? (
-          <shaders.Shader className="absolute inset-0 w-full h-full">
-            <shaders.Swirl />
-            <shaders.ChromaFlow />
-            <shaders.FlutedGlass />
-            <shaders.FilmGrain />
-          </shaders.Shader>
-        ) : (
-          <div className="absolute inset-0" style={{ background: 'radial-gradient(ellipse at 30% 60%, #1a0a2e 0%, #0a0a1a 50%, #0a0a0a 100%)' }} />
-        )}
-
-        <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0a] via-transparent to-[#0a0a0a]/40 pointer-events-none" />
-
+        <Navbar />
+        <div className="flex-1" />
         <HeroContent />
       </section>
 
-      <CaseStudies />
       <About />
-
-      {/* Contact footer */}
-      <footer id="contact" className="py-24 px-6 md:px-12 bg-[#050505] border-t border-white/5">
-        <div className="max-w-5xl mx-auto flex flex-col md:flex-row items-start md:items-center justify-between gap-8">
-          <div>
-            <p className="text-white/30 text-xs tracking-widest uppercase mb-4">Start a project</p>
-            <a
-              href="mailto:hello@axionstudio.co"
-              className="text-3xl md:text-5xl font-light text-white hover:text-orange-400 transition-colors"
-            >
-              hello@axionstudio.co
-            </a>
-          </div>
-          <div className="text-white/20 text-sm">
-            <p>© 2024 Axion Studio</p>
-            <p className="mt-1">London, UK</p>
-          </div>
-        </div>
-      </footer>
+      <CaseStudies />
     </div>
-  );
+  )
 }
