@@ -1639,6 +1639,7 @@ document.addEventListener('keydown', e=>{
 // ══════════════════════════════════════════
 let editingPortalPhone = null;
 const DAY_NAMES_PLANS = ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'];
+let _clientPlanCache = {}; // phone → client data, used instead of JSON-in-onclick
 
 function genPin() {
   const pin = String(Math.floor(100000 + Math.random() * 900000)).slice(0,6);
@@ -1670,7 +1671,14 @@ function saveClientPortal() {
         document.getElementById('cp-notes').value='';
         loadPortalClients();
       })
-      .catch(e => showToast('Error: ' + e.message, 'error'));
+      .catch(e => {
+        const msg = e.message || String(e);
+        if(msg.toLowerCase().includes('permission')) {
+          showToast('Firebase rules blocking write — open Firebase Console → Realtime Database → Rules and set clients: {".write":true}', 'error');
+        } else {
+          showToast('Error: ' + msg, 'error');
+        }
+      });
   } else {
     showToast('Firebase not connected. Cannot save.','error');
   }
@@ -1691,28 +1699,32 @@ function loadPortalClients() {
       return;
     }
 
-    // Filter to clients that have a PIN (portal clients)
-    const portalClients = Object.values(data).filter(c => c.pin);
+    // Use Object.entries to keep the Firebase key (phone) as the authoritative ID
+    const entries = Object.entries(data).filter(([, c]) => c.pin);
 
-    if(!portalClients.length) {
+    if(!entries.length) {
       container.innerHTML = '<div class="empty"><div class="empty-icon">👤</div><p>No portal clients yet. Add one above.</p></div>';
       return;
     }
+
+    // Cache by Firebase key so Edit Plan onclick doesn't need inline JSON
+    _clientPlanCache = {};
+    entries.forEach(([key, c]) => { _clientPlanCache[key] = c; });
 
     const goalColors = {
       'Fat Loss':'badge-green', 'Muscle Gain':'badge-red',
       'Strength':'badge-yellow', 'General Fitness':'badge-blue', 'default':'badge-gray'
     };
 
-    container.innerHTML = '<div class="plans-grid">' + portalClients.map(c => {
+    container.innerHTML = '<div class="plans-grid">' + entries.map(([key, c]) => {
       const badgeClass = goalColors[c.goal] || goalColors.default;
-      const hasPhone = c.phone || '';
+      const waNum = key.startsWith('+') ? key.slice(1) : '91'+key;
       return `
       <div class="client-plan-card">
         <div class="cp-header">
           <div>
             <div class="cp-name">${c.name || 'Unknown'}</div>
-            <div class="cp-phone">${hasPhone}</div>
+            <div class="cp-phone">${key}</div>
           </div>
           <span class="badge ${badgeClass}">${c.goal || '—'}</span>
         </div>
@@ -1720,13 +1732,19 @@ function loadPortalClients() {
         ${c.dietPlan ? '<div style="font-size:11px;color:var(--green);margin-top:4px">✓ Diet plan set · ' + (c.dietPlan.calories||'?') + ' kcal</div>' : '<div style="font-size:11px;color:var(--muted2);margin-top:4px">No diet plan yet</div>'}
         ${c.workoutPlan ? '<div style="font-size:11px;color:var(--green);margin-top:2px">✓ Workout plan set · ' + (c.workoutPlan.split||'') + '</div>' : '<div style="font-size:11px;color:var(--muted2);margin-top:2px">No workout plan yet</div>'}
         <div class="cp-actions">
-          <button class="btn btn-primary btn-sm" onclick="openEditPlan('${hasPhone}', ${JSON.stringify(c).replace(/"/g,'&quot;')})">✏️ Edit Plan</button>
-          <a class="btn btn-wa btn-sm" href="https://wa.me/${hasPhone.startsWith('+')?hasPhone.slice(1):'91'+hasPhone}" target="_blank">💬 WhatsApp</a>
-          <button class="btn btn-ghost btn-sm" onclick="deletePortalClient('${hasPhone}')">🗑</button>
+          <button class="btn btn-primary btn-sm" onclick="openEditPlanByKey('${key}')">✏️ Edit Plan</button>
+          <a class="btn btn-wa btn-sm" href="https://wa.me/${waNum}" target="_blank">💬 WhatsApp</a>
+          <button class="btn btn-ghost btn-sm" onclick="deletePortalClient('${key}')">🗑</button>
         </div>
       </div>`;
     }).join('') + '</div>';
   });
+}
+
+function openEditPlanByKey(key) {
+  const c = _clientPlanCache[key];
+  if(!c){ showToast('Client data not loaded yet — try Refresh','error'); return; }
+  openEditPlan(key, c);
 }
 
 function deletePortalClient(phone) {
@@ -1927,15 +1945,28 @@ function savePlan() {
   const updateData = { coachNotes, workoutPlan, dietPlan };
   if(nextSession) updateData.nextSession = nextSession;
 
+  const saveBtn = document.querySelector('#editPlanPanel .btn-primary');
+  if(saveBtn){ saveBtn.textContent = 'Saving…'; saveBtn.disabled = true; }
+
   fbDB.ref('clients/' + editingPortalPhone).update(updateData)
     .then(() => {
-      showToast('Plan saved to Firebase ✓', 'success');
+      showToast('Plan saved ✓', 'success');
       const s = document.getElementById('planSaveStatus');
       s.style.display = 'inline';
       setTimeout(()=>s.style.display='none', 3000);
       loadPortalClients();
     })
-    .catch(e => showToast('Error saving: ' + e.message, 'error'));
+    .catch(e => {
+      const msg = e.message || String(e);
+      if(msg.toLowerCase().includes('permission')) {
+        showToast('Firebase rules block this write — update rules in Firebase Console to allow clients/ writes', 'error');
+      } else {
+        showToast('Error saving: ' + msg, 'error');
+      }
+    })
+    .finally(() => {
+      if(saveBtn){ saveBtn.textContent = 'Save Plan to Firebase'; saveBtn.disabled = false; }
+    });
 }
 
 // ══════════════════════════════════════════
