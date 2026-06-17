@@ -1549,6 +1549,80 @@ footer {
 </section>
 
 <!-- ==============================
+     SOCIAL MEDIA GALLERY
+============================== -->
+<section class="section bg-surface">
+  <div class="container">
+    <div class="section-header" style="margin-bottom:36px">
+      <div class="section-label">Social Media</div>
+      <h2 class="section-title">Follow the transformation journey</h2>
+      <p style="color:var(--muted);margin-top:10px;font-size:0.95rem">
+        Real content from real training —
+        <a href="https://www.instagram.com/sahil_iblitz/" target="_blank" rel="noopener"
+           style="color:var(--gold);text-decoration:none">@sahil_iblitz</a>
+      </p>
+    </div>
+
+    <!-- Bento grid: landscape banner top, square + 2 portraits below -->
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;max-width:960px;margin:0 auto">
+
+      <!-- Top row: full-width landscape -->
+      <a href="https://www.instagram.com/sahil_iblitz/" target="_blank" rel="noopener"
+         class="social-card" style="grid-column:1/3;border-radius:14px;overflow:hidden;display:block">
+        <img src="images/ad-workout-working.webp"
+             alt="Is Your Workout Working For You?"
+             loading="lazy"
+             style="width:100%;height:320px;object-fit:cover;object-position:center;display:block">
+      </a>
+
+      <!-- Bottom left: square/before-after ad -->
+      <a href="https://www.instagram.com/sahil_iblitz/" target="_blank" rel="noopener"
+         class="social-card" style="border-radius:14px;overflow:hidden;display:block">
+        <img src="images/ad-before-after.webp"
+             alt="Stop Wasting Workouts — Train Smarter Not Harder"
+             loading="lazy"
+             style="width:100%;height:300px;object-fit:cover;display:block">
+      </a>
+
+      <!-- Bottom right: 2 portrait story ads -->
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+        <a href="https://www.instagram.com/sahil_iblitz/" target="_blank" rel="noopener"
+           class="social-card" style="border-radius:14px;overflow:hidden;display:block">
+          <img src="images/ad-gym-lost.webp"
+               alt="Wandering the gym aimlessly?"
+               loading="lazy"
+               style="width:100%;height:300px;object-fit:cover;object-position:center top;display:block">
+        </a>
+        <a href="https://www.instagram.com/sahil_iblitz/" target="_blank" rel="noopener"
+           class="social-card" style="border-radius:14px;overflow:hidden;display:block">
+          <img src="images/ad-coaching.webp"
+               alt="1:1 Premium Coaching — Custom Training + Nutrition"
+               loading="lazy"
+               style="width:100%;height:300px;object-fit:cover;object-position:center top;display:block">
+        </a>
+      </div>
+    </div>
+
+    <div style="text-align:center;margin-top:28px">
+      <a href="https://www.instagram.com/sahil_iblitz/" target="_blank" rel="noopener"
+         class="btn-outline" style="display:inline-flex;align-items:center;gap:8px;text-decoration:none">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+        Follow @sahil_iblitz on Instagram
+      </a>
+    </div>
+  </div>
+</section>
+<style>
+.social-card img { transition: transform 0.4s ease; }
+.social-card:hover img { transform: scale(1.04); }
+@media(max-width:600px){
+  .social-card[style*="grid-column"] { grid-column: 1/3 !important; }
+  div[style*="grid-template-columns:1fr 1fr;gap:12px;max-width"] { grid-template-columns:1fr !important; }
+  div[style*="grid-template-columns:1fr 1fr;gap:12px"] { grid-template-columns:1fr 1fr !important; }
+}
+</style>
+
+<!-- ==============================
      FINAL CTA
 ============================== -->
 <section class="cta-section">
