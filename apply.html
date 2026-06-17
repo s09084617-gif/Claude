@@ -12,13 +12,13 @@
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
-      --bg: #0A0A0A;
-      --surface: #161616;
-      --surface-2: #1E1E1E;
-      --primary: #C8102E;
-      --accent: #D4AF37;
-      --text: #F5F5F5;
-      --muted: #9A9A9A;
+      --bg: #F8FAFF;
+      --surface: #FFFFFF;
+      --surface-2: #DBEAFE;
+      --primary: #2563EB;
+      --accent: #7C3AED;
+      --text: #0F172A;
+      --muted: #64748B;
       --radius-card: 12px;
       --radius-btn: 8px;
       --section-pad: 80px;
@@ -43,10 +43,10 @@
       position: sticky;
       top: 0;
       z-index: 100;
-      background: rgba(10,10,10,0.94);
+      background: rgba(248,250,255,0.94);
       backdrop-filter: blur(14px);
       -webkit-backdrop-filter: blur(14px);
-      border-bottom: 1px solid rgba(255,255,255,0.06);
+      border-bottom: 1px solid rgba(37,99,235,0.12);
     }
 
     .nav-inner {
@@ -121,7 +121,7 @@
       display: none;
       flex-direction: column;
       padding: 12px 24px 20px;
-      border-top: 1px solid rgba(255,255,255,0.06);
+      border-top: 1px solid rgba(37,99,235,0.12);
       gap: 2px;
     }
 
@@ -132,7 +132,7 @@
       font-size: 15px;
       font-weight: 500;
       color: var(--muted);
-      border-bottom: 1px solid rgba(255,255,255,0.05);
+      border-bottom: 1px solid rgba(37,99,235,0.08);
       transition: color 0.2s;
     }
 
@@ -204,7 +204,7 @@
     .form-select,
     .form-textarea {
       background: var(--surface-2);
-      border: 1.5px solid rgba(255,255,255,0.1);
+      border: 1.5px solid rgba(37,99,235,0.2);
       border-radius: 12px;
       color: var(--text);
       font-family: 'Inter', sans-serif;
@@ -219,7 +219,7 @@
 
     .form-input::placeholder,
     .form-textarea::placeholder {
-      color: rgba(154,154,154,0.6);
+      color: rgba(100,116,139,0.6);
     }
 
     .form-input:focus,
@@ -269,7 +269,7 @@
       cursor: pointer;
       padding: 13px 16px;
       border-radius: 12px;
-      border: 1.5px solid rgba(255,255,255,0.1);
+      border: 1.5px solid rgba(37,99,235,0.15);
       background: var(--surface-2);
       transition: border-color 0.2s, background 0.2s;
       user-select: none;
@@ -286,7 +286,7 @@
       width: 18px;
       height: 18px;
       border-radius: 50%;
-      border: 2px solid rgba(255,255,255,0.2);
+      border: 2px solid rgba(37,99,235,0.25);
       flex-shrink: 0;
       position: relative;
       transition: border-color 0.2s;
@@ -353,7 +353,7 @@
 
     .sidebar-card {
       background: var(--surface);
-      border: 1px solid rgba(255,255,255,0.08);
+      border: 1px solid rgba(37,99,235,0.12);
       border-radius: var(--radius-card);
       padding: 32px;
       display: flex;
@@ -405,7 +405,7 @@
 
     .sidebar-divider {
       height: 1px;
-      background: rgba(255,255,255,0.07);
+      background: rgba(37,99,235,0.1);
     }
 
     .wa-link-wrap {
@@ -448,8 +448,8 @@
     }
 
     .confirm-card {
-      background: #161616;
-      border: 1px solid rgba(255,255,255,0.08);
+      background: #FFFFFF;
+      border: 1px solid rgba(37,99,235,0.12);
       border-radius: 16px;
       padding: 48px;
       text-align: center;
@@ -503,7 +503,7 @@
 
     .btn-outline {
       display: inline-block;
-      border: 1.5px solid rgba(255,255,255,0.15);
+      border: 1.5px solid rgba(37,99,235,0.2);
       color: var(--muted);
       font-size: 14px;
       font-weight: 600;
@@ -512,12 +512,12 @@
       transition: border-color 0.2s, color 0.2s;
     }
 
-    .btn-outline:hover { border-color: rgba(255,255,255,0.3); color: var(--text); }
+    .btn-outline:hover { border-color: rgba(37,99,235,0.4); color: var(--text); }
 
     /* FOOTER */
     footer {
       background: var(--surface);
-      border-top: 1px solid rgba(255,255,255,0.07);
+      border-top: 1px solid rgba(37,99,235,0.1);
     }
 
     .footer-inner {
@@ -571,7 +571,7 @@
       max-width: var(--max-w);
       margin: 0 auto;
       padding: 20px 24px;
-      border-top: 1px solid rgba(255,255,255,0.06);
+      border-top: 1px solid rgba(37,99,235,0.1);
     }
 
     .footer-bottom p { font-size: 13px; color: var(--muted); }

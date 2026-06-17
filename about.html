@@ -9,13 +9,13 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Inter+Tight:wght@700;800;900&display=swap" rel="stylesheet">
 <style>
   :root {
-    --bg: #0A0A0A;
-    --surface: #161616;
-    --surface2: #1E1E1E;
-    --primary: #C8102E;
-    --accent: #D4AF37;
-    --text: #F5F5F5;
-    --muted: #9A9A9A;
+    --bg: #F8FAFF;
+    --surface: #FFFFFF;
+    --surface2: #DBEAFE;
+    --primary: #2563EB;
+    --accent: #7C3AED;
+    --text: #0F172A;
+    --muted: #64748B;
     --radius-card: 12px;
     --radius-btn: 8px;
     --section-pad: 80px;
@@ -46,8 +46,8 @@
     position: sticky;
     top: 0;
     z-index: 500;
-    background: rgba(10,10,10,0.96);
-    border-bottom: 1px solid rgba(200,16,46,0.25);
+    background: rgba(248,250,255,0.96);
+    border-bottom: 1px solid rgba(37,99,235,0.2);
     backdrop-filter: blur(14px);
   }
 
@@ -135,7 +135,7 @@
     background: var(--surface);
     padding: 16px 24px 24px;
     gap: 4px;
-    border-top: 1px solid rgba(255,255,255,0.06);
+    border-top: 1px solid rgba(37,99,235,0.12);
   }
 
   .mobile-nav.open { display: flex; }
@@ -147,7 +147,7 @@
     color: var(--muted);
     text-decoration: none;
     padding: 10px 0;
-    border-bottom: 1px solid rgba(255,255,255,0.05);
+    border-bottom: 1px solid rgba(37,99,235,0.08);
     transition: color 0.2s;
   }
 
@@ -209,7 +209,7 @@
   /* ===== HERO ===== */
   .hero-section {
     padding: 80px 0;
-    border-bottom: 1px solid rgba(255,255,255,0.06);
+    border-bottom: 1px solid rgba(37,99,235,0.1);
   }
 
   .hero-grid {
@@ -241,7 +241,7 @@
   .coach-placeholder {
     background: var(--surface2);
     border-radius: var(--radius-card);
-    border: 1px solid rgba(255,255,255,0.06);
+    border: 1px solid rgba(37,99,235,0.12);
     aspect-ratio: 3/4;
     display: flex;
     flex-direction: column;
@@ -292,12 +292,12 @@
     border-radius: var(--radius-card);
     padding: 32px;
     text-align: center;
-    border: 1px solid rgba(255,255,255,0.05);
+    border: 1px solid rgba(37,99,235,0.1);
     transition: border-color 0.2s, transform 0.2s;
   }
 
   .credential-card:hover {
-    border-color: rgba(200,16,46,0.25);
+    border-color: rgba(37,99,235,0.25);
     transform: translateY(-3px);
   }
 
@@ -359,7 +359,7 @@
     display: flex;
     flex-direction: column;
     gap: 0;
-    border: 1px solid rgba(255,255,255,0.07);
+    border: 1px solid rgba(37,99,235,0.1);
     border-radius: var(--radius-card);
     overflow: hidden;
   }
@@ -367,7 +367,7 @@
   .faq-item {
     background: var(--surface);
     padding: 28px 32px;
-    border-bottom: 1px solid rgba(255,255,255,0.07);
+    border-bottom: 1px solid rgba(37,99,235,0.1);
     transition: background 0.2s;
   }
 
@@ -393,7 +393,7 @@
 
   .cta-card {
     border: 1px solid var(--primary);
-    background: rgba(200,16,46,0.05);
+    background: rgba(37,99,235,0.05);
     border-radius: 16px;
     padding: 60px;
     text-align: center;
@@ -427,7 +427,7 @@
   /* ===== FOOTER ===== */
   footer {
     background: var(--surface);
-    border-top: 1px solid rgba(255,255,255,0.06);
+    border-top: 1px solid rgba(37,99,235,0.1);
     padding: 64px 0 0;
   }
 
@@ -474,7 +474,7 @@
   .footer-col a:hover { color: var(--text); }
 
   .footer-bottom {
-    border-top: 1px solid rgba(255,255,255,0.06);
+    border-top: 1px solid rgba(37,99,235,0.1);
     padding: 20px 24px;
     max-width: var(--max-w);
     margin: 0 auto;

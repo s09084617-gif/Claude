@@ -25,8 +25,8 @@ html {
 }
 
 body {
-  background: #0A0A0A;
-  color: #F5F5F5;
+  background: #F8FAFF;
+  color: #0F172A;
   font-family: 'Inter', sans-serif;
   font-weight: 400;
   line-height: 1.6;
@@ -38,13 +38,13 @@ body {
    DESIGN TOKENS
 ============================== */
 :root {
-  --bg: #0A0A0A;
-  --surface-1: #161616;
-  --surface-2: #1E1E1E;
-  --crimson: #C8102E;
-  --gold: #D4AF37;
-  --text: #F5F5F5;
-  --muted: #9A9A9A;
+  --bg: #F8FAFF;
+  --surface-1: #EFF6FF;
+  --surface-2: #DBEAFE;
+  --crimson: #2563EB;
+  --gold: #7C3AED;
+  --text: #0F172A;
+  --muted: #64748B;
   --radius-card: 12px;
   --radius-btn: 8px;
 }
@@ -96,10 +96,10 @@ body {
 }
 
 .btn-primary:hover {
-  background: #a50d24;
-  border-color: #a50d24;
+  background: #1d4ed8;
+  border-color: #1d4ed8;
   transform: translateY(-2px);
-  box-shadow: 0 8px 24px rgba(200,16,46,0.35);
+  box-shadow: 0 8px 24px rgba(37,99,235,0.3);
 }
 
 .btn-outline {
@@ -112,7 +112,7 @@ body {
   text-decoration: none;
   padding: 14px 28px;
   border-radius: var(--radius-btn);
-  border: 2px solid rgba(245,245,245,0.25);
+  border: 2px solid rgba(37,99,235,0.4);
   transition: border-color 0.2s, transform 0.2s;
 }
 
@@ -128,15 +128,15 @@ body {
   position: sticky;
   top: 0;
   z-index: 1000;
-  background: rgba(10,10,10,0.85);
+  background: rgba(248,250,255,0.92);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
-  border-bottom: 1px solid rgba(255,255,255,0.06);
+  border-bottom: 1px solid rgba(37,99,235,0.12);
   transition: box-shadow 0.3s;
 }
 
 #navbar.scrolled {
-  box-shadow: 0 2px 24px rgba(0,0,0,0.7);
+  box-shadow: 0 2px 24px rgba(0,0,0,0.15);
 }
 
 .nav-inner {
@@ -198,8 +198,8 @@ body {
 }
 
 .nav-cta:hover {
-  background: #a50d24;
-  border-color: #a50d24;
+  background: #1d4ed8;
+  border-color: #1d4ed8;
   transform: translateY(-1px);
 }
 
@@ -227,7 +227,7 @@ body {
   display: none;
   flex-direction: column;
   padding: 16px 24px 20px;
-  border-top: 1px solid rgba(255,255,255,0.06);
+  border-top: 1px solid rgba(37,99,235,0.12);
   gap: 4px;
 }
 
@@ -243,7 +243,7 @@ body {
   color: var(--muted);
   text-decoration: none;
   padding: 10px 0;
-  border-bottom: 1px solid rgba(255,255,255,0.05);
+  border-bottom: 1px solid rgba(37,99,235,0.08);
   transition: color 0.2s;
 }
 
@@ -268,7 +268,7 @@ body {
 }
 
 .mobile-nav .mob-cta:hover {
-  background: #a50d24;
+  background: #1d4ed8;
   color: #fff;
 }
 
@@ -346,7 +346,7 @@ body {
   border-radius: 16px;
   border-left: 4px solid var(--crimson);
   padding: 28px 24px 24px;
-  box-shadow: 0 8px 40px rgba(0,0,0,0.5);
+  box-shadow: 0 8px 40px rgba(0,0,0,0.1);
 }
 
 .hero-card-label {
@@ -379,13 +379,13 @@ body {
 }
 
 .hero-ba-box.before {
-  background: linear-gradient(160deg, #2a2a2a 0%, #1a1a1a 100%);
-  border: 1px solid rgba(255,255,255,0.07);
+  background: linear-gradient(160deg, #DBEAFE 0%, #EFF6FF 100%);
+  border: 1px solid rgba(37,99,235,0.15);
 }
 
 .hero-ba-box.after {
-  background: linear-gradient(160deg, #3d0a12 0%, #C8102E 100%);
-  border: 1px solid rgba(200,16,46,0.3);
+  background: linear-gradient(160deg, #1e40af 0%, #2563EB 100%);
+  border: 1px solid rgba(37,99,235,0.3);
 }
 
 .hero-ba-tag {
@@ -399,7 +399,7 @@ body {
 }
 
 .hero-ba-box.before .hero-ba-tag {
-  background: rgba(255,255,255,0.08);
+  background: rgba(37,99,235,0.1);
   color: var(--muted);
 }
 
@@ -411,7 +411,7 @@ body {
 .hero-card-stats {
   text-align: center;
   padding: 14px 0 0;
-  border-top: 1px solid rgba(255,255,255,0.07);
+  border-top: 1px solid rgba(37,99,235,0.12);
 }
 
 .hero-card-stats strong {
@@ -444,8 +444,8 @@ body {
 ============================== */
 .proof-bar {
   background: var(--surface-1);
-  border-top: 1px solid rgba(255,255,255,0.06);
-  border-bottom: 1px solid rgba(255,255,255,0.06);
+  border-top: 1px solid rgba(37,99,235,0.12);
+  border-bottom: 1px solid rgba(37,99,235,0.12);
 }
 
 .proof-bar-inner {
@@ -469,7 +469,7 @@ body {
   top: 25%;
   height: 50%;
   width: 1px;
-  background: rgba(255,255,255,0.08);
+  background: rgba(37,99,235,0.1);
 }
 
 .proof-num {
@@ -522,7 +522,7 @@ body {
   background: var(--surface-1);
   border-radius: var(--radius-card);
   overflow: hidden;
-  border: 1px solid rgba(255,255,255,0.06);
+  border: 1px solid rgba(37,99,235,0.1);
   transition: border-color 0.2s, transform 0.2s;
 }
 
@@ -538,7 +538,7 @@ body {
 }
 
 .transform-before {
-  background: linear-gradient(160deg, #252525 0%, #191919 100%);
+  background: linear-gradient(160deg, #DBEAFE 0%, #EFF6FF 100%);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -546,7 +546,7 @@ body {
 }
 
 .transform-after {
-  background: linear-gradient(160deg, #2a0009 0%, #C8102E 100%);
+  background: linear-gradient(160deg, #1e40af 0%, #2563EB 100%);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -563,7 +563,7 @@ body {
 }
 
 .transform-before .transform-ba-label {
-  background: rgba(255,255,255,0.07);
+  background: rgba(37,99,235,0.1);
   color: var(--muted);
 }
 
@@ -623,7 +623,7 @@ body {
   background: var(--surface-1);
   border-radius: var(--radius-card);
   padding: 28px 24px 24px;
-  border: 1px solid rgba(255,255,255,0.07);
+  border: 1px solid rgba(37,99,235,0.1);
   display: flex;
   flex-direction: column;
   position: relative;
@@ -631,7 +631,7 @@ body {
 }
 
 .service-card:hover {
-  border-color: rgba(255,255,255,0.15);
+  border-color: rgba(37,99,235,0.25);
   transform: translateY(-4px);
 }
 
@@ -651,7 +651,7 @@ body {
   left: 50%;
   transform: translateX(-50%);
   background: var(--gold);
-  color: #0A0A0A;
+  color: #0F172A;
   font-family: 'Inter', sans-serif;
   font-weight: 700;
   font-size: 10px;
@@ -731,13 +731,13 @@ body {
   text-decoration: none;
   padding: 12px 20px;
   border-radius: var(--radius-btn);
-  border: 2px solid rgba(255,255,255,0.2);
+  border: 2px solid rgba(37,99,235,0.2);
   transition: background 0.2s, border-color 0.2s;
 }
 
 .service-cta:hover {
-  background: rgba(255,255,255,0.06);
-  border-color: rgba(255,255,255,0.4);
+  background: rgba(37,99,235,0.08);
+  border-color: rgba(37,99,235,0.4);
 }
 
 .service-card.featured .service-cta {
@@ -747,8 +747,8 @@ body {
 }
 
 .service-card.featured .service-cta:hover {
-  background: #a50d24;
-  border-color: #a50d24;
+  background: #1d4ed8;
+  border-color: #1d4ed8;
 }
 
 @media (max-width: 768px) {
@@ -774,7 +774,7 @@ body {
   background: var(--surface-1);
   border-radius: var(--radius-card);
   padding: 28px 24px;
-  border: 1px solid rgba(255,255,255,0.07);
+  border: 1px solid rgba(37,99,235,0.1);
   transition: border-color 0.2s;
 }
 
@@ -842,7 +842,7 @@ body {
 .coach-badge {
   background: var(--surface-1);
   border-radius: var(--radius-card);
-  border: 1px solid rgba(255,255,255,0.07);
+  border: 1px solid rgba(37,99,235,0.1);
   padding: 20px 18px;
   display: flex;
   flex-direction: column;
@@ -930,7 +930,7 @@ body {
 .faq-item {
   background: var(--surface-1);
   border-radius: var(--radius-card);
-  border: 1px solid rgba(255,255,255,0.07);
+  border: 1px solid rgba(37,99,235,0.1);
   overflow: hidden;
   transition: border-color 0.2s;
 }
@@ -966,7 +966,7 @@ body {
   width: 20px;
   height: 20px;
   border-radius: 50%;
-  border: 1px solid rgba(255,255,255,0.15);
+  border: 1px solid rgba(37,99,235,0.2);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -998,7 +998,7 @@ body {
   font-size: 15px;
   color: var(--muted);
   line-height: 1.7;
-  border-top: 1px solid rgba(255,255,255,0.05);
+  border-top: 1px solid rgba(37,99,235,0.08);
   padding-top: 16px;
 }
 
@@ -1006,9 +1006,9 @@ body {
    FINAL CTA SECTION
 ============================== */
 .cta-section {
-  background: #1A0608;
-  border-top: 1px solid rgba(200,16,46,0.2);
-  border-bottom: 1px solid rgba(200,16,46,0.2);
+  background: #EFF6FF;
+  border-top: 1px solid rgba(37,99,235,0.15);
+  border-bottom: 1px solid rgba(37,99,235,0.15);
 }
 
 .cta-section-inner {
@@ -1044,8 +1044,8 @@ body {
    FOOTER
 ============================== */
 footer {
-  background: #0D0D0D;
-  border-top: 1px solid rgba(255,255,255,0.07);
+  background: #EFF6FF;
+  border-top: 1px solid rgba(37,99,235,0.12);
   padding: 60px 0 0;
 }
 
@@ -1115,7 +1115,7 @@ footer {
 }
 
 .footer-bottom {
-  border-top: 1px solid rgba(255,255,255,0.06);
+  border-top: 1px solid rgba(37,99,235,0.1);
   padding: 20px 24px;
   text-align: center;
 }
@@ -1584,6 +1584,80 @@ footer {
     </div>
   </div>
 </section>
+
+<!-- ==============================
+     SOCIAL MEDIA GALLERY
+============================== -->
+<section class="section bg-surface">
+  <div class="container">
+    <div class="section-header" style="margin-bottom:36px">
+      <div class="section-label">Social Media</div>
+      <h2 class="section-title">Follow the transformation journey</h2>
+      <p style="color:var(--muted);margin-top:10px;font-size:0.95rem">
+        Real content from real training —
+        <a href="https://www.instagram.com/sahil_r_fitness/" target="_blank" rel="noopener"
+           style="color:var(--gold);text-decoration:none">@sahil_r_fitness</a>
+      </p>
+    </div>
+
+    <!-- Bento grid: landscape banner top, square + 2 portraits below -->
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;max-width:960px;margin:0 auto">
+
+      <!-- Top row: full-width landscape -->
+      <a href="https://www.instagram.com/sahil_r_fitness/" target="_blank" rel="noopener"
+         class="social-card" style="grid-column:1/3;border-radius:14px;overflow:hidden;display:block">
+        <img src="images/ad-workout-working.webp"
+             alt="Is Your Workout Working For You?"
+             loading="lazy"
+             style="width:100%;height:320px;object-fit:cover;object-position:center;display:block">
+      </a>
+
+      <!-- Bottom left: square/before-after ad -->
+      <a href="https://www.instagram.com/sahil_r_fitness/" target="_blank" rel="noopener"
+         class="social-card" style="border-radius:14px;overflow:hidden;display:block">
+        <img src="images/ad-before-after.webp"
+             alt="Stop Wasting Workouts — Train Smarter Not Harder"
+             loading="lazy"
+             style="width:100%;height:300px;object-fit:cover;display:block">
+      </a>
+
+      <!-- Bottom right: 2 portrait story ads -->
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+        <a href="https://www.instagram.com/sahil_r_fitness/" target="_blank" rel="noopener"
+           class="social-card" style="border-radius:14px;overflow:hidden;display:block">
+          <img src="images/ad-gym-lost.webp"
+               alt="Wandering the gym aimlessly?"
+               loading="lazy"
+               style="width:100%;height:300px;object-fit:cover;object-position:center top;display:block">
+        </a>
+        <a href="https://www.instagram.com/sahil_r_fitness/" target="_blank" rel="noopener"
+           class="social-card" style="border-radius:14px;overflow:hidden;display:block">
+          <img src="images/ad-coaching.webp"
+               alt="1:1 Premium Coaching — Custom Training + Nutrition"
+               loading="lazy"
+               style="width:100%;height:300px;object-fit:cover;object-position:center top;display:block">
+        </a>
+      </div>
+    </div>
+
+    <div style="text-align:center;margin-top:28px">
+      <a href="https://www.instagram.com/sahil_r_fitness/" target="_blank" rel="noopener"
+         class="btn-outline" style="display:inline-flex;align-items:center;gap:8px;text-decoration:none">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+        Follow @sahil_r_fitness on Instagram
+      </a>
+    </div>
+  </div>
+</section>
+<style>
+.social-card img { transition: transform 0.4s ease; }
+.social-card:hover img { transform: scale(1.04); }
+@media(max-width:600px){
+  .social-card[style*="grid-column"] { grid-column: 1/3 !important; }
+  div[style*="grid-template-columns:1fr 1fr;gap:12px;max-width"] { grid-template-columns:1fr !important; }
+  div[style*="grid-template-columns:1fr 1fr;gap:12px"] { grid-template-columns:1fr 1fr !important; }
+}
+</style>
 
 <!-- ==============================
      FINAL CTA
