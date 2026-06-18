@@ -881,6 +881,19 @@
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 </script>
+<script>
+// Intersection observer for fade-up animations
+(function() {
+  var els = document.querySelectorAll('.section-title, .section-label, .hero-h1, .hero-sub, .proof-stat, .feature-card, .testimonial-card, .pricing-card, .result-card, .faq-item, .step-card');
+  els.forEach(function(el) { el.classList.add('fade-up'); });
+  var io = new IntersectionObserver(function(entries) {
+    entries.forEach(function(e) {
+      if (e.isIntersecting) { e.target.classList.add('visible'); io.unobserve(e.target); }
+    });
+  }, { threshold: 0.12 });
+  els.forEach(function(el) { io.observe(el); });
+})();
+</script>
 
 </body>
 </html>
