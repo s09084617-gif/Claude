@@ -627,10 +627,23 @@ body {
 }
 
 .transform-after {
+  position: relative;
+  overflow: hidden;
   background: linear-gradient(160deg, #8b0010 0%, #C8102E 100%);
-  display: flex;
-  align-items: center;
-  justify-content: center;
+}
+
+.transform-after img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top center;
+  display: block;
+}
+
+.transform-after .transform-ba-label {
+  position: absolute;
+  top: 8px;
+  left: 8px;
 }
 
 .transform-ba-label {
@@ -1336,6 +1349,7 @@ footer {
             <span class="transform-ba-label">BEFORE</span>
           </div>
           <div class="transform-after">
+            <img src="images/transform-man-tshirt.jpg" alt="Rahul M. after transformation">
             <span class="transform-ba-label">AFTER</span>
           </div>
         </div>
@@ -1353,6 +1367,7 @@ footer {
             <span class="transform-ba-label">BEFORE</span>
           </div>
           <div class="transform-after">
+            <img src="images/transform-woman-1.jpg" alt="Priya S. after transformation">
             <span class="transform-ba-label">AFTER</span>
           </div>
         </div>
@@ -1370,6 +1385,7 @@ footer {
             <span class="transform-ba-label">BEFORE</span>
           </div>
           <div class="transform-after">
+            <img src="images/transform-man-tank.jpg" alt="Karan T. after transformation">
             <span class="transform-ba-label">AFTER</span>
           </div>
         </div>
@@ -1740,6 +1756,7 @@ footer {
       <a href="booking.html">Book a Session</a>
       <a href="client-portal.html">Client Login</a>
       <a href="qr.html">QR Code</a>
+      <a href="dashboard.html" style="color:var(--crimson);font-weight:600;">&#128272; Coach Dashboard</a>
     </div>
     <div class="footer-col">
       <h4>Legal</h4>
