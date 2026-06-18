@@ -16,6 +16,14 @@
   0%, 100% { box-shadow: 0 0 12px rgba(200,16,46,0.4), 0 0 24px rgba(200,16,46,0.2); }
   50% { box-shadow: 0 0 20px rgba(200,16,46,0.7), 0 0 40px rgba(200,16,46,0.35); }
 }
+@keyframes logo-glow {
+  0%, 100% { filter: drop-shadow(0 0 20px rgba(200,16,46,0.45)) drop-shadow(0 0 45px rgba(200,16,46,0.2)); }
+  50%       { filter: drop-shadow(0 0 38px rgba(200,16,46,0.75)) drop-shadow(0 0 70px rgba(200,16,46,0.35)) drop-shadow(0 0 12px rgba(212,175,55,0.3)); }
+}
+@keyframes hero-float {
+  0%, 100% { transform: translateY(0px); }
+  50%       { transform: translateY(-10px); }
+}
 @keyframes gold-shimmer {
   0% { background-position: -200% center; }
   100% { background-position: 200% center; }
@@ -56,7 +64,7 @@ html {
 
 body {
   background: #050505;
-  color: #0F172A;
+  color: #F5F5F5;
   font-family: 'Inter', sans-serif;
   font-weight: 400;
   line-height: 1.6;
@@ -180,17 +188,21 @@ body {
 }
 
 .nav-logo {
-  font-family: 'Barlow Condensed', sans-serif;
-  font-weight: 900;
-  font-size: 20px;
-  letter-spacing: 3px;
-  color: var(--text);
   text-decoration: none;
   flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  transition: filter 0.3s ease;
+}
+
+.nav-logo img {
+  height: 64px;
+  width: auto;
+  display: block;
 }
 
 .nav-logo:hover {
-  color: var(--crimson);
+  filter: drop-shadow(0 0 10px rgba(200,16,46,0.9)) drop-shadow(0 0 20px rgba(200,16,46,0.5));
 }
 
 .nav-links {
@@ -318,7 +330,20 @@ body {
    HERO
 ============================== */
 .hero {
-  padding: 80px 0 60px;
+  padding: 60px 0 40px;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Subtle red radial glow behind hero */
+.hero::before {
+  content: '';
+  position: absolute;
+  top: 0; right: 0;
+  width: 55%;
+  height: 100%;
+  background: radial-gradient(ellipse at center right, rgba(200,16,46,0.08) 0%, transparent 70%);
+  pointer-events: none;
 }
 
 .hero-inner {
@@ -326,9 +351,34 @@ body {
   margin: 0 auto;
   padding: 0 24px;
   display: grid;
-  grid-template-columns: 60% 40%;
-  gap: 48px;
+  grid-template-columns: 55% 45%;
+  gap: 32px;
   align-items: center;
+}
+
+/* Coach image column */
+.hero-coach-col {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+.hero-coach-img {
+  width: 100%;
+  max-width: 440px;
+  display: block;
+  animation: logo-glow 3.5s ease-in-out infinite, hero-float 5s ease-in-out infinite;
+}
+
+.hero-tagline {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-weight: 700;
+  font-size: 13px;
+  letter-spacing: 4px;
+  color: var(--gold);
+  text-align: center;
+  text-transform: uppercase;
 }
 
 .hero-label {
@@ -1198,7 +1248,7 @@ footer {
 <nav id="navbar">
   <div class="nav-inner">
     <a href="index.html" class="nav-logo">
-  <img src="images/logo-coach-sahil.png" alt="FitWid - Coach Sahil" style="height:52px;width:auto;display:block;">
+  <img src="images/logo-coach-sahil.png" alt="FitWid - Coach Sahil">
 </a>
     <ul class="nav-links">
       <li><a href="coaching.html">Coaching</a></li>
@@ -1236,21 +1286,14 @@ footer {
       </div>
     </div>
 
-    <!-- Right Column — Before/After Placeholder Card -->
-    <div class="hero-card">
-      <div class="hero-card-label">Client Transformation</div>
-      <div class="hero-ba-row">
-        <div class="hero-ba-box before">
-          <span class="hero-ba-tag">BEFORE</span>
-        </div>
-        <div class="hero-ba-box after">
-          <span class="hero-ba-tag">AFTER</span>
-        </div>
-      </div>
-      <div class="hero-card-stats">
-        <strong>+8kg Muscle &middot; &minus;12kg Fat &middot; 16 Weeks</strong>
-        <p>Real client result &mdash; photos coming soon</p>
-      </div>
+    <!-- Right Column — Coach Sahil -->
+    <div class="hero-coach-col">
+      <img
+        src="images/logo-coach-sahil.png"
+        alt="Coach Sahil — Train • Transform • Inspire"
+        class="hero-coach-img"
+      >
+      <div class="hero-tagline">Train &bull; Transform &bull; Inspire</div>
     </div>
   </div>
 </section>
@@ -1261,15 +1304,15 @@ footer {
 <div class="proof-bar">
   <div class="proof-bar-inner">
     <div class="proof-stat">
-      <span class="proof-num">200+</span>
+      <span class="proof-num gold-text">200+</span>
       <span class="proof-label">Clients Transformed</span>
     </div>
     <div class="proof-stat">
-      <span class="proof-num">4.9 &#9733;</span>
+      <span class="proof-num gold-text">4.9 &#9733;</span>
       <span class="proof-label">Average Rating</span>
     </div>
     <div class="proof-stat">
-      <span class="proof-num">5+</span>
+      <span class="proof-num gold-text">5+</span>
       <span class="proof-label">Years Coaching Experience</span>
     </div>
   </div>
@@ -1677,7 +1720,7 @@ footer {
   <div class="footer-inner">
     <div class="footer-brand">
       <a href="index.html" class="nav-logo">
-  <img src="images/logo-coach-sahil.png" alt="FitWid - Coach Sahil" style="height:52px;width:auto;display:block;">
+  <img src="images/logo-coach-sahil.png" alt="FitWid - Coach Sahil">
 </a>
       <p>I-BLITZ Fitness Club &middot; Bangalore</p>
       <a href="mailto:coach@fitwid.fit">coach@fitwid.fit</a>
