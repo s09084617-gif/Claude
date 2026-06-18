@@ -6,16 +6,47 @@
 <title>Client Results &amp; Transformations — FitWid.fit</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Inter+Tight:wght@700;800;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Barlow+Condensed:wght@700;900&family=Oswald:wght@600;700&display=swap" rel="stylesheet">
 <style>
+/* ==============================
+   ANIMATIONS
+============================== */
+@keyframes glow-pulse {
+  0%, 100% { box-shadow: 0 0 12px rgba(200,16,46,0.4), 0 0 24px rgba(200,16,46,0.2); }
+  50% { box-shadow: 0 0 20px rgba(200,16,46,0.7), 0 0 40px rgba(200,16,46,0.35); }
+}
+@keyframes gold-shimmer {
+  0% { background-position: -200% center; }
+  100% { background-position: 200% center; }
+}
+@keyframes fade-up {
+  from { opacity: 0; transform: translateY(28px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes spark-float {
+  0% { transform: translateY(0) scale(1); opacity: 1; }
+  100% { transform: translateY(-60px) scale(0.3); opacity: 0; }
+}
+.glow-pulse { animation: glow-pulse 2.5s ease-in-out infinite; }
+.gold-text {
+  background: linear-gradient(90deg, #D4AF37 0%, #f5d060 40%, #D4AF37 60%, #a8851a 100%);
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: gold-shimmer 3s linear infinite;
+}
+.fade-up { opacity: 0; transform: translateY(28px); transition: opacity 0.6s ease, transform 0.6s ease; }
+.fade-up.visible { opacity: 1; transform: translateY(0); }
+
   :root {
-    --bg: #0A0A0A;
-    --surface: #161616;
-    --surface2: #1E1E1E;
+    --bg: #050505;
+    --surface: #FFFFFF;
+    --surface2: #110000;
     --primary: #C8102E;
     --accent: #D4AF37;
     --text: #F5F5F5;
-    --muted: #9A9A9A;
+    --muted: #A0A0A0;
     --radius-card: 12px;
     --radius-btn: 8px;
     --section-pad: 80px;
@@ -46,8 +77,8 @@
     position: sticky;
     top: 0;
     z-index: 500;
-    background: rgba(10,10,10,0.96);
-    border-bottom: 1px solid rgba(200,16,46,0.25);
+    background: rgba(5,5,5,0.96);
+    border-bottom: 1px solid rgba(200,16,46,0.2);
     backdrop-filter: blur(14px);
   }
 
@@ -63,16 +94,19 @@
   }
 
   .nav-logo {
-    font-family: 'Inter Tight', sans-serif;
-    font-weight: 900;
-    font-size: 20px;
-    letter-spacing: 4px;
-    background: linear-gradient(90deg, var(--primary), var(--accent));
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
     text-decoration: none;
     flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    transition: filter 0.3s ease;
+  }
+  .nav-logo img {
+    height: 64px;
+    width: auto;
+    display: block;
+  }
+  .nav-logo:hover {
+    filter: drop-shadow(0 0 10px rgba(200,16,46,0.9)) drop-shadow(0 0 20px rgba(200,16,46,0.5));
   }
 
   .nav-links {
@@ -108,7 +142,7 @@
     flex-shrink: 0;
   }
 
-  .nav-cta:hover { opacity: 0.88; }
+  .nav-cta:hover { opacity: 0.88; box-shadow: 0 0 16px rgba(200,16,46,0.4); }
 
   .hamburger {
     display: none;
@@ -136,7 +170,7 @@
     background: var(--surface);
     padding: 16px 24px 24px;
     gap: 4px;
-    border-top: 1px solid rgba(255,255,255,0.06);
+    border-top: 1px solid rgba(200,16,46,0.12);
   }
 
   .mobile-nav.open { display: flex; }
@@ -148,7 +182,7 @@
     color: var(--muted);
     text-decoration: none;
     padding: 10px 0;
-    border-bottom: 1px solid rgba(255,255,255,0.05);
+    border-bottom: 1px solid rgba(200,16,46,0.08);
     transition: color 0.2s;
   }
 
@@ -180,7 +214,7 @@
   }
 
   h1 {
-    font-family: 'Inter Tight', sans-serif;
+    font-family: 'Barlow Condensed', sans-serif;
     font-weight: 900;
     font-size: clamp(36px, 5vw, 56px);
     line-height: 1.08;
@@ -189,7 +223,7 @@
   }
 
   h2 {
-    font-family: 'Inter Tight', sans-serif;
+    font-family: 'Barlow Condensed', sans-serif;
     font-weight: 800;
     font-size: clamp(28px, 3.5vw, 40px);
     line-height: 1.1;
@@ -208,7 +242,7 @@
   .page-header {
     padding: 80px 0 64px;
     text-align: center;
-    border-bottom: 1px solid rgba(255,255,255,0.06);
+    border-bottom: 1px solid rgba(200,16,46,0.1);
   }
 
   .page-header .lead { margin: 0 auto; }
@@ -227,13 +261,13 @@
     background: var(--surface);
     border-radius: var(--radius-card);
     overflow: hidden;
-    border: 1px solid rgba(255,255,255,0.05);
+    border: 1px solid rgba(200,16,46,0.1);
     transition: transform 0.2s, border-color 0.2s;
   }
 
   .transform-card:hover {
     transform: translateY(-3px);
-    border-color: rgba(200,16,46,0.25);
+    border-color: rgba(200,16,46,0.3);
   }
 
   .before-after {
@@ -247,7 +281,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    font-family: 'Inter Tight', sans-serif;
+    font-family: 'Barlow Condensed', sans-serif;
     font-weight: 800;
     font-size: 12px;
     letter-spacing: 2px;
@@ -255,13 +289,13 @@
   }
 
   .ba-panel.before {
-    background: linear-gradient(135deg, #2a2a2a, #1a1a1a);
-    border-right: 1px solid rgba(255,255,255,0.12);
+    background: linear-gradient(135deg, #110000, #0d0d0d);
+    border-right: 1px solid rgba(200,16,46,0.2);
   }
 
   .ba-panel.after {
-    background: linear-gradient(135deg, #3a0a10, rgba(200,16,46,0.13));
-    color: rgba(200,16,46,0.6);
+    background: linear-gradient(135deg, #8b0010, rgba(200,16,46,0.3));
+    color: rgba(200,16,46,0.8);
   }
 
   .transform-info {
@@ -283,7 +317,7 @@
     font-size: 11px;
     letter-spacing: 1px;
     color: var(--accent);
-    background: rgba(212,175,55,0.1);
+    background: rgba(124,58,237,0.1);
     border-radius: 4px;
     padding: 3px 10px;
     margin-bottom: 8px;
@@ -304,8 +338,8 @@
   /* ===== STATS BAR ===== */
   .stats-bar {
     background: var(--surface);
-    border-top: 1px solid rgba(255,255,255,0.06);
-    border-bottom: 1px solid rgba(255,255,255,0.06);
+    border-top: 1px solid rgba(200,16,46,0.1);
+    border-bottom: 1px solid rgba(200,16,46,0.1);
     padding: 0;
   }
 
@@ -318,13 +352,13 @@
     flex: 1;
     padding: 36px 24px;
     text-align: center;
-    border-right: 1px solid rgba(255,255,255,0.06);
+    border-right: 1px solid rgba(200,16,46,0.1);
   }
 
   .stat-item:last-child { border-right: none; }
 
   .stat-value {
-    font-family: 'Inter Tight', sans-serif;
+    font-family: 'Barlow Condensed', sans-serif;
     font-weight: 900;
     font-size: 36px;
     color: var(--primary);
@@ -354,14 +388,14 @@
     background: var(--surface);
     border-radius: var(--radius-card);
     padding: 24px;
-    border: 1px solid rgba(255,255,255,0.05);
+    border: 1px solid rgba(200,16,46,0.1);
     display: flex;
     flex-direction: column;
     gap: 14px;
     transition: border-color 0.2s;
   }
 
-  .testimonial-card:hover { border-color: rgba(212,175,55,0.2); }
+  .testimonial-card:hover { border-color: rgba(124,58,237,0.25); }
 
   .stars {
     font-size: 14px;
@@ -410,7 +444,7 @@
     font-family: 'Inter', sans-serif;
     font-weight: 700;
     font-size: 15px;
-    color: var(--text);
+    color: #fff;
     background: var(--primary);
     border-radius: var(--radius-btn);
     padding: 14px 36px;
@@ -423,7 +457,7 @@
   /* ===== FOOTER ===== */
   footer {
     background: var(--surface);
-    border-top: 1px solid rgba(255,255,255,0.06);
+    border-top: 1px solid rgba(200,16,46,0.1);
     padding: 64px 0 0;
   }
 
@@ -449,7 +483,7 @@
   }
 
   .footer-col h4 {
-    font-family: 'Inter Tight', sans-serif;
+    font-family: 'Barlow Condensed', sans-serif;
     font-weight: 700;
     font-size: 13px;
     letter-spacing: 1.5px;
@@ -470,7 +504,7 @@
   .footer-col a:hover { color: var(--text); }
 
   .footer-bottom {
-    border-top: 1px solid rgba(255,255,255,0.06);
+    border-top: 1px solid rgba(200,16,46,0.1);
     padding: 20px 24px;
     max-width: var(--max-w);
     margin: 0 auto;
@@ -489,7 +523,7 @@
     .transform-grid { grid-template-columns: repeat(2, 1fr); }
 
     .stats-row { flex-wrap: wrap; }
-    .stat-item { flex: 1 1 50%; border-bottom: 1px solid rgba(255,255,255,0.06); }
+    .stat-item { flex: 1 1 50%; border-bottom: 1px solid rgba(200,16,46,0.1); }
     .stat-item:nth-child(2) { border-right: none; }
     .stat-item:nth-child(3), .stat-item:nth-child(4) { border-bottom: none; }
 
@@ -502,7 +536,7 @@
     .footer-inner { grid-template-columns: 1fr; gap: 32px; }
     .cta-card { padding: 36px 24px; }
     .stats-row { flex-direction: column; }
-    .stat-item { border-right: none; border-bottom: 1px solid rgba(255,255,255,0.06); }
+    .stat-item { border-right: none; border-bottom: 1px solid rgba(200,16,46,0.1); }
     .stat-item:last-child { border-bottom: none; }
   }
 </style>
@@ -512,7 +546,9 @@
 
 <nav id="navbar">
   <div class="nav-inner">
-    <a href="index.html" class="nav-logo">FITWID</a>
+    <a href="index.html" class="nav-logo">
+  <img src="images/logo-coach-sahil.png" alt="FitWid - Coach Sahil">
+</a>
     <ul class="nav-links">
       <li><a href="coaching.html">Coaching</a></li>
       <li><a href="pricing.html">Pricing</a></li>
@@ -545,59 +581,77 @@
 <!-- TRANSFORMATIONS -->
 <section class="transform-section">
   <div class="container">
-
-    <!-- Filter Pills -->
-    <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:28px">
-      <button class="goal-filter active" data-filter="all" onclick="filterGoal(this,'all')" style="padding:8px 18px;border-radius:20px;border:1px solid rgba(200,16,46,.5);background:rgba(200,16,46,.15);color:#E8A0AA;font-size:13px;font-weight:700;cursor:pointer;transition:all .2s;letter-spacing:.5px">All Results</button>
-      <button class="goal-filter" data-filter="fat-loss" onclick="filterGoal(this,'fat-loss')" style="padding:8px 18px;border-radius:20px;border:1px solid rgba(255,255,255,.15);background:transparent;color:#9A9A9A;font-size:13px;font-weight:700;cursor:pointer;transition:all .2s;letter-spacing:.5px">Fat Loss</button>
-      <button class="goal-filter" data-filter="muscle-gain" onclick="filterGoal(this,'muscle-gain')" style="padding:8px 18px;border-radius:20px;border:1px solid rgba(255,255,255,.15);background:transparent;color:#9A9A9A;font-size:13px;font-weight:700;cursor:pointer;transition:all .2s;letter-spacing:.5px">Muscle Gain</button>
-      <button class="goal-filter" data-filter="recomp" onclick="filterGoal(this,'recomp')" style="padding:8px 18px;border-radius:20px;border:1px solid rgba(255,255,255,.15);background:transparent;color:#9A9A9A;font-size:13px;font-weight:700;cursor:pointer;transition:all .2s;letter-spacing:.5px">Body Recomp</button>
-    </div>
-
     <div class="transform-grid">
 
-      <div class="transform-card" data-goal="fat-loss muscle-gain">
-        <img src="images/transform-man-shirtless.jpg" alt="Client transformation" style="width:100%;height:240px;object-fit:cover;display:block">
+      <div class="transform-card">
+        <div class="before-after">
+          <div class="ba-panel before">BEFORE</div>
+          <div class="ba-panel after">AFTER</div>
+        </div>
         <div class="transform-info">
-          <div class="client-name">Rohan V.</div>
-          <div class="duration-chip">20 Weeks</div>
-          <div class="client-stats">Dramatic Fat Loss &amp; Muscle Build</div>
+          <div class="client-name">Rahul M.</div>
+          <div class="duration-chip">16 Weeks</div>
+          <div class="client-stats">+8kg Muscle, -12kg Fat</div>
         </div>
       </div>
 
-      <div class="transform-card" data-goal="fat-loss recomp">
-        <img src="images/transform-woman-1.jpg" alt="Client transformation" style="width:100%;height:240px;object-fit:cover;display:block">
+      <div class="transform-card">
+        <div class="before-after">
+          <div class="ba-panel before">BEFORE</div>
+          <div class="ba-panel after">AFTER</div>
+        </div>
         <div class="transform-info">
           <div class="client-name">Priya S.</div>
-          <div class="duration-chip">16 Weeks</div>
-          <div class="client-stats">Fat Loss &amp; Body Recomposition</div>
-        </div>
-      </div>
-
-      <div class="transform-card" data-goal="recomp">
-        <img src="images/transform-man-tshirt.jpg" alt="Client transformation" style="width:100%;height:240px;object-fit:cover;display:block">
-        <div class="transform-info">
-          <div class="client-name">Arjun K.</div>
           <div class="duration-chip">12 Weeks</div>
-          <div class="client-stats">Body Recomposition</div>
+          <div class="client-stats">-9kg Fat, +5kg Muscle</div>
         </div>
       </div>
 
-      <div class="transform-card" data-goal="fat-loss">
-        <img src="images/transform-woman-2.jpg" alt="Client transformation" style="width:100%;height:240px;object-fit:cover;display:block">
+      <div class="transform-card">
+        <div class="before-after">
+          <div class="ba-panel before">BEFORE</div>
+          <div class="ba-panel after">AFTER</div>
+        </div>
         <div class="transform-info">
-          <div class="client-name">Anjali M.</div>
-          <div class="duration-chip">14 Weeks</div>
-          <div class="client-stats">Fat Loss &amp; Strength Gain</div>
+          <div class="client-name">Karan T.</div>
+          <div class="duration-chip">20 Weeks</div>
+          <div class="client-stats">+11kg Muscle, -6kg Fat</div>
         </div>
       </div>
 
-      <div class="transform-card" data-goal="muscle-gain">
-        <img src="images/transform-man-tank.jpg" alt="Client transformation" style="width:100%;height:240px;object-fit:cover;display:block">
+      <div class="transform-card">
+        <div class="before-after">
+          <div class="ba-panel before">BEFORE</div>
+          <div class="ba-panel after">AFTER</div>
+        </div>
+        <div class="transform-info">
+          <div class="client-name">Anjali R.</div>
+          <div class="duration-chip">10 Weeks</div>
+          <div class="client-stats">-7kg Fat, +3kg Muscle</div>
+        </div>
+      </div>
+
+      <div class="transform-card">
+        <div class="before-after">
+          <div class="ba-panel before">BEFORE</div>
+          <div class="ba-panel after">AFTER</div>
+        </div>
         <div class="transform-info">
           <div class="client-name">Vikram N.</div>
-          <div class="duration-chip">10 Weeks</div>
-          <div class="client-stats">Lean Muscle Gain</div>
+          <div class="duration-chip">14 Weeks</div>
+          <div class="client-stats">+6kg Muscle, -10kg Fat</div>
+        </div>
+      </div>
+
+      <div class="transform-card">
+        <div class="before-after">
+          <div class="ba-panel before">BEFORE</div>
+          <div class="ba-panel after">AFTER</div>
+        </div>
+        <div class="transform-info">
+          <div class="client-name">Sneha G.</div>
+          <div class="duration-chip">18 Weeks</div>
+          <div class="client-stats">-15kg Fat, +4kg Muscle</div>
         </div>
       </div>
 
@@ -639,26 +693,38 @@
 
       <div class="testimonial-card">
         <div class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
-        <p class="quote-text">&ldquo;His guidance, structured workout plans, and constant motivation have really helped me in my fitness journey. Not only did I build muscles, but also gained stamina, strength, and overall confidence. He ensures proper form, tracks progress regularly, and pushes you just enough to get the best results.&rdquo;</p>
-        <div class="quote-author">Yash Raj &mdash; Google Review · 2 years at iBlitz</div>
+        <p class="quote-text">&ldquo;Coach Sahil&rsquo;s programming is the most intelligent I&rsquo;ve ever followed. Progressive overload built into every session, and it shows.&rdquo;</p>
+        <div class="quote-author">Aditya K. &mdash; Online Coaching</div>
       </div>
 
       <div class="testimonial-card">
         <div class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
-        <p class="quote-text">&ldquo;A big shoutout to Trainer Sahil — he's really supportive, knows his stuff well, and always makes sure you maintain the right form while pushing you to do better. Definitely a good choice if you want honest guidance and a solid workout experience.&rdquo;</p>
-        <div class="quote-author">Prakrati Gupta &mdash; Google Review</div>
+        <p class="quote-text">&ldquo;Lost 10kg in 4 months without losing strength. The nutrition guidance was the missing piece I never had before.&rdquo;</p>
+        <div class="quote-author">Meera J. &mdash; 1:1 Premium</div>
       </div>
 
       <div class="testimonial-card">
         <div class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
-        <p class="quote-text">&ldquo;Took personal training from Sahil Bansal, very good experience. Well maintained gym, all the required equipment present, trainers also very helpful. 10/10 recommended.&rdquo;</p>
-        <div class="quote-author">Ananya Bajpayi &mdash; Google Review</div>
+        <p class="quote-text">&ldquo;I&rsquo;ve been training for 3 years on my own with zero progress. 2 months with Coach Sahil and everything changed.&rdquo;</p>
+        <div class="quote-author">Rohit P. &mdash; Online Coaching</div>
       </div>
 
       <div class="testimonial-card">
         <div class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
-        <p class="quote-text">&ldquo;A special mention to Trainer Sahil — very supportive, knowledgeable, and always focused on proper form and motivation. Highly recommended if you're looking for genuine guidance and a great workout experience.&rdquo;</p>
-        <div class="quote-author">Shreya Jain &mdash; Google Review</div>
+        <p class="quote-text">&ldquo;The weekly check-ins keep me accountable. I&rsquo;ve never been this consistent in my life.&rdquo;</p>
+        <div class="quote-author">Divya M. &mdash; Online Coaching</div>
+      </div>
+
+      <div class="testimonial-card">
+        <div class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+        <p class="quote-text">&ldquo;Worth every rupee. Coach Sahil responds fast and actually adjusts the program based on how I&rsquo;m feeling.&rdquo;</p>
+        <div class="quote-author">Suresh B. &mdash; 1:1 Premium</div>
+      </div>
+
+      <div class="testimonial-card">
+        <div class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+        <p class="quote-text">&ldquo;Got abs for the first time in my life at 34. This program works if you do the work.&rdquo;</p>
+        <div class="quote-author">Nikhil A. &mdash; Online Coaching</div>
       </div>
 
     </div>
@@ -679,13 +745,15 @@
 <footer>
   <div class="footer-inner">
     <div class="footer-brand">
-      <a href="index.html" class="nav-logo">FITWID</a>
+      <a href="index.html" class="nav-logo">
+  <img src="images/logo-coach-sahil.png" alt="FitWid - Coach Sahil">
+</a>
       <p>I-BLITZ Fitness Club &middot; Bangalore</p>
       <a href="mailto:coach@fitwid.fit">coach@fitwid.fit</a>
     </div>
     <div class="footer-col"><h4>Platform</h4><a href="coaching.html">Coaching</a><a href="pricing.html">Pricing</a><a href="results.html">Results</a><a href="apply.html">Apply</a><a href="about.html">About</a></div>
     <div class="footer-col"><h4>Tools</h4><a href="generator.html">Workout Generator</a><a href="booking.html">Book Session</a><a href="client-portal.html">Client Login</a></div>
-    <div class="footer-col"><h4>Legal</h4><a href="privacy.html">Privacy</a><a href="terms.html">Terms</a></div>
+    <div class="footer-col"><h4>Legal</h4><a href="#">Privacy</a><a href="#">Terms</a></div>
   </div>
   <div class="footer-bottom"><p>&copy; 2025 FitWid.fit &mdash; I-BLITZ Fitness Club. All rights reserved.</p></div>
 </footer>
@@ -697,29 +765,18 @@
     });
   });
 </script>
-<!-- Floating WhatsApp Button -->
-<a href="https://wa.me/917015552731?text=Hi%20Coach%20Sahil%2C%20I%27m%20interested%20in%20coaching!" target="_blank" rel="noopener" aria-label="Chat on WhatsApp" style="position:fixed;bottom:24px;right:24px;z-index:997;width:56px;height:56px;background:#25D366;border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 24px rgba(37,211,102,.45);transition:transform .2s,box-shadow .2s" onmouseover="this.style.transform='scale(1.12)';this.style.boxShadow='0 6px 28px rgba(37,211,102,.6)'" onmouseout="this.style.transform='scale(1)';this.style.boxShadow='0 4px 24px rgba(37,211,102,.45)'">
-  <svg width="28" height="28" viewBox="0 0 24 24" fill="#fff"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
-</a>
 <script>
-function filterGoal(btn, goal) {
-  document.querySelectorAll('.goal-filter').forEach(b => {
-    b.style.background = 'transparent';
-    b.style.borderColor = 'rgba(255,255,255,.15)';
-    b.style.color = '#9A9A9A';
-  });
-  btn.style.background = 'rgba(200,16,46,.15)';
-  btn.style.borderColor = 'rgba(200,16,46,.5)';
-  btn.style.color = '#E8A0AA';
-  document.querySelectorAll('.transform-card').forEach(card => {
-    if(goal === 'all') {
-      card.style.display = '';
-    } else {
-      const goals = card.dataset.goal || '';
-      card.style.display = goals.includes(goal) ? '' : 'none';
-    }
-  });
-}
+// Intersection observer for fade-up animations
+(function() {
+  var els = document.querySelectorAll('.section-title, .section-label, .hero-h1, .hero-sub, .proof-stat, .feature-card, .testimonial-card, .pricing-card, .result-card, .faq-item, .step-card');
+  els.forEach(function(el) { el.classList.add('fade-up'); });
+  var io = new IntersectionObserver(function(entries) {
+    entries.forEach(function(e) {
+      if (e.isIntersecting) { e.target.classList.add('visible'); io.unobserve(e.target); }
+    });
+  }, { threshold: 0.12 });
+  els.forEach(function(el) { io.observe(el); });
+})();
 </script>
 </body>
 </html>

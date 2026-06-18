@@ -6,16 +6,47 @@
 <title>Online Coaching Services — FitWid.fit</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Inter+Tight:wght@700;800;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Barlow+Condensed:wght@700;900&family=Oswald:wght@600;700&display=swap" rel="stylesheet">
 <style>
+/* ==============================
+   ANIMATIONS
+============================== */
+@keyframes glow-pulse {
+  0%, 100% { box-shadow: 0 0 12px rgba(200,16,46,0.4), 0 0 24px rgba(200,16,46,0.2); }
+  50% { box-shadow: 0 0 20px rgba(200,16,46,0.7), 0 0 40px rgba(200,16,46,0.35); }
+}
+@keyframes gold-shimmer {
+  0% { background-position: -200% center; }
+  100% { background-position: 200% center; }
+}
+@keyframes fade-up {
+  from { opacity: 0; transform: translateY(28px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes spark-float {
+  0% { transform: translateY(0) scale(1); opacity: 1; }
+  100% { transform: translateY(-60px) scale(0.3); opacity: 0; }
+}
+.glow-pulse { animation: glow-pulse 2.5s ease-in-out infinite; }
+.gold-text {
+  background: linear-gradient(90deg, #D4AF37 0%, #f5d060 40%, #D4AF37 60%, #a8851a 100%);
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: gold-shimmer 3s linear infinite;
+}
+.fade-up { opacity: 0; transform: translateY(28px); transition: opacity 0.6s ease, transform 0.6s ease; }
+.fade-up.visible { opacity: 1; transform: translateY(0); }
+
   :root {
-    --bg: #0A0A0A;
-    --surface: #161616;
-    --surface2: #1E1E1E;
+    --bg: #050505;
+    --surface: #FFFFFF;
+    --surface2: #1a0000;
     --primary: #C8102E;
     --accent: #D4AF37;
     --text: #F5F5F5;
-    --muted: #9A9A9A;
+    --muted: #A0A0A0;
     --radius-card: 12px;
     --radius-btn: 8px;
     --section-pad: 80px;
@@ -46,8 +77,8 @@
     position: sticky;
     top: 0;
     z-index: 500;
-    background: rgba(10,10,10,0.96);
-    border-bottom: 1px solid rgba(200,16,46,0.25);
+    background: rgba(5,5,5,0.96);
+    border-bottom: 1px solid rgba(200,16,46,0.2);
     backdrop-filter: blur(14px);
   }
 
@@ -63,16 +94,19 @@
   }
 
   .nav-logo {
-    font-family: 'Inter Tight', sans-serif;
-    font-weight: 900;
-    font-size: 20px;
-    letter-spacing: 4px;
-    background: linear-gradient(90deg, var(--primary), var(--accent));
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
     text-decoration: none;
     flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    transition: filter 0.3s ease;
+  }
+  .nav-logo img {
+    height: 64px;
+    width: auto;
+    display: block;
+  }
+  .nav-logo:hover {
+    filter: drop-shadow(0 0 10px rgba(200,16,46,0.9)) drop-shadow(0 0 20px rgba(200,16,46,0.5));
   }
 
   .nav-links {
@@ -108,7 +142,7 @@
     flex-shrink: 0;
   }
 
-  .nav-cta:hover { opacity: 0.88; }
+  .nav-cta:hover { opacity: 0.88; box-shadow: 0 0 16px rgba(200,16,46,0.4); }
 
   .hamburger {
     display: none;
@@ -135,7 +169,7 @@
     background: var(--surface);
     padding: 16px 24px 24px;
     gap: 4px;
-    border-top: 1px solid rgba(255,255,255,0.06);
+    border-top: 1px solid rgba(200,16,46,0.12);
   }
 
   .mobile-nav.open { display: flex; }
@@ -147,7 +181,7 @@
     color: var(--muted);
     text-decoration: none;
     padding: 10px 0;
-    border-bottom: 1px solid rgba(255,255,255,0.05);
+    border-bottom: 1px solid rgba(200,16,46,0.08);
     transition: color 0.2s;
   }
 
@@ -179,7 +213,7 @@
   }
 
   h1 {
-    font-family: 'Inter Tight', sans-serif;
+    font-family: 'Barlow Condensed', sans-serif;
     font-weight: 900;
     font-size: clamp(36px, 5vw, 56px);
     line-height: 1.08;
@@ -188,7 +222,7 @@
   }
 
   h2 {
-    font-family: 'Inter Tight', sans-serif;
+    font-family: 'Barlow Condensed', sans-serif;
     font-weight: 800;
     font-size: clamp(28px, 3.5vw, 40px);
     line-height: 1.1;
@@ -200,7 +234,7 @@
   .page-header {
     padding: 80px 0 64px;
     text-align: center;
-    border-bottom: 1px solid rgba(255,255,255,0.06);
+    border-bottom: 1px solid rgba(200,16,46,0.1);
   }
 
   .page-header .lead {
@@ -226,7 +260,7 @@
     background: var(--surface);
     border-radius: var(--radius-card);
     padding: 32px;
-    border: 1px solid rgba(255,255,255,0.05);
+    border: 1px solid rgba(200,16,46,0.1);
     display: flex;
     flex-direction: column;
     gap: 0;
@@ -249,7 +283,7 @@
     left: 50%;
     transform: translateX(-50%);
     background: var(--accent);
-    color: #000;
+    color: #F5F5F5;
     font-family: 'Inter', sans-serif;
     font-weight: 700;
     font-size: 10px;
@@ -271,7 +305,7 @@
   }
 
   .service-name {
-    font-family: 'Inter Tight', sans-serif;
+    font-family: 'Barlow Condensed', sans-serif;
     font-weight: 800;
     font-size: 24px;
     color: var(--text);
@@ -279,7 +313,7 @@
   }
 
   .service-price {
-    font-family: 'Inter Tight', sans-serif;
+    font-family: 'Barlow Condensed', sans-serif;
     font-weight: 700;
     font-size: 28px;
     color: var(--primary);
@@ -300,7 +334,7 @@
     line-height: 1.65;
     margin-bottom: 24px;
     padding-bottom: 24px;
-    border-bottom: 1px solid rgba(255,255,255,0.07);
+    border-bottom: 1px solid rgba(200,16,46,0.1);
   }
 
   .feature-list {
@@ -345,7 +379,7 @@
   }
 
   .btn-service-outline {
-    border: 1.5px solid rgba(255,255,255,0.15);
+    border: 1.5px solid rgba(200,16,46,0.2);
     color: var(--text);
   }
 
@@ -360,7 +394,7 @@
 
   .btn-service-gold {
     background: var(--accent);
-    color: #000;
+    color: #F5F5F5;
   }
 
   .btn-service-gold:hover { opacity: 0.88; transform: translateY(-1px); }
@@ -412,7 +446,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    font-family: 'Inter Tight', sans-serif;
+    font-family: 'Barlow Condensed', sans-serif;
     font-weight: 900;
     font-size: 20px;
     color: #fff;
@@ -423,7 +457,7 @@
   }
 
   .step-title {
-    font-family: 'Inter Tight', sans-serif;
+    font-family: 'Barlow Condensed', sans-serif;
     font-weight: 700;
     font-size: 17px;
     color: var(--text);
@@ -441,7 +475,7 @@
 
   .table-wrapper {
     margin-top: 40px;
-    border: 1px solid rgba(255,255,255,0.07);
+    border: 1px solid rgba(200,16,46,0.1);
     border-radius: var(--radius-card);
     overflow: hidden;
     overflow-x: auto;
@@ -457,11 +491,11 @@
     background: var(--surface2);
     padding: 16px 20px;
     text-align: left;
-    font-family: 'Inter Tight', sans-serif;
+    font-family: 'Barlow Condensed', sans-serif;
     font-weight: 700;
     font-size: 14px;
     color: var(--text);
-    border-bottom: 1px solid rgba(255,255,255,0.07);
+    border-bottom: 1px solid rgba(200,16,46,0.1);
   }
 
   thead th:first-child {
@@ -476,7 +510,7 @@
   thead th.col-featured { color: var(--accent); }
 
   tbody tr {
-    border-bottom: 1px solid rgba(255,255,255,0.05);
+    border-bottom: 1px solid rgba(200,16,46,0.08);
     transition: background 0.15s;
   }
 
@@ -535,7 +569,7 @@
   /* ===== FOOTER ===== */
   footer {
     background: var(--surface);
-    border-top: 1px solid rgba(255,255,255,0.06);
+    border-top: 1px solid rgba(200,16,46,0.1);
     padding: 64px 0 0;
   }
 
@@ -561,7 +595,7 @@
   }
 
   .footer-col h4 {
-    font-family: 'Inter Tight', sans-serif;
+    font-family: 'Barlow Condensed', sans-serif;
     font-weight: 700;
     font-size: 13px;
     letter-spacing: 1.5px;
@@ -582,7 +616,7 @@
   .footer-col a:hover { color: var(--text); }
 
   .footer-bottom {
-    border-top: 1px solid rgba(255,255,255,0.06);
+    border-top: 1px solid rgba(200,16,46,0.1);
     padding: 20px 24px;
     max-width: var(--max-w);
     margin: 0 auto;
@@ -619,7 +653,9 @@
 
 <nav id="navbar">
   <div class="nav-inner">
-    <a href="index.html" class="nav-logo">FITWID</a>
+    <a href="index.html" class="nav-logo">
+  <img src="images/logo-coach-sahil.png" alt="FitWid - Coach Sahil">
+</a>
     <ul class="nav-links">
       <li><a href="coaching.html">Coaching</a></li>
       <li><a href="pricing.html">Pricing</a></li>
@@ -648,25 +684,6 @@
     <p class="lead">A complete system built to get results &mdash; not just hand you a PDF and disappear.</p>
   </div>
 </div>
-
-<!-- COACH INTRO STRIP -->
-<section style="padding:48px 0 0">
-  <div class="container">
-    <div style="display:grid;grid-template-columns:280px 1fr;gap:40px;align-items:center;background:#161616;border:1px solid rgba(255,255,255,.07);border-radius:16px;overflow:hidden">
-      <img src="images/coach-sahil.jpg" alt="Coach Sahil Bansal" style="width:100%;height:340px;object-fit:cover;object-position:top center;display:block">
-      <div style="padding:32px 32px 32px 0">
-        <div style="font-size:11px;font-weight:700;letter-spacing:2px;color:#C8102E;text-transform:uppercase;margin-bottom:10px">Your Coach</div>
-        <div style="font-size:28px;font-weight:900;color:#fff;line-height:1.1;margin-bottom:12px;font-family:'Inter Tight',sans-serif">Sahil Bansal</div>
-        <div style="font-size:13px;color:#9A9A9A;line-height:1.8;margin-bottom:20px">Certified strength &amp; physique coach with 5+ years and 200+ clients transformed. Every program is built by Sahil personally — not a template, not an AI bot.</div>
-        <div style="display:flex;gap:24px;flex-wrap:wrap">
-          <div><div style="font-size:20px;font-weight:800;color:#C8102E">200+</div><div style="font-size:11px;color:#9A9A9A;margin-top:2px">Clients Trained</div></div>
-          <div><div style="font-size:20px;font-weight:800;color:#C8102E">5+</div><div style="font-size:11px;color:#9A9A9A;margin-top:2px">Years Coaching</div></div>
-          <div><div style="font-size:20px;font-weight:800;color:#C8102E">4.9★</div><div style="font-size:11px;color:#9A9A9A;margin-top:2px">Google Rating</div></div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
 
 <!-- SERVICES -->
 <section class="services-section">
@@ -842,13 +859,15 @@
 <footer>
   <div class="footer-inner">
     <div class="footer-brand">
-      <a href="index.html" class="nav-logo">FITWID</a>
+      <a href="index.html" class="nav-logo">
+  <img src="images/logo-coach-sahil.png" alt="FitWid - Coach Sahil">
+</a>
       <p>I-BLITZ Fitness Club &middot; Bangalore</p>
       <a href="mailto:coach@fitwid.fit">coach@fitwid.fit</a>
     </div>
     <div class="footer-col"><h4>Platform</h4><a href="coaching.html">Coaching</a><a href="pricing.html">Pricing</a><a href="results.html">Results</a><a href="apply.html">Apply</a><a href="about.html">About</a></div>
     <div class="footer-col"><h4>Tools</h4><a href="generator.html">Workout Generator</a><a href="booking.html">Book Session</a><a href="client-portal.html">Client Login</a></div>
-    <div class="footer-col"><h4>Legal</h4><a href="privacy.html">Privacy</a><a href="terms.html">Terms</a></div>
+    <div class="footer-col"><h4>Legal</h4><a href="#">Privacy</a><a href="#">Terms</a></div>
   </div>
   <div class="footer-bottom"><p>&copy; 2025 FitWid.fit &mdash; I-BLITZ Fitness Club. All rights reserved.</p></div>
 </footer>
@@ -860,9 +879,18 @@
     });
   });
 </script>
-<!-- Floating WhatsApp Button -->
-<a href="https://wa.me/917015552731?text=Hi%20Coach%20Sahil%2C%20I%27m%20interested%20in%20coaching!" target="_blank" rel="noopener" aria-label="Chat on WhatsApp" id="waFloat" style="position:fixed;bottom:24px;right:24px;z-index:997;width:56px;height:56px;background:#25D366;border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 24px rgba(37,211,102,.45);transition:transform .2s,box-shadow .2s" onmouseover="this.style.transform='scale(1.12)';this.style.boxShadow='0 6px 28px rgba(37,211,102,.6)'" onmouseout="this.style.transform='scale(1)';this.style.boxShadow='0 4px 24px rgba(37,211,102,.45)'">
-  <svg width="28" height="28" viewBox="0 0 24 24" fill="#fff"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
-</a>
+<script>
+// Intersection observer for fade-up animations
+(function() {
+  var els = document.querySelectorAll('.section-title, .section-label, .hero-h1, .hero-sub, .proof-stat, .feature-card, .testimonial-card, .pricing-card, .result-card, .faq-item, .step-card');
+  els.forEach(function(el) { el.classList.add('fade-up'); });
+  var io = new IntersectionObserver(function(entries) {
+    entries.forEach(function(e) {
+      if (e.isIntersecting) { e.target.classList.add('visible'); io.unobserve(e.target); }
+    });
+  }, { threshold: 0.12 });
+  els.forEach(function(el) { io.observe(el); });
+})();
+</script>
 </body>
 </html>
