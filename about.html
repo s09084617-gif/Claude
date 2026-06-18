@@ -6,16 +6,47 @@
 <title>About Coach Sahil Bansal — FitWid.fit</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Inter+Tight:wght@700;800;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Barlow+Condensed:wght@700;900&family=Oswald:wght@600;700&display=swap" rel="stylesheet">
 <style>
+/* ==============================
+   ANIMATIONS
+============================== */
+@keyframes glow-pulse {
+  0%, 100% { box-shadow: 0 0 12px rgba(200,16,46,0.4), 0 0 24px rgba(200,16,46,0.2); }
+  50% { box-shadow: 0 0 20px rgba(200,16,46,0.7), 0 0 40px rgba(200,16,46,0.35); }
+}
+@keyframes gold-shimmer {
+  0% { background-position: -200% center; }
+  100% { background-position: 200% center; }
+}
+@keyframes fade-up {
+  from { opacity: 0; transform: translateY(28px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes spark-float {
+  0% { transform: translateY(0) scale(1); opacity: 1; }
+  100% { transform: translateY(-60px) scale(0.3); opacity: 0; }
+}
+.glow-pulse { animation: glow-pulse 2.5s ease-in-out infinite; }
+.gold-text {
+  background: linear-gradient(90deg, #D4AF37 0%, #f5d060 40%, #D4AF37 60%, #a8851a 100%);
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: gold-shimmer 3s linear infinite;
+}
+.fade-up { opacity: 0; transform: translateY(28px); transition: opacity 0.6s ease, transform 0.6s ease; }
+.fade-up.visible { opacity: 1; transform: translateY(0); }
+
   :root {
-    --bg: #F8FAFF;
+    --bg: #050505;
     --surface: #FFFFFF;
-    --surface2: #DBEAFE;
-    --primary: #2563EB;
-    --accent: #7C3AED;
-    --text: #0F172A;
-    --muted: #64748B;
+    --surface2: #1a0000;
+    --primary: #C8102E;
+    --accent: #D4AF37;
+    --text: #F5F5F5;
+    --muted: #A0A0A0;
     --radius-card: 12px;
     --radius-btn: 8px;
     --section-pad: 80px;
@@ -26,7 +57,7 @@
   html { scroll-behavior: smooth; }
 
   body {
-    background: var(--bg);
+    background: #050505;
     color: var(--text);
     font-family: 'Inter', sans-serif;
     font-size: 16px;
@@ -46,8 +77,8 @@
     position: sticky;
     top: 0;
     z-index: 500;
-    background: rgba(248,250,255,0.96);
-    border-bottom: 1px solid rgba(37,99,235,0.2);
+    background: rgba(5,5,5,0.96);
+    border-bottom: 1px solid rgba(200,16,46,0.2);
     backdrop-filter: blur(14px);
   }
 
@@ -63,7 +94,7 @@
   }
 
   .nav-logo {
-    font-family: 'Inter Tight', sans-serif;
+    font-family: 'Barlow Condensed', sans-serif;
     font-weight: 900;
     font-size: 20px;
     letter-spacing: 4px;
@@ -135,7 +166,7 @@
     background: var(--surface);
     padding: 16px 24px 24px;
     gap: 4px;
-    border-top: 1px solid rgba(37,99,235,0.12);
+    border-top: 1px solid rgba(200,16,46,0.12);
   }
 
   .mobile-nav.open { display: flex; }
@@ -147,7 +178,7 @@
     color: var(--muted);
     text-decoration: none;
     padding: 10px 0;
-    border-bottom: 1px solid rgba(37,99,235,0.08);
+    border-bottom: 1px solid rgba(200,16,46,0.08);
     transition: color 0.2s;
   }
 
@@ -179,7 +210,7 @@
   }
 
   h1 {
-    font-family: 'Inter Tight', sans-serif;
+    font-family: 'Barlow Condensed', sans-serif;
     font-weight: 900;
     font-size: clamp(40px, 5.5vw, 64px);
     line-height: 1.05;
@@ -188,7 +219,7 @@
   }
 
   h2 {
-    font-family: 'Inter Tight', sans-serif;
+    font-family: 'Barlow Condensed', sans-serif;
     font-weight: 800;
     font-size: clamp(28px, 3.5vw, 40px);
     line-height: 1.1;
@@ -197,7 +228,7 @@
   }
 
   h3 {
-    font-family: 'Inter Tight', sans-serif;
+    font-family: 'Barlow Condensed', sans-serif;
     font-weight: 700;
     font-size: 17px;
     color: var(--text);
@@ -209,7 +240,7 @@
   /* ===== HERO ===== */
   .hero-section {
     padding: 80px 0;
-    border-bottom: 1px solid rgba(37,99,235,0.1);
+    border-bottom: 1px solid rgba(200,16,46,0.1);
   }
 
   .hero-grid {
@@ -220,7 +251,7 @@
   }
 
   .hero-subtitle {
-    font-family: 'Inter Tight', sans-serif;
+    font-family: 'Barlow Condensed', sans-serif;
     font-weight: 700;
     font-size: 18px;
     color: var(--accent);
@@ -241,7 +272,7 @@
   .coach-placeholder {
     background: var(--surface2);
     border-radius: var(--radius-card);
-    border: 1px solid rgba(37,99,235,0.12);
+    border: 1px solid rgba(200,16,46,0.12);
     aspect-ratio: 3/4;
     display: flex;
     flex-direction: column;
@@ -253,7 +284,7 @@
   }
 
   .coach-placeholder-name {
-    font-family: 'Inter Tight', sans-serif;
+    font-family: 'Barlow Condensed', sans-serif;
     font-weight: 900;
     font-size: clamp(28px, 4vw, 40px);
     color: var(--accent);
@@ -292,17 +323,17 @@
     border-radius: var(--radius-card);
     padding: 32px;
     text-align: center;
-    border: 1px solid rgba(37,99,235,0.1);
+    border: 1px solid rgba(200,16,46,0.1);
     transition: border-color 0.2s, transform 0.2s;
   }
 
   .credential-card:hover {
-    border-color: rgba(37,99,235,0.25);
+    border-color: rgba(200,16,46,0.25);
     transform: translateY(-3px);
   }
 
   .credential-title {
-    font-family: 'Inter Tight', sans-serif;
+    font-family: 'Barlow Condensed', sans-serif;
     font-weight: 800;
     font-size: 18px;
     color: var(--primary);
@@ -359,7 +390,7 @@
     display: flex;
     flex-direction: column;
     gap: 0;
-    border: 1px solid rgba(37,99,235,0.1);
+    border: 1px solid rgba(200,16,46,0.1);
     border-radius: var(--radius-card);
     overflow: hidden;
   }
@@ -367,7 +398,7 @@
   .faq-item {
     background: var(--surface);
     padding: 28px 32px;
-    border-bottom: 1px solid rgba(37,99,235,0.1);
+    border-bottom: 1px solid rgba(200,16,46,0.1);
     transition: background 0.2s;
   }
 
@@ -375,7 +406,7 @@
   .faq-item:hover { background: var(--surface2); }
 
   .faq-q {
-    font-family: 'Inter Tight', sans-serif;
+    font-family: 'Barlow Condensed', sans-serif;
     font-weight: 700;
     font-size: 17px;
     color: var(--text);
@@ -393,7 +424,7 @@
 
   .cta-card {
     border: 1px solid var(--primary);
-    background: rgba(37,99,235,0.05);
+    background: rgba(200,16,46,0.05);
     border-radius: 16px;
     padding: 60px;
     text-align: center;
@@ -427,7 +458,7 @@
   /* ===== FOOTER ===== */
   footer {
     background: var(--surface);
-    border-top: 1px solid rgba(37,99,235,0.1);
+    border-top: 1px solid rgba(200,16,46,0.1);
     padding: 64px 0 0;
   }
 
@@ -453,7 +484,7 @@
   }
 
   .footer-col h4 {
-    font-family: 'Inter Tight', sans-serif;
+    font-family: 'Barlow Condensed', sans-serif;
     font-weight: 700;
     font-size: 13px;
     letter-spacing: 1.5px;
@@ -474,7 +505,7 @@
   .footer-col a:hover { color: var(--text); }
 
   .footer-bottom {
-    border-top: 1px solid rgba(37,99,235,0.1);
+    border-top: 1px solid rgba(200,16,46,0.1);
     padding: 20px 24px;
     max-width: var(--max-w);
     margin: 0 auto;
@@ -517,7 +548,9 @@
 
 <nav id="navbar">
   <div class="nav-inner">
-    <a href="index.html" class="nav-logo">FITWID</a>
+    <a href="index.html" class="nav-logo">
+  <img src="images/logo-coach-sahil.png" alt="FitWid - Coach Sahil" style="height:52px;width:auto;display:block;">
+</a>
     <ul class="nav-links">
       <li><a href="coaching.html">Coaching</a></li>
       <li><a href="pricing.html">Pricing</a></li>
@@ -664,7 +697,9 @@
 <footer>
   <div class="footer-inner">
     <div class="footer-brand">
-      <a href="index.html" class="nav-logo">FITWID</a>
+      <a href="index.html" class="nav-logo">
+  <img src="images/logo-coach-sahil.png" alt="FitWid - Coach Sahil" style="height:52px;width:auto;display:block;">
+</a>
       <p>I-BLITZ Fitness Club &middot; Bangalore</p>
       <a href="mailto:coach@fitwid.fit">coach@fitwid.fit</a>
     </div>

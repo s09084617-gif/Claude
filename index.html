@@ -7,8 +7,39 @@
 <meta name="description" content="Coach-programmed online strength training for men and women in Bangalore. Custom programs, weekly check-ins, WhatsApp support. Book a free consult with Coach Sahil Bansal at I-BLITZ Fitness Club.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Inter+Tight:wght@700;800;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Barlow+Condensed:wght@700;900&family=Oswald:wght@600;700&display=swap" rel="stylesheet">
 <style>
+/* ==============================
+   ANIMATIONS
+============================== */
+@keyframes glow-pulse {
+  0%, 100% { box-shadow: 0 0 12px rgba(200,16,46,0.4), 0 0 24px rgba(200,16,46,0.2); }
+  50% { box-shadow: 0 0 20px rgba(200,16,46,0.7), 0 0 40px rgba(200,16,46,0.35); }
+}
+@keyframes gold-shimmer {
+  0% { background-position: -200% center; }
+  100% { background-position: 200% center; }
+}
+@keyframes fade-up {
+  from { opacity: 0; transform: translateY(28px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes spark-float {
+  0% { transform: translateY(0) scale(1); opacity: 1; }
+  100% { transform: translateY(-60px) scale(0.3); opacity: 0; }
+}
+.glow-pulse { animation: glow-pulse 2.5s ease-in-out infinite; }
+.gold-text {
+  background: linear-gradient(90deg, #D4AF37 0%, #f5d060 40%, #D4AF37 60%, #a8851a 100%);
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: gold-shimmer 3s linear infinite;
+}
+.fade-up { opacity: 0; transform: translateY(28px); transition: opacity 0.6s ease, transform 0.6s ease; }
+.fade-up.visible { opacity: 1; transform: translateY(0); }
+
 /* ==============================
    RESET & BASE
 ============================== */
@@ -24,7 +55,7 @@ html {
 }
 
 body {
-  background: #F8FAFF;
+  background: #050505;
   color: #0F172A;
   font-family: 'Inter', sans-serif;
   font-weight: 400;
@@ -37,13 +68,13 @@ body {
    DESIGN TOKENS
 ============================== */
 :root {
-  --bg: #F8FAFF;
-  --surface-1: #EFF6FF;
-  --surface-2: #DBEAFE;
-  --crimson: #2563EB;
-  --gold: #7C3AED;
-  --text: #0F172A;
-  --muted: #64748B;
+  --bg: #050505;
+  --surface-1: #0d0d0d;
+  --surface-2: #110000;
+  --crimson: #C8102E;
+  --gold: #D4AF37;
+  --text: #F5F5F5;
+  --muted: #A0A0A0;
   --radius-card: 12px;
   --radius-btn: 8px;
 }
@@ -72,7 +103,7 @@ body {
 }
 
 .section-title {
-  font-family: 'Inter Tight', sans-serif;
+  font-family: 'Barlow Condensed', sans-serif;
   font-weight: 900;
   font-size: clamp(28px, 4vw, 42px);
   color: var(--text);
@@ -95,10 +126,10 @@ body {
 }
 
 .btn-primary:hover {
-  background: #1d4ed8;
-  border-color: #1d4ed8;
+  background: #a00d22;
+  border-color: #a00d22;
   transform: translateY(-2px);
-  box-shadow: 0 8px 24px rgba(37,99,235,0.3);
+  box-shadow: 0 8px 24px rgba(200,16,46,0.3);
 }
 
 .btn-outline {
@@ -111,7 +142,7 @@ body {
   text-decoration: none;
   padding: 14px 28px;
   border-radius: var(--radius-btn);
-  border: 2px solid rgba(37,99,235,0.4);
+  border: 2px solid rgba(200,16,46,0.4);
   transition: border-color 0.2s, transform 0.2s;
 }
 
@@ -127,10 +158,10 @@ body {
   position: sticky;
   top: 0;
   z-index: 1000;
-  background: rgba(248,250,255,0.92);
+  background: rgba(5,5,5,0.92);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
-  border-bottom: 1px solid rgba(37,99,235,0.12);
+  border-bottom: 1px solid rgba(200,16,46,0.12);
   transition: box-shadow 0.3s;
 }
 
@@ -149,7 +180,7 @@ body {
 }
 
 .nav-logo {
-  font-family: 'Inter Tight', sans-serif;
+  font-family: 'Barlow Condensed', sans-serif;
   font-weight: 900;
   font-size: 20px;
   letter-spacing: 3px;
@@ -197,9 +228,10 @@ body {
 }
 
 .nav-cta:hover {
-  background: #1d4ed8;
-  border-color: #1d4ed8;
+  background: #a00d22;
+  border-color: #a00d22;
   transform: translateY(-1px);
+  box-shadow: 0 0 16px rgba(200,16,46,0.4);
 }
 
 .hamburger {
@@ -226,7 +258,7 @@ body {
   display: none;
   flex-direction: column;
   padding: 16px 24px 20px;
-  border-top: 1px solid rgba(37,99,235,0.12);
+  border-top: 1px solid rgba(200,16,46,0.12);
   gap: 4px;
 }
 
@@ -242,7 +274,7 @@ body {
   color: var(--muted);
   text-decoration: none;
   padding: 10px 0;
-  border-bottom: 1px solid rgba(37,99,235,0.08);
+  border-bottom: 1px solid rgba(200,16,46,0.08);
   transition: color 0.2s;
 }
 
@@ -267,7 +299,7 @@ body {
 }
 
 .mobile-nav .mob-cta:hover {
-  background: #1d4ed8;
+  background: #a00d22;
   color: #fff;
 }
 
@@ -315,7 +347,7 @@ body {
 }
 
 .hero-h1 {
-  font-family: 'Inter Tight', sans-serif;
+  font-family: 'Barlow Condensed', sans-serif;
   font-weight: 900;
   font-size: clamp(40px, 5.5vw, 72px);
   line-height: 1.05;
@@ -378,17 +410,17 @@ body {
 }
 
 .hero-ba-box.before {
-  background: linear-gradient(160deg, #DBEAFE 0%, #EFF6FF 100%);
-  border: 1px solid rgba(37,99,235,0.15);
+  background: linear-gradient(160deg, #1a0000 0%, #0d0d0d 100%);
+  border: 1px solid rgba(200,16,46,0.15);
 }
 
 .hero-ba-box.after {
-  background: linear-gradient(160deg, #1e40af 0%, #2563EB 100%);
-  border: 1px solid rgba(37,99,235,0.3);
+  background: linear-gradient(160deg, #8b0010 0%, #C8102E 100%);
+  border: 1px solid rgba(200,16,46,0.3);
 }
 
 .hero-ba-tag {
-  font-family: 'Inter Tight', sans-serif;
+  font-family: 'Barlow Condensed', sans-serif;
   font-weight: 800;
   font-size: 11px;
   letter-spacing: 2px;
@@ -398,7 +430,7 @@ body {
 }
 
 .hero-ba-box.before .hero-ba-tag {
-  background: rgba(37,99,235,0.1);
+  background: rgba(200,16,46,0.1);
   color: var(--muted);
 }
 
@@ -410,11 +442,11 @@ body {
 .hero-card-stats {
   text-align: center;
   padding: 14px 0 0;
-  border-top: 1px solid rgba(37,99,235,0.12);
+  border-top: 1px solid rgba(200,16,46,0.12);
 }
 
 .hero-card-stats strong {
-  font-family: 'Inter Tight', sans-serif;
+  font-family: 'Barlow Condensed', sans-serif;
   font-weight: 800;
   font-size: 16px;
   color: var(--gold);
@@ -443,8 +475,8 @@ body {
 ============================== */
 .proof-bar {
   background: var(--surface-1);
-  border-top: 1px solid rgba(37,99,235,0.12);
-  border-bottom: 1px solid rgba(37,99,235,0.12);
+  border-top: 1px solid rgba(200,16,46,0.12);
+  border-bottom: 1px solid rgba(200,16,46,0.12);
 }
 
 .proof-bar-inner {
@@ -468,11 +500,11 @@ body {
   top: 25%;
   height: 50%;
   width: 1px;
-  background: rgba(37,99,235,0.1);
+  background: rgba(200,16,46,0.1);
 }
 
 .proof-num {
-  font-family: 'Inter Tight', sans-serif;
+  font-family: 'Barlow Condensed', sans-serif;
   font-weight: 900;
   font-size: 36px;
   color: var(--text);
@@ -521,7 +553,7 @@ body {
   background: var(--surface-1);
   border-radius: var(--radius-card);
   overflow: hidden;
-  border: 1px solid rgba(37,99,235,0.1);
+  border: 1px solid rgba(200,16,46,0.1);
   transition: border-color 0.2s, transform 0.2s;
 }
 
@@ -537,7 +569,7 @@ body {
 }
 
 .transform-before {
-  background: linear-gradient(160deg, #DBEAFE 0%, #EFF6FF 100%);
+  background: linear-gradient(160deg, #1a0000 0%, #0d0d0d 100%);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -545,14 +577,14 @@ body {
 }
 
 .transform-after {
-  background: linear-gradient(160deg, #1e40af 0%, #2563EB 100%);
+  background: linear-gradient(160deg, #8b0010 0%, #C8102E 100%);
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
 .transform-ba-label {
-  font-family: 'Inter Tight', sans-serif;
+  font-family: 'Barlow Condensed', sans-serif;
   font-weight: 800;
   font-size: 10px;
   letter-spacing: 2px;
@@ -562,7 +594,7 @@ body {
 }
 
 .transform-before .transform-ba-label {
-  background: rgba(37,99,235,0.1);
+  background: rgba(200,16,46,0.1);
   color: var(--muted);
 }
 
@@ -576,7 +608,7 @@ body {
 }
 
 .transform-name {
-  font-family: 'Inter Tight', sans-serif;
+  font-family: 'Barlow Condensed', sans-serif;
   font-weight: 700;
   font-size: 16px;
   color: var(--text);
@@ -622,7 +654,7 @@ body {
   background: var(--surface-1);
   border-radius: var(--radius-card);
   padding: 28px 24px 24px;
-  border: 1px solid rgba(37,99,235,0.1);
+  border: 1px solid rgba(200,16,46,0.1);
   display: flex;
   flex-direction: column;
   position: relative;
@@ -630,7 +662,7 @@ body {
 }
 
 .service-card:hover {
-  border-color: rgba(37,99,235,0.25);
+  border-color: rgba(200,16,46,0.25);
   transform: translateY(-4px);
 }
 
@@ -662,7 +694,7 @@ body {
 }
 
 .service-name {
-  font-family: 'Inter Tight', sans-serif;
+  font-family: 'Barlow Condensed', sans-serif;
   font-weight: 800;
   font-size: 22px;
   color: var(--text);
@@ -678,7 +710,7 @@ body {
 }
 
 .service-price {
-  font-family: 'Inter Tight', sans-serif;
+  font-family: 'Barlow Condensed', sans-serif;
   font-weight: 900;
   font-size: 26px;
   color: var(--text);
@@ -730,13 +762,13 @@ body {
   text-decoration: none;
   padding: 12px 20px;
   border-radius: var(--radius-btn);
-  border: 2px solid rgba(37,99,235,0.2);
+  border: 2px solid rgba(200,16,46,0.2);
   transition: background 0.2s, border-color 0.2s;
 }
 
 .service-cta:hover {
-  background: rgba(37,99,235,0.08);
-  border-color: rgba(37,99,235,0.4);
+  background: rgba(200,16,46,0.08);
+  border-color: rgba(200,16,46,0.4);
 }
 
 .service-card.featured .service-cta {
@@ -746,8 +778,8 @@ body {
 }
 
 .service-card.featured .service-cta:hover {
-  background: #1d4ed8;
-  border-color: #1d4ed8;
+  background: #a00d22;
+  border-color: #a00d22;
 }
 
 @media (max-width: 768px) {
@@ -773,7 +805,7 @@ body {
   background: var(--surface-1);
   border-radius: var(--radius-card);
   padding: 28px 24px;
-  border: 1px solid rgba(37,99,235,0.1);
+  border: 1px solid rgba(200,16,46,0.1);
   transition: border-color 0.2s;
 }
 
@@ -841,7 +873,7 @@ body {
 .coach-badge {
   background: var(--surface-1);
   border-radius: var(--radius-card);
-  border: 1px solid rgba(37,99,235,0.1);
+  border: 1px solid rgba(200,16,46,0.1);
   padding: 20px 18px;
   display: flex;
   flex-direction: column;
@@ -859,7 +891,7 @@ body {
 }
 
 .coach-badge-text {
-  font-family: 'Inter Tight', sans-serif;
+  font-family: 'Barlow Condensed', sans-serif;
   font-weight: 700;
   font-size: 13px;
   color: var(--text);
@@ -929,7 +961,7 @@ body {
 .faq-item {
   background: var(--surface-1);
   border-radius: var(--radius-card);
-  border: 1px solid rgba(37,99,235,0.1);
+  border: 1px solid rgba(200,16,46,0.1);
   overflow: hidden;
   transition: border-color 0.2s;
 }
@@ -965,7 +997,7 @@ body {
   width: 20px;
   height: 20px;
   border-radius: 50%;
-  border: 1px solid rgba(37,99,235,0.2);
+  border: 1px solid rgba(200,16,46,0.2);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -997,7 +1029,7 @@ body {
   font-size: 15px;
   color: var(--muted);
   line-height: 1.7;
-  border-top: 1px solid rgba(37,99,235,0.08);
+  border-top: 1px solid rgba(200,16,46,0.08);
   padding-top: 16px;
 }
 
@@ -1005,9 +1037,9 @@ body {
    FINAL CTA SECTION
 ============================== */
 .cta-section {
-  background: #EFF6FF;
-  border-top: 1px solid rgba(37,99,235,0.15);
-  border-bottom: 1px solid rgba(37,99,235,0.15);
+  background: #0d0d0d;
+  border-top: 1px solid rgba(200,16,46,0.15);
+  border-bottom: 1px solid rgba(200,16,46,0.15);
 }
 
 .cta-section-inner {
@@ -1018,7 +1050,7 @@ body {
 }
 
 .cta-section-title {
-  font-family: 'Inter Tight', sans-serif;
+  font-family: 'Barlow Condensed', sans-serif;
   font-weight: 900;
   font-size: clamp(28px, 4vw, 46px);
   color: var(--text);
@@ -1043,8 +1075,8 @@ body {
    FOOTER
 ============================== */
 footer {
-  background: #EFF6FF;
-  border-top: 1px solid rgba(37,99,235,0.12);
+  background: #0d0d0d;
+  border-top: 1px solid rgba(200,16,46,0.12);
   padding: 60px 0 0;
 }
 
@@ -1114,7 +1146,7 @@ footer {
 }
 
 .footer-bottom {
-  border-top: 1px solid rgba(37,99,235,0.1);
+  border-top: 1px solid rgba(200,16,46,0.1);
   padding: 20px 24px;
   text-align: center;
 }
@@ -1165,7 +1197,9 @@ footer {
 ============================== -->
 <nav id="navbar">
   <div class="nav-inner">
-    <a href="index.html" class="nav-logo">FITWID</a>
+    <a href="index.html" class="nav-logo">
+  <img src="images/logo-coach-sahil.png" alt="FitWid - Coach Sahil" style="height:52px;width:auto;display:block;">
+</a>
     <ul class="nav-links">
       <li><a href="coaching.html">Coaching</a></li>
       <li><a href="pricing.html">Pricing</a></li>
@@ -1642,7 +1676,9 @@ footer {
 <footer>
   <div class="footer-inner">
     <div class="footer-brand">
-      <a href="index.html" class="nav-logo">FITWID</a>
+      <a href="index.html" class="nav-logo">
+  <img src="images/logo-coach-sahil.png" alt="FitWid - Coach Sahil" style="height:52px;width:auto;display:block;">
+</a>
       <p>I-BLITZ Fitness Club &middot; Bangalore</p>
       <a href="mailto:coach@fitwid.fit">coach@fitwid.fit</a>
       <a href="https://wa.me/917015552731" target="_blank" rel="noopener" style="color:#25D366">WhatsApp Coach Sahil</a>
@@ -1702,6 +1738,19 @@ document.querySelectorAll('.faq-question').forEach(q => {
 window.addEventListener('scroll', () => {
   document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 20);
 });
+</script>
+<script>
+// Intersection observer for fade-up animations
+(function() {
+  var els = document.querySelectorAll('.section-title, .section-label, .hero-h1, .hero-sub, .proof-stat, .feature-card, .testimonial-card, .pricing-card, .result-card, .faq-item, .step-card');
+  els.forEach(function(el) { el.classList.add('fade-up'); });
+  var io = new IntersectionObserver(function(entries) {
+    entries.forEach(function(e) {
+      if (e.isIntersecting) { e.target.classList.add('visible'); io.unobserve(e.target); }
+    });
+  }, { threshold: 0.12 });
+  els.forEach(function(el) { io.observe(el); });
+})();
 </script>
 </body>
 </html>
