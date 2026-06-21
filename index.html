@@ -462,6 +462,17 @@ footer{background:var(--dark);border-top:1px solid var(--border);padding:72px 0 
   .hero-h1{font-size:clamp(52px,20vw,80px)}
 }
 </style>
+  <link rel="manifest" href="/manifest.json">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="FitWid">
+  <link rel="apple-touch-icon" sizes="180x180" href="/app-icons/ios-180.png">
+  <link rel="apple-touch-icon" sizes="152x152" href="/app-icons/ios-152.png">
+  <link rel="apple-touch-icon" sizes="120x120" href="/app-icons/ios-120.png">
+  <link rel="apple-touch-startup-image" href="/app-icons/splash-1125x2436.png" media="(device-width: 375px) and (device-height: 812px) and (-webkit-device-pixel-ratio: 3)">
+  <link rel="apple-touch-startup-image" href="/app-icons/splash-828x1792.png" media="(device-width: 414px) and (device-height: 896px) and (-webkit-device-pixel-ratio: 2)">
+  <link rel="apple-touch-startup-image" href="/app-icons/splash-750x1334.png" media="(device-width: 375px) and (device-height: 667px) and (-webkit-device-pixel-ratio: 2)">
 </head>
 <body>
 
@@ -1395,5 +1406,10 @@ document.getElementById('bf-gender').addEventListener('change',function(){
   document.getElementById('bf-hip-wrap').style.display=this.value==='f'?'block':'none'
 })
 </script>
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => navigator.serviceWorker.register('/sw.js'));
+    }
+  </script>
 </body>
 </html>
