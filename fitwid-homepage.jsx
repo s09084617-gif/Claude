@@ -1,0 +1,1343 @@
+'use client';
+import { useEffect, useRef, useState } from 'react';
+
+/* ─────────────────────────────────────────────────────────
+   FitWid Homepage — React JSX Component
+   Converted from index.html
+   Usage: import FitWidHomepage from './FitWidHomepage'
+   
+   Dependencies: Google Fonts Rajdhani + Montserrat loaded
+   in your <head> or globals.css:
+   @import url('https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&family=Montserrat:wght@400;500;600;700&display=swap');
+──────────────────────────────────────────────────────────── */
+
+export default function FitWidHomepage() {
+  const canvasRef = useRef(null);
+  const [navOpen, setNavOpen] = useState(false);
+
+  /* ── Particle canvas + IntersectionObserver + all DOM JS ── */
+  useEffect(() => {
+    /* Navbar scroll */
+    const onScroll = () => {
+      const nb = document.getElementById('navbar');
+      if (nb) nb.classList.toggle('scrolled', window.scrollY > 60);
+    };
+    window.addEventListener('scroll', onScroll);
+
+    /* Particle canvas */
+    const c = document.getElementById('hero-canvas');
+    let animId;
+    if (c) {
+      const ctx = c.getContext('2d');
+      let W, H, particles = [];
+      function resize() { W = c.width = c.offsetWidth; H = c.height = c.offsetHeight; }
+      resize();
+      window.addEventListener('resize', resize);
+      function Particle() {
+        this.x = Math.random() * W; this.y = Math.random() * H;
+        this.r = Math.random() * 2 + 0.5;
+        this.vx = (Math.random() - .5) * 0.4; this.vy = (Math.random() - .5) * 0.4;
+        this.alpha = Math.random() * 0.6 + 0.1;
+        this.gold = Math.random() < 0.15;
+      }
+      for (let i = 0; i < 80; i++) particles.push(new Particle());
+      function draw() {
+        ctx.clearRect(0, 0, W, H);
+        particles.forEach(p => {
+          ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+          ctx.fillStyle = p.gold ? `rgba(255,193,7,${p.alpha})` : `rgba(204,0,0,${p.alpha})`;
+          ctx.fill();
+          p.x += p.vx; p.y += p.vy;
+          if (p.x < 0 || p.x > W) p.vx *= -1;
+          if (p.y < 0 || p.y > H) p.vy *= -1;
+        });
+        animId = requestAnimationFrame(draw);
+      }
+      draw();
+    }
+
+    /* IntersectionObserver — fade-up + counters */
+    const io = new IntersectionObserver(entries => {
+      entries.forEach(e => {
+        if (!e.isIntersecting) return;
+        const el = e.target;
+        el.classList.add('visible');
+        if (el.dataset.target) {
+          const target = +el.dataset.target;
+          let cur = 0, step = target / 60;
+          const t = setInterval(() => {
+            cur = Math.min(cur + step, target);
+            el.textContent = Math.floor(cur) + (el.dataset.suffix || '');
+            if (cur >= target) clearInterval(t);
+          }, 16);
+        }
+        io.unobserve(el);
+      });
+    }, { threshold: 0.15 });
+    document.querySelectorAll('.fade-up,[data-target]').forEach(el => io.observe(el));
+
+    /* Hero stat counters */
+    document.querySelectorAll('.hero-stat-num[data-target]').forEach(el => {
+      const obs = new IntersectionObserver(entries => {
+        if (!entries[0].isIntersecting) return;
+        const target = +el.dataset.target;
+        let cur = 0, step = target / 50;
+        const t = setInterval(() => {
+          cur = Math.min(cur + step, target);
+          el.textContent = Math.floor(cur);
+          if (cur >= target) clearInterval(t);
+        }, 20);
+        obs.disconnect();
+      }, { threshold: 0.5 });
+      obs.observe(el);
+    });
+
+    /* Exercise library */
+    renderExercises();
+
+    /* Body fat gender toggle */
+    const bfG = document.getElementById('bf-gender');
+    if (bfG) bfG.addEventListener('change', function() {
+      const hw = document.getElementById('bf-hip-wrap');
+      if (hw) hw.style.display = this.value === 'f' ? 'block' : 'none';
+    });
+
+    return () => {
+      window.removeEventListener('scroll', onScroll);
+      if (animId) cancelAnimationFrame(animId);
+      io.disconnect();
+    };
+  }, []);
+
+  /* ── Nav toggle ── */
+  function toggleNav() {
+    setNavOpen(o => !o);
+    document.getElementById('hamburger')?.classList.toggle('open');
+    document.getElementById('mobileNav')?.classList.toggle('open');
+  }
+
+  /* ── Exercise library ── */
+  const EXERCISES = [
+    {name:'Bench Press',muscle:'chest'},{name:'Incline Dumbbell Press',muscle:'chest'},{name:'Cable Fly',muscle:'chest'},
+    {name:'Pull-Up',muscle:'back'},{name:'Deadlift',muscle:'back'},{name:'Seated Cable Row',muscle:'back'},
+    {name:'Overhead Press',muscle:'shoulders'},{name:'Lateral Raise',muscle:'shoulders'},{name:'Face Pull',muscle:'shoulders'},
+    {name:'Bicep Curl',muscle:'arms'},{name:'Tricep Pushdown',muscle:'arms'},{name:'Hammer Curl',muscle:'arms'},
+    {name:'Squat',muscle:'legs'},{name:'Romanian Deadlift',muscle:'legs'},{name:'Leg Press',muscle:'legs'},
+    {name:'Plank',muscle:'core'},{name:'Cable Crunch',muscle:'core'},
+    {name:'Battle Ropes',muscle:'cardio'},{name:'Box Jump',muscle:'cardio'},{name:'Rowing Machine',muscle:'cardio'},
+  ];
+  let _activeM = 'all', _searchQ = '';
+
+  function renderExercises() {
+    const grid = document.getElementById('exGrid');
+    if (!grid) return;
+    const filtered = EXERCISES.filter(e => (_activeM === 'all' || e.muscle === _activeM) && e.name.toLowerCase().includes(_searchQ.toLowerCase()));
+    grid.innerHTML = filtered.slice(0, 8).map(e => `
+      <div class="ex-card">
+        <div class="ex-thumb">
+          <svg viewBox="0 0 24 24"><path d="M6.5 6.5a6 6 0 1 0 11 0M6.5 6.5H3m3.5 0h11M17.5 6.5H21M5 21h14"/></svg>
+          <div class="ex-play"><svg viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg></div>
+        </div>
+        <div class="ex-body">
+          <div class="ex-name">${e.name}</div>
+          <div class="ex-muscle">${e.muscle}</div>
+        </div>
+      </div>`).join('');
+  }
+  function setMuscle(btn, m) {
+    document.querySelectorAll('.muscle-pill').forEach(p => p.classList.remove('active'));
+    btn.classList.add('active'); _activeM = m; renderExercises();
+  }
+  function filterExercises() {
+    _searchQ = document.getElementById('exSearch')?.value || ''; renderExercises();
+  }
+
+  /* ── Calculators ── */
+  function switchCalc(id, btn) {
+    document.querySelectorAll('.calc-tab').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.calc-panel').forEach(p => p.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById('calc-' + id)?.classList.add('active');
+  }
+  function calcBMI() {
+    const w = +document.getElementById('bmi-weight').value;
+    const h = +document.getElementById('bmi-height').value / 100;
+    if (!w || !h) return;
+    const bmi = (w / (h * h)).toFixed(1);
+    const cats = [{v:18.5,l:'Underweight'},{v:25,l:'Normal Weight'},{v:30,l:'Overweight'},{v:999,l:'Obese'}];
+    const cat = cats.find(c => bmi < c.v);
+    document.getElementById('bmi-val').textContent = bmi;
+    document.getElementById('bmi-note').textContent = cat.l + ' — Talk to Coach Sahil for a personalised plan';
+    document.getElementById('bmi-result').classList.add('show');
+  }
+  function calcCalories() {
+    const age = +document.getElementById('cal-age').value;
+    const g = document.getElementById('cal-gender').value;
+    const w = +document.getElementById('cal-weight').value;
+    const h = +document.getElementById('cal-height').value;
+    const act = +document.getElementById('cal-activity').value;
+    if (!age || !w || !h) return;
+    const bmr = g === 'm' ? (10*w)+(6.25*h)-(5*age)+5 : (10*w)+(6.25*h)-(5*age)-161;
+    const tdee = Math.round(bmr * act);
+    document.getElementById('cal-val').textContent = tdee + ' kcal';
+    document.getElementById('cal-note').textContent = `Gain: ${tdee+300} kcal · Maintain: ${tdee} · Lose: ${tdee-400} kcal`;
+    document.getElementById('cal-result').classList.add('show');
+  }
+  function calcMacros() {
+    const cal = +document.getElementById('mac-cal').value;
+    const goal = document.getElementById('mac-goal').value;
+    if (!cal) return;
+    let p, c, f;
+    if (goal === 'muscle') { p=Math.round(cal*.3/4); c=Math.round(cal*.45/4); f=Math.round(cal*.25/9); }
+    else if (goal === 'fat') { p=Math.round(cal*.4/4); c=Math.round(cal*.35/4); f=Math.round(cal*.25/9); }
+    else { p=Math.round(cal*.25/4); c=Math.round(cal*.5/4); f=Math.round(cal*.25/9); }
+    document.getElementById('mac-protein').textContent = p;
+    document.getElementById('mac-carbs').textContent = c;
+    document.getElementById('mac-fat').textContent = f;
+    document.getElementById('mac-result').classList.add('show');
+  }
+  function calcBodyFat() {
+    const g = document.getElementById('bf-gender').value;
+    const w = +document.getElementById('bf-waist').value;
+    const n = +document.getElementById('bf-neck').value;
+    const h = +document.getElementById('bf-height').value;
+    const hip = +document.getElementById('bf-hip').value;
+    if (!w || !n || !h) return;
+    let bf;
+    if (g === 'm') { bf = (495/(1.0324-0.19077*Math.log10(w-n)+0.15456*Math.log10(h))-450).toFixed(1); }
+    else { bf = (495/(1.29579-0.35004*Math.log10(w+hip-n)+0.22100*Math.log10(h))-450).toFixed(1); }
+    const cats = [{v:6,l:'Essential Fat'},{v:14,l:'Athletic'},{v:18,l:'Fitness'},{v:25,l:'Average'},{v:999,l:'Obese Range'}];
+    const note = cats.find(c => +bf < c.v);
+    document.getElementById('bf-val').textContent = bf + '%';
+    document.getElementById('bf-note').textContent = (note ? note.l : 'Obese Range') + ' — Book a consult with Coach Sahil';
+    document.getElementById('bf-result').classList.add('show');
+  }
+
+  return (
+    <>
+      <style>{\`
+/* ================================================
+   DESIGN TOKENS
+================================================ */
+:root {
+  --red:       #CC0000;
+  --red-b:     #FF3B3B;
+  --gold:      #FFC107;
+  --silver:    #F2F2F2;
+  --dark:      #1A1A1A;
+  --black:     #0A0A0A;
+  --surface:   rgba(255,255,255,0.04);
+  --surface2:  rgba(255,255,255,0.07);
+  --border:    rgba(204,0,0,0.18);
+  --border-g:  rgba(255,193,7,0.25);
+  --text:      #F2F2F2;
+  --muted:     rgba(242,242,242,0.5);
+  --r-card:    14px;
+  --r-btn:     8px;
+  --max-w:     1200px;
+  --pad:       0 24px;
+}
+
+/* ================================================
+   RESET & BASE
+================================================ */
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth;font-size:16px}
+body{background:var(--black);color:var(--text);font-family:'Montserrat',sans-serif;font-weight:500;line-height:1.6;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+img{display:block;max-width:100%}
+a{text-decoration:none;color:inherit}
+ul{list-style:none}
+button{cursor:pointer;border:none;background:none;font-family:inherit}
+
+/* ================================================
+   TYPOGRAPHY
+================================================ */
+h1,h2,h3,h4,h5{font-family:'Rajdhani',sans-serif;font-weight:700;line-height:1.05;color:var(--text)}
+h1{font-size:clamp(52px,8vw,100px);letter-spacing:0.04em}
+h2{font-size:clamp(32px,4.5vw,52px);letter-spacing:0.02em}
+h3{font-size:clamp(20px,2.5vw,26px)}
+h4{font-size:18px}
+p{font-size:15px;color:var(--muted);line-height:1.75}
+
+/* ================================================
+   UTILITIES
+================================================ */
+.container{max-width:var(--max-w);margin:0 auto;padding:var(--pad)}
+.section{padding:100px 0}
+.section-label{display:inline-block;font-family:'Rajdhani',sans-serif;font-weight:600;font-size:11px;letter-spacing:4px;text-transform:uppercase;color:var(--red-b);margin-bottom:14px}
+.gold{color:var(--gold)}
+.text-center{text-align:center}
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:32px;align-items:center}
+.grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
+.grid-4{display:grid;grid-template-columns:repeat(4,1fr);gap:24px}
+
+/* GLOW ANIMATIONS */
+@keyframes glow-pulse{0%,100%{box-shadow:0 0 20px rgba(204,0,0,.4),0 0 40px rgba(204,0,0,.15)}50%{box-shadow:0 0 30px rgba(204,0,0,.7),0 0 60px rgba(204,0,0,.3)}}
+@keyframes gold-shimmer{0%{background-position:-200% center}100%{background-position:200% center}}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-12px)}}
+@keyframes fade-up{from{opacity:0;transform:translateY(32px)}to{opacity:1;transform:translateY(0)}}
+@keyframes counter-in{from{opacity:0;transform:scale(.7)}to{opacity:1;transform:scale(1)}}
+@keyframes spin-slow{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
+@keyframes shimmer{0%{left:-100%}100%{left:200%}}
+
+.fade-up{opacity:0;transform:translateY(32px);transition:opacity .7s ease,transform .7s ease}
+.fade-up.visible{opacity:1;transform:translateY(0)}
+
+/* BUTTONS */
+.btn-primary{display:inline-flex;align-items:center;gap:8px;background:var(--red);color:#fff;font-family:'Rajdhani',sans-serif;font-weight:700;font-size:15px;letter-spacing:2px;text-transform:uppercase;padding:14px 32px;border-radius:var(--r-btn);border:2px solid var(--red);transition:all .25s;position:relative;overflow:hidden}
+.btn-primary::after{content:'';position:absolute;top:0;left:-100%;width:60%;height:100%;background:linear-gradient(90deg,transparent,rgba(255,255,255,.15),transparent);transition:left .4s}
+.btn-primary:hover{background:var(--red-b);border-color:var(--red-b);transform:translateY(-2px);box-shadow:0 8px 24px rgba(204,0,0,.4)}
+.btn-primary:hover::after{left:200%}
+.btn-outline{display:inline-flex;align-items:center;gap:8px;background:transparent;color:var(--silver);font-family:'Rajdhani',sans-serif;font-weight:700;font-size:15px;letter-spacing:2px;text-transform:uppercase;padding:14px 32px;border-radius:var(--r-btn);border:2px solid rgba(242,242,242,.2);transition:all .25s}
+.btn-outline:hover{border-color:var(--gold);color:var(--gold);transform:translateY(-2px)}
+.btn-gold{display:inline-flex;align-items:center;gap:8px;background:var(--gold);color:var(--black);font-family:'Rajdhani',sans-serif;font-weight:700;font-size:14px;letter-spacing:1.5px;text-transform:uppercase;padding:11px 24px;border-radius:var(--r-btn);border:2px solid var(--gold);transition:all .25s}
+.btn-gold:hover{background:transparent;color:var(--gold);transform:translateY(-2px)}
+.btn-sm{padding:10px 20px;font-size:13px}
+
+/* GOLD SHIMMER TEXT */
+.gold-shimmer{background:linear-gradient(90deg,#FFC107 0%,#FFE066 40%,#FFC107 60%,#CC8800 100%);background-size:200% auto;-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;animation:gold-shimmer 3s linear infinite}
+
+/* GRADIENT BORDERS */
+.grad-border{position:relative;background:var(--surface);border-radius:var(--r-card)}
+.grad-border::before{content:'';position:absolute;inset:0;border-radius:var(--r-card);padding:1px;background:linear-gradient(135deg,rgba(204,0,0,.5),rgba(255,193,7,.2),rgba(204,0,0,.1));-webkit-mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);-webkit-mask-composite:xor;mask-composite:exclude;pointer-events:none}
+
+/* ================================================
+   NAVBAR
+================================================ */
+#navbar{position:fixed;top:0;left:0;right:0;z-index:1000;transition:background .3s,box-shadow .3s}
+#navbar.scrolled{background:rgba(10,10,10,.95);backdrop-filter:blur(20px);box-shadow:0 2px 40px rgba(204,0,0,.1)}
+.nav-inner{max-width:var(--max-w);margin:0 auto;padding:0 24px;height:72px;display:flex;align-items:center;gap:32px}
+.nav-logo{flex-shrink:0;display:flex;align-items:center;transition:filter .3s}
+.nav-logo img{height:60px;width:auto}
+.nav-logo:hover{filter:drop-shadow(0 0 12px rgba(204,0,0,.9))}
+.nav-links{display:flex;list-style:none;gap:32px;flex:1;justify-content:center}
+.nav-links a{font-family:'Rajdhani',sans-serif;font-weight:600;font-size:14px;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);transition:color .2s;position:relative}
+.nav-links a::after{content:'';position:absolute;bottom:-4px;left:0;width:0;height:2px;background:var(--red);transition:width .25s}
+.nav-links a:hover{color:var(--text)}
+.nav-links a:hover::after{width:100%}
+.nav-cta{flex-shrink:0}
+.hamburger{display:none;flex-direction:column;gap:5px;padding:4px;margin-left:auto}
+.hamburger span{display:block;width:24px;height:2px;background:var(--text);border-radius:2px;transition:.3s}
+.hamburger.open span:nth-child(1){transform:rotate(45deg) translate(5px,5px)}
+.hamburger.open span:nth-child(2){opacity:0}
+.hamburger.open span:nth-child(3){transform:rotate(-45deg) translate(5px,-5px)}
+.mobile-nav{display:none;flex-direction:column;position:fixed;top:72px;left:0;right:0;background:rgba(10,10,10,.98);backdrop-filter:blur(20px);padding:24px;gap:4px;border-bottom:1px solid var(--border);z-index:999}
+.mobile-nav.open{display:flex}
+.mobile-nav a{font-family:'Rajdhani',sans-serif;font-weight:600;font-size:17px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);padding:14px 0;border-bottom:1px solid rgba(255,255,255,.05);transition:color .2s}
+.mobile-nav a:hover,.mobile-nav a:last-child{color:var(--text)}
+.mobile-nav a:last-of-type{border-bottom:none}
+
+/* ================================================
+   1. HERO
+================================================ */
+.hero{position:relative;min-height:100vh;display:flex;align-items:center;justify-content:center;overflow:hidden}
+.hero-bg{position:absolute;inset:0;z-index:0}
+.hero-bg img{width:100%;height:100%;object-fit:cover;object-position:65% top}
+.hero-bg::after{content:'';position:absolute;inset:0;background:linear-gradient(to right,rgba(10,10,10,.88) 0%,rgba(10,10,10,.6) 50%,rgba(10,10,10,.3) 100%)}
+#hero-canvas{position:absolute;inset:0;z-index:1;pointer-events:none}
+.hero-watermark{position:absolute;right:-60px;bottom:-60px;font-family:'Rajdhani',sans-serif;font-weight:700;font-size:360px;color:rgba(204,0,0,.03);letter-spacing:-10px;pointer-events:none;z-index:1;line-height:1;user-select:none}
+.hero-inner{position:relative;z-index:2;max-width:var(--max-w);margin:0 auto;padding:var(--pad);padding-top:100px}
+.hero-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(204,0,0,.12);border:1px solid rgba(204,0,0,.35);border-radius:40px;padding:6px 16px;margin-bottom:24px}
+.hero-badge span{font-family:'Rajdhani',sans-serif;font-weight:600;font-size:11px;letter-spacing:3px;text-transform:uppercase;color:var(--red-b)}
+.hero-badge-dot{width:6px;height:6px;border-radius:50%;background:var(--red-b);animation:glow-pulse 1.5s ease-in-out infinite}
+.hero-h1{font-size:clamp(80px,14vw,160px);letter-spacing:0.06em;line-height:0.9;margin-bottom:0}
+.hero-h1 span{display:block}
+.hero-h1 .fw{color:var(--red);text-shadow:0 0 60px rgba(204,0,0,.5)}
+.hero-sub{font-family:'Rajdhani',sans-serif;font-weight:600;font-size:clamp(18px,2.5vw,26px);letter-spacing:3px;text-transform:uppercase;color:var(--muted);margin:16px 0 12px;max-width:480px}
+.hero-tagline{font-family:'Rajdhani',sans-serif;font-weight:500;font-size:clamp(14px,1.5vw,17px);letter-spacing:2px;text-transform:uppercase;color:var(--gold);margin-bottom:40px;max-width:480px}
+.hero-ctas{display:flex;gap:16px;flex-wrap:wrap;margin-bottom:64px}
+.hero-stats{display:flex;gap:40px;flex-wrap:wrap}
+.hero-stat-num{font-family:'Rajdhani',sans-serif;font-weight:700;font-size:32px;color:var(--gold);line-height:1}
+.hero-stat-label{font-size:12px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-top:2px}
+.hero-stat-divider{width:1px;background:rgba(255,255,255,.1)}
+.scroll-hint{position:absolute;bottom:36px;left:50%;transform:translateX(-50%);z-index:2;display:flex;flex-direction:column;align-items:center;gap:8px;opacity:.5}
+.scroll-hint span{font-family:'Rajdhani',sans-serif;font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--muted)}
+.scroll-line{width:1px;height:48px;background:linear-gradient(to bottom,var(--red),transparent);animation:float 2s ease-in-out infinite}
+
+/* ================================================
+   2. TRUST BAR
+================================================ */
+.trust-bar{background:var(--dark);border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:0}
+.trust-bar-inner{max-width:var(--max-w);margin:0 auto;padding:var(--pad);display:grid;grid-template-columns:repeat(4,1fr)}
+.trust-item{padding:40px 24px;text-align:center;border-right:1px solid rgba(255,255,255,.06);position:relative;overflow:hidden}
+.trust-item:last-child{border-right:none}
+.trust-item::before{content:'';position:absolute;bottom:0;left:50%;transform:translateX(-50%);width:40px;height:2px;background:var(--red)}
+.trust-num{font-family:'Rajdhani',sans-serif;font-weight:700;font-size:clamp(36px,4vw,52px);color:var(--gold);line-height:1;display:block}
+.trust-label{font-size:12px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-top:6px;display:block}
+
+/* ================================================
+   3. HUBS
+================================================ */
+.hubs-section{background:var(--black)}
+.hubs-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-top:48px}
+.hub-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-card);padding:36px 28px;position:relative;overflow:hidden;transition:transform .3s,box-shadow .3s,border-color .3s;cursor:pointer}
+.hub-card::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(204,0,0,.06) 0%,transparent 60%);transition:opacity .3s}
+.hub-card:hover{transform:translateY(-8px);box-shadow:0 20px 60px rgba(204,0,0,.2);border-color:rgba(204,0,0,.5)}
+.hub-card:hover::before{opacity:2}
+.hub-glow{position:absolute;top:-40px;right:-40px;width:120px;height:120px;border-radius:50%;background:radial-gradient(circle,rgba(204,0,0,.2) 0%,transparent 70%);transition:opacity .3s}
+.hub-card:hover .hub-glow{opacity:2}
+.hub-icon{width:56px;height:56px;border-radius:12px;background:rgba(204,0,0,.1);border:1px solid rgba(204,0,0,.25);display:flex;align-items:center;justify-content:center;margin-bottom:20px;transition:background .3s}
+.hub-card:hover .hub-icon{background:rgba(204,0,0,.2)}
+.hub-icon svg{width:28px;height:28px;fill:var(--red-b)}
+.hub-name{font-family:'Rajdhani',sans-serif;font-weight:700;font-size:22px;letter-spacing:1px;text-transform:uppercase;color:var(--text);margin-bottom:10px}
+.hub-desc{font-size:14px;color:var(--muted);line-height:1.7;margin-bottom:24px}
+.hub-cta{font-family:'Rajdhani',sans-serif;font-weight:600;font-size:13px;letter-spacing:2px;text-transform:uppercase;color:var(--red-b);display:inline-flex;align-items:center;gap:6px;transition:gap .2s}
+.hub-card:hover .hub-cta{gap:10px;color:var(--gold)}
+
+/* ================================================
+   4. SERVICES
+================================================ */
+.services-section{background:linear-gradient(180deg,var(--black) 0%,var(--dark) 100%)}
+.services-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-top:48px}
+.service-card{background:var(--surface);border:1px solid rgba(255,255,255,.07);border-radius:var(--r-card);padding:32px 28px;transition:all .3s;position:relative;overflow:hidden}
+.service-card::after{content:'';position:absolute;bottom:0;left:0;width:100%;height:3px;background:linear-gradient(90deg,var(--red),var(--gold));transform:scaleX(0);transform-origin:left;transition:transform .3s}
+.service-card:hover{border-color:rgba(204,0,0,.3);transform:translateY(-4px);box-shadow:0 16px 48px rgba(0,0,0,.3)}
+.service-card:hover::after{transform:scaleX(1)}
+.service-num{font-family:'Rajdhani',sans-serif;font-weight:700;font-size:11px;letter-spacing:3px;color:rgba(204,0,0,.4);margin-bottom:16px}
+.service-name{font-family:'Rajdhani',sans-serif;font-weight:700;font-size:20px;letter-spacing:0.5px;color:var(--text);margin-bottom:10px}
+.service-desc{font-size:14px;color:var(--muted);line-height:1.7}
+
+/* ================================================
+   5. TRANSFORMATION
+================================================ */
+.transform-section{background:var(--dark)}
+.transform-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-top:48px}
+.t-card{border-radius:var(--r-card);overflow:hidden;border:1px solid var(--border);transition:transform .3s,box-shadow .3s;background:var(--surface)}
+.t-card:hover{transform:translateY(-6px);box-shadow:0 20px 48px rgba(204,0,0,.2)}
+.t-ba{display:grid;grid-template-columns:1fr 1fr;height:180px}
+.t-panel{position:relative;overflow:hidden}
+.t-panel img{width:100%;height:100%;object-fit:cover;object-position:center 15%}
+.t-panel-label{position:absolute;bottom:8px;left:8px;font-family:'Rajdhani',sans-serif;font-weight:700;font-size:10px;letter-spacing:2px;text-transform:uppercase;background:rgba(0,0,0,.55);color:#fff;padding:3px 8px;border-radius:4px}
+.t-panel.before{background:linear-gradient(135deg,#1a0000,#111)}
+.t-panel.after{background:linear-gradient(135deg,#4a0000,var(--red))}
+.t-panel.before .t-panel-label{color:rgba(242,242,242,.6)}
+.t-info{padding:20px}
+.t-name{font-family:'Rajdhani',sans-serif;font-weight:700;font-size:17px;color:var(--text);margin-bottom:6px}
+.t-weeks{display:inline-block;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--gold);background:rgba(255,193,7,.08);border:1px solid rgba(255,193,7,.2);border-radius:4px;padding:2px 10px;margin-bottom:8px}
+.t-stats{font-size:13px;color:var(--muted)}
+
+/* TESTIMONIALS */
+.testimonials-row{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-top:40px}
+.test-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-card);padding:28px;transition:border-color .3s}
+.test-card:hover{border-color:rgba(204,0,0,.4)}
+.test-stars{color:var(--gold);font-size:14px;letter-spacing:2px;margin-bottom:14px}
+.test-text{font-size:14px;color:var(--muted);line-height:1.75;margin-bottom:18px;font-style:italic}
+.test-author{font-family:'Rajdhani',sans-serif;font-weight:700;font-size:14px;color:var(--text)}
+.test-meta{font-size:12px;color:rgba(255,193,7,.7);margin-top:2px}
+
+/* ================================================
+   6. ECOSYSTEM
+================================================ */
+.eco-section{background:var(--black);overflow:hidden}
+.eco-flow{display:flex;align-items:center;justify-content:center;gap:0;margin-top:60px;flex-wrap:nowrap;overflow-x:auto;padding-bottom:16px}
+.eco-node{flex-shrink:0;display:flex;flex-direction:column;align-items:center;gap:12px;width:130px}
+.eco-hex{width:72px;height:72px;position:relative;display:flex;align-items:center;justify-content:center}
+.eco-hex::before{content:'';position:absolute;inset:0;background:rgba(204,0,0,.12);border:1px solid rgba(204,0,0,.35);clip-path:polygon(50% 0%,100% 25%,100% 75%,50% 100%,0% 75%,0% 25%);transition:all .3s}
+.eco-node:hover .eco-hex::before{background:rgba(204,0,0,.25);box-shadow:0 0 20px rgba(204,0,0,.3)}
+.eco-hex svg{width:28px;height:28px;fill:var(--red-b);position:relative;z-index:1}
+.eco-label{font-family:'Rajdhani',sans-serif;font-weight:700;font-size:12px;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);text-align:center}
+.eco-arrow{flex-shrink:0;display:flex;align-items:center;width:40px}
+.eco-arrow::before{content:'';display:block;width:100%;height:1px;background:linear-gradient(90deg,var(--red),transparent)}
+.eco-arrow::after{content:'▶';color:var(--red);font-size:10px;margin-left:-4px}
+
+/* ================================================
+   7. EXERCISE LIBRARY
+================================================ */
+.library-section{background:var(--dark)}
+.library-search{display:flex;gap:12px;margin-top:40px;max-width:600px}
+.lib-input{flex:1;background:var(--surface2);border:1px solid rgba(255,255,255,.1);border-radius:var(--r-btn);padding:14px 20px;color:var(--text);font-family:'Montserrat',sans-serif;font-size:14px;outline:none;transition:border-color .2s}
+.lib-input::placeholder{color:var(--muted)}
+.lib-input:focus{border-color:var(--red)}
+.muscle-filters{display:flex;gap:10px;flex-wrap:wrap;margin-top:20px}
+.muscle-pill{font-family:'Rajdhani',sans-serif;font-weight:600;font-size:12px;letter-spacing:1.5px;text-transform:uppercase;padding:7px 16px;border-radius:40px;border:1px solid rgba(255,255,255,.1);color:var(--muted);cursor:pointer;transition:all .2s}
+.muscle-pill:hover,.muscle-pill.active{background:rgba(204,0,0,.15);border-color:var(--red);color:var(--red-b)}
+.exercise-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-top:32px}
+.ex-card{background:var(--surface);border:1px solid rgba(255,255,255,.07);border-radius:12px;overflow:hidden;transition:all .3s}
+.ex-card:hover{border-color:rgba(204,0,0,.4);transform:translateY(-4px)}
+.ex-thumb{height:120px;background:linear-gradient(135deg,#1a0a0a,#2a0000);display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden}
+.ex-thumb svg{width:40px;height:40px;fill:rgba(204,0,0,.3)}
+.ex-play{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.4);opacity:0;transition:opacity .3s}
+.ex-card:hover .ex-play{opacity:1}
+.ex-play svg{width:36px;height:36px;fill:#fff}
+.ex-body{padding:14px}
+.ex-name{font-family:'Rajdhani',sans-serif;font-weight:700;font-size:15px;color:var(--text);margin-bottom:4px}
+.ex-muscle{font-size:11px;letter-spacing:1.5px;text-transform:uppercase;color:var(--red-b)}
+.lib-cta{text-align:center;margin-top:36px}
+
+/* ================================================
+   8. CALCULATORS
+================================================ */
+.calc-section{background:var(--black)}
+.calc-tabs{display:flex;gap:4px;background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:4px;width:fit-content;margin:40px 0 32px}
+.calc-tab{font-family:'Rajdhani',sans-serif;font-weight:600;font-size:13px;letter-spacing:1.5px;text-transform:uppercase;padding:10px 22px;border-radius:8px;color:var(--muted);cursor:pointer;transition:all .2s}
+.calc-tab.active{background:var(--red);color:#fff;box-shadow:0 4px 16px rgba(204,0,0,.4)}
+.calc-panel{display:none;max-width:560px}
+.calc-panel.active{display:block}
+.calc-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:20px}
+.calc-field label{font-family:'Rajdhani',sans-serif;font-weight:600;font-size:12px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:8px}
+.calc-input{width:100%;background:var(--surface2);border:1px solid rgba(255,255,255,.1);border-radius:8px;padding:12px 16px;color:var(--text);font-family:'Montserrat',sans-serif;font-size:15px;outline:none;transition:border-color .2s;-moz-appearance:textfield}
+.calc-input::-webkit-inner-spin-button,.calc-input::-webkit-outer-spin-button{-webkit-appearance:none}
+.calc-input:focus{border-color:var(--red)}
+.calc-select{width:100%;background:var(--surface2);border:1px solid rgba(255,255,255,.1);border-radius:8px;padding:12px 16px;color:var(--text);font-family:'Montserrat',sans-serif;font-size:14px;outline:none;cursor:pointer;-webkit-appearance:none}
+.calc-result{background:rgba(204,0,0,.06);border:1px solid rgba(204,0,0,.2);border-radius:10px;padding:20px 24px;margin-top:16px;display:none}
+.calc-result.show{display:block}
+.calc-result-val{font-family:'Rajdhani',sans-serif;font-weight:700;font-size:40px;color:var(--gold);line-height:1}
+.calc-result-label{font-size:13px;color:var(--muted);margin-top:4px}
+.calc-result-note{font-size:12px;color:rgba(255,193,7,.6);margin-top:8px}
+
+/* ================================================
+   9. COACH SAHIL
+================================================ */
+.coach-section{background:linear-gradient(180deg,var(--dark) 0%,var(--black) 100%)}
+.coach-grid{display:grid;grid-template-columns:55fr 45fr;gap:64px;align-items:center}
+.coach-label{font-family:'Rajdhani',sans-serif;font-weight:700;font-size:11px;letter-spacing:4px;text-transform:uppercase;color:var(--red-b);margin-bottom:16px;display:block}
+.coach-name{font-size:clamp(52px,7vw,80px);line-height:0.95;margin-bottom:20px}
+.coach-title{font-family:'Rajdhani',sans-serif;font-weight:600;font-size:18px;letter-spacing:2px;text-transform:uppercase;color:var(--gold);margin-bottom:28px}
+.coach-bio{font-size:15px;color:var(--muted);line-height:1.8;margin-bottom:32px;max-width:520px}
+.coach-creds{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:36px}
+.cred-item{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:16px 20px}
+.cred-val{font-family:'Rajdhani',sans-serif;font-weight:700;font-size:26px;color:var(--gold);line-height:1}
+.cred-label{font-size:12px;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);margin-top:4px}
+.coach-photo-wrap{position:relative}
+.coach-photo-wrap::before{content:'';position:absolute;inset:-2px;border-radius:16px;background:linear-gradient(135deg,var(--red),rgba(255,193,7,.3),rgba(204,0,0,.1));z-index:-1}
+.coach-photo-wrap img{width:100%;border-radius:14px;display:block}
+.coach-glow{position:absolute;bottom:-40px;right:-40px;width:200px;height:200px;border-radius:50%;background:radial-gradient(circle,rgba(204,0,0,.2) 0%,transparent 70%);pointer-events:none;z-index:-2}
+
+/* ================================================
+   10. APP DASHBOARD
+================================================ */
+.dash-section{background:var(--dark)}
+.dash-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:14px;margin-top:48px}
+.dash-card{background:var(--surface);border:1px solid rgba(255,255,255,.07);border-radius:12px;padding:24px 20px;transition:all .3s;text-align:center;display:block;text-decoration:none;color:inherit}
+.dash-card:hover{border-color:rgba(204,0,0,.35);transform:translateY(-4px);box-shadow:0 12px 32px rgba(204,0,0,.15)}
+.dash-icon{width:48px;height:48px;margin:0 auto 16px;background:rgba(204,0,0,.1);border:1px solid rgba(204,0,0,.2);border-radius:12px;display:flex;align-items:center;justify-content:center}
+.dash-icon svg{width:24px;height:24px;fill:var(--red-b)}
+.dash-name{font-family:'Rajdhani',sans-serif;font-weight:700;font-size:14px;letter-spacing:1px;text-transform:uppercase;color:var(--text);margin-bottom:8px}
+.dash-desc{font-size:12px;color:var(--muted);line-height:1.5}
+.dash-preview{margin-top:48px;background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:24px;overflow:hidden}
+.dash-preview-bar{background:rgba(255,255,255,.04);border-radius:8px;padding:10px 16px;display:flex;align-items:center;gap:12px;margin-bottom:20px;border:1px solid rgba(255,255,255,.05)}
+.dash-dot{width:10px;height:10px;border-radius:50%}
+.dash-url{flex:1;background:rgba(255,255,255,.04);border-radius:4px;height:22px;margin-left:8px}
+.dash-preview-grid{display:grid;grid-template-columns:220px 1fr;gap:16px}
+.dash-sidebar{background:rgba(255,255,255,.03);border-radius:10px;padding:16px;display:flex;flex-direction:column;gap:8px}
+.dash-nav-item{height:32px;border-radius:6px;background:rgba(255,255,255,.04)}
+.dash-nav-item.active{background:rgba(204,0,0,.2);border:1px solid rgba(204,0,0,.3)}
+.dash-main{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.dash-widget{background:rgba(255,255,255,.03);border-radius:10px;padding:16px;border:1px solid rgba(255,255,255,.05)}
+.dash-widget-title{height:10px;width:60%;background:rgba(255,255,255,.08);border-radius:4px;margin-bottom:12px}
+.dash-widget-bar{height:8px;border-radius:4px;background:linear-gradient(90deg,var(--red),var(--gold));margin-bottom:6px}
+.dash-widget-bar:last-child{width:70%}
+
+/* ================================================
+   11. SOCIAL PROOF
+================================================ */
+.social-section{background:var(--black)}
+.social-gallery{display:grid;grid-template-columns:1fr 1fr;gap:14px;max-width:960px;margin:48px auto 0}
+.s-card{border-radius:14px;overflow:hidden;display:block;position:relative}
+.s-card img{width:100%;display:block;transition:transform .4s}
+.s-card:hover img{transform:scale(1.04)}
+.s-card-overlay{position:absolute;inset:0;background:linear-gradient(to top,rgba(10,10,10,.6) 0%,transparent 50%);opacity:0;transition:opacity .3s;display:flex;align-items:flex-end;padding:16px}
+.s-card:hover .s-card-overlay{opacity:1}
+.s-ig-icon{color:#fff;font-size:22px}
+.follow-cta{text-align:center;margin-top:36px}
+
+/* ================================================
+   12. FOOTER
+================================================ */
+footer{background:var(--dark);border-top:1px solid var(--border);padding:72px 0 32px}
+.footer-inner{max-width:var(--max-w);margin:0 auto;padding:var(--pad);display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:48px}
+.footer-brand p{font-size:14px;color:var(--muted);margin:16px 0 20px;line-height:1.7;max-width:280px}
+.footer-statement{font-family:'Rajdhani',sans-serif;font-weight:700;font-size:22px;color:var(--text);line-height:1.3;border-left:3px solid var(--red);padding-left:16px;margin-top:24px}
+.footer-col h4{font-family:'Rajdhani',sans-serif;font-weight:700;font-size:13px;letter-spacing:3px;text-transform:uppercase;color:var(--text);margin-bottom:20px}
+.footer-col a{display:block;font-size:14px;color:var(--muted);margin-bottom:12px;transition:color .2s}
+.footer-col a:hover{color:var(--red-b)}
+.footer-socials{display:flex;gap:12px;margin-top:20px}
+.footer-social{width:38px;height:38px;border-radius:8px;border:1px solid rgba(255,255,255,.1);display:flex;align-items:center;justify-content:center;transition:all .2s}
+.footer-social:hover{border-color:var(--red);background:rgba(204,0,0,.1)}
+.footer-social svg{width:16px;height:16px;fill:var(--muted)}
+.footer-social:hover svg{fill:var(--red-b)}
+.footer-bottom{max-width:var(--max-w);margin:0 auto;padding:var(--pad);padding-top:32px;margin-top:48px;border-top:1px solid rgba(255,255,255,.05);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px}
+.footer-bottom p{font-size:13px;color:rgba(242,242,242,.3)}
+
+/* ================================================
+   RESPONSIVE
+================================================ */
+@media(max-width:1024px){
+  .hubs-grid,.services-grid,.transform-grid,.testimonials-row{grid-template-columns:repeat(2,1fr)}
+  .exercise-grid{grid-template-columns:repeat(3,1fr)}
+  .dash-grid{grid-template-columns:repeat(3,1fr)}
+  .footer-inner{grid-template-columns:1fr 1fr;gap:32px}
+  .coach-grid{grid-template-columns:1fr;gap:40px}
+  .coach-photo-wrap{max-width:420px}
+}
+@media(max-width:768px){
+  .section{padding:70px 0}
+  h1{font-size:clamp(52px,12vw,80px)}
+  .hero-h1{font-size:clamp(64px,16vw,96px)}
+  .hero-stats{gap:20px}
+  .hero-ctas{flex-direction:column;gap:12px}
+  .trust-bar-inner{grid-template-columns:1fr 1fr}
+  .trust-item{border-right:none;border-bottom:1px solid rgba(255,255,255,.06);padding:28px 16px}
+  .trust-item:nth-child(2n){border-bottom:1px solid rgba(255,255,255,.06)}
+  .trust-item:last-child,.trust-item:nth-last-child(2){border-bottom:none}
+  .hubs-grid,.services-grid{grid-template-columns:1fr}
+  .transform-grid{grid-template-columns:1fr}
+  .testimonials-row{grid-template-columns:1fr}
+  .exercise-grid{grid-template-columns:1fr 1fr}
+  .calc-grid{grid-template-columns:1fr}
+  .dash-grid{grid-template-columns:1fr 1fr}
+  .dash-preview-grid{grid-template-columns:1fr}
+  .dash-sidebar{display:none}
+  .social-gallery{grid-template-columns:1fr}
+  .footer-inner{grid-template-columns:1fr}
+  .footer-bottom{flex-direction:column;text-align:center}
+  .nav-links,.nav-cta{display:none}
+  .hamburger{display:flex}
+  .calc-tabs{flex-wrap:wrap}
+}
+@media(max-width:480px){
+  .exercise-grid{grid-template-columns:1fr}
+  .coach-creds{grid-template-columns:1fr}
+  .hero-h1{font-size:clamp(52px,20vw,80px)}
+}
+      \`}</style>
+
+{/* ================================================
+     NAVBAR
+================================================ */}
+<nav id="navbar">
+  <div className="nav-inner">
+    <a href="index.html" className="nav-logo">
+      <img src="images/logo-coach-sahil.png" alt="FitWid" />
+    </a>
+    <ul className="nav-links">
+      <li><a href="coaching.html">Programs</a></li>
+      <li><a href="pricing.html">Pricing</a></li>
+      <li><a href="results.html">Results</a></li>
+      <li><a href="about.html">Coach</a></li>
+      <li><a href="#calculators">Tools</a></li>
+    </ul>
+    <a href="apply.html" className="btn-primary nav-cta btn-sm">Start Now</a>
+    <button className="hamburger" id="hamburger" onClick={toggleNav} aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+  <div className="mobile-nav" id="mobileNav">
+    <a href="coaching.html" onClick={toggleNav}>Programs</a>
+    <a href="pricing.html" onClick={toggleNav}>Pricing</a>
+    <a href="results.html" onClick={toggleNav}>Results</a>
+    <a href="about.html" onClick={toggleNav}>Coach</a>
+    <a href="#calculators" onClick={toggleNav}>Tools</a>
+    <a href="apply.html" onClick={toggleNav}>Start Transformation →</a>
+  </div>
+</nav>
+
+{/* ================================================
+     1. HERO
+================================================ */}
+<section className="hero" id="hero">
+  <div className="hero-bg">
+    <img src="images/hero-banner.jpg" alt="Coach Sahil — FitWid" />
+  </div>
+  <canvas id="hero-canvas" /></canvas>
+  <div className="hero-watermark">FW</div>
+
+  <div className="hero-inner">
+    <div className="hero-badge">
+      <span className="hero-badge-dot"></span>
+      <span>Bangalore's #1 Online Strength Coach</span>
+    </div>
+    <h1 className="hero-h1">
+      <span>FIT</span>
+      <span className="fw">WID</span>
+    </h1>
+    <p className="hero-sub">Fitness Is The Way</p>
+    <p className="hero-tagline">Inspired By Discipline &bull; Powered By Results</p>
+    <div className="hero-ctas">
+      <a href="apply.html" className="btn-primary" style={{animation:"glow-pulse 2.5s ease-in-out infinite"}}>
+        Start Transformation
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </a>
+      <a href="apply.html" className="btn-outline">Book Consultation</a>
+    </div>
+    <div className="hero-stats">
+      <div>
+        <div className="hero-stat-num" data-target="200">0</div>
+        <div className="hero-stat-label">Clients +</div>
+      </div>
+      <div className="hero-stat-divider"></div>
+      <div>
+        <div className="hero-stat-num" data-target="5">0</div>
+        <div className="hero-stat-label">Years Exp</div>
+      </div>
+      <div className="hero-stat-divider"></div>
+      <div>
+        <div className="hero-stat-num" data-target="98">0</div>
+        <div className="hero-stat-label">% Success</div>
+      </div>
+    </div>
+  </div>
+
+  <div className="scroll-hint">
+    <span>Scroll</span>
+    <div className="scroll-line"></div>
+  </div>
+</section>
+
+{/* ================================================
+     2. TRUST BAR
+================================================ */}
+<div className="trust-bar">
+  <div className="trust-bar-inner">
+    <div className="trust-item fade-up">
+      <span className="trust-num" data-target="200">0</span>
+      <span className="trust-label">Clients Transformed</span>
+    </div>
+    <div className="trust-item fade-up">
+      <span className="trust-num" data-target="5">0</span>
+      <span className="trust-label">Years Experience</span>
+    </div>
+    <div className="trust-item fade-up">
+      <span className="trust-num" data-target="500">0</span>
+      <span className="trust-label">Programs Created</span>
+    </div>
+    <div className="trust-item fade-up">
+      <span className="trust-num" data-target="98">0</span>
+      <span className="trust-label">% Success Rate</span>
+    </div>
+  </div>
+</div>
+
+{/* ================================================
+     3. HUBS
+================================================ */}
+<section className="section hubs-section" id="hubs">
+  <div className="container">
+    <div className="text-center">
+      <span className="section-label">Training Systems</span>
+      <h2>Choose Your <span className="gold-shimmer">Hub</span></h2>
+      <p style={{maxWidth:"520px",margin:"14px auto 0"}}>Six premium training systems engineered for every goal. Select your path and we'll build the blueprint.</p>
+    </div>
+    <div className="hubs-grid">
+
+      <div className="hub-card fade-up">
+        <div className="hub-glow"></div>
+        <div className="hub-icon">
+          <svg viewBox="0 0 24 24"><path d="M6.5 6.5a6 6 0 1 0 11 0M6.5 6.5H3m3.5 0h11M17.5 6.5H21M5 21h14M12 12v9"/></svg>
+        </div>
+        <div className="hub-name">Strength Hub</div>
+        <div className="hub-desc">Progressive overload programming built for raw power. Squat. Bench. Deadlift. Dominate every rep.</div>
+        <a href="coaching.html" className="hub-cta">Build Strength <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+      </div>
+
+      <div className="hub-card fade-up" style={{transitionDelay:".1s"}}>
+        <div className="hub-glow" style={{background:"radial-gradient(circle,rgba(255,193,7,.15) 0%,transparent 70%)"}}></div>
+        <div className="hub-icon" style={{background:"rgba(255,193,7,.08)",borderColor:"rgba(255,193,7,.2)"}}>
+          <svg viewBox="0 0 24 24" style={{fill:"var(--gold)"}}><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 14v-4H7l5-8v4h4l-5 8z"/></svg>
+        </div>
+        <div className="hub-name">Hypertrophy Hub</div>
+        <div className="hub-desc">Science-backed muscle building with volume periodisation, tempo control, and progressive overload.</div>
+        <a href="coaching.html" className="hub-cta" style={{color:"var(--gold)"}}>Build Muscle <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+      </div>
+
+      <div className="hub-card fade-up" style={{transitionDelay:".2s"}}>
+        <div className="hub-glow"></div>
+        <div className="hub-icon">
+          <svg viewBox="0 0 24 24"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+        </div>
+        <div className="hub-name">Fat Loss Hub</div>
+        <div className="hub-desc">Aggressive fat loss without muscle sacrifice. Precision deficit programming meets metabolic training.</div>
+        <a href="coaching.html" className="hub-cta">Burn Fat <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+      </div>
+
+      <div className="hub-card fade-up" style={{transitionDelay:".3s"}}>
+        <div className="hub-glow"></div>
+        <div className="hub-icon">
+          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3M7 2l5 3 5-3"/></svg>
+        </div>
+        <div className="hub-name">Athletic Hub</div>
+        <div className="hub-desc">Speed, power, agility. Sport-specific conditioning built for athletes who want an edge over their competition.</div>
+        <a href="coaching.html" className="hub-cta">Get Athletic <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+      </div>
+
+      <div className="hub-card fade-up" style={{transitionDelay:".4s"}}>
+        <div className="hub-glow" style={{background:"radial-gradient(circle,rgba(255,193,7,.12) 0%,transparent 70%)"}}></div>
+        <div className="hub-icon" style={{background:"rgba(255,193,7,.08)",borderColor:"rgba(255,193,7,.2)"}}>
+          <svg viewBox="0 0 24 24" style={{fill:"var(--gold)"}}><path d="M12 2a5 5 0 0 1 5 5c0 3-3 6-5 8-2-2-5-5-5-8a5 5 0 0 1 5-5zm0 4a1 1 0 1 0 0 2 1 1 0 0 0 0-2zM3 20h18v2H3z"/></svg>
+        </div>
+        <div className="hub-name">Nutrition Hub</div>
+        <div className="hub-desc">Custom macros, meal timing, and nutrition education. Eat for your goal — not against it.</div>
+        <a href="coaching.html" className="hub-cta" style={{color:"var(--gold)"}}>Eat Better <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+      </div>
+
+      <div className="hub-card fade-up" style={{transitionDelay:".5s",borderColor:"rgba(255,193,7,.25)"}}>
+        <div className="hub-glow" style={{background:"radial-gradient(circle,rgba(255,193,7,.2) 0%,transparent 70%)"}}></div>
+        <div className="hub-icon" style={{background:"rgba(255,193,7,.1)",borderColor:"rgba(255,193,7,.3)"}}>
+          <svg viewBox="0 0 24 24" style={{fill:"var(--gold)"}}><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01z"/></svg>
+        </div>
+        <div className="hub-name">Transformation Hub</div>
+        <div className="hub-desc">The ultimate 12-week program. Body recomposition, lifestyle overhaul, mindset shift. Total transformation.</div>
+        <a href="apply.html" className="hub-cta" style={{color:"var(--gold)"}}>Transform Now <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+{/* ================================================
+     4. SERVICES
+================================================ */}
+<section className="section services-section" id="services">
+  <div className="container">
+    <span className="section-label">What We Offer</span>
+    <h2>Premium <span className="gold-shimmer">Services</span></h2>
+    <div className="services-grid">
+      <div className="service-card fade-up">
+        <div className="service-num">01</div>
+        <div className="service-name">Personal Training</div>
+        <div className="service-desc">Face-to-face coaching at I-BLITZ Fitness Club, Bangalore. Real feedback, real-time corrections, real results.</div>
+      </div>
+      <div className="service-card fade-up" style={{transitionDelay:".1s"}}>
+        <div className="service-num">02</div>
+        <div className="service-name">Online Coaching</div>
+        <div className="service-desc">Custom programs, weekly check-ins, WhatsApp support. Elite coaching from anywhere in the world.</div>
+      </div>
+      <div className="service-card fade-up" style={{transitionDelay:".2s"}}>
+        <div className="service-num">03</div>
+        <div className="service-name">Nutrition Coaching</div>
+        <div className="service-desc">Macro calculations, meal planning, supplement protocols. Nutrition built around your life, not against it.</div>
+      </div>
+      <div className="service-card fade-up" style={{transitionDelay:".3s"}}>
+        <div className="service-num">04</div>
+        <div className="service-name">Body Assessment</div>
+        <div className="service-desc">Comprehensive body composition analysis, movement screening, and goal-setting session to map your transformation.</div>
+      </div>
+      <div className="service-card fade-up" style={{transitionDelay:".4s"}}>
+        <div className="service-num">05</div>
+        <div className="service-name">Workout Programming</div>
+        <div className="service-desc">Fully periodised 12–24 week training blocks. Every set, rep, and rest period optimised for your goal.</div>
+      </div>
+      <div className="service-card fade-up" style={{transitionDelay:".5s",borderColor:"rgba(255,193,7,.2)"}}>
+        <div className="service-num" style={{color:"rgba(255,193,7,.5)"}}>06</div>
+        <div className="service-name" style={{color:"var(--gold)"}}>Transformation Coaching</div>
+        <div className="service-desc">Our flagship package. Training + Nutrition + Mindset + Check-ins. Everything you need to change your physique permanently.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+{/* ================================================
+     5. TRANSFORMATION
+================================================ */}
+<section className="section transform-section" id="results">
+  <div className="container">
+    <div className="text-center">
+      <span className="section-label">Client Results</span>
+      <h2>Real People. <span className="gold-shimmer">Real Results.</span></h2>
+      <p style={{maxWidth:"520px",margin:"14px auto 0"}}>200+ transformations and counting. These are the people who showed up, did the work, and changed their lives.</p>
+    </div>
+    <div className="transform-grid">
+      <div className="t-card fade-up">
+        <div className="t-ba">
+          <div className="t-panel before"><span className="t-panel-label">Before</span></div>
+          <div className="t-panel after">
+            <img src="images/transform-man-tshirt.jpg" alt="Rahul M." />
+            <span className="t-panel-label">After</span>
+          </div>
+        </div>
+        <div className="t-info">
+          <div className="t-name">Rahul M.</div>
+          <div className="t-weeks">16 Weeks</div>
+          <div className="t-stats">+8kg Muscle &nbsp;·&nbsp; −12kg Fat</div>
+        </div>
+      </div>
+      <div className="t-card fade-up" style={{transitionDelay:".1s"}}>
+        <div className="t-ba">
+          <div className="t-panel before"><span className="t-panel-label">Before</span></div>
+          <div className="t-panel after">
+            <img src="images/transform-woman-1.jpg" alt="Priya S." />
+            <span className="t-panel-label">After</span>
+          </div>
+        </div>
+        <div className="t-info">
+          <div className="t-name">Priya S.</div>
+          <div className="t-weeks">20 Weeks</div>
+          <div className="t-stats">+5kg Muscle &nbsp;·&nbsp; −14kg Fat</div>
+        </div>
+      </div>
+      <div className="t-card fade-up" style={{transitionDelay:".2s"}}>
+        <div className="t-ba">
+          <div className="t-panel before"><span className="t-panel-label">Before</span></div>
+          <div className="t-panel after">
+            <img src="images/transform-man-tank.jpg" alt="Karan T." />
+            <span className="t-panel-label">After</span>
+          </div>
+        </div>
+        <div className="t-info">
+          <div className="t-name">Karan T.</div>
+          <div className="t-weeks">14 Weeks</div>
+          <div className="t-stats">+10kg Muscle &nbsp;·&nbsp; −8kg Fat</div>
+        </div>
+      </div>
+    </div>
+
+    {/* Testimonials */}
+    <div style={{marginTop:"64px"}}>
+      <h3 style={{textAlign:"center",marginBottom:"8px"}}>What Clients Say</h3>
+      <p style={{textAlign:"center",marginBottom:"0"}}>Real reviews from real members of the FitWid family.</p>
+      <div className="testimonials-row">
+        <div className="test-card fade-up">
+          <div className="test-stars">★★★★★</div>
+          <div className="test-text">"Coach Sahil completely changed my approach to training. In 16 weeks I went from 78kg to 70kg while actually gaining muscle. The program was insane — but it worked."</div>
+          <div className="test-author">Rahul Mehta</div>
+          <div className="test-meta">Fat Loss · Bangalore</div>
+        </div>
+        <div className="test-card fade-up" style={{transitionDelay:".1s"}}>
+          <div className="test-stars">★★★★★</div>
+          <div className="test-text">"I've tried 3 other coaches. None of them came close to what Sahil delivers. The weekly check-ins, the nutrition guidance, the accountability — it's a whole system."</div>
+          <div className="test-author">Priya Sharma</div>
+          <div className="test-meta">Body Recomposition · Online Client</div>
+        </div>
+        <div className="test-card fade-up" style={{transitionDelay:".2s"}}>
+          <div className="test-stars">★★★★★</div>
+          <div className="test-text">"First person to actually explain the WHY behind every exercise. My lifts went up 40% in 4 months. I finally feel like I know what I'm doing in the gym."</div>
+          <div className="test-author">Vikram Nair</div>
+          <div className="test-meta">Strength · Mumbai</div>
+        </div>
+      </div>
+    </div>
+    <div style={{textAlign:"center",marginTop:"36px"}}>
+      <a href="results.html" className="btn-outline">View All Transformations</a>
+    </div>
+  </div>
+</section>
+
+{/* ================================================
+     6. ECOSYSTEM
+================================================ */}
+<section className="section eco-section" id="ecosystem">
+  <div className="container">
+    <div className="text-center">
+      <span className="section-label">The FitWid System</span>
+      <h2>Your Transformation <span className="gold-shimmer">Blueprint</span></h2>
+      <p style={{maxWidth:"520px",margin:"14px auto 0"}}>Every client goes through our proven 6-step ecosystem. Nothing is left to chance.</p>
+    </div>
+    <div className="eco-flow">
+      <div className="eco-node fade-up">
+        <div className="eco-hex">
+          <svg viewBox="0 0 24 24"><path d="M9 11l3 3L22 4M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+        </div>
+        <div className="eco-label">Assessment</div>
+      </div>
+      <div className="eco-arrow"></div>
+      <div className="eco-node fade-up" style={{transitionDelay:".1s"}}>
+        <div className="eco-hex">
+          <svg viewBox="0 0 24 24"><path d="M3 3h18v4H3zm0 7h9v4H3zm0 7h9v4H3zm11-7h7v11h-7z"/></svg>
+        </div>
+        <div className="eco-label">Classification</div>
+      </div>
+      <div className="eco-arrow"></div>
+      <div className="eco-node fade-up" style={{transitionDelay:".2s"}}>
+        <div className="eco-hex">
+          <svg viewBox="0 0 24 24"><path d="M12 2l3 7h7l-5.5 4 2 7L12 16l-6.5 4 2-7L2 9h7z"/></svg>
+        </div>
+        <div className="eco-label">Program Design</div>
+      </div>
+      <div className="eco-arrow"></div>
+      <div className="eco-node fade-up" style={{transitionDelay:".3s"}}>
+        <div className="eco-hex">
+          <svg viewBox="0 0 24 24"><path d="M6.5 6.5a6 6 0 1 0 11 0M6.5 6.5H3m3.5 0h11M17.5 6.5H21"/></svg>
+        </div>
+        <div className="eco-label">Workout Plan</div>
+      </div>
+      <div className="eco-arrow"></div>
+      <div className="eco-node fade-up" style={{transitionDelay:".4s"}}>
+        <div className="eco-hex">
+          <svg viewBox="0 0 24 24"><path d="M12 2a5 5 0 0 1 5 5c0 3-3 6-5 8-2-2-5-5-5-8a5 5 0 0 1 5-5z"/></svg>
+        </div>
+        <div className="eco-label">Nutrition Plan</div>
+      </div>
+      <div className="eco-arrow"></div>
+      <div className="eco-node fade-up" style={{transitionDelay:".5s"}}>
+        <div className="eco-hex" style={{borderColor:"rgba(255,193,7,.4)"}}>
+          <svg viewBox="0 0 24 24" style={{fill:"var(--gold)"}}><path d="M3 3v18h18M7 16l4-4 4 4 4-6"/></svg>
+        </div>
+        <div className="eco-label" style={{color:"var(--gold)"}}>Progress Tracking</div>
+      </div>
+    </div>
+    <div style={{textAlign:"center",marginTop:"48px"}}>
+      <a href="apply.html" className="btn-primary">Start Your Journey</a>
+    </div>
+  </div>
+</section>
+
+{/* ================================================
+     7. EXERCISE LIBRARY
+================================================ */}
+<section className="section library-section" id="exercises">
+  <div className="container">
+    <span className="section-label">Exercise Library</span>
+    <h2>Find Your <span className="gold-shimmer">Exercise</span></h2>
+    <div className="library-search">
+      <input className="lib-input" type="text" id="exSearch" placeholder="Search exercises..." onInput={filterExercises} />
+      <button className="btn-primary btn-sm" onClick={filterExercises}>Search</button>
+    </div>
+    <div className="muscle-filters">
+      <button className="muscle-pill active" onClick={(e)=>{setMuscle(e.currentTarget,'all')}}>All</button>
+      <button className="muscle-pill" onClick={(e)=>{setMuscle(e.currentTarget,'chest')}}>Chest</button>
+      <button className="muscle-pill" onClick={(e)=>{setMuscle(e.currentTarget,'back')}}>Back</button>
+      <button className="muscle-pill" onClick={(e)=>{setMuscle(e.currentTarget,'shoulders')}}>Shoulders</button>
+      <button className="muscle-pill" onClick={(e)=>{setMuscle(e.currentTarget,'arms')}}>Arms</button>
+      <button className="muscle-pill" onClick={(e)=>{setMuscle(e.currentTarget,'legs')}}>Legs</button>
+      <button className="muscle-pill" onClick={(e)=>{setMuscle(e.currentTarget,'core')}}>Core</button>
+      <button className="muscle-pill" onClick={(e)=>{setMuscle(e.currentTarget,'cardio')}}>Cardio</button>
+    </div>
+    <div className="exercise-grid" id="exGrid">
+      {/* dynamically filled by JS */}
+    </div>
+    <div className="lib-cta">
+      <a href="coaching.html" className="btn-outline">Get a Full Program →</a>
+    </div>
+  </div>
+</section>
+
+{/* ================================================
+     8. CALCULATORS
+================================================ */}
+<section className="section calc-section" id="calculators">
+  <div className="container">
+    <span className="section-label">Free Tools</span>
+    <h2>Body <span className="gold-shimmer">Calculators</span></h2>
+    <p>Use these tools to understand your body and plan your nutrition baseline.</p>
+    <div className="calc-tabs">
+      <button className="calc-tab active" onClick={(e)=>{switchCalc('bmi',e.currentTarget)}}>BMI</button>
+      <button className="calc-tab" onClick={(e)=>{switchCalc('calories',e.currentTarget)}}>Calories</button>
+      <button className="calc-tab" onClick={(e)=>{switchCalc('macros',e.currentTarget)}}>Macros</button>
+      <button className="calc-tab" onClick={(e)=>{switchCalc('bodyfat',e.currentTarget)}}>Body Fat</button>
+    </div>
+
+    {/* BMI */}
+    <div className="calc-panel active" id="calc-bmi">
+      <div className="calc-grid">
+        <div className="calc-field"><label>Weight (kg)</label><input className="calc-input" id="bmi-weight" type="number" placeholder="70" /></div>
+        <div className="calc-field"><label>Height (cm)</label><input className="calc-input" id="bmi-height" type="number" placeholder="175" /></div>
+      </div>
+      <button className="btn-primary" onClick={calcBMI}>Calculate BMI</button>
+      <div className="calc-result" id="bmi-result">
+        <div className="calc-result-val" id="bmi-val">—</div>
+        <div className="calc-result-label" id="bmi-label">Body Mass Index</div>
+        <div className="calc-result-note" id="bmi-note"></div>
+      </div>
+    </div>
+
+    {/* CALORIES */}
+    <div className="calc-panel" id="calc-calories">
+      <div className="calc-grid">
+        <div className="calc-field"><label>Age</label><input className="calc-input" id="cal-age" type="number" placeholder="28" /></div>
+        <div className="calc-field"><label>Gender</label><select className="calc-select" id="cal-gender"><option value="m">Male</option><option value="f">Female</option></select></div>
+        <div className="calc-field"><label>Weight (kg)</label><input className="calc-input" id="cal-weight" type="number" placeholder="75" /></div>
+        <div className="calc-field"><label>Height (cm)</label><input className="calc-input" id="cal-height" type="number" placeholder="178" /></div>
+        <div className="calc-field" style={{gridColumn:"1/-1"}}><label>Activity Level</label>
+          <select className="calc-select" id="cal-activity">
+            <option value="1.2">Sedentary (desk job, no gym)</option>
+            <option value="1.375">Lightly Active (1–3 days/week)</option>
+            <option value="1.55" selected>Moderately Active (3–5 days/week)</option>
+            <option value="1.725">Very Active (6–7 days/week)</option>
+            <option value="1.9">Extremely Active (athlete/physical job)</option>
+          </select>
+        </div>
+      </div>
+      <button className="btn-primary" onClick={calcCalories}>Calculate TDEE</button>
+      <div className="calc-result" id="cal-result">
+        <div className="calc-result-val" id="cal-val">—</div>
+        <div className="calc-result-label">Daily Calories (TDEE)</div>
+        <div className="calc-result-note" id="cal-note"></div>
+      </div>
+    </div>
+
+    {/* MACROS */}
+    <div className="calc-panel" id="calc-macros">
+      <div className="calc-grid">
+        <div className="calc-field"><label>Daily Calories</label><input className="calc-input" id="mac-cal" type="number" placeholder="2400" /></div>
+        <div className="calc-field"><label>Goal</label>
+          <select className="calc-select" id="mac-goal">
+            <option value="muscle">Muscle Gain</option>
+            <option value="fat">Fat Loss</option>
+            <option value="maintain">Maintenance</option>
+          </select>
+        </div>
+      </div>
+      <button className="btn-primary" onClick={calcMacros}>Calculate Macros</button>
+      <div className="calc-result" id="mac-result">
+        <div style={{display:"grid",gridTemplateColumns:"1fr 1fr 1fr",gap:"16px"}}>
+          <div><div className="calc-result-val" id="mac-protein" style={{fontSize:"30px"}}>—</div><div className="calc-result-label">Protein (g)</div></div>
+          <div><div className="calc-result-val" id="mac-carbs" style={{fontSize:"30px"}}>—</div><div className="calc-result-label">Carbs (g)</div></div>
+          <div><div className="calc-result-val" id="mac-fat" style={{fontSize:"30px"}}>—</div><div className="calc-result-label">Fats (g)</div></div>
+        </div>
+      </div>
+    </div>
+
+    {/* BODY FAT */}
+    <div className="calc-panel" id="calc-bodyfat">
+      <div className="calc-grid">
+        <div className="calc-field"><label>Gender</label><select className="calc-select" id="bf-gender"><option value="m">Male</option><option value="f">Female</option></select></div>
+        <div className="calc-field"><label>Age</label><input className="calc-input" id="bf-age" type="number" placeholder="28" /></div>
+        <div className="calc-field"><label>Waist (cm)</label><input className="calc-input" id="bf-waist" type="number" placeholder="82" /></div>
+        <div className="calc-field"><label>Neck (cm)</label><input className="calc-input" id="bf-neck" type="number" placeholder="38" /></div>
+        <div className="calc-field"><label>Height (cm)</label><input className="calc-input" id="bf-height" type="number" placeholder="178" /></div>
+        <div className="calc-field" id="bf-hip-wrap" style={{display:"none"}}><label>Hip (cm) — Women only</label><input className="calc-input" id="bf-hip" type="number" placeholder="96" /></div>
+      </div>
+      <button className="btn-primary" onClick={calcBodyFat}>Calculate Body Fat</button>
+      <div className="calc-result" id="bf-result">
+        <div className="calc-result-val" id="bf-val">—</div>
+        <div className="calc-result-label">Estimated Body Fat %</div>
+        <div className="calc-result-note" id="bf-note"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+{/* ================================================
+     9. COACH SAHIL
+================================================ */}
+<section className="section coach-section" id="coach">
+  <div className="container">
+    <div className="coach-grid">
+      <div>
+        <span className="coach-label">Your Coach</span>
+        <h2 className="coach-name">Coach<br /><span className="gold-shimmer">Sahil</span><br />Bansal</h2>
+        <p className="coach-title">Strength &amp; Physique Coach · I-BLITZ Fitness Club</p>
+        <p className="coach-bio">Since 2019, I've helped 200+ clients — from complete beginners to competitive athletes — completely transform their bodies and relationship with fitness. My philosophy is simple: no gimmicks, no shortcuts, no crash protocols. Just progressive, science-driven training with real accountability.<br /><br />Every client I take on gets a fully custom program, weekly check-ins, and direct WhatsApp access to me. Because average coaching gets average results.</p>
+        <div className="coach-creds">
+          <div className="cred-item fade-up">
+            <div className="cred-val">200+</div>
+            <div className="cred-label">Clients Transformed</div>
+          </div>
+          <div className="cred-item fade-up" style={{transitionDelay:".1s"}}>
+            <div className="cred-val">5+ Yrs</div>
+            <div className="cred-label">Coaching Experience</div>
+          </div>
+          <div className="cred-item fade-up" style={{transitionDelay:".2s"}}>
+            <div className="cred-val">4.9 ★</div>
+            <div className="cred-label">Average Rating</div>
+          </div>
+          <div className="cred-item fade-up" style={{transitionDelay:".3s"}}>
+            <div className="cred-val">98%</div>
+            <div className="cred-label">Client Retention</div>
+          </div>
+        </div>
+        <div style={{display:"flex",gap:"14px",flexWrap:"wrap"}}>
+          <a href="apply.html" className="btn-primary">Book Coaching</a>
+          <a href="https://wa.me/917015552731" className="btn-outline" target="_blank" rel="noopener">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
+            WhatsApp Me
+          </a>
+        </div>
+      </div>
+      <div className="coach-photo-wrap">
+        <img src="images/sahil-physique.png" alt="Coach Sahil Bansal — FitWid" />
+        <div className="coach-glow"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+{/* ================================================
+     10. APP DASHBOARD PREVIEW
+================================================ */}
+<section className="section dash-section" id="app">
+  <div className="container">
+    <div className="text-center">
+      <span className="section-label">Client Ecosystem</span>
+      <h2>Your <span className="gold-shimmer">Dashboard</span></h2>
+      <p style={{maxWidth:"520px",margin:"14px auto 0"}}>Everything you need to track, plan, and dominate your fitness journey — in one place.</p>
+    </div>
+    <div className="dash-grid">
+      <a href="generator.html" className="dash-card fade-up">
+        <div className="dash-icon"><svg viewBox="0 0 24 24"><path d="M12 2l3 7h7l-5.5 4 2 7L12 17l-6.5 4 2-7L2 9h7z"/></svg></div>
+        <div className="dash-name">Workout Generator</div>
+        <div className="dash-desc">AI-generated custom workout plans</div>
+      </a>
+      <a href="client-portal.html" className="dash-card fade-up" style={{transitionDelay:".1s"}}>
+        <div className="dash-icon"><svg viewBox="0 0 24 24"><path d="M3 3v18h18M7 16l4-4 4 4 4-6"/></svg></div>
+        <div className="dash-name">Progress Tracker</div>
+        <div className="dash-desc">Weekly stats, photos & measurements</div>
+      </a>
+      <a href="IBLITZ_Assessment_Tool-5.html" className="dash-card fade-up" style={{transitionDelay:".2s"}}>
+        <div className="dash-icon"><svg viewBox="0 0 24 24"><path d="M9 11l3 3L22 4M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg></div>
+        <div className="dash-name">Assessment Reports</div>
+        <div className="dash-desc">Body composition & fitness scores</div>
+      </a>
+      <a href="#calculators" className="dash-card fade-up" style={{transitionDelay:".3s"}}>
+        <div className="dash-icon"><svg viewBox="0 0 24 24"><path d="M12 2a5 5 0 0 1 5 5c0 3-3 6-5 8-2-2-5-5-5-8a5 5 0 0 1 5-5z"/></svg></div>
+        <div className="dash-name">Nutrition Dashboard</div>
+        <div className="dash-desc">Macros, meals, and calorie targets</div>
+      </a>
+      <a href="client-portal.html" className="dash-card fade-up" style={{transitionDelay:".4s",borderColor:"rgba(255,193,7,.2)"}}>
+        <div className="dash-icon" style={{background:"rgba(255,193,7,.1)",borderColor:"rgba(255,193,7,.25)"}}><svg viewBox="0 0 24 24" style={{fill:"var(--gold)"}}><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2M9 7a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg></div>
+        <div className="dash-name">Client Portal</div>
+        <div className="dash-desc">Direct access to your coach & plans</div>
+      </a>
+    </div>
+
+    {/* Mobile Preview + Dashboard Mockup */}
+    <div style={{display:"grid",gridTemplateColumns:"auto 1fr",gap:"40px",alignItems:"start",marginTop:"48px"}}>
+
+      {/* Phone mockup */}
+      <div style={{flexShrink:"0",display:"flex",flexDirection:"column",alignItems:"center",gap:"12px"}}>
+        <span style={{fontFamily:"\'Rajdhani\',sans-serif",fontWeight:"600",fontSize:"11px",letterSpacing:"3px",textTransform:"uppercase",color:"var(--red-b)"}}>Mobile Preview</span>
+        <div style={{position:"relative",width:"160px"}}>
+          <div style={{background:"#111",borderRadius:"28px",padding:"6px",border:"2px solid rgba(204,0,0,0.4)",boxShadow:"0 0 30px rgba(204,0,0,0.25),0 0 60px rgba(204,0,0,0.1)"}}>
+            <img src="images/coach-sahil-gym.png" alt="FitWid on Mobile — Coach Sahil" style={{width:"100%",borderRadius:"22px",display:"block"}} />
+          </div>
+        </div>
+        <span style={{fontSize:"12px",color:"var(--muted)",letterSpacing:"1px"}}>fitwid.fit</span>
+      </div>
+
+      {/* Desktop widget mockup */}
+      <div>
+    <div className="dash-preview">
+      <div className="dash-preview-bar">
+        <div className="dash-dot" style={{background:"#CC0000"}}></div>
+        <div className="dash-dot" style={{background:"#FFC107"}}></div>
+        <div className="dash-dot" style={{background:"#44cc44"}}></div>
+        <div className="dash-url"></div>
+      </div>
+      <div className="dash-preview-grid">
+        <div className="dash-sidebar">
+          <div className="dash-nav-item active"></div>
+          <div className="dash-nav-item"></div>
+          <div className="dash-nav-item"></div>
+          <div className="dash-nav-item"></div>
+          <div className="dash-nav-item"></div>
+        </div>
+        <div className="dash-main">
+          <div className="dash-widget"><div className="dash-widget-title"></div><div className="dash-widget-bar" style={{width:"80%"}}></div><div className="dash-widget-bar" style={{width:"60%"}}></div><div className="dash-widget-bar" style={{width:"70%"}}></div></div>
+          <div className="dash-widget"><div className="dash-widget-title" style={{background:"rgba(255,193,7,.15)"}}></div><div className="dash-widget-bar" style={{background:"var(--gold)",width:"55%"}}></div><div className="dash-widget-bar" style={{background:"var(--gold)",width:"40%"}}></div></div>
+          <div className="dash-widget"><div className="dash-widget-title"></div><div className="dash-widget-bar" style={{width:"90%"}}></div><div className="dash-widget-bar" style={{width:"70%"}}></div></div>
+          <div className="dash-widget"><div className="dash-widget-title" style={{background:"rgba(255,193,7,.15)"}}></div><div className="dash-widget-bar" style={{background:"rgba(255,193,7,.5)",width:"65%"}}></div></div>
+        </div>
+      </div>
+    </div>{/* end dash-preview */}
+      </div>{/* end desktop col */}
+    </div>{/* end grid */}
+
+    <div style={{textAlign:"center",marginTop:"32px"}}>
+      <a href="client-portal.html" className="btn-outline" style={{marginRight:"12px"}}>Client Login</a>
+      <a href="dashboard.html" className="btn-gold">&#128272; Coach Dashboard</a>
+    </div>
+  </div>
+</section>
+
+{/* ================================================
+     11. SOCIAL PROOF
+================================================ */}
+<section className="section social-section" id="social">
+  <div className="container">
+    <div className="text-center">
+      <span className="section-label">Social Media</span>
+      <h2>Follow the <span className="gold-shimmer">Journey</span></h2>
+      <p style={{maxWidth:"480px",margin:"14px auto 0"}}>Real content, real training, real results — <a href="https://www.instagram.com/sahil_r_fitness/" target="_blank" rel="noopener" style={{color:"var(--gold)"}}>@sahil_r_fitness</a></p>
+    </div>
+    <div className="social-gallery">
+      <a href="https://www.instagram.com/sahil_r_fitness/" target="_blank" rel="noopener" className="s-card" style={{gridColumn:"1/3"}}>
+        <img src="images/promo-sahil-barbell.png" alt="Coach Sahil" style={{height:"320px",objectFit:"cover",objectPosition:"65% center"}} />
+        <div className="s-card-overlay"><span className="s-ig-icon">📸</span></div>
+      </a>
+      <a href="https://www.instagram.com/sahil_r_fitness/" target="_blank" rel="noopener" className="s-card">
+        <img src="images/promo-sahil-fire.png" alt="Coach Sahil — Start Your Journey" style={{height:"340px",objectFit:"cover",objectPosition:"top"}} />
+        <div className="s-card-overlay"><span className="s-ig-icon">📸</span></div>
+      </a>
+      <a href="https://www.instagram.com/sahil_r_fitness/" target="_blank" rel="noopener" className="s-card">
+        <img src="images/promo-sahil-hardest.png" alt="Be the Hardest Worker" style={{height:"340px",objectFit:"cover",objectPosition:"top"}} />
+        <div className="s-card-overlay"><span className="s-ig-icon">📸</span></div>
+      </a>
+      <a href="https://www.instagram.com/sahil_r_fitness/" target="_blank" rel="noopener" className="s-card">
+        <img src="images/ad-workout-working.webp" alt="Workout" style={{height:"260px",objectFit:"cover"}} />
+        <div className="s-card-overlay"><span className="s-ig-icon">📸</span></div>
+      </a>
+      <a href="https://www.instagram.com/sahil_r_fitness/" target="_blank" rel="noopener" className="s-card">
+        <img src="images/ad-before-after.webp" alt="Transformation" style={{height:"260px",objectFit:"cover"}} />
+        <div className="s-card-overlay"><span className="s-ig-icon">📸</span></div>
+      </a>
+    </div>
+    <div className="follow-cta">
+      <a href="https://www.instagram.com/sahil_r_fitness/" target="_blank" rel="noopener" className="btn-outline" style={{display:"inline-flex",alignItems:"center",gap:"8px"}}>
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect x="2" y="2" width="20" height="20" rx="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><circle cx="17.5" cy="6.5" r=".5" fill="currentColor"/></svg>
+        Follow @sahil_r_fitness
+      </a>
+    </div>
+  </div>
+</section>
+
+{/* ================================================
+     FINAL CTA BANNER
+================================================ */}
+<section style={{padding:"80px 0",background:"linear-gradient(135deg,#1a0000 0%,#0A0A0A 50%,#1a0000 100%)",borderTop:"1px solid rgba(204,0,0,.2)",borderBottom:"1px solid rgba(204,0,0,.2)"}}>
+  <div className="container text-center">
+    <span className="section-label">Limited Spots</span>
+    <h2 style={{marginBottom:"16px"}}>Ready to <span className="gold-shimmer">Transform?</span></h2>
+    <p style={{maxWidth:"480px",margin:"0 auto 36px"}}>Only 5 coaching spots available each month. Don't wait — your transformation starts with one conversation.</p>
+    <div style={{display:"flex",gap:"16px",justifyContent:"center",flexWrap:"wrap"}}>
+      <a href="apply.html" className="btn-primary" style={{animation:"glow-pulse 2.5s ease-in-out infinite",fontSize:"16px",padding:"16px 40px"}}>Start Transformation →</a>
+      <a href="https://wa.me/917015552731" className="btn-outline" target="_blank" rel="noopener">WhatsApp Coach Sahil</a>
+    </div>
+  </div>
+</section>
+
+{/* ================================================
+     12. FOOTER
+================================================ */}
+<footer>
+  <div className="footer-inner">
+    <div className="footer-brand">
+      <a href="index.html" className="nav-logo" style={{marginBottom:"8px"}}>
+        <img src="images/logo-coach-sahil.png" alt="FitWid" style={{height:"56px"}} />
+      </a>
+      <p>Premium strength & physique coaching with Coach Sahil Bansal at I-BLITZ Fitness Club, Bangalore. Online coaching available worldwide.</p>
+      <div className="footer-statement">"We Don't Follow Trends.<br />We Build Legacies."</div>
+      <div className="footer-socials">
+        <a href="https://www.instagram.com/sahil_r_fitness/" target="_blank" rel="noopener" className="footer-social" title="Instagram">
+          <svg viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><circle cx="17.5" cy="6.5" r=".5" fill="currentColor"/></svg>
+        </a>
+        <a href="https://wa.me/917015552731" target="_blank" rel="noopener" className="footer-social" title="WhatsApp">
+          <svg viewBox="0 0 24 24"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
+        </a>
+      </div>
+    </div>
+    <div className="footer-col">
+      <h4>Programs</h4>
+      <a href="coaching.html">Online Coaching</a>
+      <a href="pricing.html">Pricing Plans</a>
+      <a href="results.html">Transformations</a>
+      <a href="apply.html">Apply Now</a>
+    </div>
+    <div className="footer-col">
+      <h4>Services</h4>
+      <a href="coaching.html">Personal Training</a>
+      <a href="coaching.html">Nutrition Coaching</a>
+      <a href="coaching.html">Body Assessment</a>
+      <a href="coaching.html">Workout Programming</a>
+    </div>
+    <div className="footer-col">
+      <h4>Tools</h4>
+      <a href="#calculators">BMI Calculator</a>
+      <a href="#calculators">Calorie Calculator</a>
+      <a href="#calculators">Macro Calculator</a>
+      <a href="client-portal.html">Client Login</a>
+      <a href="dashboard.html" style={{color:"var(--red-b)",fontWeight:"600"}}>&#128272; Coach Dashboard</a>
+    </div>
+  </div>
+  <div className="footer-bottom">
+    <p>&copy; 2025 FitWid.fit · I-BLITZ Fitness Club · Bangalore. All rights reserved.</p>
+    <p style={{color:"rgba(255,193,7,.4)"}}>Train · Transform · Inspire</p>
+  </div>
+</footer>
+
+{/* ================================================
+     JAVASCRIPT
+================================================ */}
+
+    </>
+  );
+}
