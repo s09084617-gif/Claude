@@ -2224,12 +2224,13 @@ function pg_autocalc(){
   if(h && w){
     const bmi = (w / ((h/100)**2)).toFixed(1);
     document.getElementById('pg-bmi').value = bmi;
-    parts.push(`BMI: ${bmi}`);
+    const bmiCat = bmi<18.5?'Underweight':bmi<25?'Normal':bmi<30?'Overweight':'Obese';
+    parts.push('BMI: '+bmi+' ('+bmiCat+')');
   }
   if(w && bfm){
     const pct = ((bfm/w)*100).toFixed(1);
     document.getElementById('pg-bf-pct').value = pct;
-    parts.push(`Body Fat: ${pct}%`);
+    parts.push('Body Fat: '+pct+'%');
   }
   document.getElementById('pg-auto-summary').textContent = parts.length ? 'Auto-calculated → ' + parts.join(' · ') : '';
 }
@@ -2249,6 +2250,85 @@ function pgTab(name, el){
 let _lastPlanText = '';
 let _lastPlanData = null;
 let _portalClients = {};
+
+// ── Exercise DB with cues, type, RPE, tempo ──
+const PG_EX = {
+  push:[
+    {name:'Barbell Bench Press',type:'compound',cue:'Retract scapula · Drive through palms',sets:'4',reps:'6–8',rest:'2–3 min',tempo:'3-1-1',rpe:8},
+    {name:'Incline DB Press',type:'compound',cue:'Upper chest stretch · Control descent',sets:'3',reps:'10–12',rest:'90 sec',tempo:'3-0-1',rpe:7},
+    {name:'Cable Fly / Pec Deck',type:'isolation',cue:'Full ROM · Squeeze hard at peak',sets:'3',reps:'12–15',rest:'60 sec',tempo:'2-1-2',rpe:7},
+    {name:'Overhead Press (BB or DB)',type:'compound',cue:'Core braced · No lumbar arch',sets:'4',reps:'8–10',rest:'2 min',tempo:'3-1-1',rpe:8},
+    {name:'Lateral Raises',type:'isolation',cue:'Lead with elbows · Control down',sets:'3',reps:'15–20',rest:'60 sec',tempo:'2-0-2',rpe:7},
+    {name:'Tricep Pushdown (Cable)',type:'isolation',cue:'Elbows fixed · Full extension',sets:'3',reps:'12–15',rest:'60 sec',tempo:'2-1-1',rpe:7},
+    {name:'Overhead Tricep Extension',type:'isolation',cue:'Long head emphasis · Deep stretch',sets:'3',reps:'10–12',rest:'60 sec',tempo:'3-0-1',rpe:7},
+  ],
+  pull:[
+    {name:'Barbell Row',type:'compound',cue:'Chest supported · Drive elbows back',sets:'4',reps:'6–10',rest:'2 min',tempo:'3-1-1',rpe:8},
+    {name:'Weighted Pull-Up / Lat Pulldown',type:'compound',cue:'Full stretch at bottom · Chest to bar',sets:'4',reps:'6–10',rest:'90 sec',tempo:'3-1-1',rpe:8},
+    {name:'Seated Cable Row',type:'compound',cue:'Drive elbows back not up · Tall posture',sets:'3',reps:'10–12',rest:'90 sec',tempo:'3-1-1',rpe:7},
+    {name:'Face Pull',type:'isolation',cue:'External rotation · Rear delt focus',sets:'3',reps:'15–20',rest:'60 sec',tempo:'2-1-2',rpe:6},
+    {name:'Barbell / DB Curl',type:'isolation',cue:'Supinate at top · No swing',sets:'3',reps:'10–12',rest:'60 sec',tempo:'3-1-1',rpe:7},
+    {name:'Hammer Curl',type:'isolation',cue:'Brachialis & forearm · Neutral grip',sets:'3',reps:'12–15',rest:'60 sec',tempo:'2-0-2',rpe:7},
+  ],
+  legs:[
+    {name:'Barbell Back Squat',type:'compound',cue:'Brace core · Knees track toes',sets:'4',reps:'5–8',rest:'3 min',tempo:'4-1-1',rpe:9},
+    {name:'Romanian Deadlift',type:'compound',cue:'Hip hinge · Feel hamstring stretch',sets:'3',reps:'8–10',rest:'2 min',tempo:'3-1-1',rpe:8},
+    {name:'Leg Press',type:'compound',cue:'High foot = glute/ham · Don\'t lock knees',sets:'3',reps:'10–12',rest:'90 sec',tempo:'3-1-1',rpe:7},
+    {name:'Leg Curl (Seated)',type:'isolation',cue:'Slow eccentric 3 sec · Full ROM',sets:'3',reps:'12–15',rest:'60 sec',tempo:'3-1-2',rpe:7},
+    {name:'Leg Extension',type:'isolation',cue:'Partial lockout · Squeeze at top',sets:'3',reps:'15–20',rest:'60 sec',tempo:'2-1-2',rpe:7},
+    {name:'Standing Calf Raise',type:'isolation',cue:'Full ROM · Pause at bottom',sets:'4',reps:'15–20',rest:'45 sec',tempo:'2-1-3',rpe:7},
+  ],
+  upper:[
+    {name:'Barbell Bench Press',type:'compound',cue:'Arch controlled · Full ROM',sets:'4',reps:'6–8',rest:'2–3 min',tempo:'3-1-1',rpe:8},
+    {name:'Barbell Row',type:'compound',cue:'Match pressing volume · Chest supported',sets:'4',reps:'6–8',rest:'2–3 min',tempo:'3-1-1',rpe:8},
+    {name:'Overhead Press',type:'compound',cue:'Shoulder stability · Bar path straight',sets:'3',reps:'8–10',rest:'90 sec',tempo:'3-1-1',rpe:8},
+    {name:'Lat Pulldown',type:'compound',cue:'Wide grip · Chest to bar',sets:'3',reps:'10–12',rest:'90 sec',tempo:'3-1-1',rpe:7},
+    {name:'Lateral Raises',type:'isolation',cue:'Lead elbows · Shoulder width',sets:'3',reps:'15',rest:'60 sec',tempo:'2-0-2',rpe:7},
+    {name:'Tricep Pushdown',type:'isolation',cue:'Superset with curls · Elbows fixed',sets:'2',reps:'15',rest:'30 sec',tempo:'2-1-1',rpe:7},
+    {name:'Barbell Curl',type:'isolation',cue:'Superset with pushdowns · No swing',sets:'2',reps:'12',rest:'30 sec',tempo:'3-1-1',rpe:7},
+  ],
+  lower:[
+    {name:'Squat (BB or Goblet)',type:'compound',cue:'Depth to parallel · Heels down',sets:'4',reps:'6–10',rest:'2–3 min',tempo:'4-1-1',rpe:9},
+    {name:'Romanian Deadlift',type:'compound',cue:'Hip hinge pattern · Neutral spine',sets:'4',reps:'8–10',rest:'2 min',tempo:'3-1-1',rpe:8},
+    {name:'Leg Press',type:'compound',cue:'Higher foot position · Glute drive',sets:'3',reps:'12–15',rest:'90 sec',tempo:'3-1-1',rpe:7},
+    {name:'Leg Curl',type:'isolation',cue:'Hamstring isolation · 3 sec eccentric',sets:'3',reps:'12–15',rest:'60 sec',tempo:'3-1-2',rpe:7},
+    {name:'Hip Thrust (BB or Machine)',type:'compound',cue:'Chin tuck · Drive through heels',sets:'3',reps:'12–15',rest:'60 sec',tempo:'2-1-2',rpe:7},
+    {name:'Calf Raise',type:'isolation',cue:'Full stretch · Pause at top',sets:'3',reps:'15–20',rest:'45 sec',tempo:'2-1-3',rpe:7},
+  ],
+  fullbody:[
+    {name:'Squat (BB or Goblet)',type:'compound',cue:'Lead compound · Full depth',sets:'3',reps:'6–10',rest:'2 min',tempo:'4-1-1',rpe:8},
+    {name:'Bench Press or OHP',type:'compound',cue:'Push pattern · Scapula retracted',sets:'3',reps:'8–10',rest:'90 sec',tempo:'3-1-1',rpe:8},
+    {name:'Barbell / DB Row',type:'compound',cue:'Pull pattern · Balance push:pull',sets:'3',reps:'8–10',rest:'90 sec',tempo:'3-1-1',rpe:7},
+    {name:'Romanian Deadlift',type:'compound',cue:'Posterior chain · Hip hinge',sets:'3',reps:'10–12',rest:'90 sec',tempo:'3-1-1',rpe:7},
+    {name:'Lat Pulldown or Pull-Up',type:'compound',cue:'Vertical pull · Full stretch',sets:'3',reps:'10–12',rest:'60 sec',tempo:'3-1-1',rpe:7},
+    {name:'Accessory (Arms / Calves)',type:'isolation',cue:'Vary each session · Pump work',sets:'2–3',reps:'12–15',rest:'45 sec',tempo:'2-1-2',rpe:6},
+  ],
+  core:[
+    {name:'Plank',type:'isometric',cue:'Neutral spine · Glutes braced',sets:'3',reps:'45–60 sec',rest:'45 sec',tempo:'—',rpe:7},
+    {name:'Ab Wheel Rollout',type:'compound',cue:'Keep lower back flat',sets:'3',reps:'8–12',rest:'60 sec',tempo:'3-1-1',rpe:8},
+    {name:'Hanging Leg Raise',type:'isolation',cue:'Control descent · No swing',sets:'3',reps:'12–15',rest:'60 sec',tempo:'2-1-2',rpe:7},
+    {name:'Cable Crunch',type:'isolation',cue:'Flex at waist not hips · Round back ok',sets:'3',reps:'15–20',rest:'45 sec',tempo:'2-1-2',rpe:7},
+  ],
+};
+
+const PG_WARMUP = {
+  push: ['Band pull-aparts 2×15','Shoulder circles × 20 each direction','Light DB lateral raises × 15','Rotator cuff external rotation × 12'],
+  pull: ['Cat-cow stretch × 10','Band face pulls × 20','Dead hangs 30 sec × 2','Scapular push-ups × 15'],
+  legs: ['Hip circles × 20 each direction','Bodyweight squat × 15 slow','Hip flexor stretch 30 sec/side','Leg swings × 15 each direction'],
+  upper: ['Shoulder dislocations with band × 10','Arm circles × 20','Light row × 15','Chest stretch 20 sec/side'],
+  lower: ['Hip circles × 20','Glute bridge × 20','Lateral band walk × 15 steps each','Hamstring sweep × 10/side'],
+  fullbody: ['5 min light cardio','Inchworm × 8','World\'s greatest stretch × 5/side','Jump squat × 10 (bodyweight)'],
+  core: ['Bird-dog × 10/side','Dead bug × 8/side','Hip flexor stretch 30 sec/side','Glute bridge × 15'],
+};
+
+const PG_COOLDOWN = '5–10 min static stretching · Focus on muscle groups worked · Hold each stretch 30–45 sec · Box breathing 4-4-4-4';
+
+function rpeColor(rpe){
+  if(rpe>=9) return '#ff4444';
+  if(rpe>=8) return '#ff8c00';
+  if(rpe>=7) return '#f59e0b';
+  return '#22c55e';
+}
 
 function generatePlan(){
   const name    = document.getElementById('pg-name').value.trim() || 'Client';
@@ -2281,6 +2361,7 @@ function generatePlan(){
     ? (bfPct < 12 ? 'Very Lean' : bfPct < 18 ? 'Lean' : bfPct < 25 ? 'Average' : bfPct < 30 ? 'Above Average' : 'Obese')
     : (bfPct < 20 ? 'Very Lean' : bfPct < 26 ? 'Lean' : bfPct < 32 ? 'Average' : bfPct < 38 ? 'Above Average' : 'Obese');
   const highVFL = vfl >= 10;
+  const leanMass = weight - bfm;
 
   // ── Workout split by days ──
   const splits = {
@@ -2291,128 +2372,148 @@ function generatePlan(){
   };
   const split = splits[days] || splits[4];
 
-  // ── Exercise DB ──
-  const exercises = {
-    push:[
-      {name:'Barbell Bench Press',sets:'4',reps:'6–8',rest:'2–3 min',note:'Compound — control the eccentric'},
-      {name:'Incline Dumbbell Press',sets:'3',reps:'10–12',rest:'90 sec',note:'Focus on upper chest stretch'},
-      {name:'Cable Fly / Pec Deck',sets:'3',reps:'12–15',rest:'60 sec',note:'Full ROM, squeeze at peak'},
-      {name:'Overhead Press (BB or DB)',sets:'4',reps:'8–10',rest:'2 min',note:'Core braced, no lumbar arch'},
-      {name:'Lateral Raises',sets:'3',reps:'15–20',rest:'60 sec',note:'Partial rep technique works well'},
-      {name:'Tricep Pushdown (Cable)',sets:'3',reps:'12–15',rest:'60 sec',note:'Elbows fixed, full extension'},
-      {name:'Overhead Tricep Extension',sets:'3',reps:'10–12',rest:'60 sec',note:'Long head emphasis'},
-    ],
-    pull:[
-      {name:'Barbell / Dumbbell Row',sets:'4',reps:'6–10',rest:'2 min',note:'Chest supported preferred for form'},
-      {name:'Weighted Pull-Up / Lat Pulldown',sets:'4',reps:'6–10',rest:'90 sec',note:'Full stretch at the bottom'},
-      {name:'Seated Cable Row',sets:'3',reps:'10–12',rest:'90 sec',note:'Drive elbows back, not up'},
-      {name:'Face Pull',sets:'3',reps:'15–20',rest:'60 sec',note:'Critical for shoulder health'},
-      {name:'Barbell / Dumbbell Curl',sets:'3',reps:'10–12',rest:'60 sec',note:'Supinate at the top'},
-      {name:'Hammer Curl',sets:'3',reps:'12–15',rest:'60 sec',note:'Brachialis & brachioradialis'},
-    ],
-    legs:[
-      {name:'Barbell Back Squat',sets:'4',reps:'5–8',rest:'3 min',note:'Core brace, knees track toes'},
-      {name:'Romanian Deadlift',sets:'3',reps:'8–10',rest:'2 min',note:'Hip hinge, feel hamstring stretch'},
-      {name:'Leg Press',sets:'3',reps:'10–12',rest:'90 sec',note:'Feet high = glute/ham emphasis'},
-      {name:'Leg Curl (Seated or Lying)',sets:'3',reps:'12–15',rest:'60 sec',note:'Slow eccentric, 3 sec down'},
-      {name:'Leg Extension',sets:'3',reps:'15–20',rest:'60 sec',note:'Partial lockout to protect knees'},
-      {name:'Standing Calf Raise',sets:'4',reps:'15–20',rest:'45 sec',note:'Full ROM — stretch at bottom'},
-    ],
-    upper:[
-      {name:'Barbell Bench Press',sets:'4',reps:'6–8',rest:'2–3 min',note:'Primary chest compound'},
-      {name:'Barbell Row',sets:'4',reps:'6–8',rest:'2–3 min',note:'Match pressing volume'},
-      {name:'Overhead Press',sets:'3',reps:'8–10',rest:'90 sec',note:'Shoulder stability'},
-      {name:'Lat Pulldown',sets:'3',reps:'10–12',rest:'90 sec',note:'Wide grip, chest to bar'},
-      {name:'Lateral Raises',sets:'3',reps:'15',rest:'60 sec',note:'Shoulder width'},
-      {name:'Tricep Pushdown',sets:'2',reps:'15',rest:'45 sec',note:'Superset with curls'},
-      {name:'Barbell Curl',sets:'2',reps:'12',rest:'45 sec',note:'Superset with pushdown'},
-    ],
-    lower:[
-      {name:'Squat (BB or Goblet)',sets:'4',reps:'6–10',rest:'2–3 min',note:'Depth to parallel or below'},
-      {name:'Romanian Deadlift',sets:'4',reps:'8–10',rest:'2 min',note:'Hip hinge pattern'},
-      {name:'Leg Press',sets:'3',reps:'12–15',rest:'90 sec',note:'Higher foot position'},
-      {name:'Leg Curl',sets:'3',reps:'12–15',rest:'60 sec',note:'Hamstring isolation'},
-      {name:'Hip Thrust (BB or Machine)',sets:'3',reps:'12–15',rest:'60 sec',note:'Glute-dominant'},
-      {name:'Calf Raise',sets:'3',reps:'15–20',rest:'45 sec',note:'Full stretch'},
-    ],
-    fullbody:[
-      {name:'Squat',sets:'3',reps:'6–10',rest:'2 min',note:'Lead compound'},
-      {name:'Bench Press or OHP',sets:'3',reps:'8–10',rest:'90 sec',note:'Push pattern'},
-      {name:'Barbell / DB Row',sets:'3',reps:'8–10',rest:'90 sec',note:'Pull pattern'},
-      {name:'Romanian Deadlift',sets:'3',reps:'10–12',rest:'90 sec',note:'Posterior chain'},
-      {name:'Lat Pulldown or Pull-Up',sets:'3',reps:'10–12',rest:'60 sec',note:'Vertical pull'},
-      {name:'Accessory (Arms / Calves)',sets:'2–3',reps:'12–15',rest:'45 sec',note:'Vary each session'},
-    ],
-    core:[
-      {name:'Plank',sets:'3',reps:'45–60 sec',rest:'45 sec',note:'Neutral spine, glutes braced'},
-      {name:'Ab Wheel Rollout',sets:'3',reps:'8–12',rest:'60 sec',note:'Keep lower back flat'},
-      {name:'Hanging Leg Raise',sets:'3',reps:'12–15',rest:'60 sec',note:'Control the descent'},
-      {name:'Cable Crunch',sets:'3',reps:'15–20',rest:'45 sec',note:'Flex at the waist, not hips'},
-    ],
-    cardio: highVFL
-      ? [{name:'LISS Cardio (walk/cycle)',sets:'—',reps:'30–45 min',rest:'—',note:'7–10 min/km pace, every session'}]
-      : [{name:'Optional Cardio',sets:'—',reps:'20–30 min',rest:'—',note:'Post-session LISS or active recovery'}],
-  };
-
-  function getDayExercises(dayName){
-    const d = dayName.toLowerCase();
-    if(d.includes('full body')) return [...exercises.fullbody];
-    if(d.includes('push')) return [...exercises.push];
-    if(d.includes('pull')) return [...exercises.pull];
-    if(d.includes('leg')) return [...exercises.legs];
-    if(d.includes('upper')) return [...exercises.upper];
-    if(d.includes('lower')) return [...exercises.lower];
-    if(d.includes('core') || d.includes('recovery')) return [...exercises.core, ...exercises.cardio];
-    return [...exercises.fullbody];
-  }
-
-  // ── Adjust reps for goal ──
+  // ── Adjust reps/RPE by goal & exp ──
   function adjustReps(repsStr){
     if(goal==='fat_loss') return repsStr.replace(/6–8/,'10–12').replace(/5–8/,'8–12').replace(/8–10/,'12–15');
     if(goal==='strength') return repsStr.replace(/10–12/,'5–8').replace(/12–15/,'8–10').replace(/15–20/,'10–12');
     return repsStr;
   }
+  function adjustRPE(base){
+    if(exp==='beginner') return Math.max(5, base-2);
+    if(exp==='advanced') return Math.min(10, base+1);
+    return base;
+  }
+  function adjustSets(setsStr){
+    if(exp==='advanced') return setsStr.replace(/^3$/,'4').replace(/^4$/,'5');
+    if(exp==='beginner') return setsStr.replace(/^4$/,'3').replace(/^5$/,'3');
+    return setsStr;
+  }
+
+  function getDayExercises(dayName){
+    const d = dayName.toLowerCase();
+    if(d.includes('full body')) return [...PG_EX.fullbody];
+    if(d.includes('push')) return [...PG_EX.push];
+    if(d.includes('pull')) return [...PG_EX.pull];
+    if(d.includes('leg')) return [...PG_EX.legs];
+    if(d.includes('upper')) return [...PG_EX.upper];
+    if(d.includes('lower')) return [...PG_EX.lower];
+    if(d.includes('core') || d.includes('recovery')) return [...PG_EX.core];
+    return [...PG_EX.fullbody];
+  }
+
+  function getWarmup(dayName){
+    const d = dayName.toLowerCase();
+    if(d.includes('push')) return PG_WARMUP.push;
+    if(d.includes('pull')) return PG_WARMUP.pull;
+    if(d.includes('leg')) return PG_WARMUP.legs;
+    if(d.includes('upper')) return PG_WARMUP.upper;
+    if(d.includes('lower')) return PG_WARMUP.lower;
+    if(d.includes('core') || d.includes('recovery')) return PG_WARMUP.core;
+    return PG_WARMUP.fullbody;
+  }
+
+  function typeBadge(type){
+    if(type==='compound') return '<span style="font-size:9px;font-weight:700;letter-spacing:.5px;background:rgba(192,17,43,.2);color:#ff6b6b;border-radius:3px;padding:1px 5px;margin-right:5px;border:1px solid rgba(192,17,43,.35)">COMPOUND</span>';
+    if(type==='isolation') return '<span style="font-size:9px;font-weight:700;letter-spacing:.5px;background:rgba(212,160,23,.15);color:var(--gold);border-radius:3px;padding:1px 5px;margin-right:5px;border:1px solid rgba(212,160,23,.3)">ISOLATION</span>';
+    return '<span style="font-size:9px;font-weight:700;letter-spacing:.5px;background:rgba(34,197,94,.12);color:#4ade80;border-radius:3px;padding:1px 5px;margin-right:5px;border:1px solid rgba(34,197,94,.25)">ISOMETRIC</span>';
+  }
+
+  function rpePill(rpe){
+    const adj = adjustRPE(rpe);
+    const c = rpeColor(adj);
+    return '<span style="background:'+c+'22;border:1px solid '+c+'55;color:'+c+';font-size:10px;font-weight:700;padding:2px 7px;border-radius:10px">RPE '+adj+'</span>';
+  }
+
+  // ── Weekly schedule grid ──
+  const WEEK = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
+  const trainIdx = split.map((_,i) => i); // training day indices
+  const scheduleHTML = '<div style="display:flex;gap:6px;margin-bottom:20px">' + WEEK.map((d,i) => {
+    const isRest = i >= days;
+    return '<div style="flex:1;border-radius:6px;padding:8px 4px;text-align:center;border:1px solid '+(isRest?'var(--border)':'rgba(192,17,43,.4)')+';background:'+(isRest?'var(--card2)':'rgba(192,17,43,.08)')+'">'
+      +'<div style="font-size:9px;font-weight:700;letter-spacing:1px;color:'+(isRest?'var(--muted)':'var(--gold)')+'">'+d+'</div>'
+      +'<div style="font-size:10px;font-weight:600;color:'+(isRest?'var(--muted2)':'#fff')+';margin-top:4px">'+(isRest?'Rest':(split[i]||'').split(' ')[0])+'</div>'
+      +'</div>';
+  }).join('') + '</div>';
 
   // ── Build workout HTML ──
-  let workoutHTML = `<div style="font-size:13px;color:var(--muted2);margin-bottom:20px">
-    ${days}-day ${goal.replace('_',' ')} split · ${exp} level · ${name}
-    ${highVFL ? '<span style="background:rgba(245,158,11,.15);color:#f59e0b;padding:2px 8px;border-radius:4px;font-size:11px;font-weight:700;margin-left:8px">HIGH VFL — Add cardio daily</span>' : ''}
-  </div>`;
+  let workoutHTML = '<div style="font-size:12px;color:var(--muted2);margin-bottom:12px;display:flex;align-items:center;gap:10px;flex-wrap:wrap">'
+    + '<span style="background:rgba(192,17,43,.12);border:1px solid rgba(192,17,43,.3);color:#ff6b6b;padding:3px 10px;border-radius:12px;font-size:11px;font-weight:700">'+days+'-DAY SPLIT</span>'
+    + '<span style="background:rgba(212,160,23,.1);border:1px solid rgba(212,160,23,.25);color:var(--gold);padding:3px 10px;border-radius:12px;font-size:11px;font-weight:700">'+goal.replace('_',' ').toUpperCase()+'</span>'
+    + '<span style="background:rgba(59,130,246,.1);border:1px solid rgba(59,130,246,.25);color:#60a5fa;padding:3px 10px;border-radius:12px;font-size:11px;font-weight:700">'+exp.toUpperCase()+'</span>'
+    + (highVFL ? '<span style="background:rgba(245,158,11,.15);color:#f59e0b;padding:3px 10px;border-radius:12px;font-size:11px;font-weight:700;border:1px solid rgba(245,158,11,.3)">⚠ HIGH VFL '+vfl+'</span>' : '')
+    + '</div>';
+
+  workoutHTML += '<div style="font-size:11px;font-weight:700;letter-spacing:1.5px;color:var(--gold);margin-bottom:8px">WEEKLY SCHEDULE</div>';
+  workoutHTML += scheduleHTML;
 
   split.forEach((dayName, i) => {
     const exs = getDayExercises(dayName);
-    workoutHTML += `
-    <div style="margin-bottom:24px">
-      <div style="font-weight:700;font-size:13px;color:var(--crimson);letter-spacing:1px;margin-bottom:10px;text-transform:uppercase">
-        Day ${i+1} — ${dayName}
-      </div>
-      <table style="width:100%;border-collapse:collapse;font-size:13px">
-        <tr style="color:var(--muted);font-size:11px;letter-spacing:.5px;text-transform:uppercase">
-          <th style="padding:6px 0;text-align:left;font-weight:600;width:35%">Exercise</th>
-          <th style="padding:6px 0;text-align:center;width:10%">Sets</th>
-          <th style="padding:6px 0;text-align:center;width:15%">Reps</th>
-          <th style="padding:6px 0;text-align:center;width:12%">Rest</th>
-          <th style="padding:6px 0;text-align:left;width:28%">Coaching Note</th>
-        </tr>`;
-    exs.forEach((ex,j) => {
-      const bg = j%2===0 ? 'rgba(255,255,255,.02)' : 'transparent';
-      workoutHTML += `<tr style="background:${bg}">
-        <td style="padding:8px 6px 8px 0;font-weight:600">${ex.name}</td>
-        <td style="padding:8px;text-align:center;color:var(--gold)">${ex.sets}</td>
-        <td style="padding:8px;text-align:center">${adjustReps(ex.reps)}</td>
-        <td style="padding:8px;text-align:center;color:var(--muted2)">${ex.rest}</td>
-        <td style="padding:8px;color:var(--muted2);font-size:12px">${ex.note}</td>
-      </tr>`;
-    });
-    workoutHTML += `</table></div>`;
-    if(highVFL && !dayName.toLowerCase().includes('recovery')){
-      workoutHTML += `<div style="font-size:12px;color:var(--yellow);margin-top:-16px;margin-bottom:20px">⚠ Add 20–30 min LISS cardio after this session (VFL ${vfl} — prioritise visceral fat reduction)</div>`;
+    const warmup = getWarmup(dayName);
+    const totalSets = exs.reduce((s,e)=>s+(parseInt(e.sets)||3),0);
+    const isRest = dayName.toLowerCase().includes('recovery');
+
+    workoutHTML += '<div style="margin-bottom:28px;background:var(--card2);border:1px solid var(--border);border-radius:10px;overflow:hidden">';
+    workoutHTML += '<div style="padding:12px 16px;background:rgba(192,17,43,.08);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between">'
+      + '<div><div style="font-weight:800;font-size:13px;color:#fff;letter-spacing:.5px">Day '+(i+1)+' — '+dayName+'</div>'
+      + '<div style="font-size:11px;color:var(--muted2);margin-top:2px">'+exs.length+' exercises · '+totalSets+' total sets</div></div>'
+      + '<span style="font-size:12px;font-weight:700;color:var(--crimson);letter-spacing:1px">'+WEEK[i]||''+'</span>'
+      + '</div>';
+
+    // Warm-up block
+    workoutHTML += '<div style="padding:10px 16px;border-bottom:1px solid var(--border);background:rgba(34,197,94,.04)">'
+      + '<div style="font-size:10px;font-weight:700;letter-spacing:1.5px;color:#4ade80;margin-bottom:6px">WARM-UP (8–10 MIN)</div>'
+      + '<div style="display:flex;flex-wrap:wrap;gap:6px">'
+      + warmup.map(w=>'<span style="font-size:11px;color:var(--muted2);background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:4px;padding:3px 8px">'+w+'</span>').join('')
+      + '</div></div>';
+
+    if(isRest){
+      workoutHTML += '<div style="padding:20px 16px;font-size:13px;color:var(--muted2)">Active recovery — light walk, stretching, mobility work. No heavy lifting.</div>';
+    } else {
+      // Exercise table header
+      workoutHTML += '<table style="width:100%;border-collapse:collapse">'
+        + '<tr style="background:rgba(255,255,255,.03)">'
+        + '<th style="padding:8px 16px;text-align:left;font-size:10px;color:var(--muted);font-weight:600;letter-spacing:1px;text-transform:uppercase;width:4%">#</th>'
+        + '<th style="padding:8px 8px;text-align:left;font-size:10px;color:var(--muted);font-weight:600;letter-spacing:1px;text-transform:uppercase;width:32%">Exercise</th>'
+        + '<th style="padding:8px 8px;text-align:center;font-size:10px;color:var(--muted);font-weight:600;letter-spacing:1px;text-transform:uppercase;width:8%">Sets</th>'
+        + '<th style="padding:8px 8px;text-align:center;font-size:10px;color:var(--muted);font-weight:600;letter-spacing:1px;text-transform:uppercase;width:10%">Reps</th>'
+        + '<th style="padding:8px 8px;text-align:center;font-size:10px;color:var(--muted);font-weight:600;letter-spacing:1px;text-transform:uppercase;width:10%">Rest</th>'
+        + '<th style="padding:8px 8px;text-align:center;font-size:10px;color:var(--muted);font-weight:600;letter-spacing:1px;text-transform:uppercase;width:10%">Tempo</th>'
+        + '<th style="padding:8px 8px;text-align:center;font-size:10px;color:var(--muted);font-weight:600;letter-spacing:1px;text-transform:uppercase;width:10%">RPE</th>'
+        + '</tr>';
+
+      exs.forEach((ex,j) => {
+        const bg = j%2===0 ? 'rgba(255,255,255,.015)' : 'transparent';
+        workoutHTML += '<tr style="background:'+bg+';border-top:1px solid rgba(255,255,255,.04)">'
+          + '<td style="padding:10px 16px;font-size:12px;color:var(--muted2);font-weight:700">'+(j+1)+'</td>'
+          + '<td style="padding:10px 8px"><div style="font-weight:700;font-size:13px;color:#fff;margin-bottom:3px">'+ex.name+'</div>'
+          + '<div style="display:flex;align-items:center;gap:4px;flex-wrap:wrap">'+typeBadge(ex.type)+'<span style="font-size:11px;color:var(--muted2)">'+ex.cue+'</span></div></td>'
+          + '<td style="padding:10px 8px;text-align:center;font-size:14px;font-weight:800;color:var(--gold)">'+adjustSets(ex.sets)+'</td>'
+          + '<td style="padding:10px 8px;text-align:center;font-size:13px;font-weight:600;color:#fff">'+adjustReps(ex.reps)+'</td>'
+          + '<td style="padding:10px 8px;text-align:center;font-size:12px;color:var(--muted2)">'+ex.rest+'</td>'
+          + '<td style="padding:10px 8px;text-align:center;font-size:12px;color:var(--muted2);font-weight:600">'+ex.tempo+'</td>'
+          + '<td style="padding:10px 8px;text-align:center">'+rpePill(ex.rpe)+'</td>'
+          + '</tr>';
+      });
+      workoutHTML += '</table>';
+    }
+
+    // Cool-down block
+    workoutHTML += '<div style="padding:10px 16px;border-top:1px solid var(--border);background:rgba(59,130,246,.04)">'
+      + '<div style="font-size:10px;font-weight:700;letter-spacing:1.5px;color:#60a5fa;margin-bottom:4px">COOL-DOWN</div>'
+      + '<div style="font-size:11px;color:var(--muted2)">'+PG_COOLDOWN+'</div>'
+      + '</div>';
+
+    workoutHTML += '</div>'; // end day card
+
+    if(highVFL && !isRest){
+      workoutHTML += '<div style="font-size:12px;color:var(--yellow);margin:-20px 0 24px;padding:10px 14px;background:rgba(245,158,11,.06);border:1px solid rgba(245,158,11,.2);border-radius:6px">⚠ VFL '+vfl+' — Add 20–30 min LISS cardio (walk/cycle) after this session to prioritise visceral fat reduction.</div>';
     }
   });
 
   // ── Build nutrition HTML ──
   const mealCount = targetCals > 2200 ? 5 : 4;
   const mealCals = Math.round(targetCals / mealCount);
+  const proteinPerMeal = Math.round(proteinG / mealCount);
   const meals = goal==='fat_loss'
     ? [
         {name:'Breakfast (7–8 AM)',items:'3–4 eggs + 2 egg whites scrambled, 2 multigrain toast, 1 glass water'},
@@ -2438,75 +2539,125 @@ function generatePlan(){
         {name:'Dinner (7–8 PM)',items:'150–200g protein, 1 cup vegetables, 1 cup dal or 1 roti'},
       ];
 
-  let nutritionHTML = `
-  <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:24px">
-    ${[['Target Calories', targetCals+' kcal', 'red'],['Protein', proteinG+'g', 'green'],['Carbs', carbG+'g', 'blue'],['Fat', fatG+'g', 'gold']].map(([l,v,c])=>`
-    <div style="background:var(--card2);border:1px solid var(--border);border-radius:8px;padding:14px;text-align:center">
-      <div style="font-size:20px;font-weight:800;color:var(--${c==='red'?'crimson':c==='gold'?'gold':c==='green'?'green':'blue'})">${v}</div>
-      <div style="font-size:11px;color:var(--muted2);margin-top:4px;text-transform:uppercase;letter-spacing:.5px">${l}</div>
-    </div>`).join('')}
-  </div>
-  <div style="font-size:13px;color:var(--muted2);margin-bottom:16px">BMR ${bmr} kcal × ${activityMult} activity = TDEE ${tdee} kcal · Adjustment: ${goalAdj>0?'+':''}${goalAdj} kcal</div>
-  `;
+  // Macro distribution bar
+  const totalMacroG = proteinG + carbG + fatG;
+  const pPct = Math.round(proteinG/totalMacroG*100);
+  const cPct = Math.round(carbG/totalMacroG*100);
+  const fPct = 100 - pPct - cPct;
 
-  meals.forEach(m => {
-    nutritionHTML += `
-    <div style="border:1px solid var(--border);border-radius:8px;padding:14px 16px;margin-bottom:10px;display:flex;gap:16px;align-items:baseline">
-      <div style="font-size:12px;font-weight:700;color:var(--gold);min-width:160px;flex-shrink:0">${m.name}</div>
-      <div style="font-size:13px;color:var(--muted2)">${m.items}</div>
-    </div>`;
+  let nutritionHTML = '<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:16px">'
+    + [['Calories', targetCals+' kcal','var(--crimson)'],['Protein', proteinG+'g','var(--green)'],['Carbs', carbG+'g','#60a5fa'],['Fat', fatG+'g','var(--gold)']].map(([l,v,c])=>
+      '<div style="background:var(--card2);border:1px solid var(--border);border-radius:8px;padding:14px;text-align:center">'
+      + '<div style="font-size:20px;font-weight:800;color:'+c+'">'+v+'</div>'
+      + '<div style="font-size:10px;color:var(--muted2);margin-top:4px;text-transform:uppercase;letter-spacing:.5px">'+l+'</div>'
+      + '</div>'
+    ).join('') + '</div>';
+
+  nutritionHTML += '<div style="background:var(--card2);border:1px solid var(--border);border-radius:8px;padding:12px 14px;margin-bottom:16px">'
+    + '<div style="display:flex;justify-content:space-between;font-size:11px;color:var(--muted2);margin-bottom:6px">'
+    + '<span>Macro Split</span><span style="color:var(--muted)">P '+pPct+'% · C '+cPct+'% · F '+fPct+'%</span>'
+    + '</div>'
+    + '<div style="display:flex;height:8px;border-radius:4px;overflow:hidden;gap:1px">'
+    + '<div style="width:'+pPct+'%;background:var(--green)"></div>'
+    + '<div style="width:'+cPct+'%;background:#3b82f6"></div>'
+    + '<div style="width:'+fPct+'%;background:var(--gold)"></div>'
+    + '</div>'
+    + '<div style="font-size:11px;color:var(--muted2);margin-top:8px">BMR '+bmr+' kcal × '+activityMult+' = TDEE '+tdee+' kcal · Adjustment: '+(goalAdj>0?'+':'')+goalAdj+' kcal</div>'
+    + '</div>';
+
+  nutritionHTML += '<div style="font-size:11px;font-weight:700;letter-spacing:1.5px;color:var(--gold);margin-bottom:10px">MEAL PLAN</div>';
+
+  meals.forEach((m,i) => {
+    const mCal = Math.round(targetCals / meals.length * (i===0||i===2?1.2:i===meals.length-1?0.9:1));
+    const mPro = Math.round(proteinG / meals.length * (i===0||i===2?1.1:1));
+    nutritionHTML += '<div style="border:1px solid var(--border);border-radius:8px;padding:12px 14px;margin-bottom:8px">'
+      + '<div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px">'
+      + '<div style="font-size:12px;font-weight:700;color:var(--gold)">'+m.name+'</div>'
+      + '<div style="display:flex;gap:8px">'
+      + '<span style="font-size:10px;font-weight:700;background:rgba(192,17,43,.12);color:#ff6b6b;border-radius:4px;padding:2px 6px">~'+mCal+' kcal</span>'
+      + '<span style="font-size:10px;font-weight:700;background:rgba(34,197,94,.1);color:#4ade80;border-radius:4px;padding:2px 6px">~'+mPro+'g P</span>'
+      + '</div></div>'
+      + '<div style="font-size:12px;color:var(--muted2)">'+m.items+'</div>'
+      + '</div>';
   });
 
-  nutritionHTML += `
-  <div style="background:rgba(34,197,94,.05);border:1px solid rgba(34,197,94,.2);border-radius:8px;padding:14px 16px;margin-top:8px;font-size:13px;color:var(--muted2)">
-    <strong style="color:var(--green)">Hydration:</strong> ${Math.round(weight * 0.035)}–${Math.round(weight * 0.04)} litres water/day&nbsp;&nbsp;
-    <strong style="color:var(--green)">Protein target:</strong> ${proteinG}g spread across all meals&nbsp;&nbsp;
-    ${highVFL ? `<strong style="color:var(--yellow)">⚠ VFL ${vfl}:</strong> Reduce refined carbs & sugar. Add 2 tbsp psyllium husk/day.` : ''}
-  </div>`;
+  nutritionHTML += '<div style="background:rgba(34,197,94,.05);border:1px solid rgba(34,197,94,.2);border-radius:8px;padding:12px 14px;margin-top:8px">'
+    + '<div style="font-size:11px;font-weight:700;letter-spacing:1px;color:var(--green);margin-bottom:6px">HYDRATION & TIMING</div>'
+    + '<div style="font-size:12px;color:var(--muted2);line-height:1.8">'
+    + '💧 Water: '+Math.round(weight*0.035)+'–'+Math.round(weight*0.04)+' L/day · Protein: '+proteinPerMeal+'g per meal target<br>'
+    + '⏱ Eat every 3–4 hours · Pre-workout meal 60–90 min before · Post-workout protein within 30–45 min'
+    + (highVFL ? '<br>⚠ VFL '+vfl+': Reduce refined carbs & sugar. Add psyllium husk 2 tbsp/day.' : '')
+    + '</div></div>';
 
   // ── Coach Notes ──
   const riskFlags = [];
-  if(bmi > 30) riskFlags.push('BMI >30 — Start with lower impact, monitor joint health');
-  if(highVFL) riskFlags.push(`Visceral Fat Level ${vfl} — Prioritise fat loss, add daily cardio, restrict refined sugar`);
-  if(bfPct > (gender==='male'?28:35)) riskFlags.push('High body fat — Recomp approach even if goal is muscle gain');
-  if(smm && smm < (gender==='male'?27:20)) riskFlags.push('Low skeletal muscle mass — Compound movement priority, progressive overload key');
+  if(bmi > 30) riskFlags.push({icon:'🦴', text:'BMI '+bmi.toFixed(1)+' (Obese) — Start with lower impact movements, monitor joint stress. Progress volume slowly.'});
+  if(highVFL) riskFlags.push({icon:'⚡', text:'Visceral Fat Level '+vfl+' (Elevated) — Priority: fat loss + daily cardio + restrict refined sugar & alcohol.'});
+  if(bfPct > (gender==='male'?28:35)) riskFlags.push({icon:'📊', text:'Body fat '+bfPct.toFixed(1)+'% — Recomp approach recommended even if primary goal is muscle gain.'});
+  if(smm && smm < (gender==='male'?27:20)) riskFlags.push({icon:'💪', text:'Low skeletal muscle mass ('+smm+'kg) — Prioritise compound movements & progressive overload. Eat at maintenance or small surplus.'});
+  if(score && parseInt(score) < 70) riskFlags.push({icon:'📋', text:'InBody Score '+score+' — Below 70. Focus on recomposition: increase muscle, reduce fat mass simultaneously.'});
 
-  let notesHTML = `
-  <div style="margin-bottom:18px">
-    <div style="font-size:12px;font-weight:700;color:var(--crimson);letter-spacing:1px;margin-bottom:10px">ASSESSMENT SUMMARY</div>
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;font-size:13px">
-      <div>Body Fat Category: <strong style="color:#fff">${fatCategory}</strong></div>
-      <div>Visceral Fat Level: <strong style="color:${vfl>=10?'var(--yellow)':'var(--green)'}">${vfl} ${vfl>=10?'(Elevated)':'(Normal)'}</strong></div>
-      <div>InBody Score: <strong style="color:#fff">${score || '—'}</strong></div>
-      <div>Est. BMR: <strong style="color:#fff">${bmr} kcal</strong></div>
-      <div>TDEE (est): <strong style="color:#fff">${tdee} kcal</strong></div>
-      <div>Target: <strong style="color:var(--gold)">${targetCals} kcal/day</strong></div>
-    </div>
-  </div>
-  ${riskFlags.length ? `
-  <div style="margin-bottom:18px">
-    <div style="font-size:12px;font-weight:700;color:var(--yellow);letter-spacing:1px;margin-bottom:10px">⚠ FLAGS FOR THIS CLIENT</div>
-    ${riskFlags.map(f=>`<div style="display:flex;gap:8px;font-size:13px;color:var(--muted2);margin-bottom:6px"><span style="color:var(--yellow);flex-shrink:0">→</span>${f}</div>`).join('')}
-  </div>` : ''}
-  <div style="margin-bottom:18px">
-    <div style="font-size:12px;font-weight:700;color:var(--muted);letter-spacing:1px;margin-bottom:10px">PROGRESSION PROTOCOL</div>
-    <div style="font-size:13px;color:var(--muted2);line-height:2">
-      Week 1–2: Establish form, track all lifts<br>
-      Week 3–4: Add weight when top-end reps are easy (double progression)<br>
-      Week 5–6: Deload or reassess — reduce load by 40%, same sets<br>
-      Check-in: Weekly weight + photos every 4 weeks
-    </div>
-  </div>
-  <div>
-    <div style="font-size:12px;font-weight:700;color:var(--muted);letter-spacing:1px;margin-bottom:10px">SUPPLEMENTS (OPTIONAL)</div>
-    <div style="font-size:13px;color:var(--muted2);line-height:2">
-      Creatine Monohydrate: 5g/day (loading optional)<br>
-      Whey Protein: ${Math.max(0,proteinG-120)}g/day from shakes to hit protein target<br>
-      Vitamin D3: 2000 IU/day<br>
-      Omega-3: 2–3g EPA+DHA/day
-      ${highVFL ? '<br>Green tea extract or L-Carnitine: May support fat oxidation' : ''}
-    </div>
-  </div>`;
+  // Body composition bars
+  const leanPct = weight ? Math.round((leanMass/weight)*100) : 0;
+  const compBars = weight ? (
+    '<div style="margin-bottom:8px"><div style="display:flex;justify-content:space-between;font-size:11px;margin-bottom:4px"><span style="color:var(--muted2)">Lean Mass</span><span style="color:#4ade80;font-weight:700">'+leanMass.toFixed(1)+'kg ('+leanPct+'%)</span></div>'
+    + '<div style="height:7px;background:var(--border2);border-radius:4px;overflow:hidden"><div style="width:'+leanPct+'%;height:100%;background:var(--green);border-radius:4px"></div></div></div>'
+    + '<div><div style="display:flex;justify-content:space-between;font-size:11px;margin-bottom:4px"><span style="color:var(--muted2)">Body Fat</span><span style="color:'+(bfPct>(gender==='male'?25:32)?'var(--yellow)':'#60a5fa')+';font-weight:700">'+bfm.toFixed(1)+'kg ('+bfPct.toFixed(1)+'%)</span></div>'
+    + '<div style="height:7px;background:var(--border2);border-radius:4px;overflow:hidden"><div style="width:'+Math.round(bfPct)+'%;height:100%;background:'+(bfPct>(gender==='male'?25:32)?'var(--yellow)':'#3b82f6')+';border-radius:4px"></div></div></div>'
+  ) : '<div style="font-size:12px;color:var(--muted2)">Enter weight & body fat mass to see composition breakdown.</div>';
+
+  const inbodyScore = score ? parseInt(score) : null;
+  const scoreColor = !inbodyScore ? 'var(--muted)' : inbodyScore>=80?'var(--green)':inbodyScore>=70?'var(--gold)':'var(--yellow)';
+  const scoreLabel = !inbodyScore ? '—' : inbodyScore>=80?'Excellent':inbodyScore>=70?'Good':inbodyScore>=60?'Below Average':'Needs Improvement';
+
+  let notesHTML = '<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:18px">'
+    + [
+      ['Body Fat Category', fatCategory, bfPct>(gender==='male'?25:32)?'var(--yellow)':'var(--green)'],
+      ['Visceral Fat Level', vfl+(vfl>=10?' ⚠':' ✓'), vfl>=10?'var(--yellow)':'var(--green)'],
+      ['InBody Score', (score||'—')+' · '+scoreLabel, scoreColor],
+      ['Est. BMR', bmr+' kcal', '#fff'],
+      ['TDEE (est)', tdee+' kcal', '#fff'],
+      ['Target Intake', targetCals+' kcal/day', 'var(--gold)'],
+    ].map(([l,v,c])=>'<div style="background:var(--card2);border:1px solid var(--border);border-radius:6px;padding:10px 12px">'
+      +'<div style="font-size:10px;color:var(--muted2);margin-bottom:4px;text-transform:uppercase;letter-spacing:.5px">'+l+'</div>'
+      +'<div style="font-size:13px;font-weight:700;color:'+c+'">'+v+'</div>'
+      +'</div>'
+    ).join('') + '</div>';
+
+  notesHTML += '<div style="background:var(--card2);border:1px solid var(--border);border-radius:8px;padding:14px;margin-bottom:16px">'
+    + '<div style="font-size:11px;font-weight:700;letter-spacing:1.5px;color:var(--muted2);margin-bottom:12px">BODY COMPOSITION</div>'
+    + compBars + '</div>';
+
+  if(riskFlags.length){
+    notesHTML += '<div style="background:rgba(245,158,11,.06);border:1px solid rgba(245,158,11,.25);border-radius:8px;padding:14px;margin-bottom:16px">'
+      + '<div style="font-size:11px;font-weight:700;letter-spacing:1.5px;color:var(--yellow);margin-bottom:10px">⚠ FLAGS FOR THIS CLIENT</div>'
+      + riskFlags.map(f=>'<div style="display:flex;gap:10px;font-size:12px;color:var(--muted2);margin-bottom:8px;align-items:baseline"><span style="font-size:14px;flex-shrink:0">'+f.icon+'</span>'+f.text+'</div>').join('')
+      + '</div>';
+  }
+
+  notesHTML += '<div style="background:var(--card2);border:1px solid var(--border);border-radius:8px;padding:14px;margin-bottom:16px">'
+    + '<div style="font-size:11px;font-weight:700;letter-spacing:1.5px;color:var(--muted2);margin-bottom:12px">4-WEEK PROGRESSION PROTOCOL</div>'
+    + [
+      ['Week 1–2','Establish movement patterns. Track every set. No maximal effort — RPE cap at 7.'],
+      ['Week 3–4','Progressive overload: add weight when you hit top-end reps cleanly (double progression).'],
+      ['Week 5–6','Reassess or deload: reduce load 40%, keep same sets. Rebuild intensity in next block.'],
+      ['Check-in','Weekly weigh-in (same time/conditions) · Progress photos every 4 weeks · InBody monthly'],
+    ].map(([w,t])=>'<div style="display:grid;grid-template-columns:80px 1fr;gap:10px;margin-bottom:8px;font-size:12px">'
+      +'<span style="color:var(--crimson);font-weight:700">'+w+'</span>'
+      +'<span style="color:var(--muted2)">'+t+'</span>'
+      +'</div>'
+    ).join('') + '</div>';
+
+  notesHTML += '<div style="background:var(--card2);border:1px solid var(--border);border-radius:8px;padding:14px">'
+    + '<div style="font-size:11px;font-weight:700;letter-spacing:1.5px;color:var(--muted2);margin-bottom:12px">SUPPLEMENTS (OPTIONAL)</div>'
+    + [
+      ['Creatine Monohydrate','5g/day · Any time · No loading needed · Best for strength & muscle'],
+      ['Whey Protein',''+Math.max(0,proteinG-120)+'g/day from shakes to hit '+proteinG+'g protein target'],
+      ['Vitamin D3','2000–5000 IU/day · Especially if limited sun exposure'],
+      ['Omega-3 (Fish Oil)','2–3g EPA+DHA/day · Reduces inflammation, supports recovery'],
+      ...(highVFL ? [['L-Carnitine / Green Tea','500mg L-Carnitine pre-workout · May support fat oxidation (VFL priority)']] : []),
+    ].map(([s,d])=>'<div style="margin-bottom:8px;font-size:12px"><span style="color:#fff;font-weight:600">'+s+':</span> <span style="color:var(--muted2)">'+d+'</span></div>').join('')
+    + '</div>';
 
   // ── Render ──
   document.getElementById('pg-summary-card').innerHTML = [
