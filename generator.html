@@ -333,7 +333,7 @@ footer a:hover{color:var(--red-b)}
   <div class="step-card active" id="step-0">
     <div class="step-num">Step 01 / 04</div>
     <div class="step-title">Target Muscle Group</div>
-    <div class="step-sub">Which muscle are you training today?</div>
+    <div class="step-sub">Which muscles are you training today? <span style="color:var(--gold);font-weight:700">Select 1 or more</span></div>
     <div class="opts" id="muscleOpts">
       <div class="opt" data-val="chest" data-group="muscleOpts"><span class="opt-icon">🏋️</span><div class="opt-label">Chest</div><div class="opt-sub">Pecs · Push</div></div>
       <div class="opt" data-val="back" data-group="muscleOpts"><span class="opt-icon">🔱</span><div class="opt-label">Back</div><div class="opt-sub">Lats · Pull</div></div>
@@ -475,7 +475,7 @@ function toggleNav(){
 }
 
 /* ── STATE ── */
-const S = {muscle:null, level:null, goal:null, equip:null};
+const S = {muscles:[], level:null, goal:null, equip:null};
 let _currentStep = 0;
 const TOTAL = 4;
 
@@ -483,9 +483,21 @@ const TOTAL = 4;
 document.querySelectorAll('.opt').forEach(opt=>{
   opt.addEventListener('click',()=>{
     const grp = opt.dataset.group;
+    if(grp === 'muscleOpts'){
+      // Multi-select for muscles
+      opt.classList.toggle('selected');
+      const val = opt.dataset.val;
+      if(opt.classList.contains('selected')){
+        if(!S.muscles.includes(val)) S.muscles.push(val);
+      } else {
+        S.muscles = S.muscles.filter(m=>m!==val);
+      }
+      updateNextBtn();
+      return;
+    }
     document.querySelectorAll(`[data-group="${grp}"]`).forEach(o=>o.classList.remove('selected'));
     opt.classList.add('selected');
-    const key = {muscleOpts:'muscle',levelOpts:'level',goalOpts:'goal',equipOpts:'equip'}[grp];
+    const key = {levelOpts:'level',goalOpts:'goal',equipOpts:'equip'}[grp];
     S[key] = opt.dataset.val;
     updateNextBtn();
     if(key==='equip') updateSummary();
@@ -493,10 +505,10 @@ document.querySelectorAll('.opt').forEach(opt=>{
 });
 
 function updateNextBtn(){
-  const keys = [['muscle','next0'],['level','next1'],['goal','next2'],['equip','genBtn']];
+  const keys = [['muscles','next0'],['level','next1'],['goal','next2'],['equip','genBtn']];
   keys.forEach(([k,id])=>{
     const el = document.getElementById(id);
-    if(el) el.disabled = !S[k];
+    if(el) el.disabled = k==='muscles' ? S.muscles.length===0 : !S[k];
   });
 }
 
@@ -507,7 +519,9 @@ function updateSummary(){
     goal:{muscle:'Muscle Building',fatloss:'Fat Loss',strength:'Strength',endurance:'Endurance'},
     equip:{gym:'Full Gym',dumbbells:'Dumbbells',bodyweight:'Bodyweight'}
   };
-  const chips = Object.entries(S).filter(([,v])=>v).map(([k,v])=>`<span class="sel-chip">${labels[k]?.[v]||v}</span>`).join('');
+  const muscleChips = S.muscles.map(m=>`<span class="sel-chip">${labels.muscle?.[m]||m}</span>`).join('');
+  const otherChips = [['level',S.level],['goal',S.goal],['equip',S.equip]].filter(([,v])=>v).map(([k,v])=>`<span class="sel-chip">${labels[k]?.[v]||v}</span>`).join('');
+  const chips = muscleChips + otherChips;
   document.getElementById('selSummary').innerHTML = chips;
 }
 
@@ -1013,8 +1027,8 @@ function shuffle(arr){return [...arr].sort(()=>Math.random()-.5)}
 
 /* ── GENERATE ── */
 function generate(){
-  const {muscle,level,goal,equip} = S;
-  if(!muscle||!level||!goal||!equip) return;
+  const {muscles,level,goal,equip} = S;
+  if(!muscles.length||!level||!goal||!equip) return;
 
   document.getElementById(`step-3`).style.display = 'none';
   const loading = document.getElementById('genLoading');
@@ -1031,19 +1045,31 @@ function generate(){
 
   setTimeout(()=>{
     loading.style.display = 'none';
-    pendingWorkoutData = buildWorkout(muscle,level,goal,equip);
+    pendingWorkoutData = buildWorkout(muscles,level,goal,equip);
     showEmailGate();
   }, 1400);
 }
 
 let pendingWorkoutData = null;
 
-function buildWorkout(muscle,level,goal,equip){
+function buildWorkout(muscles,level,goal,equip){
   const rx = RX[goal][level];
-  const pool = DB[muscle]?.[equip] || {};
-  const compounds = shuffle(pool.compound || []);
-  const isolation = shuffle(pool.isolation || []);
-  const numCompound = Math.min(Math.ceil(rx.exCount * 0.45), compounds.length);
+  // Combine exercises from all selected muscles
+  const muscleArr = Array.isArray(muscles) ? muscles : [muscles];
+  let allCompounds = [], allIsolation = [];
+  const exPerMuscle = Math.max(2, Math.floor(rx.exCount / muscleArr.length));
+  muscleArr.forEach(muscle => {
+    const pool = DB[muscle]?.[equip] || {};
+    const mc = shuffle(pool.compound || []);
+    const mi = shuffle(pool.isolation || []);
+    const nc = Math.min(Math.ceil(exPerMuscle * 0.5), mc.length);
+    const ni = Math.min(exPerMuscle - nc, mi.length);
+    allCompounds.push(...mc.slice(0, nc));
+    allIsolation.push(...mi.slice(0, ni));
+  });
+  const compounds = shuffle(allCompounds);
+  const isolation = shuffle(allIsolation);
+  const numCompound = Math.min(Math.ceil(rx.exCount * 0.5), compounds.length);
   const numIsolation = Math.min(rx.exCount - numCompound, isolation.length);
   const exercises = [...compounds.slice(0,numCompound),...isolation.slice(0,numIsolation)];
 
@@ -1231,7 +1257,7 @@ function submitGate(e){
   try{
     const app=firebase.apps.length?firebase.app():firebase.initializeApp(FIREBASE_CONFIG);
     firebase.database().ref('generator_requests').push({
-      email,muscle:S.muscle,level:S.level,goal:S.goal,equipment:S.equip,
+      email,muscle:S.muscles.join('+'),level:S.level,goal:S.goal,equipment:S.equip,
       source:'generator_v2',created_at:new Date().toISOString()
     }).catch(()=>{});
   }catch(err){}
@@ -1251,7 +1277,7 @@ function revealPlan(){
 }
 
 function regenerate(){
-  pendingWorkoutData=buildWorkout(S.muscle,S.level,S.goal,S.equip);
+  pendingWorkoutData=buildWorkout(S.muscles,S.level,S.goal,S.equip);
   const el=document.getElementById('genResult');
   el.innerHTML=renderResult(pendingWorkoutData);
   el.scrollIntoView({behavior:'smooth',block:'start'});
