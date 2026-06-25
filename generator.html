@@ -1084,13 +1084,16 @@ function buildWorkout(muscles,level,goal,equip){
   const avgReps = rx.reps.includes('–') ? parseInt(rx.reps.split('–')[1]) : parseInt(rx.reps);
   const totalVol = totalSets * avgReps;
 
-  return {muscle,level,goal,equip,exercises,rx,totalTime,totalSets,totalVol};
+  const muscle = muscleArr.length===1 ? muscleArr[0] : muscleArr[0]; // use first for warmup/split; muscles array for labels
+  return {muscle, muscles:muscleArr, level,goal,equip,exercises,rx,totalTime,totalSets,totalVol};
 }
 
 function renderResult(d){
-  const {muscle,level,goal,equip,exercises,rx,totalTime,totalSets,totalVol} = d;
+  const {muscle, muscles:muscleArr2, level,goal,equip,exercises,rx,totalTime,totalSets,totalVol} = d;
+  const _ML = {chest:'Chest',back:'Back',shoulders:'Shoulders',biceps:'Biceps',triceps:'Triceps',legs:'Legs',core:'Core',fullbody:'Full Body'};
+  const _muscleList = muscleArr2 && muscleArr2.length ? muscleArr2 : [muscle];
 
-  const mLabel = {chest:'Chest',back:'Back',shoulders:'Shoulders',biceps:'Biceps',triceps:'Triceps',legs:'Legs',core:'Core',fullbody:'Full Body'}[muscle];
+  const mLabel = _muscleList.map(m=>_ML[m]||m).join(' + ');
   const gLabel = {muscle:'Muscle Building',fatloss:'Fat Loss',strength:'Strength',endurance:'Endurance'}[goal];
   const lLabel = {beginner:'Beginner',intermediate:'Intermediate',advanced:'Advanced'}[level];
   const eLabel = {gym:'Full Gym',dumbbells:'Dumbbells',bodyweight:'Bodyweight'}[equip];
@@ -1134,13 +1137,13 @@ function renderResult(d){
     </div>${techRow}`;
   }).join('');
 
-  const warmup = WARMUP[muscle]||WARMUP.fullbody;
+  const warmup = WARMUP[_muscleList[0]]||WARMUP.fullbody;
   const warmHTML = warmup.map(w=>`<div class="proto-item"><div class="proto-dot red"></div><div><div class="proto-text">${w}</div></div></div>`).join('');
   const coolHTML = COOLDOWN.map(c=>`<div class="proto-item"><div class="proto-dot green"></div><div><div class="proto-text">${c}</div></div></div>`).join('');
 
   const split = SPLITS[goal]?.[level]||SPLITS.muscle.beginner;
   const splitHTML = split.days.map((d,i)=>{
-    const isTarget = d.toLowerCase().includes(mLabel.toLowerCase().slice(0,4))||d==='Full'||d.includes('+');
+    const isTarget = _muscleList.some(m=>d.toLowerCase().includes((_ML[m]||m).toLowerCase().slice(0,4)))||d==='Full'||d.includes('+');
     const isRest = d==='Rest';
     const cls = isRest?'rest':isTarget?'active':'';
     return `<div class="split-day ${cls}"><div class="day-name">${['Mon','Tue','Wed','Thu','Fri','Sat','Sun'][i]}</div><div class="day-focus">${d}</div></div>`;
