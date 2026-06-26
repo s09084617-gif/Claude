@@ -1,0 +1,813 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Nutrition Plan — Sahil Fitness</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@400;600;700&family=Montserrat:wght@400;500;600;700&family=Rajdhani:wght@600;700&display=swap" rel="stylesheet">
+<style>
+:root{--red:#CC0000;--gold:#FFC107;--black:#0A0A0A;--card:#131313;--border:rgba(255,255,255,.07);--muted:#555;--red-b:#e60000}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--black);color:#fff;font-family:'Montserrat',sans-serif;font-size:14px;min-height:100vh;overflow-x:hidden}
+body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(rgba(204,0,0,.03) 1px,transparent 1px),linear-gradient(90deg,rgba(204,0,0,.03) 1px,transparent 1px);background-size:40px 40px;pointer-events:none;z-index:0}
+
+/* NAV */
+header{position:relative;z-index:10;display:flex;align-items:center;justify-content:space-between;padding:18px 28px;border-bottom:1px solid var(--border);background:rgba(10,10,10,.95);backdrop-filter:blur(12px);position:sticky;top:0}
+.brand{display:flex;align-items:center;gap:10px;text-decoration:none}
+.brand-logo{width:36px;height:36px;background:var(--red);border-radius:2px;display:flex;align-items:center;justify-content:center;font-family:'Bebas Neue',sans-serif;font-size:18px;color:#fff;letter-spacing:1px}
+.brand-name{font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:3px;color:#fff}
+.brand-name span{color:var(--red)}
+nav{display:flex;gap:24px}
+nav a{color:var(--muted);text-decoration:none;font-family:'Barlow Condensed',sans-serif;font-size:13px;letter-spacing:2px;text-transform:uppercase;transition:color .2s}
+nav a:hover{color:#fff}
+nav a.active{color:var(--gold)}
+
+/* MAIN */
+main{position:relative;z-index:1;max-width:820px;margin:0 auto;padding:40px 20px 80px}
+
+/* HERO */
+.hero{text-align:center;margin-bottom:44px}
+.hero-tag{font-family:'Barlow Condensed',sans-serif;font-size:11px;letter-spacing:4px;color:var(--red);text-transform:uppercase;margin-bottom:10px}
+.hero-title{font-family:'Bebas Neue',sans-serif;font-size:clamp(38px,8vw,64px);letter-spacing:5px;line-height:1;margin-bottom:10px}
+.hero-title span{color:var(--gold)}
+.hero-sub{font-family:'Barlow Condensed',sans-serif;font-size:15px;color:var(--muted);letter-spacing:2px}
+
+/* PROGRESS BAR */
+.progress-bar{display:flex;gap:4px;margin-bottom:36px}
+.prog-step{flex:1;height:3px;background:var(--border);border-radius:2px;transition:background .3s}
+.prog-step.done{background:var(--red)}
+.prog-step.active{background:var(--gold)}
+
+/* STEP CARD */
+.step-card{background:var(--card);border:1px solid var(--border);border-radius:4px;padding:32px;display:none;animation:fadeUp .35s ease both}
+.step-card.active{display:block}
+@keyframes fadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+.step-label{font-family:'Barlow Condensed',sans-serif;font-size:10px;letter-spacing:4px;color:var(--red);text-transform:uppercase;margin-bottom:6px}
+.step-title{font-family:'Bebas Neue',sans-serif;font-size:clamp(24px,5vw,34px);letter-spacing:4px;margin-bottom:6px}
+.step-sub{font-size:13px;color:var(--muted);letter-spacing:.5px;margin-bottom:28px}
+
+/* OPTS GRID */
+.opts{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:12px;margin-bottom:28px}
+.opts.two-col{grid-template-columns:1fr 1fr}
+.opt{background:#1a1a1a;border:1px solid var(--border);border-radius:3px;padding:18px 14px;cursor:pointer;transition:all .2s;text-align:center;position:relative;user-select:none}
+.opt:hover{border-color:rgba(204,0,0,.4);background:#1f1010}
+.opt.selected{background:rgba(204,0,0,.1);border-color:var(--red)}
+.opt-icon{font-size:26px;display:block;margin-bottom:8px}
+.opt-label{font-family:'Barlow Condensed',sans-serif;font-size:15px;letter-spacing:1.5px;font-weight:700;text-transform:uppercase;color:#fff;margin-bottom:3px}
+.opt-sub{font-size:11px;color:var(--muted);letter-spacing:.3px}
+.opt.selected .opt-label{color:#fff}
+.opt.gold-opt.selected{background:rgba(255,193,7,.08);border-color:var(--gold)}
+.opt-badge{position:absolute;top:8px;right:8px;background:var(--gold);color:#000;font-family:'Barlow Condensed',sans-serif;font-size:9px;letter-spacing:2px;padding:2px 6px;border-radius:1px;font-weight:700}
+
+/* STEP NAV */
+.step-nav{display:flex;gap:12px;justify-content:flex-end}
+.btn-back{background:transparent;border:1px solid var(--border);color:var(--muted);padding:13px 28px;font-family:'Bebas Neue',sans-serif;font-size:16px;letter-spacing:3px;cursor:pointer;border-radius:2px;transition:all .2s}
+.btn-back:hover{border-color:rgba(255,255,255,.2);color:#fff}
+.btn-next{background:var(--red);border:none;color:#fff;padding:13px 32px;font-family:'Bebas Neue',sans-serif;font-size:16px;letter-spacing:3px;cursor:pointer;border-radius:2px;transition:all .2s}
+.btn-next:hover{background:var(--red-b)}
+.btn-next:disabled{opacity:.4;cursor:not-allowed}
+.btn-generate{background:linear-gradient(135deg,var(--red),#8b0000);border:none;color:#fff;padding:16px 40px;font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:4px;cursor:pointer;border-radius:2px;transition:all .2s;width:100%}
+.btn-generate:hover{filter:brightness(1.1)}
+
+/* RESULTS */
+#results{display:none;animation:fadeUp .5s ease both}
+.result-header{background:linear-gradient(135deg,#1a0000,#0d0000);border:1px solid rgba(204,0,0,.3);border-radius:4px;padding:28px 32px;margin-bottom:24px}
+.result-person{font-family:'Barlow Condensed',sans-serif;font-size:11px;letter-spacing:3px;color:var(--red);text-transform:uppercase;margin-bottom:6px}
+.result-title{font-family:'Bebas Neue',sans-serif;font-size:clamp(24px,5vw,38px);letter-spacing:4px;margin-bottom:4px}
+.result-sub{font-family:'Barlow Condensed',sans-serif;font-size:13px;color:var(--gold);letter-spacing:1px}
+
+/* MACRO TARGETS */
+.macro-row{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:24px}
+.macro-box{background:var(--card);border:1px solid var(--border);border-radius:3px;padding:18px;text-align:center}
+.macro-val{font-family:'Bebas Neue',sans-serif;font-size:32px;letter-spacing:2px;line-height:1}
+.macro-val.cal{color:var(--gold)}
+.macro-val.prot{color:#e05050}
+.macro-val.carb{color:#60a5fa}
+.macro-val.fat{color:#a3e635}
+.macro-lbl{font-family:'Barlow Condensed',sans-serif;font-size:10px;letter-spacing:2px;color:var(--muted);text-transform:uppercase;margin-top:4px}
+
+/* DAY TABS */
+.day-tabs{display:flex;gap:4px;margin-bottom:0;overflow-x:auto;padding-bottom:0}
+.day-tab{flex:1;min-width:60px;padding:10px 4px;font-family:'Bebas Neue',sans-serif;font-size:14px;letter-spacing:2px;color:var(--muted);background:var(--card);border:1px solid var(--border);border-bottom:none;cursor:pointer;text-align:center;transition:all .2s;white-space:nowrap;border-radius:3px 3px 0 0}
+.day-tab.active{color:#fff;background:#1a1a1a;border-color:var(--red);border-bottom-color:#1a1a1a}
+.day-plan{background:#1a1a1a;border:1px solid var(--border);border-radius:0 0 3px 3px;border-top:1px solid var(--red);padding:24px;margin-bottom:24px;display:none}
+.day-plan.active{display:block;animation:fadeUp .25s ease both}
+
+/* MEAL ROWS */
+.meal-row{display:flex;align-items:flex-start;gap:16px;padding:14px 0;border-bottom:1px solid var(--border)}
+.meal-row:last-child{border-bottom:none}
+.meal-time{font-family:'Barlow Condensed',sans-serif;font-size:10px;letter-spacing:2px;color:var(--muted);text-transform:uppercase;min-width:88px;padding-top:2px}
+.meal-info{flex:1}
+.meal-name{font-family:'Barlow Condensed',sans-serif;font-size:16px;letter-spacing:.5px;font-weight:700;color:#fff;margin-bottom:2px}
+.meal-note{font-size:11px;color:var(--muted);margin-bottom:6px}
+.meal-macros{display:flex;gap:10px;flex-wrap:wrap}
+.meal-macro{font-family:'Barlow Condensed',sans-serif;font-size:11px;letter-spacing:1px;padding:2px 8px;border-radius:1px}
+.meal-macro.cal{background:rgba(255,193,7,.1);color:var(--gold);border:1px solid rgba(255,193,7,.2)}
+.meal-macro.prot{background:rgba(224,80,80,.1);color:#e08080;border:1px solid rgba(224,80,80,.2)}
+.meal-macro.carb{background:rgba(96,165,250,.1);color:#80b5ff;border:1px solid rgba(96,165,250,.2)}
+.meal-macro.fat{background:rgba(163,230,53,.1);color:#b5e050;border:1px solid rgba(163,230,53,.2)}
+
+/* DAY TOTAL */
+.day-total{display:flex;gap:16px;justify-content:flex-end;padding-top:14px;border-top:1px solid rgba(204,0,0,.2);margin-top:4px;flex-wrap:wrap}
+.day-total-item{font-family:'Barlow Condensed',sans-serif;font-size:12px;letter-spacing:1px;color:var(--muted)}
+.day-total-item strong{color:#fff}
+
+/* TIPS SECTIONS */
+.tips-section{background:var(--card);border:1px solid var(--border);border-radius:3px;padding:24px;margin-bottom:16px}
+.tips-title{font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:3px;color:var(--gold);margin-bottom:16px;display:flex;align-items:center;gap:10px}
+.tip-item{display:flex;gap:12px;padding:10px 0;border-bottom:1px solid var(--border)}
+.tip-item:last-child{border-bottom:none}
+.tip-dot{width:6px;height:6px;border-radius:50%;background:var(--red);margin-top:5px;flex-shrink:0}
+.tip-text{font-size:13px;color:#ccc;line-height:1.6}
+.tip-text strong{color:#fff}
+
+/* SUPPS */
+.supp-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:10px}
+.supp-card{background:#111;border:1px solid var(--border);border-radius:3px;padding:14px;font-size:12px}
+.supp-name{font-family:'Barlow Condensed',sans-serif;font-size:14px;letter-spacing:1px;font-weight:700;color:#fff;margin-bottom:4px}
+.supp-dose{color:var(--gold);margin-bottom:4px}
+.supp-why{color:var(--muted)}
+
+/* RESET */
+.btn-reset{background:transparent;border:1px solid var(--border);color:var(--muted);padding:12px 28px;font-family:'Bebas Neue',sans-serif;font-size:15px;letter-spacing:3px;cursor:pointer;border-radius:2px;transition:all .2s;margin-top:24px;width:100%}
+.btn-reset:hover{border-color:rgba(255,255,255,.2);color:#fff}
+
+/* PG BADGE */
+.pg-badge{display:inline-block;background:rgba(255,193,7,.12);border:1px solid rgba(255,193,7,.3);color:var(--gold);font-family:'Barlow Condensed',sans-serif;font-size:10px;letter-spacing:2px;padding:2px 8px;border-radius:1px;text-transform:uppercase;margin-left:6px}
+
+@media(max-width:600px){
+  .macro-row{grid-template-columns:1fr 1fr}
+  nav{display:none}
+  .meal-time{min-width:72px;font-size:9px}
+  .day-tabs{gap:2px}
+  .day-tab{font-size:12px;padding:8px 2px;min-width:40px}
+}
+</style>
+</head>
+<body>
+<header>
+  <a class="brand" href="index.html">
+    <div class="brand-logo">SF</div>
+    <div class="brand-name">SAHIL <span>FITNESS</span></div>
+  </a>
+  <nav>
+    <a href="generator.html">Workout</a>
+    <a href="diet.html" class="active">Nutrition</a>
+    <a href="IBLITZ_Assessment_Tool-5.html">Assessment</a>
+    <a href="apply.html" style="color:var(--red)">Start →</a>
+  </nav>
+</header>
+
+<main>
+  <div class="hero">
+    <div class="hero-tag">🥗 Coach Sahil Bansal</div>
+    <h1 class="hero-title">CUSTOM<br><span>DIET PLAN</span></h1>
+    <div class="hero-sub">Personalised for your goal · lifestyle · cuisine</div>
+  </div>
+
+  <!-- PROGRESS -->
+  <div class="progress-bar">
+    <div class="prog-step active" id="prog0"></div>
+    <div class="prog-step" id="prog1"></div>
+    <div class="prog-step" id="prog2"></div>
+    <div class="prog-step" id="prog3"></div>
+  </div>
+
+  <!-- STEP 1: GENDER -->
+  <div class="step-card active" id="step0">
+    <div class="step-label">Step 1 of 4</div>
+    <div class="step-title">Who Are You?</div>
+    <div class="step-sub">Select your gender — calorie targets differ significantly</div>
+    <div class="opts two-col" id="genderOpts">
+      <div class="opt" data-val="male" data-group="genderOpts">
+        <span class="opt-icon">♂️</span>
+        <div class="opt-label">Male</div>
+        <div class="opt-sub">Boy / Man</div>
+      </div>
+      <div class="opt" data-val="female" data-group="genderOpts">
+        <span class="opt-icon">♀️</span>
+        <div class="opt-label">Female</div>
+        <div class="opt-sub">Girl / Woman</div>
+      </div>
+    </div>
+    <div class="step-nav">
+      <button class="btn-next" id="next0" disabled onclick="goStep(1)">NEXT →</button>
+    </div>
+  </div>
+
+  <!-- STEP 2: LIFESTYLE -->
+  <div class="step-card" id="step1">
+    <div class="step-label">Step 2 of 4</div>
+    <div class="step-title">Your Lifestyle</div>
+    <div class="step-sub">This shapes your calorie needs and meal timing advice</div>
+    <div class="opts" id="lifeOpts">
+      <div class="opt" data-val="office" data-group="lifeOpts">
+        <span class="opt-icon">💼</span>
+        <div class="opt-label">Office / Corporate</div>
+        <div class="opt-sub">9–6 desk job, sedentary</div>
+      </div>
+      <div class="opt" data-val="pg" data-group="lifeOpts">
+        <span class="opt-icon">🏠</span>
+        <div class="opt-label">Bangalore PG</div>
+        <div class="opt-sub">PG meals provided</div>
+      </div>
+      <div class="opt" data-val="student" data-group="lifeOpts">
+        <span class="opt-icon">📚</span>
+        <div class="opt-label">Student</div>
+        <div class="opt-sub">College / Campus</div>
+      </div>
+      <div class="opt" data-val="gym" data-group="lifeOpts">
+        <span class="opt-icon">🏋️</span>
+        <div class="opt-label">Active / Gym-Goer</div>
+        <div class="opt-sub">Training 4–6 days/week</div>
+      </div>
+      <div class="opt" data-val="wfh" data-group="lifeOpts">
+        <span class="opt-icon">🖥️</span>
+        <div class="opt-label">Work From Home</div>
+        <div class="opt-sub">Remote, home kitchen</div>
+      </div>
+    </div>
+    <div class="step-nav">
+      <button class="btn-back" onclick="goStep(0)">← BACK</button>
+      <button class="btn-next" id="next1" disabled onclick="goStep(2)">NEXT →</button>
+    </div>
+  </div>
+
+  <!-- STEP 3: GOAL -->
+  <div class="step-card" id="step2">
+    <div class="step-label">Step 3 of 4</div>
+    <div class="step-title">Your Goal</div>
+    <div class="step-sub">Everything is designed around this — be honest</div>
+    <div class="opts" id="goalOpts">
+      <div class="opt" data-val="weightloss" data-group="goalOpts">
+        <span class="opt-icon">🔥</span>
+        <div class="opt-label">Weight Loss</div>
+        <div class="opt-sub">Calorie deficit · fat burn</div>
+      </div>
+      <div class="opt" data-val="musclegain" data-group="goalOpts">
+        <span class="opt-icon">💪</span>
+        <div class="opt-label">Muscle Gain</div>
+        <div class="opt-sub">Calorie surplus · build mass</div>
+      </div>
+      <div class="opt" data-val="maintenance" data-group="goalOpts">
+        <span class="opt-icon">⚖️</span>
+        <div class="opt-label">Maintenance</div>
+        <div class="opt-sub">Hold weight · eat clean</div>
+      </div>
+      <div class="opt gold-opt" data-val="recomp" data-group="goalOpts">
+        <span class="opt-badge">ADVANCED</span>
+        <span class="opt-icon">🎯</span>
+        <div class="opt-label">Body Recomp</div>
+        <div class="opt-sub">Lose fat + gain muscle</div>
+      </div>
+    </div>
+    <div class="step-nav">
+      <button class="btn-back" onclick="goStep(1)">← BACK</button>
+      <button class="btn-next" id="next2" disabled onclick="goStep(3)">NEXT →</button>
+    </div>
+  </div>
+
+  <!-- STEP 4: DIET TYPE -->
+  <div class="step-card" id="step3">
+    <div class="step-label">Step 4 of 4</div>
+    <div class="step-title">Food Preference</div>
+    <div class="step-sub">Your cuisine — we'll plan real Indian meals, not bland diet food</div>
+    <div class="opts" id="dietOpts">
+      <div class="opt" data-val="siVeg" data-group="dietOpts">
+        <span class="opt-icon">🥥</span>
+        <div class="opt-label">South Indian</div>
+        <div class="opt-sub">Veg · Idli Dosa Sambar</div>
+      </div>
+      <div class="opt" data-val="siNonVeg" data-group="dietOpts">
+        <span class="opt-icon">🍗</span>
+        <div class="opt-label">South Indian</div>
+        <div class="opt-sub">Non-Veg · Egg Chicken Fish</div>
+      </div>
+      <div class="opt" data-val="niVeg" data-group="dietOpts">
+        <span class="opt-icon">🫓</span>
+        <div class="opt-label">North Indian</div>
+        <div class="opt-sub">Veg · Roti Dal Paneer</div>
+      </div>
+      <div class="opt" data-val="niNonVeg" data-group="dietOpts">
+        <span class="opt-icon">🍖</span>
+        <div class="opt-label">North Indian</div>
+        <div class="opt-sub">Non-Veg · Egg Chicken</div>
+      </div>
+      <div class="opt" data-val="mixedVeg" data-group="dietOpts">
+        <span class="opt-icon">🌱</span>
+        <div class="opt-label">Mixed Veg</div>
+        <div class="opt-sub">Best of both cuisines</div>
+      </div>
+      <div class="opt" data-val="mixedNonVeg" data-group="dietOpts">
+        <span class="opt-icon">⚡</span>
+        <div class="opt-label">Mixed Non-Veg</div>
+        <div class="opt-sub">High protein · any cuisine</div>
+      </div>
+    </div>
+    <div class="step-nav">
+      <button class="btn-back" onclick="goStep(2)">← BACK</button>
+      <button class="btn-generate" id="genBtn" onclick="generatePlan()">GENERATE MY PLAN →</button>
+    </div>
+  </div>
+
+  <!-- RESULTS -->
+  <div id="results">
+    <div class="result-header" id="resultHeader"></div>
+    <div class="macro-row" id="macroRow"></div>
+    <div class="day-tabs" id="dayTabs"></div>
+    <div id="dayPlans"></div>
+    <div id="lifestyleTips"></div>
+    <div id="suppSection"></div>
+    <button class="btn-reset" onclick="resetPlan()">↩ START OVER</button>
+  </div>
+</main>
+
+<script>
+const S = {gender:null, life:null, goal:null, diet:null};
+
+/* ── CALORIE TARGETS ── */
+const TARGETS = {
+  male:{
+    weightloss: {cal:1800,P:145,C:175,F:55,note:'300–400 cal deficit from maintenance'},
+    musclegain: {cal:2700,P:190,C:310,F:72,note:'400–500 cal surplus — lean bulk'},
+    maintenance:{cal:2300,P:160,C:255,F:65,note:'TDEE maintenance — stay the same weight'},
+    recomp:     {cal:2000,P:180,C:195,F:58,note:'Slight deficit with very high protein'}
+  },
+  female:{
+    weightloss: {cal:1350,P:110,C:135,F:42,note:'250–300 cal deficit from maintenance'},
+    musclegain: {cal:1900,P:140,C:215,F:55,note:'250–300 cal surplus — lean bulk'},
+    maintenance:{cal:1700,P:120,C:190,F:50,note:'TDEE maintenance — stay the same weight'},
+    recomp:     {cal:1550,P:135,C:155,F:46,note:'Slight deficit with very high protein'}
+  }
+};
+
+/* ── LIFESTYLE MULTIPLIERS ── */
+const LIFE_MULT = {office:1.0, pg:1.0, student:1.05, gym:1.15, wfh:1.0};
+
+/* ── MEAL POOLS ── */
+const MP = {
+  siVeg:{
+    breakfast:[
+      {n:'2 Idli + Sambar (1 bowl)',          cal:230,P:9,C:44,F:2,note:'Classic · add chutney for healthy fat'},
+      {n:'Masala Dosa + Coconut Chutney',      cal:285,P:7,C:56,F:7,note:'Higher carb — great for training day'},
+      {n:'Oats Upma (1.5 cup)',                cal:205,P:7,C:36,F:4,note:'Best for weight loss · high fibre'},
+      {n:'Ven Pongal + Sambar',               cal:255,P:8,C:48,F:5,note:'Protein-rich ghee pongal'},
+      {n:'3 Rava Idli + Green Chutney',        cal:248,P:9,C:46,F:3,note:'Low fat · easy to digest'},
+      {n:'Pesarattu (2) + Ginger Chutney',     cal:215,P:11,C:36,F:3,note:'Moong dal — highest protein breakfast'},
+      {n:'Poha + Peanuts (1.5 cup)',           cal:225,P:6,C:38,F:6,note:'Quick to make · good pre-work meal'}
+    ],
+    midMorning:[
+      {n:'Buttermilk (1 glass) + Sprouts (50g)',cal:115,P:8,C:14,F:1,note:'Probiotic + protein hit'},
+      {n:'Roasted Chana (50g)',                 cal:185,P:9,C:30,F:4,note:'Carry in pocket — best desk snack'},
+      {n:'Banana + Peanuts (20g)',              cal:175,P:5,C:32,F:7,note:'Quick energy + healthy fat'},
+      {n:'Coconut Water + 3 Walnuts',           cal:110,P:2,C:18,F:5,note:'Electrolytes + omega-3'},
+      {n:'Boiled Chana (100g)',                 cal:165,P:9,C:27,F:3,note:'High protein · very filling'},
+      {n:'Curd (1 cup) + Cucumber',             cal:105,P:8,C:10,F:3,note:'Probiotic + hydrating'},
+      {n:'Mixed Fruits (200g)',                 cal:110,P:1,C:27,F:0,note:'Vitamins + natural sugar'}
+    ],
+    lunch:[
+      {n:'Rice (1 cup) + Sambar + Rasam + Curd',cal:470,P:13,C:88,F:4,note:'Classic South Indian thali'},
+      {n:'Brown Rice + Sambar + Mixed Sabzi',    cal:390,P:11,C:76,F:4,note:'Better choice for weight loss'},
+      {n:'Curd Rice (1.5 cup) + Mango Pickle',  cal:345,P:10,C:62,F:5,note:'Light on stomach · cooling'},
+      {n:'Bisibelebath (1.5 cup)',               cal:420,P:13,C:78,F:6,note:'One-pot complete meal'},
+      {n:'Rajma Rice (South Indian style)',      cal:445,P:17,C:82,F:5,note:'Best protein in veg lunch'},
+      {n:'Lemon Rice + Curd (small) + Papad',   cal:375,P:9,C:70,F:6,note:'Tasty + filling'},
+      {n:'Sambar + 3 Chapati (no rice day)',     cal:360,P:14,C:62,F:5,note:'Lower carb option'}
+    ],
+    eveningSnack:[
+      {n:'Buttermilk + Roasted Groundnuts (25g)',cal:175,P:7,C:12,F:10,note:'Perfect 4–5 PM snack'},
+      {n:'Sprouts Chaat (1 cup)',                cal:130,P:9,C:20,F:2,note:'High protein · easy to make'},
+      {n:'Boiled Sweet Potato (100g)',           cal:90,P:2,C:20,F:0,note:'Clean carbs before evening gym'},
+      {n:'Handful Mixed Nuts (30g)',             cal:175,P:5,C:7,F:15,note:'Healthy fat + micronutrients'},
+      {n:'Idli x2 (leftover from morning)',      cal:150,P:6,C:30,F:1,note:'Light pre-workout option'},
+      {n:'Tender Coconut Water + 2 Dates',       cal:110,P:1,C:28,F:0,note:'Natural electrolytes'},
+      {n:'Peanut Chikki (30g)',                  cal:155,P:5,C:20,F:7,note:'Energy-dense + tasty'}
+    ],
+    dinner:[
+      {n:'3 Chapati + Mixed Dal (1 bowl)',       cal:385,P:15,C:65,F:5,note:'Light and complete'},
+      {n:'2 Idli + Sambar (light dinner)',       cal:225,P:8,C:42,F:2,note:'Best light dinner option'},
+      {n:'Khichdi (1 bowl) + Curd',             cal:365,P:12,C:65,F:5,note:'Easy to digest · gut-friendly'},
+      {n:'Oats Khichdi + Raita',                cal:285,P:11,C:46,F:5,note:'Best for weight loss dinner'},
+      {n:'Uttapam (2) + Coconut Chutney',       cal:280,P:8,C:50,F:5,note:'Light · fills well'},
+      {n:'2 Chapati + Palak Dal',               cal:340,P:14,C:56,F:5,note:'Iron-rich · muscle recovery'},
+      {n:'Dosa + Tomato Chutney (no ghee)',     cal:180,P:5,C:34,F:4,note:'Very light dinner'}
+    ]
+  },
+
+  siNonVeg:{
+    breakfast:[
+      {n:'3 Egg Omelette + 1 Toast',            cal:320,P:23,C:18,F:18,note:'High protein start — best for muscle'},
+      {n:'Egg Dosa (2 eggs) + Chutney',         cal:380,P:19,C:42,F:16,note:'Protein-loaded dosa'},
+      {n:'2 Boiled Eggs + 2 Idli + Sambar',     cal:370,P:21,C:44,F:9,note:'Classic + protein boost'},
+      {n:'Egg Bhurji (3 eggs) + 2 Toast',       cal:360,P:24,C:26,F:16,note:'Quick · high protein'},
+      {n:'Masala Omelette (2 eggs) + Upma',     cal:390,P:20,C:38,F:16,note:'Filling combo'},
+      {n:'Chicken Poha (1.5 cup)',              cal:310,P:22,C:34,F:8,note:'Lean protein in every bite'},
+      {n:'3 Egg White Omelette + Dosa',         cal:280,P:22,C:32,F:6,note:'Very low fat · weight loss'}
+    ],
+    midMorning:[
+      {n:'2 Boiled Eggs + Buttermilk',          cal:195,P:15,C:8,F:11,note:'Best mid-morning protein'},
+      {n:'Chicken Tikka (100g) — grilled',      cal:165,P:25,C:2,F:6,note:'Pre-workout protein bomb'},
+      {n:'Tuna (1 small can) + Cucumber',       cal:135,P:22,C:3,F:3,note:'Omega-3 + protein'},
+      {n:'Egg White (4) boiled + fruit',        cal:145,P:18,C:18,F:0,note:'Zero fat protein'},
+      {n:'Roasted Chana + 1 Boiled Egg',        cal:255,P:18,C:28,F:7,note:'Combo snack'},
+      {n:'Greek Yogurt (150g)',                 cal:130,P:14,C:9,F:3,note:'If available — best dairy protein'},
+      {n:'Sprouts + Egg (boiled)',              cal:175,P:16,C:16,F:5,note:'Fibre + protein'}
+    ],
+    lunch:[
+      {n:'Rice + Chicken Curry (150g) + Sabzi',  cal:525,P:37,C:70,F:10,note:'Best muscle-building lunch'},
+      {n:'Rice + Fish Curry (150g) + Rasam',     cal:475,P:33,C:68,F:8,note:'Omega-3 rich · lean protein'},
+      {n:'Egg Curry (3 eggs) + Rice + Curd',     cal:480,P:24,C:72,F:12,note:'Budget-friendly protein'},
+      {n:'Prawn Masala + Rice (1 cup)',          cal:420,P:28,C:62,F:8,note:'High protein · low fat'},
+      {n:'Chicken Biryani (1 plate — home)',     cal:560,P:34,C:74,F:14,note:'Cheat meal / feast day'},
+      {n:'Grilled Fish (150g) + 2 Chapati + Dal',cal:480,P:36,C:52,F:10,note:'Lower carb option'},
+      {n:'Chicken + Brown Rice + Curd',          cal:490,P:40,C:62,F:8,note:'Cleanest bulk lunch'}
+    ],
+    eveningSnack:[
+      {n:'Boiled Eggs (2) + Sprouts',           cal:200,P:16,C:14,F:10,note:'Pre-gym protein'},
+      {n:'Grilled Chicken Strips (100g)',        cal:165,P:25,C:0,F:6,note:'Zero carb protein snack'},
+      {n:'Egg Whites (4) + Fruit',              cal:150,P:18,C:18,F:0,note:'Light pre-workout'},
+      {n:'Roasted Chana + 1 Egg Boiled',        cal:255,P:18,C:28,F:7,note:'Filling combo'},
+      {n:'Peanuts (30g) + Banana',              cal:255,P:8,C:30,F:14,note:'Natural pre-workout'},
+      {n:'Chicken Sandwich (2 slices)',          cal:310,P:24,C:28,F:10,note:'Post-gym or evening meal'},
+      {n:'Fish Tikka (100g) — grilled',         cal:145,P:22,C:2,F:5,note:'Low cal high protein'}
+    ],
+    dinner:[
+      {n:'Grilled Chicken (150g) + 2 Chapati + Dal',cal:480,P:42,C:48,F:10,note:'Best muscle dinner'},
+      {n:'Egg Bhurji (3 eggs) + 2 Roti',        cal:380,P:24,C:44,F:13,note:'Quick · high protein'},
+      {n:'Fish Fry (150g) + 2 Chapati + Salad', cal:395,P:32,C:44,F:10,note:'Omega-3 + lean'},
+      {n:'Chicken Soup + Oats Khichdi',         cal:340,P:28,C:36,F:7,note:'Light recovery dinner'},
+      {n:'Egg Omelette (3) + 1 Chapati',        cal:325,P:24,C:24,F:18,note:'Easy to make'},
+      {n:'Prawn Stir-Fry + Brown Rice',         cal:390,P:28,C:52,F:6,note:'Lean high protein'},
+      {n:'Chicken Stew + 2 Appam',              cal:420,P:30,C:46,F:10,note:'South Indian classic'}
+    ]
+  },
+
+  niVeg:{
+    breakfast:[
+      {n:'Besan Chilla (3) + Green Chutney',    cal:280,P:14,C:35,F:9,note:'Highest protein veg breakfast'},
+      {n:'Moong Dal Cheela (3) + Curd',         cal:260,P:14,C:34,F:6,note:'Best for weight loss'},
+      {n:'Aloo Paratha (2) + Low-Fat Curd',     cal:450,P:12,C:76,F:12,note:'Muscle gain day option'},
+      {n:'Oats + Milk (250ml) + Banana',        cal:330,P:13,C:56,F:6,note:'Balanced · quick to make'},
+      {n:'Dalia (Broken Wheat) + Milk',         cal:285,P:9,C:50,F:5,note:'High fibre · weight loss'},
+      {n:'Paneer Bhurji (50g) + 2 Toast',       cal:305,P:16,C:28,F:13,note:'High protein start'},
+      {n:'Methi Paratha (2) + Curd',            cal:390,P:12,C:62,F:11,note:'Iron-rich · good for women'}
+    ],
+    midMorning:[
+      {n:'Sattu Drink (2 tbsp + water)',         cal:130,P:7,C:22,F:2,note:'Best North Indian protein drink'},
+      {n:'Roasted Chana (50g)',                  cal:185,P:9,C:30,F:4,note:'Carry in pocket — desk snack'},
+      {n:'Lassi (1 glass low-fat)',              cal:155,P:7,C:20,F:4,note:'Probiotic + protein'},
+      {n:'Dahi (1 cup) + 5 Almonds',            cal:145,P:9,C:12,F:6,note:'Calcium + healthy fat'},
+      {n:'Peanuts (30g) + Apple',               cal:215,P:8,C:25,F:14,note:'Filling mid-morning combo'},
+      {n:'Makhana (Fox Nuts) 30g roasted',      cal:110,P:4,C:20,F:1,note:'Low cal · crunchy snack'},
+      {n:'Boiled Chana + Onion Tomato',         cal:160,P:8,C:25,F:2,note:'High fibre chaat'}
+    ],
+    lunch:[
+      {n:'3 Roti + Dal Tadka + Mixed Sabzi',    cal:500,P:16,C:88,F:8,note:'Classic North Indian thali'},
+      {n:'Rajma Chawal (1 bowl each)',           cal:480,P:18,C:86,F:6,note:'Best protein in veg lunch'},
+      {n:'Paneer Bhurji (100g) + 3 Roti',       cal:540,P:24,C:66,F:18,note:'Highest protein option'},
+      {n:'Dal Makhani + Rice (1 cup)',           cal:520,P:16,C:88,F:10,note:'Tasty · calorie-dense'},
+      {n:'Palak Dal + Rice + Salad',            cal:420,P:14,C:78,F:5,note:'Iron-rich · weight loss'},
+      {n:'Matar Paneer + 3 Roti',               cal:490,P:20,C:66,F:16,note:'Filling muscle meal'},
+      {n:'Chole (1 cup) + 2 Roti (no bhatura)',cal:440,P:16,C:76,F:8,note:'High fibre · filling'}
+    ],
+    eveningSnack:[
+      {n:'Sattu Paratha (1 small) + Pickle',    cal:210,P:8,C:34,F:5,note:'North Indian power snack'},
+      {n:'Roasted Chana + Jaggery (small)',      cal:200,P:9,C:34,F:4,note:'Natural energy'},
+      {n:'Chai (no sugar) + 2 Khakhra',         cal:130,P:4,C:20,F:3,note:'Office desk snack'},
+      {n:'Peanut Butter (2 tbsp) + Banana',     cal:270,P:9,C:32,F:14,note:'Pre-gym combo'},
+      {n:'Dahi (1 cup) + Fruits',               cal:170,P:8,C:26,F:3,note:'Probiotic + vitamins'},
+      {n:'Mixed Nuts (30g)',                    cal:175,P:5,C:7,F:15,note:'Healthy fat dose'},
+      {n:'Sprouts + Lemon + Chaat Masala',      cal:110,P:8,C:17,F:1,note:'High protein · low cal'}
+    ],
+    dinner:[
+      {n:'3 Roti + Moong Dal + Sabzi',          cal:400,P:15,C:68,F:6,note:'Light digestible dinner'},
+      {n:'Khichdi (1 bowl) + Curd + Pickle',    cal:360,P:12,C:64,F:5,note:'Gut-friendly · easy'},
+      {n:'Dalia Khichdi + Raita',               cal:315,P:10,C:56,F:5,note:'Best weight loss dinner'},
+      {n:'2 Roti + Paneer Bhurji (75g)',        cal:390,P:18,C:48,F:13,note:'Muscle recovery'},
+      {n:'Palak Roti (2) + Dal',               cal:350,P:13,C:58,F:6,note:'Iron + protein combo'},
+      {n:'Besan Roti (2) + Curd',              cal:330,P:13,C:50,F:7,note:'High protein roti'},
+      {n:'Lauki Dal + 2 Roti',                 cal:340,P:12,C:58,F:5,note:'Light · low calorie'}
+    ]
+  },
+
+  niNonVeg:{
+    breakfast:[
+      {n:'3 Egg Bhurji + 2 Toast',             cal:355,P:24,C:28,F:16,note:'Most popular NI protein breakfast'},
+      {n:'Omelette (3 eggs) + Paratha (1)',     cal:430,P:22,C:38,F:20,note:'Heavy muscle-gain breakfast'},
+      {n:'Egg White Bhurji (4) + 2 Roti',      cal:300,P:20,C:42,F:7,note:'Low fat weight loss option'},
+      {n:'Chicken Keema + 2 Toast',            cal:370,P:30,C:24,F:14,note:'High protein start'},
+      {n:'Boiled Eggs (3) + Oats',             cal:335,P:24,C:28,F:12,note:'Simple · complete'},
+      {n:'Besan Chilla + 2 Eggs (stuffed)',    cal:350,P:22,C:34,F:12,note:'Best for muscle + fat loss'},
+      {n:'Dalia + Milk + 2 Boiled Eggs',       cal:380,P:22,C:48,F:11,note:'Sustained energy'}
+    ],
+    midMorning:[
+      {n:'Boiled Eggs (2) + Roasted Chana',    cal:255,P:18,C:28,F:9,note:'Complete mid-morning'},
+      {n:'Chicken Tikka (100g) — grilled',     cal:165,P:25,C:2,F:6,note:'Lean protein hit'},
+      {n:'Egg Whites (4) boiled + Fruit',      cal:145,P:18,C:18,F:0,note:'Clean cut option'},
+      {n:'Tuna (1 can) + Cucumber + Roti',     cal:270,P:24,C:28,F:4,note:'Lean protein combo'},
+      {n:'Greek Yogurt (150g) + Nuts',         cal:205,P:15,C:12,F:10,note:'Post-workout snack'},
+      {n:'Peanuts + 1 Egg Boiled',             cal:245,P:14,C:7,F:17,note:'High protein snack'},
+      {n:'Protein Shake + Banana',             cal:270,P:25,C:36,F:3,note:'Gym supplement option'}
+    ],
+    lunch:[
+      {n:'Chicken Curry + 2 Roti + Dal',       cal:560,P:42,C:58,F:14,note:'Best muscle lunch'},
+      {n:'Egg Curry (3) + Rice + Sabzi',       cal:490,P:24,C:74,F:12,note:'Budget protein lunch'},
+      {n:'Mutton Dal + 2 Roti',               cal:520,P:36,C:52,F:16,note:'Very high protein'},
+      {n:'Grilled Chicken (150g) + 3 Roti + Salad',cal:490,P:42,C:56,F:10,note:'Clean muscle meal'},
+      {n:'Fish Curry + Rice + Sabzi',          cal:470,P:30,C:70,F:8,note:'Omega-3 + lean'},
+      {n:'Chicken Biryani (1 plate)',          cal:580,P:38,C:74,F:14,note:'Cheat/feast day'},
+      {n:'Keema Matar + 3 Roti',             cal:530,P:38,C:58,F:16,note:'High protein NI classic'}
+    ],
+    eveningSnack:[
+      {n:'Grilled Chicken (100g) + Sprouts',  cal:235,P:30,C:12,F:7,note:'High protein pre-gym'},
+      {n:'Boiled Eggs (2) + Peanuts (20g)',   cal:250,P:17,C:6,F:17,note:'Fat + protein combo'},
+      {n:'Egg Sandwich (2 slices)',           cal:310,P:20,C:30,F:12,note:'Filling option'},
+      {n:'Chicken Tikka (100g) + Buttermilk',cal:225,P:26,C:10,F:6,note:'Clean snack'},
+      {n:'Mixed Nuts + 1 Egg',               cal:250,P:12,C:8,F:18,note:'Healthy fats + protein'},
+      {n:'Sprouts + Tuna Chaat',             cal:190,P:22,C:14,F:4,note:'High protein bowl'},
+      {n:'Peanut Butter (2tbsp) + 1 Egg',   cal:235,P:14,C:8,F:17,note:'Fat + protein'}
+    ],
+    dinner:[
+      {n:'Grilled Chicken (150g) + Dal + 2 Roti',cal:490,P:44,C:48,F:10,note:'Best muscle dinner'},
+      {n:'Egg Bhurji (3 eggs) + 2 Roti',    cal:375,P:24,C:44,F:13,note:'Quick high protein'},
+      {n:'Fish Tikka (150g) + Salad + 2 Roti',cal:420,P:34,C:44,F:10,note:'Low cal high protein'},
+      {n:'Chicken Soup + 2 Chapati',         cal:350,P:28,C:40,F:7,note:'Light recovery dinner'},
+      {n:'Omelette (3 eggs) + 1 Roti',      cal:330,P:24,C:26,F:18,note:'Easy to cook'},
+      {n:'Prawn Masala (150g) + Rice',       cal:390,P:28,C:54,F:6,note:'Lean high protein'},
+      {n:'Mutton + 2 Roti (small portion)',  cal:460,P:32,C:44,F:14,note:'Muscle gain dinner'}
+    ]
+  }
+};
+
+/* Mixed Veg = SI Veg + NI Veg combined pool */
+MP.mixedVeg = {
+  breakfast: [...MP.siVeg.breakfast, ...MP.niVeg.breakfast],
+  midMorning:[...MP.siVeg.midMorning,...MP.niVeg.midMorning],
+  lunch:     [...MP.siVeg.lunch,     ...MP.niVeg.lunch],
+  eveningSnack:[...MP.siVeg.eveningSnack,...MP.niVeg.eveningSnack],
+  dinner:    [...MP.siVeg.dinner,    ...MP.niVeg.dinner]
+};
+MP.mixedNonVeg = {
+  breakfast: [...MP.siNonVeg.breakfast,...MP.niNonVeg.breakfast],
+  midMorning:[...MP.siNonVeg.midMorning,...MP.niNonVeg.midMorning],
+  lunch:     [...MP.siNonVeg.lunch,    ...MP.niNonVeg.lunch],
+  eveningSnack:[...MP.siNonVeg.eveningSnack,...MP.niNonVeg.eveningSnack],
+  dinner:    [...MP.siNonVeg.dinner,   ...MP.niNonVeg.dinner]
+};
+
+/* ── LIFESTYLE TIPS ── */
+const LIFE_TIPS = {
+  office:{
+    title:'💼 Corporate / Office Worker Tips',
+    tips:[
+      {t:'<strong>Pack your lunch</strong> — office canteen food is high in oil, low in protein. Bring dal, sabzi, roti in a container.',},
+      {t:'<strong>Desk snack</strong>: Keep roasted chana in your drawer. Way better than biscuits or chips.'},
+      {t:'<strong>2 PM danger zone</strong>: If you feel sleepy after lunch, your meal is too heavy. Switch to brown rice or eat less rice.'},
+      {t:'<strong>Water target</strong>: Drink 2.5–3 litres per day. Office AC dehydrates you faster than you think.'},
+      {t:'<strong>Stand up every 45 min</strong>: Sedentary sitting kills insulin sensitivity. Set a phone alarm.'},
+      {t:'<strong>Evening workout</strong>: Even 45 min × 4 days is enough if your diet is clean. Don\'t skip post-work gym.'}
+    ]
+  },
+  pg:{
+    title:'🏠 Bangalore PG Meal Optimization',
+    tips:[
+      {t:'<strong>Your PG gives you carbs, not protein.</strong> Standard PG meal = Idli/Dosa/Rice + Dal/Sambar. This is ~8–12g protein per meal. You need 30–40g.'},
+      {t:'<strong>Buy from outside:</strong> 6 Eggs/day (₹6–8 each = ₹36–48/day). This adds 36g protein cheaply.'},
+      {t:'<strong>Morning PG meal</strong>: Eat what they serve + add 2 boiled eggs from canteen or your own cooker.'},
+      {t:'<strong>Lunch PG meal</strong>: Eat full — ask for extra dal (protein) and skip extra rice. Add curd if available.'},
+      {t:'<strong>Evening</strong>: Roasted chana (₹25/250g), 2 boiled eggs, banana — this is your most important supplement window.'},
+      {t:'<strong>Night PG meal</strong>: Eat light — 2 chapati + sabzi is fine. Avoid going to bed on a heavy rice meal.'},
+      {t:'<strong>Monthly extras budget (₹1500–2500)</strong>: Eggs (₹500), Roasted chana (₹200), Whey protein if budget (₹1500), Bananas (₹200), Peanut butter (₹300).'},
+      {t:'<strong>PG hack</strong>: Buy a small electric cooker (₹400 one-time). Boil eggs, make oats, cook sprouts — total game-changer.'}
+    ]
+  },
+  student:{
+    title:'📚 Student Nutrition Hacks',
+    tips:[
+      {t:'<strong>Hostel mess strategy</strong>: Always take extra dal and curd. Skip the extra rice — take salad instead.'},
+      {t:'<strong>Budget protein</strong>: Eggs (₹6–8), Canned tuna (₹60), Roasted chana (₹25/250g), Peanut butter (₹150/jar).'},
+      {t:'<strong>Don\'t skip breakfast</strong>: Your focus, energy and hunger control all depend on it. Even 2 idli + chai is fine.'},
+      {t:'<strong>Study snack</strong>: Peanuts or roasted chana — not Maggi or chips. Same cost, very different body composition results.'},
+      {t:'<strong>Meal timing</strong>: Eat every 3–4 hours. Skipping meals → binging at night. Night binging → fat gain, not muscle.'}
+    ]
+  },
+  gym:{
+    title:'🏋️ Active Gym-Goer Timing Guide',
+    tips:[
+      {t:'<strong>Pre-workout (60–90 min before gym)</strong>: Banana + peanuts, or 2 idli, or 1 roti with dal. Carbs + protein.'},
+      {t:'<strong>Post-workout (within 30 min)</strong>: 3 egg whites or 1 scoop whey or 200g curd. Get protein in FAST.'},
+      {t:'<strong>Training days</strong>: Eat 100–150 cal more than rest days — especially carbs.'},
+      {t:'<strong>Rest days</strong>: Cut rice/roti by 25%. Keep protein the same or higher.'},
+      {t:'<strong>Sleep is the meal</strong>: 7–8 hours = the time your muscles are actually growing. Prioritise it.'},
+      {t:'<strong>Creatine</strong>: 5g/day with water (no timing needed). One of the few supplements actually proven to work.'}
+    ]
+  },
+  wfh:{
+    title:'🖥️ Work From Home Nutrition Control',
+    tips:[
+      {t:'<strong>No commute = no excuse</strong>: You have a kitchen. Use it. Meal prep Sunday for 3 days.'},
+      {t:'<strong>Fridge danger</strong>: The biggest WFH problem. Don\'t keep biscuits, chips, or sweets at home. You will eat them.'},
+      {t:'<strong>Hydration alerts</strong>: Set a phone alarm every hour to drink water. WFH people forget to drink.'},
+      {t:'<strong>Lunch break walk</strong>: 15–20 min walk after lunch. It improves digestion and blood sugar control.'},
+      {t:'<strong>Separate eating from screen</strong>: Eating in front of laptop → overeating by 25%. Sit at table.'},
+      {t:'<strong>Cook in batch</strong>: Make dal and sabzi for 2 days. Saves time and prevents ordering.'}
+    ]
+  }
+};
+
+/* ── SUPPLEMENTS ── */
+const SUPPS = {
+  weightloss:[
+    {name:'Whey Protein',dose:'1 scoop (25g) post-workout',why:'Fills protein gap without adding carbs/fat'},
+    {name:'Creatine',dose:'5g/day with water',why:'Maintains muscle while cutting — proven'},
+    {name:'Omega-3',dose:'1g × 2 daily with meals',why:'Reduces inflammation, improves fat loss'},
+    {name:'Vitamin D3',dose:'2000 IU daily',why:'Most Indians are deficient — affects metabolism'}
+  ],
+  musclegain:[
+    {name:'Whey Protein',dose:'1–2 scoops post-workout',why:'Fast-absorbing protein for muscle repair'},
+    {name:'Creatine',dose:'5g/day with water',why:'Proven to increase strength + muscle size'},
+    {name:'Mass Gainer',dose:'Only if eating <2500 cal/day',why:'Calorie surplus for hardgainers'},
+    {name:'Omega-3',dose:'1g × 2 daily',why:'Reduces muscle soreness, joint health'}
+  ],
+  maintenance:[
+    {name:'Whey Protein',dose:'1 scoop on training days',why:'Hit protein target conveniently'},
+    {name:'Omega-3',dose:'1g × 2 daily',why:'Overall health + inflammation'},
+    {name:'Multivitamin',dose:'1 daily with food',why:'Insurance for micro-nutrients'}
+  ],
+  recomp:[
+    {name:'Whey Protein',dose:'1–2 scoops/day',why:'High protein is everything for recomp'},
+    {name:'Creatine',dose:'5g/day',why:'Adds strength without fat — essential'},
+    {name:'Omega-3',dose:'1g × 2 daily',why:'Reduces cortisol — important for recomp'},
+    {name:'L-Carnitine',dose:'500mg before cardio',why:'Helps use fat as fuel during training'}
+  ]
+};
+
+/* ── STATE ── */
+let S = {gender:null,life:null,goal:null,diet:null};
+let currentStep = 0;
+
+/* ── CLICK HANDLER ── */
+document.querySelectorAll('.opt').forEach(opt=>{
+  opt.addEventListener('click',()=>{
+    const grp = opt.dataset.group;
+    document.querySelectorAll(`[data-group="${grp}"]`).forEach(o=>o.classList.remove('selected'));
+    opt.classList.add('selected');
+    const keyMap={genderOpts:'gender',lifeOpts:'life',goalOpts:'goal',dietOpts:'diet'};
+    S[keyMap[grp]] = opt.dataset.val;
+    updateBtns();
+  });
+});
+
+function updateBtns(){
+  const map = [[S.gender,'next0'],[S.life,'next1'],[S.goal,'next2'],[S.diet,'genBtn']];
+  map.forEach(([v,id])=>{
+    const el = document.getElementById(id);
+    if(el) el.disabled = !v;
+  });
+}
+
+function goStep(n){
+  document.getElementById(`step${currentStep}`).classList.remove('active');
+  document.getElementById(`prog${currentStep}`).classList.remove('active');
+  document.getElementById(`prog${currentStep}`).classList.add('done');
+  currentStep = n;
+  document.getElementById(`step${n}`).classList.add('active');
+  document.getElementById(`prog${n}`).classList.add('active');
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+/* ── GENERATE ── */
+function generatePlan(){
+  const tBase = TARGETS[S.gender][S.goal];
+  const mult   = LIFE_MULT[S.life];
+  const tCal   = Math.round(tBase.cal * mult);
+  const tP     = Math.round(tBase.P * mult);
+  const tC     = Math.round(tBase.C * mult);
+  const tF     = Math.round(tBase.F * mult);
+
+  /* hide wizard */
+  document.getElementById(`step${currentStep}`).classList.remove('active');
+  document.querySelector('.progress-bar').style.display='none';
+  ['prog0','prog1','prog2','prog3'].forEach(id=>document.getElementById(id).classList.add('done'));
+
+  const pool = MP[S.diet];
+
+  const dietLabels={siVeg:'South Indian Veg',siNonVeg:'South Indian Non-Veg',niVeg:'North Indian Veg',niNonVeg:'North Indian Non-Veg',mixedVeg:'Mixed Veg',mixedNonVeg:'Mixed Non-Veg'};
+  const goalLabels={weightloss:'Weight Loss',musclegain:'Muscle Gain',maintenance:'Maintenance',recomp:'Body Recomp'};
+  const lifeLabels={office:'Office / Corporate',pg:'Bangalore PG Resident',student:'Student',gym:'Active Gym-Goer',wfh:'Work From Home'};
+  const genderLabels={male:'Male',female:'Female'};
+
+  /* HEADER */
+  document.getElementById('resultHeader').innerHTML=`
+    <div class="result-person">🎯 ${genderLabels[S.gender]} · ${lifeLabels[S.life]} · ${goalLabels[S.goal]}</div>
+    <div class="result-title">${goalLabels[S.goal].toUpperCase()} PLAN<span style="color:var(--red)"> —</span> ${dietLabels[S.diet]}</div>
+    <div class="result-sub">${tBase.note} · Coach Sahil Bansal</div>
+  `;
+
+  /* MACROS */
+  document.getElementById('macroRow').innerHTML=`
+    <div class="macro-box"><div class="macro-val cal">${tCal}</div><div class="macro-lbl">Calories / Day</div></div>
+    <div class="macro-box"><div class="macro-val prot">${tP}g</div><div class="macro-lbl">Protein</div></div>
+    <div class="macro-box"><div class="macro-val carb">${tC}g</div><div class="macro-lbl">Carbs</div></div>
+    <div class="macro-box"><div class="macro-val fat">${tF}g</div><div class="macro-lbl">Fat</div></div>
+  `;
+
+  /* 7-DAY PLAN */
+  const DAYS=['MON','TUE','WED','THU','FRI','SAT','SUN'];
+  const SLOTS=['breakfast','midMorning','lunch','eveningSnack','dinner'];
+  const SLOT_LABELS=['🌅 Breakfast','🍎 Mid-Morning','☀️ Lunch','🌤️ Evening Snack','🌙 Dinner'];
+
+  let tabsHTML='', plansHTML='';
+
+  for(let d=0;d<7;d++){
+    tabsHTML+=`<div class="day-tab${d===0?' active':''}" onclick="switchDay(${d})" id="tab${d}">${DAYS[d]}</div>`;
+    let dayMeals=[], dayP=0,dayC=0,dayF=0,dayCAL=0;
+
+    SLOTS.forEach((slot,si)=>{
+      const pool2 = pool[slot];
+      const idx = (d * 3 + si * 2) % pool2.length;
+      const meal = pool2[idx];
+      dayMeals.push({...meal,slotLabel:SLOT_LABELS[si]});
+      dayP+=meal.P; dayC+=meal.C; dayF+=meal.F; dayCAL+=meal.cal;
+    });
+
+    const mealRowsHTML = dayMeals.map(m=>`
+      <div class="meal-row">
+        <div class="meal-time">${m.slotLabel}</div>
+        <div class="meal-info">
+          <div class="meal-name">${m.n}</div>
+          <div class="meal-note">${m.note||''}</div>
+          <div class="meal-macros">
+            <span class="meal-macro cal">${m.cal} kcal</span>
+            <span class="meal-macro prot">${m.P}g protein</span>
+            <span class="meal-macro carb">${m.C}g carbs</span>
+            <span class="meal-macro fat">${m.F}g fat</span>
+          </div>
+        </div>
+      </div>`).join('');
+
+    const gapP = tP - dayP, gapC = tC - dayC, gapCAL = tCal - dayCAL;
+    const gapNote = gapP > 15 ? `<span style="color:#e08080">⚠️ Add ${gapP}g protein · 1 scoop whey or 2 eggs</span>` :
+                    gapP < -10 ? `<span style="color:var(--gold)">✓ Protein target exceeded</span>` :
+                    `<span style="color:#4ade80">✓ On target</span>`;
+
+    plansHTML+=`<div class="day-plan${d===0?' active':''}" id="plan${d}">
+      ${mealRowsHTML}
+      <div class="day-total">
+        <div class="day-total-item">Total Cal: <strong>${dayCAL}</strong> / ${tCal}</div>
+        <div class="day-total-item">Protein: <strong>${dayP}g</strong> / ${tP}g</div>
+        <div class="day-total-item">Carbs: <strong>${dayC}g</strong></div>
+        <div class="day-total-item">Fat: <strong>${dayF}g</strong></div>
+        <div class="day-total-item">${gapNote}</div>
+      </div>
+    </div>`;
+  }
+
+  document.getElementById('dayTabs').innerHTML = tabsHTML;
+  document.getElementById('dayPlans').innerHTML = plansHTML;
+
+  /* LIFESTYLE TIPS */
+  const lt = LIFE_TIPS[S.life];
+  document.getElementById('lifestyleTips').innerHTML=`
+    <div class="tips-section">
+      <div class="tips-title">${lt.title}</div>
+      ${lt.tips.map(t=>`<div class="tip-item"><div class="tip-dot"></div><div class="tip-text">${t.t}</div></div>`).join('')}
+    </div>`;
+
+  /* SUPPLEMENTS */
+  const supps = SUPPS[S.goal];
+  document.getElementById('suppSection').innerHTML=`
+    <div class="tips-section">
+      <div class="tips-title">💊 Supplement Stack — ${goalLabels[S.goal]}</div>
+      <div class="supp-grid">
+        ${supps.map(s=>`<div class="supp-card"><div class="supp-name">${s.name}</div><div class="supp-dose">${s.dose}</div><div class="supp-why">${s.why}</div></div>`).join('')}
+      </div>
+      <div style="margin-top:14px;font-size:12px;color:var(--muted);font-family:'Barlow Condensed',sans-serif;letter-spacing:1px">⚠️ Food first. Supplements fill gaps — they don't replace a solid diet. Consult Coach Sahil before starting any stack.</div>
+    </div>`;
+
+  document.getElementById('results').style.display='block';
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function switchDay(d){
+  document.querySelectorAll('.day-tab').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('.day-plan').forEach(p=>p.classList.remove('active'));
+  document.getElementById(`tab${d}`).classList.add('active');
+  document.getElementById(`plan${d}`).classList.add('active');
+}
+
+function resetPlan(){
+  S={gender:null,life:null,goal:null,diet:null};
+  currentStep=0;
+  document.getElementById('results').style.display='none';
+  document.querySelector('.progress-bar').style.display='flex';
+  document.querySelectorAll('.opt').forEach(o=>o.classList.remove('selected'));
+  document.querySelectorAll('.prog-step').forEach(p=>{p.classList.remove('done','active')});
+  document.getElementById('prog0').classList.add('active');
+  document.getElementById('step0').classList.add('active');
+  updateBtns();
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+</script>
+</body>
+</html>
