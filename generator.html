@@ -221,4 +221,1072 @@ button{cursor:pointer;border:none;background:none;font-family:inherit}
 
 /* Email gate */
 #emailGate{display:none;animation:fadeIn .3s ease}
-.gate-card{background:rgba(10,10,10,.96);backdrop-filter:blur(12px);border:1px so
+.gate-card{background:rgba(10,10,10,.96);backdrop-filter:blur(12px);border:1px solid rgba(204,0,0,.3);border-radius:var(--r);padding:44px 36px;text-align:center;margin:20px 0}
+.gate-icon{font-size:52px;margin-bottom:20px}
+.gate-title{font-family:'Rajdhani',sans-serif;font-weight:700;font-size:32px;letter-spacing:2px;margin-bottom:8px}
+.gate-sub{font-size:14px;color:var(--muted);margin-bottom:28px;max-width:380px;margin-left:auto;margin-right:auto;line-height:1.7}
+.gate-input{width:100%;background:rgba(255,255,255,.05);border:1.5px solid rgba(255,255,255,.12);border-radius:8px;color:var(--text);padding:14px 18px;font-size:15px;margin-bottom:12px;outline:none;font-family:'Montserrat',sans-serif;transition:border-color .2s}
+.gate-input:focus{border-color:var(--red)}
+.gate-btn{width:100%;background:var(--red);color:#fff;border:none;border-radius:8px;padding:15px;font-family:'Rajdhani',sans-serif;font-size:17px;font-weight:700;letter-spacing:2px;text-transform:uppercase;cursor:pointer;transition:background .2s}
+.gate-btn:hover{background:var(--red-b)}
+.gate-skip{margin-top:16px;font-size:13px;color:var(--muted)}
+.gate-skip a{color:rgba(242,242,242,.6);text-decoration:underline;cursor:pointer}
+
+/* Footer */
+footer{text-align:center;padding:40px 24px;border-top:1px solid rgba(255,255,255,.06);color:var(--muted);font-size:13px}
+footer a{color:var(--muted);transition:color .2s}
+footer a:hover{color:var(--red-b)}
+.footer-links{display:flex;justify-content:center;gap:24px;flex-wrap:wrap;margin-top:10px}
+
+/* RESPONSIVE */
+@media(max-width:700px){
+  .ex-table-head,.ex-row{grid-template-columns:28px 1fr 60px 70px;gap:0;padding:12px 14px}
+  .ex-row .ex-rest,.ex-row .ex-tempo,.ex-row .ex-rpe{display:none}
+  .ex-table-head>div:nth-child(5),.ex-table-head>div:nth-child(6),.ex-table-head>div:nth-child(7){display:none}
+  .stats-bar{grid-template-columns:1fr 1fr}
+  .stat-item:nth-child(2){border-right:none}
+  .stat-item:nth-child(3){border-right:1px solid rgba(255,255,255,.06)}
+  .stats-bar .stat-item:nth-child(3),.stats-bar .stat-item:nth-child(4){border-top:1px solid rgba(255,255,255,.06)}
+  .split-days{grid-template-columns:repeat(4,1fr)}
+  .split-day:last-child{display:none}
+  .opts{grid-template-columns:repeat(2,1fr)}
+  .opts.cols-3{grid-template-columns:repeat(3,1fr)}
+  .step-card{padding:24px 20px}
+  .gen-hero h1{font-size:clamp(36px,10vw,56px)}
+}
+@media(max-width:440px){
+  .opts,.opts.cols-3,.opts.cols-4{grid-template-columns:1fr 1fr}
+  .step-labels{display:none}
+  .protocol-grid{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav id="navbar">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo">
+      <img src="images/logo-coach-sahil.png" alt="FitWid">
+    </a>
+    <ul class="nav-links">
+      <li><a href="coaching.html">Programs</a></li>
+      <li><a href="pricing.html">Pricing</a></li>
+      <li><a href="results.html">Results</a></li>
+      <li><a href="about.html">Coach</a></li>
+      <li><a href="generator.html" class="active">Generator</a></li>
+      <li><a href="diet.html">Diet Plan</a></li>
+    </ul>
+    <a href="apply.html" class="nav-cta">Start Now</a>
+    <button class="hamburger" id="hamburger" onclick="toggleNav()" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+  <div class="mobile-nav" id="mobileNav">
+    <a href="coaching.html" onclick="toggleNav()">Programs</a>
+    <a href="pricing.html" onclick="toggleNav()">Pricing</a>
+    <a href="results.html" onclick="toggleNav()">Results</a>
+    <a href="about.html" onclick="toggleNav()">Coach</a>
+    <a href="generator.html" onclick="toggleNav()">Generator</a>
+    <a href="apply.html" onclick="toggleNav()" style="color:var(--red-b);font-weight:700">Start Transformation →</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<div class="gen-hero">
+  <div class="hero-badge">
+    <span class="hero-badge-dot"></span>
+    <span>Coach Sahil's Training System · FitWid</span>
+  </div>
+  <h1>AI Workout <span>Generator</span></h1>
+  <p>4 questions. Infinite programs. Zero guesswork.</p>
+</div>
+
+<!-- WIZARD -->
+<div class="wizard">
+
+  <!-- PROGRESS -->
+  <div class="progress-wrap">
+    <div class="step-labels" id="stepLabels">
+      <div class="step-label active" id="sl-0">
+        <div class="step-dot active" id="sd-0">1</div>
+        <div class="step-name">Target</div>
+      </div>
+      <div class="step-label" id="sl-1">
+        <div class="step-dot" id="sd-1">2</div>
+        <div class="step-name">Level</div>
+      </div>
+      <div class="step-label" id="sl-2">
+        <div class="step-dot" id="sd-2">3</div>
+        <div class="step-name">Goal</div>
+      </div>
+      <div class="step-label" id="sl-3">
+        <div class="step-dot" id="sd-3">4</div>
+        <div class="step-name">Equipment</div>
+      </div>
+    </div>
+    <div class="progress-track">
+      <div class="progress-fill" id="progressFill"></div>
+    </div>
+  </div>
+
+  <!-- STEP 1: MUSCLE -->
+  <div class="step-card active" id="step-0">
+    <div class="step-num">Step 01 / 04</div>
+    <div class="step-title">Target Muscle Group</div>
+    <div class="step-sub">Which muscles are you training today? <span style="color:var(--gold);font-weight:700">Select 1 or more</span></div>
+    <div class="opts" id="muscleOpts">
+      <div class="opt" data-val="chest" data-group="muscleOpts"><span class="opt-icon">🏋️</span><div class="opt-label">Chest</div><div class="opt-sub">Pecs · Push</div></div>
+      <div class="opt" data-val="back" data-group="muscleOpts"><span class="opt-icon">🔱</span><div class="opt-label">Back</div><div class="opt-sub">Lats · Pull</div></div>
+      <div class="opt" data-val="shoulders" data-group="muscleOpts"><span class="opt-icon">🎯</span><div class="opt-label">Shoulders</div><div class="opt-sub">All 3 Heads</div></div>
+      <div class="opt" data-val="biceps" data-group="muscleOpts"><span class="opt-icon">💪</span><div class="opt-label">Biceps</div><div class="opt-sub">Arms · Curl</div></div>
+      <div class="opt" data-val="triceps" data-group="muscleOpts"><span class="opt-icon">🦾</span><div class="opt-label">Triceps</div><div class="opt-sub">Arms · Push</div></div>
+      <div class="opt" data-val="legs" data-group="muscleOpts"><span class="opt-icon">🦵</span><div class="opt-label">Legs</div><div class="opt-sub">Quads · Glutes</div></div>
+      <div class="opt" data-val="core" data-group="muscleOpts"><span class="opt-icon">🔥</span><div class="opt-label">Core</div><div class="opt-sub">Abs · Stability</div></div>
+      <div class="opt gold-opt" data-val="fullbody" data-group="muscleOpts"><span class="opt-badge">ELITE</span><span class="opt-icon">⚡</span><div class="opt-label">Full Body</div><div class="opt-sub">Total Athlete</div></div>
+    </div>
+    <div class="step-nav">
+      <span></span>
+      <button class="btn-next" id="next0" onclick="nextStep(1)" disabled>
+        Next <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- STEP 2: LEVEL -->
+  <div class="step-card" id="step-1">
+    <div class="step-num">Step 02 / 04</div>
+    <div class="step-title">Experience Level</div>
+    <div class="step-sub">How long have you been training consistently?</div>
+    <div class="opts cols-3" id="levelOpts">
+      <div class="opt" data-val="beginner" data-group="levelOpts">
+        <span class="opt-icon">🌱</span><div class="opt-label">Beginner</div><div class="opt-sub">0–6 months</div>
+      </div>
+      <div class="opt" data-val="intermediate" data-group="levelOpts">
+        <span class="opt-icon">⚡</span><div class="opt-label">Intermediate</div><div class="opt-sub">6–24 months</div>
+      </div>
+      <div class="opt gold-opt" data-val="advanced" data-group="levelOpts">
+        <span class="opt-badge">PRO</span><span class="opt-icon">🔥</span><div class="opt-label">Advanced</div><div class="opt-sub">2+ years</div>
+      </div>
+    </div>
+    <div class="step-nav">
+      <button class="btn-back" onclick="goStep(0)">← Back</button>
+      <button class="btn-next" id="next1" onclick="nextStep(2)" disabled>
+        Next <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- STEP 3: GOAL -->
+  <div class="step-card" id="step-2">
+    <div class="step-num">Step 03 / 04</div>
+    <div class="step-title">Training Goal</div>
+    <div class="step-sub">What do you want from this session?</div>
+    <div class="opts cols-4" id="goalOpts">
+      <div class="opt" data-val="muscle" data-group="goalOpts"><span class="opt-icon">💪</span><div class="opt-label">Muscle</div><div class="opt-sub">Hypertrophy</div></div>
+      <div class="opt" data-val="fatloss" data-group="goalOpts"><span class="opt-icon">🔥</span><div class="opt-label">Fat Loss</div><div class="opt-sub">Metabolic</div></div>
+      <div class="opt" data-val="strength" data-group="goalOpts"><span class="opt-icon">🏆</span><div class="opt-label">Strength</div><div class="opt-sub">Power</div></div>
+      <div class="opt" data-val="endurance" data-group="goalOpts"><span class="opt-icon">🏃</span><div class="opt-label">Endurance</div><div class="opt-sub">Conditioning</div></div>
+    </div>
+    <div class="step-nav">
+      <button class="btn-back" onclick="goStep(1)">← Back</button>
+      <button class="btn-next" id="next2" onclick="nextStep(3)" disabled>
+        Next <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- STEP 4: EQUIPMENT -->
+  <div class="step-card" id="step-3">
+    <div class="step-num">Step 04 / 04</div>
+    <div class="step-title">Equipment Available</div>
+    <div class="step-sub">What do you have access to right now?</div>
+    <div class="opts cols-3" id="equipOpts">
+      <div class="opt gold-opt" data-val="gym" data-group="equipOpts"><span class="opt-icon">🏟️</span><div class="opt-label">Full Gym</div><div class="opt-sub">All equipment</div></div>
+      <div class="opt" data-val="dumbbells" data-group="equipOpts"><span class="opt-icon">🥊</span><div class="opt-label">Dumbbells</div><div class="opt-sub">Free weights only</div></div>
+      <div class="opt" data-val="bodyweight" data-group="equipOpts"><span class="opt-icon">🤸</span><div class="opt-label">Bodyweight</div><div class="opt-sub">No equipment</div></div>
+    </div>
+
+    <!-- Summary before generate -->
+    <div class="selection-summary" id="selSummary"></div>
+
+    <button class="btn-generate" id="genBtn" onclick="generate()" disabled>
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+      GENERATE MY WORKOUT
+    </button>
+
+    <div style="margin-top:16px">
+      <button class="btn-back" onclick="goStep(2)">← Back</button>
+    </div>
+  </div>
+
+  <!-- LOADING -->
+  <div class="gen-loading" id="genLoading">
+    <div class="gen-loading-ring"></div>
+    <h3>Building Your Program</h3>
+    <p>Applying Coach Sahil's training methodology…</p>
+    <div class="loading-steps">
+      <div class="l-step" id="ls0"><div class="l-step-dot"></div>Selecting optimal exercises</div>
+      <div class="l-step" id="ls1"><div class="l-step-dot"></div>Calculating sets, reps & tempo</div>
+      <div class="l-step" id="ls2"><div class="l-step-dot"></div>Applying intensity techniques</div>
+      <div class="l-step" id="ls3"><div class="l-step-dot"></div>Building warm-up & cool-down</div>
+      <div class="l-step" id="ls4"><div class="l-step-dot"></div>Finalising your program</div>
+    </div>
+  </div>
+
+  <!-- EMAIL GATE -->
+  <div id="emailGate">
+    <div class="gate-card">
+      <div class="gate-icon">📋</div>
+      <div class="gate-title">Your Program Is Ready</div>
+      <p class="gate-sub">Enter your email to unlock it — we'll also send you a copy to save for later.</p>
+      <form id="gateForm" onsubmit="submitGate(event)">
+        <input class="gate-input" type="email" id="gateEmail" placeholder="Enter your email address" required>
+        <button class="gate-btn" type="submit" id="gateBtn">Unlock My Workout</button>
+      </form>
+      <p class="gate-skip">No thanks — <a onclick="skipGate()">just show me the plan</a></p>
+    </div>
+  </div>
+
+  <!-- RESULT -->
+  <div id="genResult"></div>
+
+</div><!-- end wizard -->
+
+<footer>
+  <p>© 2025 FitWid.fit · I-BLITZ Fitness Club, Bangalore</p>
+  <div class="footer-links">
+    <a href="index.html">Home</a>
+    <a href="coaching.html">Programs</a>
+    <a href="pricing.html">Pricing</a>
+    <a href="apply.html">Apply</a>
+    <a href="client-portal.html">Client Login</a>
+    <a href="dashboard.html">Coach Dashboard</a>
+    <a href="diet.html">🥗 Diet Plan</a>
+  </div>
+</footer>
+
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+<script src="firebase-config.js"></script>
+<script>
+/* ── NAV ── */
+function toggleNav(){
+  document.getElementById('hamburger').classList.toggle('open');
+  document.getElementById('mobileNav').classList.toggle('open');
+}
+
+/* ── STATE ── */
+const S = {muscles:[], level:null, goal:null, equip:null};
+let _currentStep = 0;
+const TOTAL = 4;
+
+/* ── OPTION CLICK ── */
+document.querySelectorAll('.opt').forEach(opt=>{
+  opt.addEventListener('click',()=>{
+    const grp = opt.dataset.group;
+    if(grp === 'muscleOpts'){
+      // Multi-select for muscles
+      opt.classList.toggle('selected');
+      const val = opt.dataset.val;
+      if(opt.classList.contains('selected')){
+        if(!S.muscles.includes(val)) S.muscles.push(val);
+      } else {
+        S.muscles = S.muscles.filter(m=>m!==val);
+      }
+      updateNextBtn();
+      return;
+    }
+    document.querySelectorAll(`[data-group="${grp}"]`).forEach(o=>o.classList.remove('selected'));
+    opt.classList.add('selected');
+    const key = {levelOpts:'level',goalOpts:'goal',equipOpts:'equip'}[grp];
+    S[key] = opt.dataset.val;
+    updateNextBtn();
+    if(key==='equip') updateSummary();
+  });
+});
+
+function updateNextBtn(){
+  const keys = [['muscles','next0'],['level','next1'],['goal','next2'],['equip','genBtn']];
+  keys.forEach(([k,id])=>{
+    const el = document.getElementById(id);
+    if(el) el.disabled = k==='muscles' ? S.muscles.length===0 : !S[k];
+  });
+}
+
+function updateSummary(){
+  const labels = {
+    muscle:{chest:'Chest',back:'Back',shoulders:'Shoulders',biceps:'Biceps',triceps:'Triceps',legs:'Legs',core:'Core',fullbody:'Full Body'},
+    level:{beginner:'Beginner',intermediate:'Intermediate',advanced:'Advanced'},
+    goal:{muscle:'Muscle Building',fatloss:'Fat Loss',strength:'Strength',endurance:'Endurance'},
+    equip:{gym:'Full Gym',dumbbells:'Dumbbells',bodyweight:'Bodyweight'}
+  };
+  const muscleChips = S.muscles.map(m=>`<span class="sel-chip">${labels.muscle?.[m]||m}</span>`).join('');
+  const otherChips = [['level',S.level],['goal',S.goal],['equip',S.equip]].filter(([,v])=>v).map(([k,v])=>`<span class="sel-chip">${labels[k]?.[v]||v}</span>`).join('');
+  const chips = muscleChips + otherChips;
+  document.getElementById('selSummary').innerHTML = chips;
+}
+
+/* ── STEP NAVIGATION ── */
+function goStep(n){
+  document.getElementById(`step-${_currentStep}`).classList.remove('active');
+  document.getElementById('genLoading').style.display = 'none';
+  document.getElementById('emailGate').style.display = 'none';
+  document.getElementById('genResult').style.display = 'none';
+  _currentStep = n;
+  document.getElementById(`step-${n}`).classList.add('active');
+  updateProgress();
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function nextStep(n){
+  goStep(n);
+}
+
+function updateProgress(){
+  const pct = (_currentStep / (TOTAL-1)) * 100;
+  document.getElementById('progressFill').style.width = pct+'%';
+  for(let i=0;i<TOTAL;i++){
+    const dot = document.getElementById(`sd-${i}`);
+    const lbl = document.getElementById(`sl-${i}`);
+    dot.classList.remove('done','active');
+    lbl.classList.remove('done','active');
+    if(i<_currentStep){dot.classList.add('done');lbl.classList.add('done');dot.textContent='✓';}
+    else if(i===_currentStep){dot.classList.add('active');lbl.classList.add('active');dot.textContent=i+1;}
+    else{dot.textContent=i+1;}
+  }
+}
+
+/* ══════════════════════════════════════
+   EXERCISE DATABASE
+══════════════════════════════════════ */
+const DB = {
+  chest:{
+    gym:{
+      compound:[
+        {name:'Barbell Bench Press',cue:'Retract scapula · Drive through palms',muscle:'Pectoralis Major'},
+        {name:'Incline Barbell Press',cue:'45° incline · Upper chest emphasis',muscle:'Upper Pec'},
+        {name:'Decline Barbell Press',cue:'Head below hips · Full stretch at bottom',muscle:'Lower Pec'},
+        {name:'Weighted Chest Dips',cue:'Lean forward to shift load to chest',muscle:'Chest/Triceps'},
+      ],
+      isolation:[
+        {name:'Cable Crossover (High to Low)',cue:'Squeeze hard at cross · Hold 1s',muscle:'Lower Pec'},
+        {name:'Incline Dumbbell Fly',cue:'Slight elbow bend · Full stretch',muscle:'Upper Pec'},
+        {name:'Pec Deck Machine',cue:'Elbows at 90° · 2s squeeze at close',muscle:'Pectoralis'},
+        {name:'Cable Fly (Low to High)',cue:'Scoop motion · Activate lower to upper',muscle:'Lower Pec'},
+        {name:'Dumbbell Pullover',cue:'Arms nearly straight · Rib expansion',muscle:'Pec/Serratus'},
+        {name:'Dumbbell Bench Press',cue:'Touch shoulders · Full ROM',muscle:'Pectoralis Major'},
+      ]
+    },
+    dumbbells:{
+      compound:[
+        {name:'Dumbbell Bench Press',cue:'Neutral spine · Touch sides of chest',muscle:'Pectoralis Major'},
+        {name:'Incline Dumbbell Press',cue:'30–45° incline · Control the descent',muscle:'Upper Pec'},
+        {name:'Decline Dumbbell Press',cue:'Lower pec activation · Keep core tight',muscle:'Lower Pec'},
+      ],
+      isolation:[
+        {name:'Dumbbell Fly',cue:'Arc path · Stretch deeply · Squeeze top',muscle:'Pectoralis'},
+        {name:'Incline Dumbbell Fly',cue:'Arms wide · Feel stretch at bottom',muscle:'Upper Pec'},
+        {name:'Dumbbell Pullover',cue:'Full rib cage expansion',muscle:'Pec/Serratus'},
+        {name:'Around the World',cue:'Circular path · Constant tension',muscle:'Pectoralis'},
+      ]
+    },
+    bodyweight:{
+      compound:[
+        {name:'Push-Up',cue:'Hollow body position · Full chest contact',muscle:'Pectoralis'},
+        {name:'Wide-Grip Push-Up',cue:'Hands beyond shoulder width',muscle:'Pec Major'},
+        {name:'Decline Push-Up',cue:'Feet elevated · Upper chest focus',muscle:'Upper Pec'},
+        {name:'Archer Push-Up',cue:'Load one side · Extend other arm',muscle:'Pec Major'},
+      ],
+      isolation:[
+        {name:'Diamond Push-Up',cue:'Hands form diamond · Elbows in',muscle:'Inner Chest/Triceps'},
+        {name:'Slow-Tempo Push-Up',cue:'4s down · 2s pause · 1s up',muscle:'Pectoralis'},
+        {name:'Explosive Push-Up',cue:'Maximum power on each rep',muscle:'Pec Major'},
+        {name:'Hindu Push-Up',cue:'Flow through · Full shoulder circle',muscle:'Pec/Shoulder'},
+      ]
+    }
+  },
+  back:{
+    gym:{
+      compound:[
+        {name:'Barbell Deadlift',cue:'Bar over mid-foot · Chest tall · Drive floor away',muscle:'Entire Posterior Chain'},
+        {name:'Bent-Over Barbell Row',cue:'Hinge 45° · Row to belly button · Squeeze rhomboids',muscle:'Lats/Rhomboids'},
+        {name:'Weighted Pull-Up',cue:'Dead hang start · Drive elbows to hips',muscle:'Lats'},
+        {name:'T-Bar Row',cue:'Chest on pad · Full ROM · Pause at top',muscle:'Mid Back/Lats'},
+        {name:'Seated Cable Row',cue:'Sit tall · Retract scapula first · Then pull',muscle:'Mid Back'},
+      ],
+      isolation:[
+        {name:'Lat Pulldown (Wide Grip)',cue:'Lean back slightly · Pull to upper chest',muscle:'Latissimus Dorsi'},
+        {name:'Single-Arm Dumbbell Row',cue:'Full hip rotation · Drive elbow to ceiling',muscle:'Lats/Rhomboids'},
+        {name:'Straight-Arm Pulldown',cue:'Keep arms straight · Feel lat stretch',muscle:'Lats'},
+        {name:'Face Pull',cue:'Pull to nose height · External rotate at end',muscle:'Rear Delt/Traps'},
+        {name:'Rack Pull',cue:'Bar at knee height · Traps fully engaged',muscle:'Traps/Lower Back'},
+        {name:'Cable Row — Wide Grip',cue:'Elbows flared · Upper back focus',muscle:'Upper Back'},
+      ]
+    },
+    dumbbells:{
+      compound:[
+        {name:'Dumbbell Bent-Over Row',cue:'Neutral spine · Bilaterally balanced pull',muscle:'Lats/Rhomboids'},
+        {name:'Single-Arm Row',cue:'Full hip rotation · Drive elbow high',muscle:'Lats/Rhomboids'},
+        {name:'Renegade Row',cue:'Anti-rotation · Tight plank · Row alternating',muscle:'Back/Core'},
+        {name:'Dumbbell Deadlift',cue:'Hip hinge · Dumbbells track shin',muscle:'Full Back'},
+      ],
+      isolation:[
+        {name:'Dumbbell Pullover',cue:'Lat stretch position · Full extension',muscle:'Lats/Serratus'},
+        {name:'Dumbbell Shrug',cue:'Full ROM · Pause at top 2s · No rolling',muscle:'Trapezius'},
+        {name:'Dumbbell Face Pull',cue:'Thumbs back · External rotation',muscle:'Rear Delt/Traps'},
+        {name:'Incline Dumbbell Row',cue:'Chest on bench · Full lat stretch',muscle:'Upper Lats'},
+      ]
+    },
+    bodyweight:{
+      compound:[
+        {name:'Pull-Up (Full ROM)',cue:'Dead hang start · Chin over bar · Control descent',muscle:'Lats'},
+        {name:'Chin-Up',cue:'Underhand grip · Bicep/Lat combo · Full ROM',muscle:'Lats/Biceps'},
+        {name:'Inverted Row',cue:'Chest to bar · Straight body · Pull elbows wide',muscle:'Mid Back'},
+        {name:'Australian Pull-Up',cue:'Body parallel to floor · Horizontal pull',muscle:'Rhomboids/Lats'},
+      ],
+      isolation:[
+        {name:'Superman Hold',cue:'Arms extended · Hold 3s at top · Squeeze glutes',muscle:'Erector Spinae'},
+        {name:'Scapular Pull-Up',cue:'Protract then retract · No elbow bend',muscle:'Lats/Serratus'},
+        {name:'Band Pull-Apart',cue:'Arms at shoulder height · Full retraction',muscle:'Rear Delt/Traps'},
+        {name:'Negative Pull-Up',cue:'Jump to top · 5s slow descent · Full hang',muscle:'Lats'},
+      ]
+    }
+  },
+  shoulders:{
+    gym:{
+      compound:[
+        {name:'Barbell Overhead Press',cue:'Bar in front · Elbows slightly in front · Full lockout',muscle:'All 3 Delt Heads'},
+        {name:'Arnold Press',cue:'Rotate grip · Hit all heads · Control every inch',muscle:'All 3 Delt Heads'},
+        {name:'Dumbbell Shoulder Press',cue:'Neutral or pronated · Drive straight up',muscle:'Anterior/Lateral Delt'},
+        {name:'Push Press',cue:'Leg drive to initiate · Lock out overhead',muscle:'Shoulders/Triceps'},
+      ],
+      isolation:[
+        {name:'Cable Lateral Raise',cue:'Constant cable tension · Thumb slightly down',muscle:'Lateral Deltoid'},
+        {name:'Dumbbell Lateral Raise',cue:'Lead with elbows · Pinkies up · Pause at top',muscle:'Lateral Deltoid'},
+        {name:'Rear Delt Cable Fly',cue:'Cross-cable · Arms parallel to floor',muscle:'Posterior Deltoid'},
+        {name:'Face Pull (Rope)',cue:'Pull to nose · External rotate at end position',muscle:'Rear Delt'},
+        {name:'Front Raise',cue:'Alternate arms · Control the descent',muscle:'Anterior Deltoid'},
+        {name:'Upright Row (Cable)',cue:'Elbows lead · Raise to chin height only',muscle:'Lateral Delt/Traps'},
+        {name:'Dumbbell Shrug',cue:'Full elevation · 2s hold · No rolling',muscle:'Trapezius'},
+      ]
+    },
+    dumbbells:{
+      compound:[
+        {name:'Dumbbell Shoulder Press',cue:'Seated or standing · Drive straight overhead',muscle:'All 3 Delt Heads'},
+        {name:'Arnold Press',cue:'Start palms in · Rotate to press · Full ROM',muscle:'All Heads'},
+        {name:'Cuban Press',cue:'Row → External rotate → Press · Full shoulder workout',muscle:'All Heads + Rotator Cuff'},
+      ],
+      isolation:[
+        {name:'Lateral Raise',cue:'Lead with elbows · Slight forward lean',muscle:'Lateral Deltoid'},
+        {name:'Bent-Over Rear Delt Fly',cue:'Chest to knees · Fly out and back',muscle:'Posterior Deltoid'},
+        {name:'Front Raise',cue:'Alternating · Control eccentric',muscle:'Anterior Deltoid'},
+        {name:'Dumbbell Shrug',cue:'Straight up · No rolling · Hold at top',muscle:'Trapezius'},
+        {name:'W-Raise (Prone)',cue:'Face down · W arm shape · Rear delt hits',muscle:'Rear Delt/Rotator'},
+      ]
+    },
+    bodyweight:{
+      compound:[
+        {name:'Pike Push-Up',cue:'Hips high · Lower nose to floor · Press',muscle:'Anterior/Lateral Delt'},
+        {name:'Handstand Push-Up',cue:'Wall support · Full ROM · Lock out',muscle:'All Deltoid Heads'},
+        {name:'Decline Pike Push-Up',cue:'Feet elevated · Steeper overhead angle',muscle:'Anterior Delt'},
+      ],
+      isolation:[
+        {name:'Band Pull-Apart',cue:'Arms at shoulder height · Full retraction',muscle:'Posterior Deltoid'},
+        {name:'Lateral Raise (Bands)',cue:'Stand on band · Raise to shoulder height',muscle:'Lateral Deltoid'},
+        {name:'Superman Y-Raise',cue:'Y arm shape · Hold 3s at top',muscle:'Rear Delt/Traps'},
+        {name:'Wall Handstand Hold',cue:'Straight body · Push floor away · Breathe',muscle:'All Deltoid Heads'},
+      ]
+    }
+  },
+  biceps:{
+    gym:{
+      compound:[
+        {name:'Barbell Curl',cue:'Supinate fully at top · Elbows pinned to sides',muscle:'Biceps Brachii'},
+        {name:'EZ-Bar Curl',cue:'Wrist-friendly · Brachialis emphasis',muscle:'Biceps/Brachialis'},
+        {name:'Incline Dumbbell Curl',cue:'Arms behind body at start · Maximum long head stretch',muscle:'Long Head Bicep'},
+      ],
+      isolation:[
+        {name:'Preacher Curl (EZ Bar)',cue:'Full stretch at bottom · Squeeze at top · No swing',muscle:'Short Head Peak'},
+        {name:'Concentration Curl',cue:'Elbow on inner thigh · Full supination',muscle:'Bicep Peak'},
+        {name:'Hammer Curl',cue:'Neutral grip · Brachialis builder',muscle:'Brachialis/Bicep'},
+        {name:'Spider Curl',cue:'Chest on incline bench · Hanging curl · Full ROM',muscle:'Short Head Bicep'},
+        {name:'Cable Curl',cue:'Low pulley · Constant tension entire ROM',muscle:'Biceps Brachii'},
+        {name:'Reverse Curl',cue:'Overhand grip · Brachioradialis forearm focus',muscle:'Brachioradialis'},
+      ]
+    },
+    dumbbells:{
+      compound:[
+        {name:'Alternating Dumbbell Curl',cue:'Supinate as you curl · Don\'t swing',muscle:'Biceps Brachii'},
+        {name:'Hammer Curl',cue:'Neutral throughout · Brachialis loaded',muscle:'Brachialis/Bicep'},
+        {name:'Zottman Curl',cue:'Curl up supinated · Lower pronated · Full forearm',muscle:'Bicep/Brachioradialis'},
+      ],
+      isolation:[
+        {name:'Concentration Curl',cue:'Elbow vs inner knee · Pure isolation',muscle:'Bicep Peak'},
+        {name:'Incline Curl',cue:'Arm drops behind body · Max long head stretch',muscle:'Long Head Bicep'},
+        {name:'Cross-Body Hammer Curl',cue:'Curl across to opposite shoulder',muscle:'Brachialis'},
+        {name:'Waiter Curl',cue:'Hands under dumbbell head · Short head peak',muscle:'Short Head Bicep'},
+        {name:'Reverse Curl',cue:'Overhand grip · Both DB together · Forearm',muscle:'Brachioradialis'},
+      ]
+    },
+    bodyweight:{
+      compound:[
+        {name:'Chin-Up',cue:'Underhand grip · Pull to chest · Full hang',muscle:'Biceps/Lats'},
+        {name:'Inverted Row (Underhand)',cue:'Palms toward you · Horizontal bicep pull',muscle:'Biceps/Back'},
+        {name:'Negative Chin-Up',cue:'Jump to top · 6s controlled descent',muscle:'Biceps Brachii'},
+      ],
+      isolation:[
+        {name:'Resistance Band Curl',cue:'Stand on band · Constant tension · Squeeze hard',muscle:'Biceps Brachii'},
+        {name:'Towel Door Curl',cue:'Towel around door handle · Lean back and curl',muscle:'Biceps/Forearm'},
+        {name:'Isometric Bicep Hold',cue:'Flex at 90° · Hold for time · Maximum contraction',muscle:'Biceps Brachii'},
+        {name:'Archer Chin-Up',cue:'One arm extended · Load shifts to working arm',muscle:'Biceps/Lat'},
+      ]
+    }
+  },
+  triceps:{
+    gym:{
+      compound:[
+        {name:'Close-Grip Bench Press',cue:'Shoulder-width grip · Elbows tucked at 45°',muscle:'All 3 Tricep Heads'},
+        {name:'Skull Crusher (EZ Bar)',cue:'Bar to forehead level · Long head stretch',muscle:'Long Head Tricep'},
+        {name:'Weighted Tricep Dip',cue:'Upright torso · Elbows track back',muscle:'Triceps'},
+        {name:'Board Press / Floor Press',cue:'Pause at bottom · Eliminates pec · Pure tricep',muscle:'Triceps'},
+      ],
+      isolation:[
+        {name:'Cable Pushdown (Bar)',cue:'Elbows pinned · Full extension · 1s squeeze',muscle:'Lateral Head'},
+        {name:'Overhead Cable Extension (Rope)',cue:'Face away · Full long head stretch overhead',muscle:'Long Head Tricep'},
+        {name:'Single-Arm Cable Pushdown',cue:'Unilateral · Full pronation at bottom',muscle:'Triceps'},
+        {name:'Dumbbell Kickback',cue:'Upper arm parallel to floor · Full extension at top',muscle:'Lateral/Long Head'},
+        {name:'JM Press',cue:'Bar path toward neck · Hybrid press/extension',muscle:'All Tricep Heads'},
+        {name:'Reverse Grip Pushdown',cue:'Supinated grip · Medial head emphasis',muscle:'Medial Tricep Head'},
+      ]
+    },
+    dumbbells:{
+      compound:[
+        {name:'Dumbbell Skull Crusher',cue:'Neutral grip · Bar to temples · Long head',muscle:'Triceps Brachii'},
+        {name:'Close-Grip Dumbbell Press',cue:'Dumbbells touching · Elbows in · All heads',muscle:'All Tricep Heads'},
+        {name:'Overhead DB Extension (2-hand)',cue:'Both hands on one DB · Full overhead stretch',muscle:'Long Head'},
+      ],
+      isolation:[
+        {name:'Dumbbell Kickback',cue:'Upper arm parallel · Elbow locked · Kick back',muscle:'Lateral/Medial Head'},
+        {name:'Tate Press',cue:'DB tips on chest · Press elbows out · Medial focus',muscle:'Medial Tricep'},
+        {name:'Lying DB Tricep Extension',cue:'Elbows up · DB to ears · Stretch loaded',muscle:'All Tricep Heads'},
+        {name:'Single-Arm Overhead DB Ext',cue:'Full stretch behind head · Keep elbow in',muscle:'Long Head Tricep'},
+      ]
+    },
+    bodyweight:{
+      compound:[
+        {name:'Diamond Push-Up',cue:'Hands form diamond · Elbows back not out',muscle:'Triceps/Chest'},
+        {name:'Tricep Bench Dip',cue:'Upright body · Go deep · Full extension',muscle:'Triceps'},
+        {name:'Close-Grip Push-Up',cue:'Hands at chest · Elbows track back',muscle:'Triceps'},
+        {name:'Pike Push-Up',cue:'Overhead press pattern · All heads',muscle:'Triceps/Shoulder'},
+      ],
+      isolation:[
+        {name:'Tricep Push-Up Negative',cue:'5s slow descent · Explosive back to top',muscle:'Triceps Brachii'},
+        {name:'Sphinx Push-Up',cue:'Forearms to hands press · Medial focus',muscle:'Medial/Long Head'},
+        {name:'Overhead Tricep Extension (Band)',cue:'Band behind head · Full long head stretch',muscle:'Long Head Tricep'},
+        {name:'Bench Dip',cue:'Legs extended · Feet on bench for harder',muscle:'All Tricep Heads'},
+      ]
+    }
+  },
+  legs:{
+    gym:{
+      compound:[
+        {name:'Barbell Back Squat',cue:'Break parallel · Knees track toes · Drive through heels',muscle:'Quads/Glutes/Hamstrings'},
+        {name:'Romanian Deadlift',cue:'Push hips back · Feel hamstring stretch · Soft knees',muscle:'Hamstrings/Glutes'},
+        {name:'Barbell Hip Thrust',cue:'Chin tucked · Drive hips up · Hold 1s at top',muscle:'Glutes/Hamstrings'},
+        {name:'Bulgarian Split Squat',cue:'Front foot out · Vertical shin · 90° rear knee',muscle:'Quads/Glutes'},
+        {name:'Leg Press (High Foot)',cue:'High foot placement = glute emphasis',muscle:'Quads/Glutes'},
+        {name:'Hack Squat',cue:'Narrow stance · Full ROM · Quad dominant',muscle:'Quadriceps'},
+      ],
+      isolation:[
+        {name:'Leg Extension',cue:'Full extension · 1s squeeze · Control descent',muscle:'Quadriceps'},
+        {name:'Lying Leg Curl',cue:'Don\'t let hips rise · Full contraction',muscle:'Hamstrings'},
+        {name:'Standing Calf Raise',cue:'Full stretch at bottom · Hold at top',muscle:'Gastrocnemius'},
+        {name:'Seated Calf Raise',cue:'Slow · Full ROM · Soleus emphasis',muscle:'Soleus'},
+        {name:'Cable Glute Kickback',cue:'Hip hinge start · Kick directly back',muscle:'Gluteus Maximus'},
+        {name:'Adductor Machine',cue:'Full ROM · Inner thigh activation',muscle:'Adductors'},
+      ]
+    },
+    dumbbells:{
+      compound:[
+        {name:'Dumbbell Goblet Squat',cue:'Hold at chest · Elbows track knees',muscle:'Quads/Glutes'},
+        {name:'Dumbbell Romanian Deadlift',cue:'Hinge at hips · DBs track shins · Deep stretch',muscle:'Hamstrings/Glutes'},
+        {name:'Dumbbell Lunge',cue:'Long stride · Vertical front shin · 90° both knees',muscle:'Quads/Glutes'},
+        {name:'Dumbbell Bulgarian Split Squat',cue:'Rear foot elevated · Deep front squat',muscle:'Quads/Glutes'},
+        {name:'Dumbbell Step-Up',cue:'Full hip extension at top · Drive knee up',muscle:'Glutes/Quads'},
+      ],
+      isolation:[
+        {name:'Dumbbell Hip Thrust',cue:'Shoulders on bench · DB on lap · Drive hips',muscle:'Glutes'},
+        {name:'Single-Leg Calf Raise (DB)',cue:'Full ROM · Slow · Feel stretch at bottom',muscle:'Gastrocnemius'},
+        {name:'Sumo Dumbbell Squat',cue:'Wide stance · Toes out · Inner thigh hits',muscle:'Adductors/Glutes'},
+        {name:'Dumbbell Good Morning',cue:'Slight knee bend · Hinge deep · Hamstring focus',muscle:'Hamstrings/Lower Back'},
+      ]
+    },
+    bodyweight:{
+      compound:[
+        {name:'Bodyweight Squat',cue:'Arms out front · Break parallel · Full hip crease',muscle:'Quads/Glutes'},
+        {name:'Jump Squat',cue:'Full squat depth · Explode up · Soft landing',muscle:'Quads/Glutes/Calves'},
+        {name:'Reverse Lunge',cue:'Step back · Front shin vertical · Back knee hovers',muscle:'Glutes/Quads'},
+        {name:'Glute Bridge',cue:'Chin tucked · Drive hips high · Hold 2s',muscle:'Glutes/Hamstrings'},
+        {name:'Pistol Squat',cue:'One leg extended · Full depth · Control descent',muscle:'Full Leg'},
+        {name:'Nordic Hamstring Curl',cue:'Anchor feet · Lower slowly · Eccentric beast',muscle:'Hamstrings'},
+      ],
+      isolation:[
+        {name:'Wall Sit',cue:'90° knee angle · Hands off thighs · Hold',muscle:'Quadriceps'},
+        {name:'Donkey Kick',cue:'Fire glute · Leg 90° · Squeeze at top',muscle:'Gluteus Maximus'},
+        {name:'Fire Hydrant',cue:'Knee stays bent · Raise to hip height',muscle:'Gluteus Medius'},
+        {name:'Calf Raise (Bodyweight)',cue:'Single leg is harder · Full ROM every rep',muscle:'Gastrocnemius'},
+      ]
+    }
+  },
+  core:{
+    gym:{
+      compound:[
+        {name:'Cable Crunch (Rope)',cue:'Round over to pelvis not thighs · Abs pull',muscle:'Rectus Abdominis'},
+        {name:'Hanging Leg Raise',cue:'Posterior pelvic tilt · Don\'t swing · Lower slowly',muscle:'Lower Abs/Hip Flexors'},
+        {name:'Ab Wheel Rollout',cue:'From knees or feet · Don\'t let hips sag',muscle:'Entire Core'},
+        {name:'Pallof Press',cue:'Anti-rotation · Stand perpendicular to cable',muscle:'Transverse Abdominis'},
+      ],
+      isolation:[
+        {name:'Decline Sit-Up (Weighted)',cue:'Plate on chest · Chin tucked · Full ROM',muscle:'Rectus Abdominis'},
+        {name:'Cable Woodchop',cue:'Rotational power · Hips drive · Obliques',muscle:'Obliques'},
+        {name:'Weighted Plank',cue:'Plate on back · Full body tension · Breathe',muscle:'Entire Core'},
+        {name:'Russian Twist (Weighted)',cue:'Heels off floor · Rotate fully each side',muscle:'Obliques'},
+        {name:'Hanging Knee Raise',cue:'Posterior tilt · Compress abs · 3s descent',muscle:'Lower Abs'},
+        {name:'Landmine Rotation',cue:'Arms straight · Pivot feet · Power from hips',muscle:'Obliques/Core'},
+      ]
+    },
+    dumbbells:{
+      compound:[
+        {name:'Dumbbell Woodchop',cue:'High to low · Hips rotate · Abs brace',muscle:'Obliques/Core'},
+        {name:'Farmers Walk (Single DB)',cue:'Anti-lateral flexion · Tall spine · Walk',muscle:'Core/Grip'},
+        {name:'Suitcase Carry',cue:'One heavy DB · Resist leaning · Obliques fire',muscle:'Core/Lats'},
+      ],
+      isolation:[
+        {name:'Dumbbell Russian Twist',cue:'Feet elevated · Full rotation · DB touches floor',muscle:'Obliques'},
+        {name:'Windmill',cue:'Arm straight overhead · Hinge · Touch floor',muscle:'Obliques/Shoulder'},
+        {name:'Weighted Plank',cue:'DB on back · Full tension · Don\'t drop hips',muscle:'Entire Core'},
+        {name:'Weighted Crunch',cue:'DB on chest · Only crunch abs · Not hip flexors',muscle:'Rectus Abdominis'},
+        {name:'Dumbbell Side Bend',cue:'One heavy DB · Lateral flex only',muscle:'Obliques'},
+      ]
+    },
+    bodyweight:{
+      compound:[
+        {name:'Plank (Full Tension)',cue:'Posterior tilt · Squeeze everything · Breathe',muscle:'Entire Core'},
+        {name:'Hollow Body Hold',cue:'Lower back pressed to floor · Legs low',muscle:'Entire Core'},
+        {name:'Ab Wheel Rollout',cue:'Hips tight · Full extension · Pull back with lats',muscle:'Entire Core'},
+        {name:'L-Sit Hold',cue:'Legs parallel to floor · Hands push down',muscle:'Abs/Hip Flexors'},
+      ],
+      isolation:[
+        {name:'Bicycle Crunch',cue:'Slow · Elbow to opposite knee · Full rotation',muscle:'Obliques/Abs'},
+        {name:'Leg Raise',cue:'Posterior tilt · Control descent · No swing',muscle:'Lower Abs'},
+        {name:'Dead Bug',cue:'Lower back pressed down · Opposite arm/leg · Slow',muscle:'Transverse Abdominis'},
+        {name:'V-Up',cue:'Reach fingertips to toes · Peak contraction',muscle:'Upper/Lower Abs'},
+        {name:'Dragon Flag',cue:'Advanced · Hollow body · Lower slowly',muscle:'Entire Core'},
+        {name:'Side Plank (Elbow)',cue:'Hip high · Don\'t rotate · Hold each side',muscle:'Obliques'},
+        {name:'Mountain Climber',cue:'Hips level · Drive knees to chest · Alternate',muscle:'Core/Hip Flexors'},
+        {name:'Russian Twist',cue:'Feet raised · Full rotation · Touch floor each side',muscle:'Obliques'},
+      ]
+    }
+  },
+  fullbody:{
+    gym:{
+      compound:[
+        {name:'Barbell Deadlift',cue:'Bar over mid-foot · Chest tall · Drive floor away',muscle:'Full Body'},
+        {name:'Barbell Back Squat',cue:'Below parallel · Brace hard · Drive',muscle:'Full Body'},
+        {name:'Barbell Overhead Press',cue:'Full lockout · Ribs down · Core braced',muscle:'Shoulders/Triceps/Core'},
+        {name:'Barbell Bent-Over Row',cue:'45° hinge · Bar to belly · Retract scapula',muscle:'Back/Biceps/Core'},
+        {name:'Power Clean',cue:'Hip extension drives bar up · Fast elbows',muscle:'Full Body'},
+        {name:'Push Press',cue:'Leg drive → push overhead · Lockout',muscle:'Full Body'},
+      ],
+      isolation:[
+        {name:'Pull-Up',cue:'Dead hang · Drive elbows to hips · Chin over',muscle:'Lats/Biceps'},
+        {name:'Kettlebell/DB Swing',cue:'Hip hinge · Explosive hip snap · Absorb on return',muscle:'Posterior Chain'},
+        {name:'Burpee to Pull-Up',cue:'Explosive · Jump to bar · Full pull',muscle:'Full Body'},
+        {name:'Box Jump',cue:'Full jump · Soft landing · Step down',muscle:'Quads/Glutes/Calves'},
+        {name:'Dumbbell Thruster',cue:'Squat + press in one fluid motion',muscle:'Full Body'},
+      ]
+    },
+    dumbbells:{
+      compound:[
+        {name:'Dumbbell Thruster',cue:'Squat below parallel · Explode and press overhead',muscle:'Full Body'},
+        {name:'Dumbbell Deadlift',cue:'Hip hinge · Dumbbells track shins',muscle:'Full Body'},
+        {name:'Renegade Row',cue:'Tight plank → row L → row R → push up',muscle:'Full Body'},
+        {name:'Dumbbell Clean and Press',cue:'Hip drive → catch → press overhead',muscle:'Full Body'},
+        {name:'Man Maker',cue:'Plank → row L → row R → push-up → squat → press',muscle:'Full Body'},
+      ],
+      isolation:[
+        {name:'Goblet Squat to Curl Press',cue:'Squat · Curl at bottom · Press overhead',muscle:'Full Body'},
+        {name:'Dumbbell Swing',cue:'Hip hinge dominant · Explosive forward',muscle:'Posterior Chain'},
+        {name:'Dumbbell Lunge to Curl',cue:'Step forward → curl at bottom → stand',muscle:'Full Body'},
+        {name:'Suitcase Carry',cue:'Heavy DB · Resist lean · Walk for distance',muscle:'Core/Full Body'},
+        {name:'Burpee (Dumbbell Push-Up)',cue:'Push-up on DBs · Jump at top',muscle:'Full Body'},
+      ]
+    },
+    bodyweight:{
+      compound:[
+        {name:'Burpee',cue:'Push-up to jump · Full height · Land soft',muscle:'Full Body'},
+        {name:'Push-Up',cue:'Tight core · Full ROM · Chest to floor',muscle:'Chest/Triceps/Core'},
+        {name:'Pull-Up',cue:'Dead hang · Full ROM every rep',muscle:'Lats/Biceps'},
+        {name:'Jump Squat',cue:'Full depth · Explode · Soft landing',muscle:'Quads/Glutes'},
+        {name:'Handstand Push-Up',cue:'Wall support · Full overhead ROM',muscle:'Shoulders/Triceps'},
+      ],
+      isolation:[
+        {name:'Mountain Climber (Fast)',cue:'Level hips · Drive knees · Cardio intensity',muscle:'Full Body'},
+        {name:'Jump Lunge',cue:'Explosive switch · Equal depth each side',muscle:'Quads/Glutes'},
+        {name:'Bear Crawl',cue:'Knees hover · Core tight · Opposite limbs',muscle:'Core/Full Body'},
+        {name:'Tuck Jump',cue:'Knees to chest at peak · Maximum power',muscle:'Full Body'},
+        {name:'Inchworm + Push-Up',cue:'Walk out · Push-up · Walk back',muscle:'Core/Full Body'},
+      ]
+    }
+  }
+};
+
+/* ── PRESCRIPTION ── */
+const RX = {
+  muscle:{
+    beginner:    {sets:'3',reps:'10–12',rest:'60s',tempo:'2-0-2',rpe:'RPE 7',exCount:5,techniques:[],note:"Focus on feeling the muscle contract on every rep. Control the weight both ways — the eccentric (lowering) is where growth happens."},
+    intermediate:{sets:'4',reps:'8–12', rest:'75s',tempo:'3-1-2',rpe:'RPE 8',exCount:6,techniques:['Drop Set on last exercise','Rest-Pause on final set'],note:"Apply progressive overload — add 2.5kg or 1 clean rep each session. Track volume. The muscle grows during rest, not during training."},
+    advanced:    {sets:'4–5',reps:'6–12',rest:'90s',tempo:'4-1-2',rpe:'RPE 9',exCount:7,techniques:['Drop Set × 2','Rest-Pause','Mechanical Drop Set on isolation'],note:"Use advanced intensity techniques on the last 1–2 sets only. Overtraining is real — technique over ego every single session."}
+  },
+  fatloss:{
+    beginner:    {sets:'3',reps:'12–15',rest:'40s',tempo:'2-0-1',rpe:'RPE 7',exCount:6,techniques:[],note:"Short rest is your weapon. Keep moving. Circuit-style training keeps heart rate up and burns calories long after the session."},
+    intermediate:{sets:'3–4',reps:'12–20',rest:'30s',tempo:'2-0-1',rpe:'RPE 8',exCount:6,techniques:['Superset opposing muscles','Giant Set on isolation'],note:"Superset opposing muscle groups with 0 rest between exercises. Your heart rate stays elevated, which is your fat-loss advantage."},
+    advanced:    {sets:'4',reps:'15–20',rest:'20s',tempo:'1-0-1',rpe:'RPE 9',exCount:7,techniques:['Superset all exercises','AMRAP finisher set','Mechanical Drop Set'],note:"Every second of rest is a missed calorie burn. Drop sets, circuits, AMRAP finishers. Make every minute count."}
+  },
+  strength:{
+    beginner:    {sets:'3',reps:'5',rest:'2min',tempo:'2-1-1',rpe:'RPE 7',exCount:4,techniques:[],note:"Strength is a skill. 5×5 protocol is gold at this stage. Prioritise form — ugly lifts don't build real strength."},
+    intermediate:{sets:'4–5',reps:'3–6',rest:'2–3min',tempo:'2-2-1',rpe:'RPE 8–9',exCount:5,techniques:['Wave Loading (heavy/light alternating sets)'],note:"RPE 8–9 means 1–2 reps left in the tank. Go heavier on the primary lift only. Assistance work stays moderate."},
+    advanced:    {sets:'5',reps:'1–5',rest:'3–5min',tempo:'1-2-X',rpe:'RPE 9–10',exCount:5,techniques:['Cluster Sets','Contrast Method'],note:"Periodize your strength. Heavy/moderate/deload blocks. CNS fatigue compounds — respect the deload or performance will crash."}
+  },
+  endurance:{
+    beginner:    {sets:'2–3',reps:'15–20',rest:'30s',tempo:'1-0-1',rpe:'RPE 6',exCount:6,techniques:[],note:"Build your base. High rep ranges, moderate weight. Your cardiovascular adaptation is the goal, not the load on the bar."},
+    intermediate:{sets:'3',reps:'20–25',rest:'20s',tempo:'1-0-1',rpe:'RPE 7–8',exCount:7,techniques:['Circuit style — no rest between exercises','EMOM sets'],note:"Circuit training with 20s rest between exercises. Your body is an engine — the more you push its limits, the bigger it gets."},
+    advanced:    {sets:'4',reps:'25–30',rest:'15s',tempo:'1-0-1',rpe:'RPE 8–9',exCount:8,techniques:['100-rep challenge on isolation','AMRAP final round','Timed sets (60s per exercise)'],note:"Extended sets, AMRAP rounds, timed sets. You've earned the right to suffer. Embrace it — this is where elite conditioning lives."}
+  }
+};
+
+/* ── COACH TIPS ── */
+const TIPS = {
+  chest:"Arch your upper back, retract your scapula, and drive through the heel of your palm — not your fingers. Most people lose half their chest gains from poor setup and no mind-muscle connection.",
+  back:"Pull with your elbows, not your hands. Every rep starts with scapular depression — pull the shoulder blade down first, THEN row. This single cue doubles lat activation immediately.",
+  shoulders:"Train rear delts 2× as much as front delts. Most people are anterior-dominant from pressing, creating massive imbalances that lead to shoulder injury. Fix your rear delts first.",
+  biceps:"Supinate (rotate wrist outward) at the top of every curl. That's what creates the peak. Most people skip this — and that's why their biceps look flat instead of full.",
+  triceps:"The long head (inner tricep) makes up 66% of your arm mass. Prioritize overhead movements to fully stretch it. If all you do is pushdowns, you're leaving half your tricep on the table.",
+  legs:"Depth matters more than weight. Below parallel activates 40% more glute than a half squat. Ego kills leg gains — go light, go deep, grow faster.",
+  core:"Your core is a 360° cylinder — not just your abs. Train anti-rotation (Pallof Press), anti-extension (Ab Wheel), and anti-lateral flexion (Suitcase Carry). Most people only train crunches and wonder why they get injured.",
+  fullbody:"Sequence matters on full-body days: biggest compound lifts first (deadlift, squat, press) when CNS is fresh. Save isolation work for last. Energy spent = results earned."
+};
+
+/* ── WARM-UP PROTOCOLS ── */
+const WARMUP = {
+  chest:['5 min light cardio','Shoulder circles × 20','Band pull-apart × 15','Chest stretch hold 30s','Empty bar press × 15 reps'],
+  back:['5 min light cardio','Cat-cow × 10','Scapular pull-up × 10','Band pull-apart × 20','Dead hang 30s'],
+  shoulders:['5 min light cardio','Arm circles (fwd/back) × 20','Band pull-apart × 20','External rotation × 15','Face pull (light) × 15'],
+  biceps:['5 min light cardio','Wrist circles × 20','Light dumbbell curl × 15','Elbow stretch 30s each','Band bicep curl × 15'],
+  triceps:['5 min light cardio','Tricep stretch 30s each','Light pushdown × 15','Wrist circles × 20','Shoulder stretch 30s'],
+  legs:['8 min light bike/jog','Hip circle × 15 each direction','Bodyweight squat × 20','Walking lunge × 10 each','Glute bridge × 20'],
+  core:['5 min light cardio','Cat-cow × 10','Hip flexor stretch 30s','Glute bridge × 15','Dead bug × 10 each side'],
+  fullbody:['8 min light cardio','World greatest stretch × 5 each','Inchworm × 5','Arm circles × 20','Bodyweight squat × 15']
+};
+
+/* ── COOL-DOWN ── */
+const COOLDOWN = [
+  '5 min light walk / cool down',
+  'Child\'s pose 45s',
+  'Hip flexor stretch 30s each side',
+  'Hamstring stretch 30s each side',
+  'Chest doorway stretch 30s',
+  '10 deep belly breaths'
+];
+
+/* ── WEEKLY SPLITS ── */
+const SPLITS = {
+  muscle:{
+    beginner:{days:['Push','Rest','Pull','Rest','Legs','Rest','Rest'],note:'3-day split — perfect foundation'},
+    intermediate:{days:['Push','Pull','Legs','Rest','Push','Pull','Rest'],note:'PPL — 5 days/week optimal'},
+    advanced:{days:['Push','Pull','Legs','Push','Pull','Legs','Rest'],note:'PPL 6-day — maximum frequency'}
+  },
+  fatloss:{
+    beginner:{days:['Full','Rest','Full','Rest','Full','Rest','Rest'],note:'3x Full Body — metabolic focus'},
+    intermediate:{days:['Upper','HIIT','Lower','Rest','Upper','Lower','Rest'],note:'Upper/Lower + Cardio'},
+    advanced:{days:['Push+HIIT','Pull+HIIT','Legs','Push','Pull','Legs+HIIT','Rest'],note:'6-day fat incinerator'}
+  },
+  strength:{
+    beginner:{days:['Squat','Rest','Press','Rest','Pull','Rest','Rest'],note:'3-day SBD · Rest between'},
+    intermediate:{days:['Squat','Press','Rest','Pull','Squat','Rest','Rest'],note:'4-day strength block'},
+    advanced:{days:['Heavy','Accessory','Rest','Moderate','Speed','Rest','Rest'],note:'Conjugate method split'}
+  },
+  endurance:{
+    beginner:{days:['Circuit','Rest','Circuit','Rest','Circuit','Rest','Rest'],note:'3-day conditioning block'},
+    intermediate:{days:['Circuit','Cardio','Circuit','Rest','Circuit','Cardio','Rest'],note:'5-day conditioning'},
+    advanced:{days:['Circuit','HIIT','Circuit','HIIT','Circuit','HIIT','Rest'],note:'6-day elite conditioning'}
+  }
+};
+
+/* ── SHUFFLE ── */
+function shuffle(arr){return [...arr].sort(()=>Math.random()-.5)}
+
+/* ── GENERATE ── */
+function generate(){
+  const {muscles,level,goal,equip} = S;
+  if(!muscles.length||!level||!goal||!equip) return;
+
+  document.getElementById(`step-3`).style.display = 'none';
+  const loading = document.getElementById('genLoading');
+  loading.style.display = 'block';
+  document.getElementById('genResult').style.display = 'none';
+  document.getElementById('emailGate').style.display = 'none';
+  window.scrollTo({top:0,behavior:'smooth'});
+
+  // Animate loading steps
+  const lSteps = ['ls0','ls1','ls2','ls3','ls4'];
+  lSteps.forEach((id,i)=>{
+    setTimeout(()=>{document.getElementById(id)?.classList.add('lit')}, i*200+200);
+  });
+
+  setTimeout(()=>{
+    loading.style.display = 'none';
+    pendingWorkoutData = buildWorkout(muscles,level,goal,equip);
+    showEmailGate();
+  }, 1400);
+}
+
+let pendingWorkoutData = null;
+
+function buildWorkout(muscles,level,goal,equip){
+  const rx = RX[goal][level];
+  // Combine exercises from all selected muscles
+  const muscleArr = Array.isArray(muscles) ? muscles : [muscles];
+  let allCompounds = [], allIsolation = [];
+  const exPerMuscle = Math.max(2, Math.floor(rx.exCount / muscleArr.length));
+  muscleArr.forEach(muscle => {
+    const pool = DB[muscle]?.[equip] || {};
+    const mc = shuffle(pool.compound || []);
+    const mi = shuffle(pool.isolation || []);
+    const nc = Math.min(Math.ceil(exPerMuscle * 0.5), mc.length);
+    const ni = Math.min(exPerMuscle - nc, mi.length);
+    allCompounds.push(...mc.slice(0, nc));
+    allIsolation.push(...mi.slice(0, ni));
+  });
+  const compounds = shuffle(allCompounds);
+  const isolation = shuffle(allIsolation);
+  const numCompound = Math.min(Math.ceil(rx.exCount * 0.5), compounds.length);
+  const numIsolation = Math.min(rx.exCount - numCompound, isolation.length);
+  const exercises = [...compounds.slice(0,numCompound),...isolation.slice(0,numIsolation)];
+
+  const sets = parseInt(rx.sets) || 3;
+  const restSec = parseInt(rx.rest) || 60;
+  const warmupTime = 7;
+  const mainTime = exercises.length * (sets * (60 + restSec) / 60);
+  const cooldownTime = 7;
+  const totalTime = Math.round(warmupTime + mainTime + cooldownTime);
+
+  const totalSets = exercises.length * sets;
+  const avgReps = rx.reps.includes('–') ? parseInt(rx.reps.split('–')[1]) : parseInt(rx.reps);
+  const totalVol = totalSets * avgReps;
+
+  const muscle = muscleArr.length===1 ? muscleArr[0] : muscleArr[0]; // use first for warmup/split; muscles array for labels
+  return {muscle, muscles:muscleArr, level,goal,equip,exercises,rx,totalTime,totalSets,totalVol};
+}
+
+function renderResult(d){
+  const {muscle, muscles:muscleArr2, level,goal,equip,exercises,rx,totalTime,totalSets,totalVol} = d;
+  const _ML = {chest:'Chest',back:'Back',shoulders:'Shoulders',biceps:'Biceps',triceps:'Triceps',legs:'Legs',core:'Core',fullbody:'Full Body'};
+  const _muscleList = muscleArr2 && muscleArr2.length ? muscleArr2 : [muscle];
+
+  const mLabel = _muscleList.map(m=>_ML[m]||m).join(' + ');
+  const gLabel = {muscle:'Muscle Building',fatloss:'Fat Loss',strength:'Strength',endurance:'Endurance'}[goal];
+  const lLabel = {beginner:'Beginner',intermediate:'Intermediate',advanced:'Advanced'}[level];
+  const eLabel = {gym:'Full Gym',dumbbells:'Dumbbells',bodyweight:'Bodyweight'}[equip];
+
+  // Determine type tag
+  const typeTag = ex => {
+    const t = ex.type || (ex.cue ? 'Compound' : 'Isolation');
+    const cat = ex.muscle.toLowerCase().includes('isometric') ? 'isometric' :
+                (ex.cue && ex.cue.includes('isolation')) ? 'isolation' : 'compound';
+    const name = ex.name.toLowerCase();
+    if(name.includes('hold')||name.includes('plank')||name.includes('isometric')) return ['isometric','Isometric'];
+    if(name.includes('fly')||name.includes('raise')||name.includes('curl')||name.includes('extension')||name.includes('kickback')||name.includes('pushdown')) return ['isolation','Isolation'];
+    return ['compound','Compound'];
+  };
+
+  const rpeColor = r=>{
+    if(!r)return 'rpe-med';
+    if(r.includes('6')||r.includes('7'))return 'rpe-low';
+    if(r.includes('8'))return 'rpe-med';
+    return 'rpe-high';
+  };
+
+  const rowsHTML = exercises.map((ex,i)=>{
+    const [tagClass,tagLabel] = typeTag(ex);
+    const isAdv = level==='advanced';
+    const techRow = (isAdv && rx.techniques.length && i===exercises.length-1) ?
+      `<div class="ex-tech-row"><span class="tech-badge">⚡ ${rx.techniques[0]}</span></div>` : '';
+    return `
+    <div class="ex-row">
+      <div class="ex-num">${i+1}</div>
+      <div class="ex-name-wrap">
+        <span class="ex-type-tag ${tagClass}">${tagLabel}</span>
+        <div class="ex-name">${ex.name}</div>
+        <div class="ex-sub">${ex.cue||ex.type||''}</div>
+      </div>
+      <div class="ex-sets">${rx.sets}</div>
+      <div class="ex-reps">${rx.reps}</div>
+      <div class="ex-rest">${rx.rest}</div>
+      <div class="ex-tempo">${rx.tempo}</div>
+      <div class="ex-rpe"><span class="rpe-pill ${rpeColor(rx.rpe)}">${rx.rpe}</span></div>
+    </div>${techRow}`;
+  }).join('');
+
+  const warmup = WARMUP[_muscleList[0]]||WARMUP.fullbody;
+  const warmHTML = warmup.map(w=>`<div class="proto-item"><div class="proto-dot red"></div><div><div class="proto-text">${w}</div></div></div>`).join('');
+  const coolHTML = COOLDOWN.map(c=>`<div class="proto-item"><div class="proto-dot green"></div><div><div class="proto-text">${c}</div></div></div>`).join('');
+
+  const split = SPLITS[goal]?.[level]||SPLITS.muscle.beginner;
+  const splitHTML = split.days.map((d,i)=>{
+    const isTarget = _muscleList.some(m=>d.toLowerCase().includes((_ML[m]||m).toLowerCase().slice(0,4)))||d==='Full'||d.includes('+');
+    const isRest = d==='Rest';
+    const cls = isRest?'rest':isTarget?'active':'';
+    return `<div class="split-day ${cls}"><div class="day-name">${['Mon','Tue','Wed','Thu','Fri','Sat','Sun'][i]}</div><div class="day-focus">${d}</div></div>`;
+  }).join('');
+
+  const waText = encodeURIComponent(
+`⚡ *FitWid Custom Workout*
+━━━━━━━━━━━━━━━━━
+📌 Muscle: ${mLabel}
+🎯 Goal: ${gLabel}
+⚡ Level: ${lLabel}
+🏟️ Equipment: ${eLabel}
+⏱ Duration: ~${totalTime} min
+━━━━━━━━━━━━━━━━━
+*Exercises (${exercises.length}):*
+${exercises.map((e,i)=>`${i+1}. ${e.name} — ${rx.sets}×${rx.reps} @ ${rx.rpe}`).join('\n')}
+━━━━━━━━━━━━━━━━━
+Coach Sahil · FitWid.fit
+I want to train this with you! 💪`);
+
+  return `
+    <div class="res-header">
+      <div class="res-label">Custom Workout · Coach Sahil Bansal</div>
+      <div class="res-title">${mLabel} <span>— ${gLabel}</span></div>
+      <div class="res-chips">
+        <span class="res-chip gold">${lLabel}</span>
+        <span class="res-chip red">${eLabel}</span>
+        <span class="res-chip">${exercises.length} Exercises</span>
+        <span class="res-chip">~${totalTime} min</span>
+      </div>
+      <div class="res-actions">
+        <a class="btn-wa" href="https://wa.me/917015552731?text=${waText}" target="_blank" rel="noopener">💬 Share on WhatsApp</a>
+        <a class="btn-apply" href="apply.html">🏆 Get Full Program</a>
+        <button class="btn-regen" onclick="regenerate()">↻ Regenerate</button>
+      </div>
+    </div>
+
+    <div class="stats-bar">
+      <div class="stat-item"><div class="stat-val">${exercises.length}</div><div class="stat-lbl">Exercises</div></div>
+      <div class="stat-item"><div class="stat-val">${totalSets}</div><div class="stat-lbl">Total Sets</div></div>
+      <div class="stat-item"><div class="stat-val">${totalVol}</div><div class="stat-lbl">Total Reps</div></div>
+      <div class="stat-item"><div class="stat-val">${totalTime}<span style="font-size:16px"> min</span></div><div class="stat-lbl">Session Time</div></div>
+    </div>
+
+    <div class="protocol-block">
+      <div class="protocol-title"><span>🔥</span> Warm-Up Protocol · 5–7 min</div>
+      <div class="protocol-grid">${warmHTML}</div>
+    </div>
+
+    <div class="ex-table">
+      <div class="ex-table-head">
+        <div>#</div><div>Exercise</div><div style="text-align:center">Sets</div>
+        <div style="text-align:center">Reps</div><div style="text-align:center">Rest</div>
+        <div style="text-align:center">Tempo</div><div style="text-align:center">RPE</div>
+      </div>
+      ${rowsHTML}
+    </div>
+
+    <div class="protocol-block">
+      <div class="protocol-title"><span>❄️</span> Cool-Down Protocol · 5–7 min</div>
+      <div class="protocol-grid">${coolHTML}</div>
+    </div>
+
+    <div class="coach-tip">
+      <div class="tip-avatar">💪</div>
+      <div class="tip-body">
+        <div class="tip-title">Coach Sahil · ${mLabel} Tip</div>
+        <div class="tip-text">${TIPS[muscle]}</div>
+      </div>
+    </div>
+
+    <div class="protocol-tip">
+      <div class="tip-avatar" style="background:linear-gradient(135deg,rgba(34,197,94,.3),rgba(10,10,10,0));border-color:rgba(34,197,94,.3)">📋</div>
+      <div class="tip-body">
+        <div class="tip-title">Session Protocol · ${gLabel}</div>
+        <div class="tip-text">${rx.note}</div>
+      </div>
+    </div>
+
+    ${rx.techniques.length?`
+    <div class="coach-tip" style="background:linear-gradient(135deg,rgba(204,0,0,.07),rgba(10,10,10,0));border-color:rgba(204,0,0,.25)">
+      <div class="tip-avatar" style="background:linear-gradient(135deg,rgba(204,0,0,.3),rgba(10,10,10,0));border-color:rgba(204,0,0,.3)">⚡</div>
+      <div class="tip-body">
+        <div class="tip-title" style="color:var(--red-b)">Intensity Techniques · ${lLabel}</div>
+        <div class="tip-text">Apply these on your last 1–2 sets only: <strong style="color:var(--text)">${rx.techniques.join(' → ')}</strong>. Use sparingly — intensity beyond recovery = no growth.</div>
+      </div>
+    </div>`:''
+    }
+
+    <div class="split-block">
+      <div class="split-title">Suggested Weekly Split · ${split.note}</div>
+      <div class="split-days">${splitHTML}</div>
+    </div>
+
+    <div class="cta-banner">
+      <h3>Want a Full 4-Week Program?</h3>
+      <p>Coach Sahil will build a complete progression-based plan around your specific goals, schedule, and lifestyle — not just one session.</p>
+      <a href="apply.html" class="btn-apply" style="display:inline-flex;font-size:16px;padding:14px 32px">Apply for Coaching →</a>
+    </div>
+  `;
+}
+
+/* ── EMAIL GATE ── */
+function showEmailGate(){
+  document.getElementById('emailGate').style.display='block';
+  document.getElementById('emailGate').scrollIntoView({behavior:'smooth',block:'center'});
+}
+
+function submitGate(e){
+  e.preventDefault();
+  const email=document.getElementById('gateEmail').value.trim();
+  const btn=document.getElementById('gateBtn');
+  btn.disabled=true; btn.textContent='Unlocking…';
+  try{
+    const app=firebase.apps.length?firebase.app():firebase.initializeApp(FIREBASE_CONFIG);
+    firebase.database().ref('generator_requests').push({
+      email,muscle:S.muscles.join('+'),level:S.level,goal:S.goal,equipment:S.equip,
+      source:'generator_v2',created_at:new Date().toISOString()
+    }).catch(()=>{});
+  }catch(err){}
+  revealPlan();
+}
+
+function skipGate(){
+  revealPlan();
+}
+
+function revealPlan(){
+  document.getElementById('emailGate').style.display='none';
+  const el=document.getElementById('genResult');
+  el.innerHTML=renderResult(pendingWorkoutData);
+  el.style.display='block';
+  el.scrollIntoView({behavior:'smooth',block:'start'});
+}
+
+function regenerate(){
+  pendingWorkoutData=buildWorkout(S.muscles,S.level,S.goal,S.equip);
+  const el=document.getElementById('genResult');
+  el.innerHTML=renderResult(pendingWorkoutData);
+  el.scrollIntoView({behavior:'smooth',block:'start'});
+}
+</script>
+</body>
+</html>

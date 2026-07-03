@@ -14,7 +14,7 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
 /* NAV */
 header{position:relative;z-index:10;display:flex;align-items:center;justify-content:space-between;padding:18px 28px;border-bottom:1px solid var(--border);background:rgba(10,10,10,.95);backdrop-filter:blur(12px);position:sticky;top:0}
 .brand{display:flex;align-items:center;gap:10px;text-decoration:none}
-.brand-logo{width:36px;height:36px;background:var(--red);border-radius:2px;display:flex;align-items:center;justify-content:center;font-family:'Bebas Neue',sans-serif;font-size:18px;color:#fff;letter-spacing:1px}
+.brand-logo img{height:44px;width:auto;display:block;filter:drop-shadow(0 0 6px rgba(204,0,0,.4))}
 .brand-name{font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:3px;color:#fff}
 .brand-name span{color:var(--red)}
 nav{display:flex;gap:24px}
@@ -147,8 +147,7 @@ main{position:relative;z-index:1;max-width:820px;margin:0 auto;padding:40px 20px
 <body>
 <header>
   <a class="brand" href="index.html">
-    <div class="brand-logo">SF</div>
-    <div class="brand-name">SAHIL <span>FITNESS</span></div>
+    <div class="brand-logo"><img src="images/logo-coach-sahil.png" alt="FitWid Fitness"></div>
   </a>
   <nav>
     <a href="generator.html">Workout</a>
