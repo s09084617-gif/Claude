@@ -344,6 +344,8 @@ footer a:hover{color:var(--red-b)}
       <div class="opt" data-val="legs" data-group="muscleOpts"><span class="opt-icon">🦵</span><div class="opt-label">Legs</div><div class="opt-sub">Quads · Glutes</div></div>
       <div class="opt" data-val="core" data-group="muscleOpts"><span class="opt-icon">🔥</span><div class="opt-label">Core</div><div class="opt-sub">Abs · Stability</div></div>
       <div class="opt gold-opt" data-val="fullbody" data-group="muscleOpts"><span class="opt-badge">ELITE</span><span class="opt-icon">⚡</span><div class="opt-label">Full Body</div><div class="opt-sub">Total Athlete</div></div>
+      <div class="opt" data-val="functional" data-group="muscleOpts"><span class="opt-icon">🤾</span><div class="opt-label">Functional</div><div class="opt-sub">Movement · Stability</div></div>
+      <div class="opt" data-val="hiit" data-group="muscleOpts"><span class="opt-icon">⏱️</span><div class="opt-label">HIIT</div><div class="opt-sub">Metabolic · Intervals</div></div>
     </div>
     <div class="step-nav">
       <span></span>
@@ -939,6 +941,87 @@ const DB = {
         {name:'Inchworm + Push-Up',cue:'Walk out · Push-up · Walk back',muscle:'Core/Full Body'},
       ]
     }
+  },
+  functional:{
+    gym:{
+      compound:[
+        {name:'Kettlebell Swing',cue:'Hip hinge · Explosive snap · Arms relaxed',muscle:'Posterior Chain'},
+        {name:'Sled Push',cue:'Low shin angle · Drive through full foot',muscle:'Full Body/Power'},
+        {name:'Farmer\'s Carry',cue:'Tall spine · Braced core · Even steps',muscle:'Grip/Core/Traps'},
+        {name:'TRX Row',cue:'Body straight · Pull chest to hands',muscle:'Back/Core'},
+        {name:'Battle Rope Slams',cue:'Full body wave · Hinge and drive',muscle:'Full Body/Conditioning'},
+      ],
+      isolation:[
+        {name:'Cable Woodchopper',cue:'Rotate from hips, not arms · Controlled return',muscle:'Obliques/Core'},
+        {name:'Bosu Ball Squat',cue:'Slow tempo · Balance through midfoot',muscle:'Legs/Stability'},
+        {name:'Medicine Ball Rotational Throw',cue:'Hip-driven rotation · Explosive release',muscle:'Core/Power'},
+        {name:'Single-Arm Suitcase Carry',cue:'Resist side lean · Braced obliques',muscle:'Core/Grip'},
+      ]
+    },
+    dumbbells:{
+      compound:[
+        {name:'Dumbbell Thruster',cue:'Squat to press in one fluid motion',muscle:'Full Body'},
+        {name:'Renegade Row',cue:'Tight plank · Row without hip rotation',muscle:'Back/Core'},
+        {name:'Single-Arm Overhead Carry',cue:'Locked elbow · Braced core · Walk tall',muscle:'Shoulders/Core'},
+        {name:'Dumbbell Man Maker',cue:'Row · Row · Push-up · Squat · Press',muscle:'Full Body'},
+      ],
+      isolation:[
+        {name:'Turkish Get-Up (Partial)',cue:'Eyes on weight · Move segment by segment',muscle:'Full Body/Stability'},
+        {name:'Lateral Lunge with DB',cue:'Push hips back · Knee tracks toe',muscle:'Legs/Adductors'},
+        {name:'Dumbbell Woodchopper',cue:'Rotate from core · Controlled tempo',muscle:'Obliques/Core'},
+      ]
+    },
+    bodyweight:{
+      compound:[
+        {name:'Bear Crawl',cue:'Knees hover · Opposite hand/foot move together',muscle:'Full Body/Core'},
+        {name:'Broad Jump',cue:'Full hip extension · Soft, controlled landing',muscle:'Legs/Power'},
+        {name:'Mountain Climber',cue:'Level hips · Controlled drive, not just fast',muscle:'Core/Hip Flexors'},
+        {name:'Crab Walk',cue:'Hips lifted · Controlled opposite-limb steps',muscle:'Triceps/Glutes/Core'},
+      ],
+      isolation:[
+        {name:'Plank to Push-Up',cue:'Minimal hip rotation · Alternate lead arm',muscle:'Core/Shoulders'},
+        {name:'Lateral Bound',cue:'Stick the landing · Control before next rep',muscle:'Legs/Stability'},
+        {name:'Inchworm to Push-Up',cue:'Walk hands out slowly · Full plank push-up',muscle:'Core/Full Body'},
+      ]
+    }
+  },
+  hiit:{
+    gym:{
+      compound:[
+        {name:'Assault Bike Sprint',cue:'Max effort intervals · Full recovery between',muscle:'Full Body/Cardio'},
+        {name:'Rowing Machine Sprint',cue:'Legs-core-arms sequence · Explosive drive',muscle:'Full Body/Cardio'},
+        {name:'Sled Sprint Push',cue:'Short, max-effort bursts · Full reset',muscle:'Legs/Power'},
+        {name:'Wall Ball Shot',cue:'Full squat depth · Explode through the throw',muscle:'Full Body/Power'},
+      ],
+      isolation:[
+        {name:'Box Jump (Metabolic Pace)',cue:'Full jump, step down · Keep pace controlled',muscle:'Legs/Power'},
+        {name:'Kettlebell Swing (Metabolic)',cue:'Continuous tempo · Hip snap drives pace',muscle:'Posterior Chain/Cardio'},
+        {name:'Battle Rope Waves',cue:'Sustained rhythm · Brace core throughout',muscle:'Full Body/Cardio'},
+      ]
+    },
+    dumbbells:{
+      compound:[
+        {name:'Dumbbell Squat to Press',cue:'Continuous tempo · Full lockout overhead',muscle:'Full Body/Cardio'},
+        {name:'Dumbbell Snatch (Alternating)',cue:'Explosive hip drive · Punch through overhead',muscle:'Full Body/Power'},
+        {name:'Renegade Row Burpee',cue:'Row · Row · Burpee · Repeat at pace',muscle:'Full Body/Cardio'},
+      ],
+      isolation:[
+        {name:'Dumbbell Thruster (Finisher Pace)',cue:'Minimal rest between reps · Sustainable tempo',muscle:'Full Body/Cardio'},
+        {name:'Weighted Jumping Jack',cue:'Light DBs · Continuous rhythm',muscle:'Shoulders/Cardio'},
+      ]
+    },
+    bodyweight:{
+      compound:[
+        {name:'Burpee Sprint',cue:'Max effort for time · Full extension on jump',muscle:'Full Body/Cardio'},
+        {name:'High Knees Sprint',cue:'Drive knees to hip height · Fast arm drive',muscle:'Legs/Cardio'},
+        {name:'Jump Squat',cue:'Full depth every rep · Soft, quiet landings',muscle:'Legs/Power'},
+      ],
+      isolation:[
+        {name:'Mountain Climber Sprint',cue:'Fast, controlled cadence · Level hips',muscle:'Core/Cardio'},
+        {name:'Jump Lunge',cue:'Equal depth both sides · Land soft',muscle:'Legs/Power'},
+        {name:'Plank Jack',cue:'Stable shoulders · Feet stay light',muscle:'Core/Cardio'},
+      ]
+    }
   }
 };
 
@@ -975,7 +1058,9 @@ const TIPS = {
   triceps:"The long head (inner tricep) makes up 66% of your arm mass. Prioritize overhead movements to fully stretch it. If all you do is pushdowns, you're leaving half your tricep on the table.",
   legs:"Depth matters more than weight. Below parallel activates 40% more glute than a half squat. Ego kills leg gains — go light, go deep, grow faster.",
   core:"Your core is a 360° cylinder — not just your abs. Train anti-rotation (Pallof Press), anti-extension (Ab Wheel), and anti-lateral flexion (Suitcase Carry). Most people only train crunches and wonder why they get injured.",
-  fullbody:"Sequence matters on full-body days: biggest compound lifts first (deadlift, squat, press) when CNS is fresh. Save isolation work for last. Energy spent = results earned."
+  fullbody:"Sequence matters on full-body days: biggest compound lifts first (deadlift, squat, press) when CNS is fresh. Save isolation work for last. Energy spent = results earned.",
+  functional:"Functional training builds movement quality, not just muscle — carries, crawls, and rotational work transfer directly to real life and protect your joints. Slow down the eccentric on unfamiliar patterns before adding speed or load.",
+  hiit:"HIIT works because of the interval, not the exercise. Go genuinely max-effort during work periods and genuinely rest during recovery — pacing yourself through 'max effort' defeats the entire purpose of the protocol."
 };
 
 /* ── WARM-UP PROTOCOLS ── */
@@ -987,7 +1072,9 @@ const WARMUP = {
   triceps:['5 min light cardio','Tricep stretch 30s each','Light pushdown × 15','Wrist circles × 20','Shoulder stretch 30s'],
   legs:['8 min light bike/jog','Hip circle × 15 each direction','Bodyweight squat × 20','Walking lunge × 10 each','Glute bridge × 20'],
   core:['5 min light cardio','Cat-cow × 10','Hip flexor stretch 30s','Glute bridge × 15','Dead bug × 10 each side'],
-  fullbody:['8 min light cardio','World greatest stretch × 5 each','Inchworm × 5','Arm circles × 20','Bodyweight squat × 15']
+  fullbody:['8 min light cardio','World greatest stretch × 5 each','Inchworm × 5','Arm circles × 20','Bodyweight squat × 15'],
+  functional:['5 min light cardio','World\'s greatest stretch × 5 each side','Bodyweight squat × 15','Arm circles × 20','Hip circle × 10 each direction'],
+  hiit:['5 min gradual ramp-up cardio','Dynamic leg swings × 10 each','Bodyweight squat × 15','High knees (easy pace) × 20s','Jumping jacks (easy pace) × 20s']
 };
 
 /* ── COOL-DOWN ── */
@@ -999,6 +1086,20 @@ const COOLDOWN = [
   'Chest doorway stretch 30s',
   '10 deep belly breaths'
 ];
+
+/* ── INJURY-PREVENTION STRETCHING (targeted by muscle group) ── */
+const INJURY_STRETCH = {
+  chest:['Doorway pec stretch 30s each side','Cross-body shoulder stretch 30s each arm','Thoracic spine foam roll 60s','Wall slide × 10 (shoulder health)'],
+  back:['Cat-cow × 10 (spinal mobility)','Child\'s pose 45s','Lat stretch on wall 30s each side','Thoracic rotation × 10 each side'],
+  shoulders:['Cross-body shoulder stretch 30s each arm','Sleeper stretch 30s each side (rotator cuff)','Wall slide × 10','Band external rotation × 15 (light, injury-prevention pace)'],
+  biceps:['Wrist flexor stretch 30s each arm','Bicep wall stretch 30s each side','Elbow circles × 10 each direction'],
+  triceps:['Overhead tricep stretch 30s each arm','Wrist extensor stretch 30s each arm','Shoulder cross-body stretch 30s each side'],
+  legs:['Standing quad stretch 30s each side','Hamstring stretch 30s each side','Standing calf stretch 30s each side','90/90 hip stretch 30s each side (knee health)'],
+  core:['Cobra stretch 30s (lower back)','Child\'s pose 45s','Hip flexor stretch 30s each side','Seated spinal twist 30s each side'],
+  fullbody:['World\'s greatest stretch × 5 each side','90/90 hip stretch 30s each side','Thoracic spine foam roll 60s','Standing calf stretch 30s each side'],
+  functional:['90/90 hip stretch 30s each side','Thoracic rotation × 10 each side','Ankle circles × 10 each direction (joint prep)','Wrist circles × 10 each direction'],
+  hiit:['Standing calf stretch 30s each side (Achilles care)','Hip flexor stretch 30s each side','Ankle circles × 10 each direction','Deep squat hold 30s (knee/hip health)']
+};
 
 /* ── WEEKLY SPLITS ── */
 const SPLITS = {
@@ -1092,7 +1193,7 @@ function buildWorkout(muscles,level,goal,equip){
 
 function renderResult(d){
   const {muscle, muscles:muscleArr2, level,goal,equip,exercises,rx,totalTime,totalSets,totalVol} = d;
-  const _ML = {chest:'Chest',back:'Back',shoulders:'Shoulders',biceps:'Biceps',triceps:'Triceps',legs:'Legs',core:'Core',fullbody:'Full Body'};
+  const _ML = {chest:'Chest',back:'Back',shoulders:'Shoulders',biceps:'Biceps',triceps:'Triceps',legs:'Legs',core:'Core',fullbody:'Full Body',functional:'Functional Training',hiit:'HIIT Training'};
   const _muscleList = muscleArr2 && muscleArr2.length ? muscleArr2 : [muscle];
 
   const mLabel = _muscleList.map(m=>_ML[m]||m).join(' + ');
@@ -1142,6 +1243,11 @@ function renderResult(d){
   const warmup = WARMUP[_muscleList[0]]||WARMUP.fullbody;
   const warmHTML = warmup.map(w=>`<div class="proto-item"><div class="proto-dot red"></div><div><div class="proto-text">${w}</div></div></div>`).join('');
   const coolHTML = COOLDOWN.map(c=>`<div class="proto-item"><div class="proto-dot green"></div><div><div class="proto-text">${c}</div></div></div>`).join('');
+
+  const injurySet = new Set();
+  _muscleList.forEach(m => (INJURY_STRETCH[m]||INJURY_STRETCH.fullbody).forEach(s => injurySet.add(s)));
+  const injuryList = [...injurySet].slice(0, 6);
+  const injuryHTML = injuryList.map(s=>`<div class="proto-item"><div class="proto-dot" style="background:var(--gold)"></div><div><div class="proto-text">${s}</div></div></div>`).join('');
 
   const split = SPLITS[goal]?.[level]||SPLITS.muscle.beginner;
   const splitHTML = split.days.map((d,i)=>{
@@ -1207,6 +1313,11 @@ I want to train this with you! 💪`);
     <div class="protocol-block">
       <div class="protocol-title"><span>❄️</span> Cool-Down Protocol · 5–7 min</div>
       <div class="protocol-grid">${coolHTML}</div>
+    </div>
+
+    <div class="protocol-block" style="border-color:rgba(201,168,76,.3)">
+      <div class="protocol-title"><span>🩹</span> Injury-Prevention Stretching · Do 2–3×/week</div>
+      <div class="protocol-grid">${injuryHTML}</div>
     </div>
 
     <div class="coach-tip">
