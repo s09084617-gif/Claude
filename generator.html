@@ -88,6 +88,7 @@ button{cursor:pointer;border:none;background:none;font-family:inherit}
 .opts{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:12px;margin-bottom:32px}
 .opts.cols-3{grid-template-columns:repeat(3,1fr)}
 .opts.cols-4{grid-template-columns:repeat(4,1fr)}
+.opts.cols-2{grid-template-columns:repeat(2,1fr)}
 .opt{background:rgba(255,255,255,.03);border:1.5px solid rgba(255,255,255,.08);border-radius:10px;padding:18px 14px;cursor:pointer;transition:all .2s;text-align:center;user-select:none;position:relative;overflow:hidden}
 .opt::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(204,0,0,.05),transparent);opacity:0;transition:opacity .2s}
 .opt:hover{border-color:rgba(204,0,0,.4);transform:translateY(-2px)}
@@ -299,7 +300,7 @@ footer a:hover{color:var(--red-b)}
     <span>Coach Sahil's Training System · FitWid</span>
   </div>
   <h1>AI Workout <span>Generator</span></h1>
-  <p>4 questions. Infinite programs. Zero guesswork.</p>
+  <p>5 questions. Infinite programs. Zero guesswork.</p>
 </div>
 
 <!-- WIZARD -->
@@ -310,18 +311,22 @@ footer a:hover{color:var(--red-b)}
     <div class="step-labels" id="stepLabels">
       <div class="step-label active" id="sl-0">
         <div class="step-dot active" id="sd-0">1</div>
-        <div class="step-name">Target</div>
+        <div class="step-name">Gender</div>
       </div>
       <div class="step-label" id="sl-1">
         <div class="step-dot" id="sd-1">2</div>
-        <div class="step-name">Level</div>
+        <div class="step-name">Target</div>
       </div>
       <div class="step-label" id="sl-2">
         <div class="step-dot" id="sd-2">3</div>
-        <div class="step-name">Goal</div>
+        <div class="step-name">Level</div>
       </div>
       <div class="step-label" id="sl-3">
         <div class="step-dot" id="sd-3">4</div>
+        <div class="step-name">Goal</div>
+      </div>
+      <div class="step-label" id="sl-4">
+        <div class="step-dot" id="sd-4">5</div>
         <div class="step-name">Equipment</div>
       </div>
     </div>
@@ -330,9 +335,26 @@ footer a:hover{color:var(--red-b)}
     </div>
   </div>
 
-  <!-- STEP 1: MUSCLE -->
+  <!-- STEP 1: GENDER -->
   <div class="step-card active" id="step-0">
-    <div class="step-num">Step 01 / 04</div>
+    <div class="step-num">Step 01 / 05</div>
+    <div class="step-title">Training For</div>
+    <div class="step-sub">This helps Coach Sahil tailor the coaching notes to you.</div>
+    <div class="opts cols-2" id="genderOpts">
+      <div class="opt" data-val="men" data-group="genderOpts"><span class="opt-icon">🚹</span><div class="opt-label">Men</div></div>
+      <div class="opt" data-val="women" data-group="genderOpts"><span class="opt-icon">🚺</span><div class="opt-label">Women</div></div>
+    </div>
+    <div class="step-nav">
+      <span></span>
+      <button class="btn-next" id="next0" onclick="nextStep(1)" disabled>
+        Next <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- STEP 2: MUSCLE -->
+  <div class="step-card" id="step-1">
+    <div class="step-num">Step 02 / 05</div>
     <div class="step-title">Target Muscle Group</div>
     <div class="step-sub">Which muscles are you training today? <span style="color:var(--gold);font-weight:700">Select 1 or more</span></div>
     <div class="opts" id="muscleOpts">
@@ -348,16 +370,16 @@ footer a:hover{color:var(--red-b)}
       <div class="opt" data-val="hiit" data-group="muscleOpts"><span class="opt-icon">⏱️</span><div class="opt-label">HIIT</div><div class="opt-sub">Metabolic · Intervals</div></div>
     </div>
     <div class="step-nav">
-      <span></span>
-      <button class="btn-next" id="next0" onclick="nextStep(1)" disabled>
+      <button class="btn-back" onclick="goStep(0)">← Back</button>
+      <button class="btn-next" id="next1" onclick="nextStep(2)" disabled>
         Next <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
       </button>
     </div>
   </div>
 
-  <!-- STEP 2: LEVEL -->
-  <div class="step-card" id="step-1">
-    <div class="step-num">Step 02 / 04</div>
+  <!-- STEP 3: LEVEL -->
+  <div class="step-card" id="step-2">
+    <div class="step-num">Step 03 / 05</div>
     <div class="step-title">Experience Level</div>
     <div class="step-sub">How long have you been training consistently?</div>
     <div class="opts cols-3" id="levelOpts">
@@ -372,16 +394,16 @@ footer a:hover{color:var(--red-b)}
       </div>
     </div>
     <div class="step-nav">
-      <button class="btn-back" onclick="goStep(0)">← Back</button>
-      <button class="btn-next" id="next1" onclick="nextStep(2)" disabled>
+      <button class="btn-back" onclick="goStep(1)">← Back</button>
+      <button class="btn-next" id="next2" onclick="nextStep(3)" disabled>
         Next <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
       </button>
     </div>
   </div>
 
-  <!-- STEP 3: GOAL -->
-  <div class="step-card" id="step-2">
-    <div class="step-num">Step 03 / 04</div>
+  <!-- STEP 4: GOAL -->
+  <div class="step-card" id="step-3">
+    <div class="step-num">Step 04 / 05</div>
     <div class="step-title">Training Goal</div>
     <div class="step-sub">What do you want from this session?</div>
     <div class="opts cols-4" id="goalOpts">
@@ -391,16 +413,16 @@ footer a:hover{color:var(--red-b)}
       <div class="opt" data-val="endurance" data-group="goalOpts"><span class="opt-icon">🏃</span><div class="opt-label">Endurance</div><div class="opt-sub">Conditioning</div></div>
     </div>
     <div class="step-nav">
-      <button class="btn-back" onclick="goStep(1)">← Back</button>
-      <button class="btn-next" id="next2" onclick="nextStep(3)" disabled>
+      <button class="btn-back" onclick="goStep(2)">← Back</button>
+      <button class="btn-next" id="next3" onclick="nextStep(4)" disabled>
         Next <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
       </button>
     </div>
   </div>
 
-  <!-- STEP 4: EQUIPMENT -->
-  <div class="step-card" id="step-3">
-    <div class="step-num">Step 04 / 04</div>
+  <!-- STEP 5: EQUIPMENT -->
+  <div class="step-card" id="step-4">
+    <div class="step-num">Step 05 / 05</div>
     <div class="step-title">Equipment Available</div>
     <div class="step-sub">What do you have access to right now?</div>
     <div class="opts cols-3" id="equipOpts">
@@ -418,7 +440,7 @@ footer a:hover{color:var(--red-b)}
     </button>
 
     <div style="margin-top:16px">
-      <button class="btn-back" onclick="goStep(2)">← Back</button>
+      <button class="btn-back" onclick="goStep(3)">← Back</button>
     </div>
   </div>
 
@@ -479,9 +501,9 @@ function toggleNav(){
 }
 
 /* ── STATE ── */
-const S = {muscles:[], level:null, goal:null, equip:null};
+const S = {gender:null, muscles:[], level:null, goal:null, equip:null};
 let _currentStep = 0;
-const TOTAL = 4;
+const TOTAL = 5;
 
 /* ── OPTION CLICK ── */
 document.querySelectorAll('.opt').forEach(opt=>{
@@ -501,7 +523,7 @@ document.querySelectorAll('.opt').forEach(opt=>{
     }
     document.querySelectorAll(`[data-group="${grp}"]`).forEach(o=>o.classList.remove('selected'));
     opt.classList.add('selected');
-    const key = {levelOpts:'level',goalOpts:'goal',equipOpts:'equip'}[grp];
+    const key = {genderOpts:'gender',levelOpts:'level',goalOpts:'goal',equipOpts:'equip'}[grp];
     S[key] = opt.dataset.val;
     updateNextBtn();
     if(key==='equip') updateSummary();
@@ -509,7 +531,7 @@ document.querySelectorAll('.opt').forEach(opt=>{
 });
 
 function updateNextBtn(){
-  const keys = [['muscles','next0'],['level','next1'],['goal','next2'],['equip','genBtn']];
+  const keys = [['gender','next0'],['muscles','next1'],['level','next2'],['goal','next3'],['equip','genBtn']];
   keys.forEach(([k,id])=>{
     const el = document.getElementById(id);
     if(el) el.disabled = k==='muscles' ? S.muscles.length===0 : !S[k];
@@ -518,13 +540,14 @@ function updateNextBtn(){
 
 function updateSummary(){
   const labels = {
+    gender:{men:'Men',women:'Women'},
     muscle:{chest:'Chest',back:'Back',shoulders:'Shoulders',biceps:'Biceps',triceps:'Triceps',legs:'Legs',core:'Core',fullbody:'Full Body'},
     level:{beginner:'Beginner',intermediate:'Intermediate',advanced:'Advanced'},
     goal:{muscle:'Muscle Building',fatloss:'Fat Loss',strength:'Strength',endurance:'Endurance'},
     equip:{gym:'Full Gym',dumbbells:'Dumbbells',bodyweight:'Bodyweight'}
   };
   const muscleChips = S.muscles.map(m=>`<span class="sel-chip">${labels.muscle?.[m]||m}</span>`).join('');
-  const otherChips = [['level',S.level],['goal',S.goal],['equip',S.equip]].filter(([,v])=>v).map(([k,v])=>`<span class="sel-chip">${labels[k]?.[v]||v}</span>`).join('');
+  const otherChips = [['gender',S.gender],['level',S.level],['goal',S.goal],['equip',S.equip]].filter(([,v])=>v).map(([k,v])=>`<span class="sel-chip">${labels[k]?.[v]||v}</span>`).join('');
   const chips = muscleChips + otherChips;
   document.getElementById('selSummary').innerHTML = chips;
 }
@@ -1130,10 +1153,10 @@ function shuffle(arr){return [...arr].sort(()=>Math.random()-.5)}
 
 /* ── GENERATE ── */
 function generate(){
-  const {muscles,level,goal,equip} = S;
-  if(!muscles.length||!level||!goal||!equip) return;
+  const {gender,muscles,level,goal,equip} = S;
+  if(!gender||!muscles.length||!level||!goal||!equip) return;
 
-  document.getElementById(`step-3`).style.display = 'none';
+  document.getElementById(`step-4`).style.display = 'none';
   const loading = document.getElementById('genLoading');
   loading.style.display = 'block';
   document.getElementById('genResult').style.display = 'none';
@@ -1148,14 +1171,14 @@ function generate(){
 
   setTimeout(()=>{
     loading.style.display = 'none';
-    pendingWorkoutData = buildWorkout(muscles,level,goal,equip);
+    pendingWorkoutData = buildWorkout(gender,muscles,level,goal,equip);
     showEmailGate();
   }, 1400);
 }
 
 let pendingWorkoutData = null;
 
-function buildWorkout(muscles,level,goal,equip){
+function buildWorkout(gender,muscles,level,goal,equip){
   const rx = RX[goal][level];
   // Combine exercises from all selected muscles
   const muscleArr = Array.isArray(muscles) ? muscles : [muscles];
@@ -1188,11 +1211,11 @@ function buildWorkout(muscles,level,goal,equip){
   const totalVol = totalSets * avgReps;
 
   const muscle = muscleArr.length===1 ? muscleArr[0] : muscleArr[0]; // use first for warmup/split; muscles array for labels
-  return {muscle, muscles:muscleArr, level,goal,equip,exercises,rx,totalTime,totalSets,totalVol};
+  return {gender, muscle, muscles:muscleArr, level,goal,equip,exercises,rx,totalTime,totalSets,totalVol};
 }
 
 function renderResult(d){
-  const {muscle, muscles:muscleArr2, level,goal,equip,exercises,rx,totalTime,totalSets,totalVol} = d;
+  const {gender, muscle, muscles:muscleArr2, level,goal,equip,exercises,rx,totalTime,totalSets,totalVol} = d;
   const _ML = {chest:'Chest',back:'Back',shoulders:'Shoulders',biceps:'Biceps',triceps:'Triceps',legs:'Legs',core:'Core',fullbody:'Full Body',functional:'Functional Training',hiit:'HIIT Training'};
   const _muscleList = muscleArr2 && muscleArr2.length ? muscleArr2 : [muscle];
 
@@ -1200,6 +1223,7 @@ function renderResult(d){
   const gLabel = {muscle:'Muscle Building',fatloss:'Fat Loss',strength:'Strength',endurance:'Endurance'}[goal];
   const lLabel = {beginner:'Beginner',intermediate:'Intermediate',advanced:'Advanced'}[level];
   const eLabel = {gym:'Full Gym',dumbbells:'Dumbbells',bodyweight:'Bodyweight'}[equip];
+  const genderLabel = {men:'Men',women:'Women'}[gender] || '';
 
   // Determine type tag
   const typeTag = ex => {
@@ -1277,6 +1301,7 @@ I want to train this with you! 💪`);
       <div class="res-label">Custom Workout · Coach Sahil Bansal</div>
       <div class="res-title">${mLabel} <span>— ${gLabel}</span></div>
       <div class="res-chips">
+        <span class="res-chip gold">${genderLabel}</span>
         <span class="res-chip gold">${lLabel}</span>
         <span class="res-chip red">${eLabel}</span>
         <span class="res-chip">${exercises.length} Exercises</span>
@@ -1393,7 +1418,7 @@ function revealPlan(){
 }
 
 function regenerate(){
-  pendingWorkoutData=buildWorkout(S.muscles,S.level,S.goal,S.equip);
+  pendingWorkoutData=buildWorkout(S.gender,S.muscles,S.level,S.goal,S.equip);
   const el=document.getElementById('genResult');
   el.innerHTML=renderResult(pendingWorkoutData);
   el.scrollIntoView({behavior:'smooth',block:'start'});
